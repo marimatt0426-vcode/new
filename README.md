@@ -352,9 +352,17 @@ typing their number** — even if they close the popup one second later. They no
 your quote in their pocket with a one-word path to booking.
 
 - Workflow settings: **allow re-entry OFF** (one instant text per contact).
-- Action 1: **Wait 1 minute** (feels human, not robotic).
-- Action 2: **SMS → message 1** from the [copy library](#message-copy-library).
-- Action 3 (optional): **Internal notification** to you — new hot lead with all fields.
+- **Goal Event**: contact tag added = `service-requested` (add `estimate-requested`
+  too). Critical: plenty of people finish checkout in under a minute, and the goal
+  pulls them out of this workflow **mid-wait** the instant they book — so the quote
+  text never fires at someone who already converted (they get the confirmation text
+  from Workflow 4 instead).
+- Action 1: **Wait 3 minutes** — long enough to separate stalled quote-viewers (who
+  need this nudge) from active form-fillers (who don't).
+- Action 2: **If/Else — has tag `service-requested` OR `estimate-requested`?** → yes →
+  End (belt-and-suspenders behind the goal); no → continue.
+- Action 3: **SMS → message 1** from the [copy library](#message-copy-library).
+- Action 4 (optional): **Internal notification** → **message 15** — new hot lead.
 
 When they reply "YES", it lands in your GHL conversation inbox — close it by hand, or
 add a reply-trigger workflow later once volume justifies it.
