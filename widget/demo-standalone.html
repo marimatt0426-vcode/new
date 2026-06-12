@@ -48,6 +48,19 @@
     // Leave "" during development: payloads log to the console instead.
     leadEndpoint: "",
 
+    // Conversion tracking.
+    // redirectUrl keeps your existing page-visit conversions working: after the
+    // confirmation screen, the browser goes to this page (same mechanism as the
+    // old Housecall Pro flow). Set "" to disable the redirect.
+    // firePixelEvents also pushes events to gtag/fbq/dataLayer when those exist
+    // on the page, including an early "quote_unlocked" event at phone capture.
+    tracking: {
+      redirectUrl: "https://itspurgepros.com/submit-true",
+      redirectDelayMs: 3500,
+      firePixelEvents: true,
+      trackCustomBookings: true
+    },
+
     brand: {
       name: "Purge Pros",
       // TODO: set the real business line customers should call
@@ -55,9 +68,9 @@
       phoneHref: "tel:+13175550123",
       chips: [
         "5.0 Google rating",
-        "Pay per visit — no monthly billing",
+        "Pay per visit — never billed monthly",
         "No contracts",
-        "Text alerts before arrival"
+        "Heads-up text before every visit"
       ],
       testimonial: "" // optional: "“Quote here.” – Name"
     },
@@ -72,36 +85,37 @@
     ],
 
     frequencies: [
-      { id: "twice", label: "Twice Weekly", sub: "For heavy-use yards", maxDogs: 9,
+      { id: "twice", label: "Twice Weekly", sub: "Multiple dogs & busy yards", maxDogs: 9,
         prices: { 1: 15.99, 2: 17.49, 3: 18.99, 4: 20.49, 5: 21.99, 6: 23.49, 7: 24.99, 8: 26.49, 9: 27.99 } },
-      { id: "weekly", label: "Weekly", sub: "Best fit for most yards", maxDogs: 5, popular: true,
+      { id: "weekly", label: "Weekly", sub: "The sweet spot for most homes", maxDogs: 5, popular: true,
         prices: { 1: 19.99, 2: 22.49, 3: 24.99, 4: 27.49, 5: 29.99 } },
-      { id: "biweekly", label: "Every Other Week", sub: "Lower-maintenance option", maxDogs: 4,
+      { id: "biweekly", label: "Every Other Week", sub: "Light upkeep, longer gaps", maxDogs: 4,
         prices: { 1: 29.99, 2: 33.49, 3: 36.99, 4: 40.49 } },
-      { id: "onetime", label: "One-Time Clean", sub: "Reset & catch-up clean", flat: 89.99, anyDogs: true,
+      { id: "onetime", label: "One-Time Clean", sub: "One visit, total reset", flat: 89.99, anyDogs: true,
+        selectedNote: "One-time cleans are a flat base rate with 30 minutes of labor included, then $1/min until the job is done. The yard questions below don’t change the rate — they help us estimate time on site.",
         notes: [
           "30 minutes of labor included, then $1/min through completion",
-          "Deposit of the base rate is due at scheduling — we’ll reach out",
-          "Any additional fees billed after job completion"
+          "A deposit of the base rate is due at scheduling — we’ll reach out to set that up",
+          "Any time beyond the included 30 minutes is billed after completion"
         ] },
-      { id: "custom", label: "Custom Booking", sub: "10+ dogs, 1+ acre, kennels & commercial", custom: true }
+      { id: "custom", label: "Custom Booking", sub: "10+ dogs · 1+ acre · kennels & commercial", custom: true }
     ],
 
-    // Per-visit surcharges. Waived for one-time cleans.
-    areas: [
-      { id: "back",       label: "Back Yard",          add: 0 },
-      { id: "front",      label: "Front Yard",          add: 0 },
-      { id: "side",       label: "Side Yard(s)",        add: 0 },
-      { id: "front_back", label: "Front & Back",        add: 2.5 },
-      { id: "front_side", label: "Front & Side(s)",     add: 2.5 },
-      { id: "back_side",  label: "Back & Side(s)",      add: 2.5 },
-      { id: "all",        label: "Yard+ (All Sides)",   add: 5 }
+    // Yard coverage is multi-select: pick any one area at the base rate,
+    // any two areas +$2.50/visit, all three +$5/visit. Waived for one-time cleans.
+    areaOptions: [
+      { id: "back",  label: "Back Yard",    short: "Back" },
+      { id: "front", label: "Front Yard",   short: "Front" },
+      { id: "side",  label: "Side Yard(s)", short: "Side(s)" }
     ],
+    areaPricing: { 1: 0, 2: 2.5, 3: 5 },
+    areaPlusLabel: "Yard+ (All Areas)",
+
     yardSizes: [
-      { id: "s",    label: "Small · ⅛ acre",   add: 0 },
-      { id: "m",    label: "Medium · ¼ acre",  add: 4 },
-      { id: "l",    label: "Large · ½ acre",   add: 8 },
-      { id: "xl",   label: "X-Large · 1 acre",      add: 12 },
+      { id: "s",    label: "Small · ⅛ acre",  add: 0 },
+      { id: "m",    label: "Medium · ¼ acre", add: 4 },
+      { id: "l",    label: "Large · ½ acre",  add: 8 },
+      { id: "xl",   label: "X-Large · 1 acre",     add: 12 },
       { id: "over", label: "Over 1 acre", customOnly: true }
     ],
     customYardSizes: ["XX-Large · 1–2 acres", "2+ acres", "Kennel", "Other (specify in notes)"],
@@ -110,7 +124,7 @@
 
     addons: [
       { id: "wysiwash", label: "WYSIWash Treatment",
-        desc: "Deodorizer & sanitizer — keeps the yard fresh between visits",
+        desc: "Professional deodorizing & sanitizing treatment applied after we scoop",
         prices: { twice: 19.99, weekly: 24.99, biweekly: 29.99, onetime: 29.99 } }
     ],
 
@@ -119,22 +133,50 @@
     coupons: {},
 
     freebies: [
-      "💩 Waste hauled away — FREE",
-      "💬 Text alerts — FREE",
-      "🦴 Dog treats — FREE"
+      "💩 Waste hauled away — always free",
+      "💬 Arrival text alerts — free",
+      "🦴 Treats for the good dogs — free"
     ],
 
     copy: {
-      eyebrow: "INSTANT ONLINE QUOTE",
-      title: "GET YOUR PRICE AND PICK YOUR PLAN.",
-      subtitle: "Start with your ZIP code. Weekly is preselected because it fits most yards.",
-      phoneHint: "We only use this for quote follow-up and service details.",
+      eyebrow: "60-SECOND PRICE CHECK",
+      title: "SEE YOUR EXACT PER-VISIT PRICE.",
+      subtitle: "A few quick questions about your dogs and your yard — that’s it. You pay per visit, never a monthly bill.",
+      callPrefix: "Rather talk to a human? Call",
+      zipTitle: "First — are we in your neighborhood?",
+      zipBody: "Drop in your ZIP code and we’ll check coverage.",
+      zipButton: "Check Coverage",
+      planTitle: "Let’s price out your yard",
+      planBody: "About 30 seconds of questions, then your exact per-visit price. Never billed monthly.",
+      dogsLabel: "How many dogs do we scoop after?",
+      freqLabel: "How often should we come?",
+      freqHint: "Most customers pick Weekly",
+      areasLabel: "Which areas should we cover?",
+      areasHint: "Tap all that apply",
+      sizeLabel: "Roughly how big is the yard?",
+      lastCleanLabel: "When did the yard last get a full cleanup?",
+      lastCleanNote: "No effect on price — it just tells us how much time to block off for visit #1.",
+      phoneLabel: "Pop in your mobile number to unlock your price",
+      phoneHint: "Used for your quote and service updates only — never spam, opt out anytime.",
+      lockedBox: "🔒 Your price is ready — enter your mobile number above to unlock it.",
+      perVisitLabel: "Your per-visit price",
+      oneTimeLabel: "One-time total",
+      waiverText: "💰 First-visit deep clean ($99+ value): ON US",
+      waiverButton: "How’s it free?",
       consent: "I agree to receive service-related texts and emails from Purge Pros. Msg & data rates may apply. Reply STOP to opt out.",
-      outOfArea: "We don’t service ZIP {zip} right now, but we’re growing fast. Drop your email and we’ll let you know when we launch in your area.",
-      doneTitle: "You’re on the schedule! 🎉",
-      doneBody: "We’ll text you shortly to confirm your first visit. You’ll get a text alert before every arrival and a gate photo when we leave.",
+      outOfAreaTitle: "We haven’t made it there… yet",
+      outOfArea: "We’re expanding around the Indy area fast. Leave your email and you’ll be the first to know when {zip} goes live.",
+      detailsTitle: "Last step — lock it in",
+      detailsBody: "Tell us who you are and where the yard is.",
+      oneTimeCheckout: "Heads up: one-time cleans require a deposit of the base rate at scheduling — we’ll text you to square that away. Time beyond the included 30 minutes is billed after the job is complete.",
+      ctaStandard: "Book My First Visit",
+      ctaCustom: "Request My Estimate",
+      doneTitle: "You’re in! 🎉",
+      doneBody: "Watch your texts — we’ll confirm your first visit shortly. You’ll get a heads-up message before every visit and a gate photo when we wrap up.",
+      doneOneTimeExtra: "We’ll also reach out about your base-rate deposit to get you on the schedule.",
       doneCustomTitle: "Request received! ✅",
-      doneCustomBody: "We’re reviewing your details and will text you a personalized estimate shortly — usually within business hours the same day."
+      doneCustomBody: "Our team is reviewing your property details now. Expect a text with your hand-built estimate shortly — usually the same business day.",
+      redirectNote: "Hang tight — taking you back to the site…"
     }
   };
 
@@ -146,12 +188,12 @@
     zip: "",
     dogs: 1,              // 1..9 or "10+"
     freq: "weekly",
-    area: "back",
+    areasSel: ["back"],   // multi-select of areaOptions ids
     yardSize: "s",
     customYardSize: "",
     lastCleaned: PQ_CONFIG.lastCleaned[0],
     addons: [],
-    coupon: null,         // applied coupon code
+    coupon: null,
     phone: "",            // digits only
     priceUnlocked: false,
     notes: "",
@@ -159,6 +201,36 @@
     questionOpen: false,
     doneCustom: false
   };
+
+  /* ---------- persistence: resume an abandoned quote for 24h ---------- */
+  var STORE_KEY = "pq_quote_v2";
+  function persist() {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        t: Date.now(),
+        s: {
+          step: state.step === "details" ? "details" : (state.step === "plan" ? "plan" : "zip"),
+          zip: state.zip, dogs: state.dogs, freq: state.freq, areasSel: state.areasSel,
+          yardSize: state.yardSize, customYardSize: state.customYardSize,
+          lastCleaned: state.lastCleaned, addons: state.addons, coupon: state.coupon,
+          phone: state.phone, priceUnlocked: state.priceUnlocked,
+          notes: state.notes, contact: state.contact
+        }
+      }));
+    } catch (e) {}
+  }
+  function restore() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return;
+      var d = JSON.parse(raw);
+      if (!d || !d.s || Date.now() - d.t > 24 * 3600 * 1000) { localStorage.removeItem(STORE_KEY); return; }
+      for (var k in d.s) if (Object.prototype.hasOwnProperty.call(state, k)) state[k] = d.s[k];
+      if (state.step !== "zip" && !state.zip) state.step = "zip";
+      if (!state.areasSel || !state.areasSel.length) state.areasSel = ["back"];
+    } catch (e) {}
+  }
+  function clearStore() { try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
 
   function freqDef(id) {
     for (var i = 0; i < PQ_CONFIG.frequencies.length; i++)
@@ -178,6 +250,15 @@
     return state.dogs <= f.maxDogs;
   }
 
+  function areaLabel() {
+    var n = state.areasSel.length;
+    if (n === PQ_CONFIG.areaOptions.length) return PQ_CONFIG.areaPlusLabel;
+    var shorts = PQ_CONFIG.areaOptions
+      .filter(function (a) { return state.areasSel.indexOf(a.id) >= 0; })
+      .map(function (a) { return a.short; });
+    return shorts.join(" & ") + " Yard";
+  }
+
   // Per-visit price breakdown, or null when no instant price (custom booking)
   function quote() {
     if (isCustom()) return null;
@@ -190,8 +271,8 @@
       if (base == null) return null;
       rows.push({ label: state.dogs + (state.dogs === 1 ? " dog" : " dogs") + " · " + f.label, amt: base });
       total = base;
-      var area = byId(PQ_CONFIG.areas, state.area);
-      if (area && area.add) { rows.push({ label: area.label, amt: area.add }); total += area.add; }
+      var areaAdd = PQ_CONFIG.areaPricing[state.areasSel.length] || 0;
+      if (areaAdd) { rows.push({ label: "Coverage: " + areaLabel(), amt: areaAdd }); total += areaAdd; }
       var size = byId(PQ_CONFIG.yardSizes, state.yardSize);
       if (size && size.add) { rows.push({ label: size.label, amt: size.add }); total += size.add; }
     }
@@ -249,7 +330,7 @@
       zip: state.zip,
       frequency: freqDef() ? freqDef().label : state.freq,
       dogs: String(state.dogs),
-      areas: (byId(PQ_CONFIG.areas, state.area) || {}).label || "",
+      areas: areaLabel(),
       yardSize: isCustom() ? state.customYardSize : ((byId(PQ_CONFIG.yardSizes, state.yardSize) || {}).label || ""),
       lastCleaned: state.lastCleaned,
       addons: state.addons.map(function (id) { return (byId(PQ_CONFIG.addons, id) || {}).label; }).join(", "),
@@ -281,6 +362,37 @@
     }).catch(function () {
       if (attempt < 1) setTimeout(function () { postLead(payload, attempt + 1); }, 2000);
     });
+  }
+
+  /* ============================================================
+   * CONVERSION TRACKING
+   * Pixel events fire if gtag/fbq/dataLayer exist on the host page.
+   * The redirect mirrors the legacy "/submit-true" page-visit conversion.
+   * ============================================================ */
+  var unlockedTracked = false;
+  function trackUnlock() {
+    if (unlockedTracked) return;
+    unlockedTracked = true;
+    var t = PQ_CONFIG.tracking || {};
+    if (t.firePixelEvents === false) return;
+    try { if (typeof window.fbq === "function") window.fbq("trackCustom", "QuoteUnlocked"); } catch (e) {}
+    try { if (typeof window.gtag === "function") window.gtag("event", "quote_unlocked", { event_category: "quote_widget" }); } catch (e) {}
+    try { (window.dataLayer = window.dataLayer || []).push({ event: "pq_quote_unlocked" }); } catch (e) {}
+  }
+  function trackBooking(kind) {
+    var t = PQ_CONFIG.tracking || {};
+    if (kind === "custom" && t.trackCustomBookings === false) return;
+    if (t.firePixelEvents !== false) {
+      try { if (typeof window.fbq === "function") window.fbq("track", "Lead", { content_name: "quote_widget_" + kind }); } catch (e) {}
+      try { if (typeof window.gtag === "function") window.gtag("event", "generate_lead", { event_category: "quote_widget", event_label: kind }); } catch (e) {}
+      try { (window.dataLayer = window.dataLayer || []).push({ event: "pq_booking", pq_kind: kind }); } catch (e) {}
+    }
+    if (t.redirectUrl) {
+      setTimeout(function () { location.href = t.redirectUrl; },
+        t.redirectDelayMs == null ? 3500 : t.redirectDelayMs);
+      return true; // caller can show the "taking you back" note
+    }
+    return false;
   }
 
   /* ============================================================
@@ -317,17 +429,19 @@
     ".pq-btn[disabled]{background:#a8d9f7;cursor:not-allowed}" +
     ".pq-btn-ghost{background:#fff;color:#16191d;border:1.5px solid #d6dee5}.pq-btn-ghost:hover{background:#f2f8fc;border-color:#38b6ff}" +
     ".pq-grid{display:grid;gap:10px}" +
-    ".pq-grid-dogs{grid-template-columns:repeat(5,1fr)}" +
     ".pq-grid-2{grid-template-columns:1fr 1fr}" +
-    "@media(max-width:560px){.pq-grid-dogs{grid-template-columns:repeat(3,1fr)}.pq-grid-2{grid-template-columns:1fr}.pq-row{flex-direction:column}.pq-title{font-size:22px}.pq-body,.pq-head{padding-left:18px;padding-right:18px}}" +
+    "@media(max-width:560px){.pq-grid-2{grid-template-columns:1fr}.pq-row{flex-direction:column}.pq-title{font-size:22px}.pq-body,.pq-head{padding-left:18px;padding-right:18px}}" +
     ".pq-opt{position:relative;border:1.5px solid #d6dee5;border-radius:12px;background:#fff;padding:12px;text-align:left;cursor:pointer;font-size:14px;font-weight:700;color:#16191d}" +
     ".pq-opt small{display:block;font-weight:500;color:#5b6770;font-size:12px;margin-top:3px}" +
     ".pq-opt:hover{border-color:#9fd9ff}" +
     ".pq-opt.sel{border-color:#38b6ff;background:#eef8ff;box-shadow:0 0 0 1px #38b6ff inset}" +
     ".pq-opt.dis{opacity:.45;cursor:not-allowed}" +
     ".pq-opt .pq-pop{position:absolute;top:-9px;right:10px;background:#38b6ff;color:#fff;font-size:10px;font-weight:800;border-radius:999px;padding:2px 8px;letter-spacing:.04em}" +
+    ".pq-opt .pq-check{display:inline-block;width:18px;height:18px;border-radius:5px;border:1.5px solid #c2cdd6;margin-right:8px;vertical-align:-4px;text-align:center;font-size:13px;line-height:16px;color:#fff}" +
+    ".pq-opt.sel .pq-check{background:#38b6ff;border-color:#38b6ff}" +
     ".pq-center{text-align:center}" +
     ".pq-note{font-size:12px;color:#5b6770;margin-top:6px}" +
+    ".pq-callout{font-size:13px;background:#f4f9fd;border:1px solid #cfe8f7;border-radius:10px;padding:10px 12px;color:#2a5b78;margin-top:10px}" +
     ".pq-pricebox{border:1.5px solid #d6dee5;border-radius:12px;padding:14px 16px;margin-top:14px;background:#fafcfe}" +
     ".pq-pricebox.locked{background:#f2f6f9;color:#8a97a1;text-align:center;font-size:14px;padding:18px}" +
     ".pq-prow{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;color:#3c4750}" +
@@ -384,7 +498,7 @@
       '<p class="pq-sub">' + esc(c.subtitle) + "</p>" +
       '<div class="pq-chips">' + chips + "</div>" +
       (b.testimonial ? '<div class="pq-quote-line">' + esc(b.testimonial) + "</div>" : "") +
-      '<div class="pq-call">Need help instead? Call <a href="' + esc(b.phoneHref) + '">' + esc(b.phoneDisplay) + "</a></div>" +
+      '<div class="pq-call">' + esc(c.callPrefix) + ' <a href="' + esc(b.phoneHref) + '">' + esc(b.phoneDisplay) + "</a></div>" +
       "</div>";
   }
 
@@ -410,35 +524,37 @@
 
   /* ---------- Step 1: ZIP ---------- */
   function stepZip() {
-    return '<h3 class="pq-h">Check your area</h3>' +
-      '<p class="pq-p">Enter your ZIP code to see if we service your neighborhood.</p>' +
+    var c = PQ_CONFIG.copy;
+    return '<h3 class="pq-h">' + esc(c.zipTitle) + "</h3>" +
+      '<p class="pq-p">' + esc(c.zipBody) + "</p>" +
       '<div class="pq-row">' +
       '<input class="pq-input" id="pq-zip" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="ZIP code" value="' + esc(state.zip) + '">' +
-      '<button class="pq-btn" id="pq-zip-go" style="flex:none">Check My ZIP</button>' +
+      '<button class="pq-btn" id="pq-zip-go" style="flex:none">' + esc(c.zipButton) + "</button>" +
       "</div>" +
       '<div class="pq-err" id="pq-zip-err">Please enter a 5-digit ZIP code.</div>';
   }
 
   function stepNotify() {
-    return '<h3 class="pq-h">We’re not there yet</h3>' +
-      '<p class="pq-p">' + esc(PQ_CONFIG.copy.outOfArea.replace("{zip}", state.zip)) + "</p>" +
+    var c = PQ_CONFIG.copy;
+    return '<h3 class="pq-h">' + esc(c.outOfAreaTitle) + "</h3>" +
+      '<p class="pq-p">' + esc(c.outOfArea.replace("{zip}", state.zip)) + "</p>" +
       '<div class="pq-row">' +
       '<input class="pq-input" id="pq-oo-email" type="email" autocomplete="email" placeholder="you@email.com">' +
-      '<button class="pq-btn" id="pq-oo-go" style="flex:none">Notify Me</button>' +
+      '<button class="pq-btn" id="pq-oo-go" style="flex:none">Keep Me Posted</button>' +
       "</div>" +
       '<div class="pq-err" id="pq-oo-err">Please enter a valid email.</div>' +
-      '<div class="pq-foot"><button class="pq-back" id="pq-oo-back">← Try a different ZIP</button></div>';
+      '<div class="pq-foot"><button class="pq-back" id="pq-oo-back">← Try another ZIP</button></div>';
   }
 
   /* ---------- Step 2: Build your plan ---------- */
-  function dogChips() {
-    var out = "";
+  function dogsDropdown() {
+    var opts = "";
     for (var d = 1; d <= 9; d++) {
-      out += '<button class="pq-opt pq-center' + (state.dogs === d ? " sel" : "") + '" data-dogs="' + d + '">' +
-        d + (d === 1 ? " dog" : " dogs") + "</button>";
+      opts += '<option value="' + d + '"' + (state.dogs === d ? " selected" : "") + ">" +
+        d + (d === 1 ? " dog" : " dogs") + "</option>";
     }
-    out += '<button class="pq-opt pq-center' + (state.dogs === "10+" ? " sel" : "") + '" data-dogs="10+">10+ dogs<small>Custom</small></button>';
-    return out;
+    opts += '<option value="10+"' + (state.dogs === "10+" ? " selected" : "") + ">10+ dogs (Custom Booking)</option>";
+    return '<select class="pq-select" id="pq-dogs">' + opts + "</select>";
   }
 
   function freqCards() {
@@ -447,22 +563,37 @@
       var cls = "pq-opt" + (state.freq === f.id ? " sel" : "") + (allowed ? "" : " dis");
       var hint = allowed ? f.sub : "Not available for " + state.dogs + " dogs";
       return '<button class="' + cls + '" data-freq="' + f.id + '"' + (allowed ? "" : " disabled") + ">" +
-        (f.popular ? '<span class="pq-pop">MOST POPULAR</span>' : "") +
+        (f.popular ? '<span class="pq-pop">CUSTOMER FAVORITE</span>' : "") +
         esc(f.label) + "<small>" + esc(hint) + "</small></button>";
     }).join("");
   }
 
-  function optionCards(list, key, attr) {
-    return list.map(function (o) {
-      return '<button class="pq-opt' + (state[key] === o.id ? " sel" : "") + '" data-' + attr + '="' + o.id + '">' +
-        esc(o.label) +
-        (o.customOnly ? "<small>Custom Booking</small>" : (o.add ? "<small>+" + money(o.add) + "/visit</small>" : "<small>Included</small>")) +
-        "</button>";
+  // Multi-select area chips + a "Yard+" shortcut that grabs everything.
+  // No prices shown here — pricing stays hidden until the phone gate.
+  function areaCards() {
+    var all = state.areasSel.length === PQ_CONFIG.areaOptions.length;
+    var out = PQ_CONFIG.areaOptions.map(function (a) {
+      var on = state.areasSel.indexOf(a.id) >= 0;
+      return '<button class="pq-opt' + (on ? " sel" : "") + '" data-area="' + a.id + '">' +
+        '<span class="pq-check">' + (on ? "✓" : "") + "</span>" + esc(a.label) + "</button>";
+    }).join("");
+    out += '<button class="pq-opt' + (all ? " sel" : "") + '" data-area="__all">' +
+      '<span class="pq-check">' + (all ? "✓" : "") + "</span>" + esc(PQ_CONFIG.areaPlusLabel) +
+      "<small>One tap — we cover everything</small></button>";
+    return out;
+  }
+
+  function sizeCards() {
+    return PQ_CONFIG.yardSizes.map(function (o) {
+      return '<button class="pq-opt' + (state.yardSize === o.id && !o.customOnly ? " sel" : "") + '" data-size="' + o.id + '">' +
+        esc(o.label) + (o.customOnly ? "<small>Custom Booking</small>" : "") + "</button>";
     }).join("");
   }
 
+  // Add-ons & coupon render only after the price is unlocked — nothing with a
+  // dollar sign is visible before the phone gate.
   function addonRows() {
-    if (isCustom()) return "";
+    if (isCustom() || !state.priceUnlocked) return "";
     var rows = PQ_CONFIG.addons.map(function (a) {
       var p = a.prices[state.freq];
       if (p == null) return "";
@@ -472,30 +603,31 @@
         '<span class="price">+' + money(p) + "/visit</span></label>";
     }).join("");
     if (!rows) return "";
-    return '<span class="pq-label">Optional add-ons <span class="pq-hintright">' + PQ_CONFIG.addons.length + " available</span></span>" + rows;
+    return '<span class="pq-label">Optional extras <span class="pq-hintright">' + PQ_CONFIG.addons.length + " available</span></span>" + rows;
   }
 
   function couponRow() {
-    if (isCustom() || !Object.keys(PQ_CONFIG.coupons).length) return "";
-    return '<span class="pq-label">Add coupon <span class="pq-hintright">Optional</span></span>' +
+    if (isCustom() || !state.priceUnlocked || !Object.keys(PQ_CONFIG.coupons).length) return "";
+    return '<span class="pq-label">Got a coupon? <span class="pq-hintright">Optional</span></span>' +
       '<div class="pq-row"><input class="pq-input" id="pq-coupon" placeholder="Coupon code" value="' + esc(state.coupon || "") + '">' +
       '<button class="pq-btn pq-btn-ghost" id="pq-coupon-apply" style="flex:none">Apply</button></div>' +
       '<div class="pq-err" id="pq-coupon-err">That code isn’t valid.</div>';
   }
 
   function priceBoxHTML() {
+    var c = PQ_CONFIG.copy;
     if (isCustom()) {
-      return '<div class="pq-pricebox"><div class="pq-prow total"><span>Personalized estimate</span><span class="amt" style="font-size:15px;color:#1273ad">We’ll text it to you</span></div>' +
-        '<div class="pq-note">Custom bookings (10+ dogs, 1+ acre, kennels & commercial) are priced after we review your details — no obligation.</div></div>';
+      return '<div class="pq-pricebox"><div class="pq-prow total"><span>Hand-built estimate</span><span class="amt" style="font-size:15px;color:#1273ad">We’ll text it to you</span></div>' +
+        '<div class="pq-note">Big properties get a real number from a human, not a guess — no obligation.</div></div>';
     }
     if (!state.priceUnlocked) {
-      return '<div class="pq-pricebox locked" id="pq-pricebox">Enter your phone number to view your quote.</div>';
+      return '<div class="pq-pricebox locked" id="pq-pricebox">' + esc(c.lockedBox) + "</div>";
     }
     var q = quote();
     if (!q) return "";
     var f = freqDef();
     var rows = q.rows.map(function (r) {
-      return '<div class="pq-prow"><span>' + esc(r.label) + "</span><span>" + (r.amt >= 0 ? "" : "") + money(r.amt) + (f.flat == null ? "/visit" : "") + "</span></div>";
+      return '<div class="pq-prow"><span>' + esc(r.label) + "</span><span>" + money(r.amt) + (f.flat == null ? "/visit" : "") + "</span></div>";
     }).join("");
     var notes = "";
     if (isOneTime() && f.notes) {
@@ -503,75 +635,79 @@
     }
     var waiver = "";
     if (!isOneTime()) {
-      waiver = '<div class="pq-waiver">💰 $99+ Initial Deep-Clean Fee: <s>$99.99+</s> WAIVED' +
-        '<button type="button" id="pq-fee-info">What’s this?</button></div>';
+      waiver = '<div class="pq-waiver">' + esc(c.waiverText) +
+        '<button type="button" id="pq-fee-info">' + esc(c.waiverButton) + "</button></div>";
     }
     var free = '<div class="pq-free">' + PQ_CONFIG.freebies.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>";
     return '<div class="pq-pricebox" id="pq-pricebox">' + rows +
-      '<div class="pq-prow total"><span>' + (f.flat != null ? "One-time total" : "Per visit") + '</span><span class="amt">' + money(q.total) + "</span></div>" +
+      '<div class="pq-prow total"><span>' + esc(f.flat != null ? c.oneTimeLabel : c.perVisitLabel) + '</span><span class="amt">' + money(q.total) + "</span></div>" +
       notes + waiver + free + "</div>";
   }
 
   function questionPanel() {
     if (!state.questionOpen) return "";
     return '<div class="pq-qpanel" id="pq-qpanel">' +
-      '<h4 style="font-size:16px;font-weight:800;margin-bottom:4px">Ask before you commit</h4>' +
-      '<p class="pq-p" style="margin-bottom:10px">Send your question and we’ll reply with real details — your quote info comes along with it.</p>' +
+      '<h4 style="font-size:16px;font-weight:800;margin-bottom:4px">Ask us anything before you book</h4>' +
+      '<p class="pq-p" style="margin-bottom:10px">Text us your question — we’ll reply with a straight answer. Your quote details come along so you won’t have to repeat yourself.</p>' +
       '<div class="pq-grid pq-grid-2">' +
       '<input class="pq-input" id="pq-q-first" placeholder="First name" autocomplete="given-name" value="' + esc(state.contact.first) + '">' +
       '<input class="pq-input" id="pq-q-email" type="email" placeholder="you@email.com" autocomplete="email" value="' + esc(state.contact.email) + '">' +
       "</div>" +
-      '<textarea class="pq-textarea" id="pq-q-text" rows="3" style="margin-top:10px" placeholder="Example: Is weekly enough for two dogs on a smaller gravel yard, and how soon could service start?"></textarea>' +
+      '<textarea class="pq-textarea" id="pq-q-text" rows="3" style="margin-top:10px" placeholder="Example: My two labs share a gravel side yard — does that change anything, and how soon could you start?"></textarea>' +
       '<div class="pq-err" id="pq-q-err">Add your question and a phone number above so we can reply.</div>' +
-      '<div class="pq-foot"><span class="pq-note">We include your ZIP, dog count, frequency and price so the reply has full context.</span>' +
+      '<div class="pq-foot"><span class="pq-note">Your ZIP, dog count, schedule and price ride along so our reply is specific.</span>' +
       '<button class="pq-btn" id="pq-q-send">Send My Question</button></div></div>';
   }
 
   function stepPlan() {
+    var c = PQ_CONFIG.copy;
     var phoneFmt = formatPhone(state.phone);
-    return '<h3 class="pq-h">Build your plan</h3>' +
-      '<p class="pq-p">Tell us about your yard so we can give you an accurate price. Pay per visit — never billed monthly.</p>' +
+    var f = freqDef();
+    var freqNote = (f && f.selectedNote && state.freq === f.id)
+      ? '<div class="pq-callout">' + esc(f.selectedNote) + "</div>" : "";
+    return '<h3 class="pq-h">' + esc(c.planTitle) + "</h3>" +
+      '<p class="pq-p">' + esc(c.planBody) + "</p>" +
 
-      '<span class="pq-label">How many dogs?</span>' +
-      '<div class="pq-grid pq-grid-dogs">' + dogChips() + "</div>" +
+      '<span class="pq-label">' + esc(c.dogsLabel) + "</span>" + dogsDropdown() +
 
-      '<span class="pq-label">How often? <span class="pq-hintright">Weekly is most popular</span></span>' +
-      '<div class="pq-grid pq-grid-2">' + freqCards() + "</div>" +
+      '<span class="pq-label">' + esc(c.freqLabel) + ' <span class="pq-hintright">' + esc(c.freqHint) + "</span></span>" +
+      '<div class="pq-grid pq-grid-2">' + freqCards() + "</div>" + freqNote +
 
       (isCustom() ? customFields() : standardFields()) +
 
-      '<span class="pq-label">Enter phone number to view ' + (isCustom() ? "your estimate request" : "your quote") + "</span>" +
+      '<span class="pq-label">' + esc(isCustom() ? "Where should we text your estimate?" : c.phoneLabel) + "</span>" +
       '<input class="pq-input" id="pq-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(317) 555-1234" value="' + esc(phoneFmt) + '">' +
-      '<div class="pq-note">' + esc(PQ_CONFIG.copy.phoneHint) + "</div>" +
+      '<div class="pq-note">' + esc(c.phoneHint) + "</div>" +
 
       priceBoxHTML() +
       couponRow() +
       addonRows() +
 
       '<div class="pq-foot">' +
-      '<button class="pq-btn pq-btn-ghost" id="pq-q-toggle">' + (state.questionOpen ? "Hide Question Form" : "Have Questions?") + "</button>" +
-      '<button class="pq-btn" id="pq-continue"' + (canContinue() ? "" : " disabled") + ">" + (isCustom() ? "Request My Estimate" : "Get Started") + "</button>" +
+      '<button class="pq-btn pq-btn-ghost" id="pq-q-toggle">' + (state.questionOpen ? "Hide the question box" : "Got a question first?") + "</button>" +
+      '<button class="pq-btn" id="pq-continue"' + (canContinue() ? "" : " disabled") + ">" + esc(isCustom() ? c.ctaCustom : "Keep Going →") + "</button>" +
       "</div>" +
       questionPanel() +
-      '<div class="pq-foot"><button class="pq-back" id="pq-plan-back">← Change ZIP</button></div>';
+      '<div class="pq-foot"><button class="pq-back" id="pq-plan-back">← Different ZIP</button></div>';
   }
 
   function standardFields() {
-    return '<span class="pq-label">Which areas do we clean?</span>' +
-      '<div class="pq-grid pq-grid-2">' + optionCards(PQ_CONFIG.areas, "area", "area") + "</div>" +
-      '<span class="pq-label">Yard size?</span>' +
-      '<div class="pq-grid pq-grid-2">' + optionCards(PQ_CONFIG.yardSizes, "yardSize", "size") + "</div>" +
-      '<span class="pq-label">When was the yard last thoroughly cleaned?</span>' +
+    var c = PQ_CONFIG.copy;
+    return '<span class="pq-label">' + esc(c.areasLabel) + ' <span class="pq-hintright">' + esc(c.areasHint) + "</span></span>" +
+      '<div class="pq-grid pq-grid-2">' + areaCards() + "</div>" +
+      '<span class="pq-label">' + esc(c.sizeLabel) + "</span>" +
+      '<div class="pq-grid pq-grid-2">' + sizeCards() + "</div>" +
+      '<span class="pq-label">' + esc(c.lastCleanLabel) + "</span>" +
       '<select class="pq-select" id="pq-lastclean">' +
       PQ_CONFIG.lastCleaned.map(function (o) {
         return '<option' + (o === state.lastCleaned ? " selected" : "") + ">" + esc(o) + "</option>";
       }).join("") + "</select>" +
-      '<div class="pq-note">This does NOT affect pricing — it just tells us how much time to allot for your first visit.</div>';
+      '<div class="pq-note">' + esc(c.lastCleanNote) + "</div>";
   }
 
   function customFields() {
     return '<div class="pq-qpanel" style="margin-top:14px;background:#fbfdff">' +
-      '<p class="pq-p" style="margin-bottom:10px"><strong>Custom Booking</strong> — for households, estates or kennels with 10+ dogs, yards over 1 acre, or commercial properties. We collect your info and follow up with a personalized estimate.</p>' +
+      '<p class="pq-p" style="margin-bottom:10px"><strong>Custom Booking</strong> — for 10+ dogs, properties over an acre, kennels, or commercial. Tell us the details and we’ll text you a real number, not a guess.</p>' +
       '<div class="pq-grid pq-grid-2">' +
       "<div><span class='pq-label' style='margin-top:0'>How many dogs?</span>" +
       '<input class="pq-input" id="pq-cdogs" inputmode="numeric" placeholder="e.g. 12" value="' + esc(state.dogs === "10+" ? "" : state.dogs) + '"></div>' +
@@ -590,45 +726,50 @@
 
   /* ---------- Step 3: Details ---------- */
   function stepDetails() {
+    var c = PQ_CONFIG.copy;
     var q = quote();
     var summary = isCustom()
-      ? "Custom booking · personalized estimate"
+      ? "Custom booking · hand-built estimate"
       : (state.dogs + (state.dogs === 1 ? " dog" : " dogs") + ", " + freqDef().label);
     var amt = q ? (money(q.total) + (isOneTime() ? "" : "/visit")) : "TBD";
-    var c = state.contact;
-    return '<h3 class="pq-h">Almost there</h3>' +
-      '<p class="pq-p">Fill in your details and we’ll get you on the schedule.</p>' +
+    var ct = state.contact;
+    return '<h3 class="pq-h">' + esc(c.detailsTitle) + "</h3>" +
+      '<p class="pq-p">' + esc(c.detailsBody) + "</p>" +
       '<div class="pq-summary"><span>' + esc(summary) + '</span><span class="amt">' + esc(amt) + "</span></div>" +
+      (isOneTime() ? '<div class="pq-callout" style="margin:0 0 14px">' + esc(c.oneTimeCheckout) + "</div>" : "") +
       '<div class="pq-grid pq-grid-2">' +
-      "<div><span class='pq-label' style='margin-top:0'>First name *</span><input class='pq-input' id='pq-first' autocomplete='given-name' value='" + esc(c.first) + "'></div>" +
-      "<div><span class='pq-label' style='margin-top:0'>Last name *</span><input class='pq-input' id='pq-last' autocomplete='family-name' value='" + esc(c.last) + "'></div>" +
-      "<div><span class='pq-label'>Email *</span><input class='pq-input' id='pq-email' type='email' autocomplete='email' value='" + esc(c.email) + "'></div>" +
+      "<div><span class='pq-label' style='margin-top:0'>First name *</span><input class='pq-input' id='pq-first' autocomplete='given-name' value='" + esc(ct.first) + "'></div>" +
+      "<div><span class='pq-label' style='margin-top:0'>Last name *</span><input class='pq-input' id='pq-last' autocomplete='family-name' value='" + esc(ct.last) + "'></div>" +
+      "<div><span class='pq-label'>Email *</span><input class='pq-input' id='pq-email' type='email' autocomplete='email' value='" + esc(ct.email) + "'></div>" +
       "<div><span class='pq-label'>Phone *</span><input class='pq-input' id='pq-dphone' type='tel' autocomplete='tel' value='" + esc(formatPhone(state.phone)) + "'></div>" +
       "</div>" +
-      "<span class='pq-label'>Street address *</span><input class='pq-input' id='pq-street' autocomplete='street-address' value='" + esc(c.street) + "'>" +
+      "<span class='pq-label'>Street address *</span><input class='pq-input' id='pq-street' autocomplete='street-address' value='" + esc(ct.street) + "'>" +
       '<div class="pq-grid pq-grid-2" style="margin-top:10px">' +
-      "<div><span class='pq-label' style='margin-top:0'>City</span><input class='pq-input' id='pq-city' autocomplete='address-level2' value='" + esc(c.city) + "'></div>" +
-      "<div><span class='pq-label' style='margin-top:0'>State</span><input class='pq-input' id='pq-state' autocomplete='address-level1' value='" + esc(c.state) + "'></div>" +
+      "<div><span class='pq-label' style='margin-top:0'>City</span><input class='pq-input' id='pq-city' autocomplete='address-level2' value='" + esc(ct.city) + "'></div>" +
+      "<div><span class='pq-label' style='margin-top:0'>State</span><input class='pq-input' id='pq-state' autocomplete='address-level1' value='" + esc(ct.state) + "'></div>" +
       "</div>" +
-      '<label class="pq-consent"><input type="checkbox" id="pq-consent"' + (c.consent ? " checked" : "") + ">" +
-      "<span>" + esc(PQ_CONFIG.copy.consent) + "</span></label>" +
+      '<label class="pq-consent"><input type="checkbox" id="pq-consent"' + (ct.consent ? " checked" : "") + ">" +
+      "<span>" + esc(c.consent) + "</span></label>" +
       '<div class="pq-err" id="pq-d-err">Please fill in the required fields.</div>' +
       '<div class="pq-foot">' +
       '<button class="pq-back" id="pq-d-back">← Back</button>' +
-      '<button class="pq-btn" id="pq-d-go">' + (isCustom() ? "Send My Request" : "Start My Service") + "</button>" +
+      '<button class="pq-btn" id="pq-d-go">' + esc(isCustom() ? c.ctaCustom : c.ctaStandard) + "</button>" +
       "</div>";
   }
 
   /* ---------- Step 4: Done ---------- */
-  function stepDone() {
+  function stepDone(redirecting) {
     var c = PQ_CONFIG.copy;
     var title = state.doneCustom ? c.doneCustomTitle : c.doneTitle;
     var body = state.doneCustom ? c.doneCustomBody : c.doneBody;
+    if (!state.doneCustom && state.doneOneTime) body += " " + c.doneOneTimeExtra;
     return '<div class="pq-done"><div class="big">✅</div>' +
       '<h3 class="pq-h">' + esc(title) + "</h3>" +
       '<p class="pq-p" style="max-width:440px;margin:0 auto 16px">' + esc(body) + "</p>" +
       '<div class="pq-free" style="justify-content:center">' + PQ_CONFIG.freebies.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>" +
-      '<div class="pq-foot" style="justify-content:center;margin-top:22px"><button class="pq-btn pq-btn-ghost" id="pq-done-close">Close</button></div></div>';
+      (redirecting ? '<p class="pq-note" style="margin-top:18px">' + esc(c.redirectNote) + "</p>" :
+        '<div class="pq-foot" style="justify-content:center;margin-top:22px"><button class="pq-btn pq-btn-ghost" id="pq-done-close">Close</button></div>') +
+      "</div>";
   }
 
   /* ---------- Start-up fee explainer ---------- */
@@ -637,17 +778,17 @@
     wrap.className = "pq-feewrap";
     wrap.innerHTML = '<div class="pq-fee">' +
       '<button class="pq-close" style="top:10px;right:10px" data-fee-close>×</button>' +
-      "<h3>🤔 What is the “Start-Up Fee”?</h3>" +
-      "<p>For new recurring customers, the first visit is a <strong>DEEP CLEAN</strong>. 💩 We hunt down <em>every single pile</em> to reset your yard to zero! 🐕✨</p>" +
-      "<p>Normally, this takes us serious time &amp; labor… 🥵</p>" +
+      "<h3>🤔 Wait — how is the first deep clean free?</h3>" +
+      "<p>Every new recurring customer starts with a <strong>full-yard reset</strong>. 💩 We don’t skim it — we clear <em>everything</em> so visit #2 starts from zero. 🐕✨</p>" +
+      "<p>That first visit takes real time and elbow grease. Here’s what it would normally run:</p>" +
       '<div class="pq-feebox">' +
-      '<div class="pq-feerow"><span>⏱️ Base Rate (30 mins):</span><span class="strike">$39.99</span></div>' +
-      '<div class="pq-feerow"><span>👷 Extra Labor ($1/min):</span><span class="strike">~$60.00+</span></div>' +
-      '<div class="pq-feerow red"><span>🏷️ TYPICAL TOTAL COST:</span><span class="strike">$99.99+</span></div>' +
-      '<div class="pq-feerow green"><span>🎉 WITH THIS OFFER:</span><span class="amt">$0.00</span></div>' +
+      '<div class="pq-feerow"><span>⏱️ First 30 minutes on site:</span><span class="strike">$39.99</span></div>' +
+      '<div class="pq-feerow"><span>👷 Every minute after ($1/min):</span><span class="strike">~$60.00+</span></div>' +
+      '<div class="pq-feerow red"><span>🏷️ WHAT THAT ADDS UP TO:</span><span class="strike">$99.99+</span></div>' +
+      '<div class="pq-feerow green"><span>🎉 WHAT YOU PAY:</span><span class="amt">$0.00</span></div>' +
       "</div>" +
-      '<p class="mid">✅ You pay your <strong>Per Visit Rate Only</strong>.<br>The “Deep Clean” labor is 100% on the house! 🏠💙</p>' +
-      '<p class="fine">* Offer only valid for new recurring customers. Not valid for One-Time cleans. *</p>' +
+      '<p class="mid">✅ Your card only ever sees your <strong>per-visit rate</strong>.<br>The reset labor? That one’s on us. 🏠💙</p>' +
+      '<p class="fine">* For new recurring customers only. Doesn’t apply to One-Time cleans. *</p>' +
       "</div>";
     wrap.addEventListener("click", function (e) {
       if (e.target === wrap || e.target.hasAttribute("data-fee-close")) wrap.remove();
@@ -682,10 +823,20 @@
 
   function afterOptionChange() {
     ensureFreqValid();
+    persist();
     render();
     // Quote already unlocked → keep GHL's picture of this lead current,
     // but lazily (2.5s) and deduped, so option-fiddling stays cheap.
     if (state.priceUnlocked && state.phone.length === 10) sender.queue("quote_updated", 2500);
+  }
+
+  function refreshPriceBox() {
+    var box = $("pq-pricebox");
+    if (box) {
+      box.outerHTML = priceBoxHTML();
+      var fee = $("pq-fee-info");
+      if (fee) fee.addEventListener("click", openFeeModal);
+    }
   }
 
   function bindStep() {
@@ -698,6 +849,7 @@
         if (z.length !== 5) { show($("pq-zip-err"), true); return; }
         state.zip = z;
         state.step = PQ_CONFIG.serviceZips.indexOf(z) >= 0 ? "plan" : "notify";
+        persist();
         render();
       };
       zipIn.addEventListener("keydown", function (e) { if (e.key === "Enter") goZip(); });
@@ -713,10 +865,10 @@
         if (!validEmail(em.value)) { show($("pq-oo-err"), true); return; }
         state.contact.email = em.value.trim();
         sender.send("out_of_area");
-        state.doneCustom = false;
+        clearStore();
         bodyEl.innerHTML = dotsHTML() + '<div class="pq-done"><div class="big">📨</div>' +
-          '<h3 class="pq-h">You’re on the list!</h3>' +
-          '<p class="pq-p">We’ll email you the moment we launch in ' + esc(state.zip) + ".</p>" +
+          '<h3 class="pq-h">You’re on the launch list!</h3>' +
+          '<p class="pq-p">We’ll email you the day we open up ' + esc(state.zip) + ".</p>" +
           '<div class="pq-foot" style="justify-content:center"><button class="pq-btn pq-btn-ghost" id="pq-oo-done">Close</button></div></div>';
         bodyEl.querySelector("#pq-oo-done").addEventListener("click", close);
         return;
@@ -729,13 +881,13 @@
 
     // Plan
     if (state.step === "plan") {
-      bodyEl.querySelectorAll("[data-dogs]").forEach(function (el) {
-        el.addEventListener("click", function () {
-          var v = el.getAttribute("data-dogs");
-          state.dogs = v === "10+" ? "10+" : parseInt(v, 10);
-          afterOptionChange();
-        });
+      var dogsSel = $("pq-dogs");
+      dogsSel.addEventListener("change", function () {
+        var v = dogsSel.value;
+        state.dogs = v === "10+" ? "10+" : parseInt(v, 10);
+        afterOptionChange();
       });
+
       bodyEl.querySelectorAll("[data-freq]").forEach(function (el) {
         el.addEventListener("click", function () {
           if (el.disabled) return;
@@ -743,9 +895,26 @@
           afterOptionChange();
         });
       });
+
       bodyEl.querySelectorAll("[data-area]").forEach(function (el) {
-        el.addEventListener("click", function () { state.area = el.getAttribute("data-area"); afterOptionChange(); });
+        el.addEventListener("click", function () {
+          var id = el.getAttribute("data-area");
+          var allIds = PQ_CONFIG.areaOptions.map(function (a) { return a.id; });
+          if (id === "__all") {
+            // Yard+ toggles everything on; tapping again drops back to one area
+            state.areasSel = state.areasSel.length === allIds.length ? [allIds[0]] : allIds.slice();
+          } else {
+            var i = state.areasSel.indexOf(id);
+            if (i >= 0) {
+              if (state.areasSel.length > 1) state.areasSel.splice(i, 1); // never allow zero areas
+            } else {
+              state.areasSel.push(id);
+            }
+          }
+          afterOptionChange();
+        });
       });
+
       bodyEl.querySelectorAll("[data-size]").forEach(function (el) {
         el.addEventListener("click", function () {
           var id = el.getAttribute("data-size");
@@ -754,6 +923,7 @@
           afterOptionChange();
         });
       });
+
       var lc = $("pq-lastclean");
       if (lc) lc.addEventListener("change", function () { state.lastCleaned = lc.value; afterOptionChange(); });
 
@@ -781,7 +951,7 @@
         state.dogs = isNaN(n) ? "10+" : n;
       });
       var cs = $("pq-csize");
-      if (cs) cs.addEventListener("change", function () { state.customYardSize = cs.value; });
+      if (cs) cs.addEventListener("change", function () { state.customYardSize = cs.value; persist(); });
       var cn = $("pq-cnotes");
       if (cn) cn.addEventListener("input", function () { state.notes = cn.value; });
 
@@ -794,22 +964,24 @@
         state.phone = d;
         var fmt = formatPhone(d);
         if (ph.value !== fmt) { ph.value = fmt; if (caretAtEnd) ph.setSelectionRange(fmt.length, fmt.length); }
-        var btn = $("pq-continue");
         if (d.length === 10) {
-          if (!state.priceUnlocked) {
-            state.priceUnlocked = true;
-            var box = $("pq-pricebox");
-            if (box) box.outerHTML = priceBoxHTML();
-            var fee = $("pq-fee-info");
-            if (fee) fee.addEventListener("click", openFeeModal);
-          } else {
-            var box2 = $("pq-pricebox");
-            if (box2) { box2.outerHTML = priceBoxHTML(); var fee2 = $("pq-fee-info"); if (fee2) fee2.addEventListener("click", openFeeModal); }
-          }
-          if (btn) btn.disabled = false;
           sender.queue("phone_captured", 800);
-        } else if (btn) {
-          btn.disabled = true;
+          persist();
+          if (!state.priceUnlocked) {
+            // First unlock: full re-render so add-ons/coupon appear with the price
+            state.priceUnlocked = true;
+            trackUnlock();
+            render();
+            var ph2 = $("pq-phone");
+            if (ph2) { ph2.focus(); ph2.setSelectionRange(ph2.value.length, ph2.value.length); }
+            return;
+          }
+          refreshPriceBox();
+          var btn = $("pq-continue");
+          if (btn) btn.disabled = false;
+        } else {
+          var btn2 = $("pq-continue");
+          if (btn2) btn2.disabled = true;
         }
       });
       ph.addEventListener("blur", function () {
@@ -836,13 +1008,14 @@
         state.question = qt;
         sender.send("question_submitted");
         var panel = bodyEl.querySelector("#pq-qpanel");
-        panel.innerHTML = '<p class="pq-p" style="margin:0"><strong>✅ Question sent!</strong> We’ll text you back shortly with real details.</p>';
+        panel.innerHTML = '<p class="pq-p" style="margin:0"><strong>✅ Question sent!</strong> Keep an eye on your texts — a real answer is on the way.</p>';
       });
 
       $("pq-continue").addEventListener("click", function () {
         if (!canContinue()) return;
         if (isCustom() && state.dogs !== "10+" && !state.dogs) state.dogs = "10+";
         state.step = "details";
+        persist();
         render();
       });
       $("pq-plan-back").addEventListener("click", function () { state.step = "zip"; render(); });
@@ -853,16 +1026,16 @@
     if (state.step === "details") {
       $("pq-d-back").addEventListener("click", function () { state.step = "plan"; render(); });
       $("pq-d-go").addEventListener("click", function () {
-        var c = state.contact;
-        c.first = $("pq-first").value.trim();
-        c.last = $("pq-last").value.trim();
-        c.email = $("pq-email").value.trim();
-        c.street = $("pq-street").value.trim();
-        c.city = $("pq-city").value.trim();
-        c.state = $("pq-state").value.trim();
-        c.consent = $("pq-consent").checked;
+        var ct = state.contact;
+        ct.first = $("pq-first").value.trim();
+        ct.last = $("pq-last").value.trim();
+        ct.email = $("pq-email").value.trim();
+        ct.street = $("pq-street").value.trim();
+        ct.city = $("pq-city").value.trim();
+        ct.state = $("pq-state").value.trim();
+        ct.consent = $("pq-consent").checked;
         state.phone = digitsOf($("pq-dphone").value) || state.phone;
-        var ok = c.first && c.last && validEmail(c.email) && c.street && state.phone.length === 10;
+        var ok = ct.first && ct.last && validEmail(ct.email) && ct.street && state.phone.length === 10;
         ["pq-first", "pq-last", "pq-email", "pq-street", "pq-dphone"].forEach(function (id) {
           var el = $(id);
           var bad = !el.value.trim() || (id === "pq-email" && !validEmail(el.value)) || (id === "pq-dphone" && digitsOf(el.value).length !== 10);
@@ -870,23 +1043,30 @@
         });
         if (!ok) { show($("pq-d-err"), true); return; }
         state.doneCustom = isCustom();
+        state.doneOneTime = isOneTime();
         sender.send(isCustom() ? "estimate_requested" : "service_requested");
+        clearStore();
+        var redirecting = trackBooking(isCustom() ? "custom" : "standard");
         state.step = "done";
-        render();
+        bodyEl.innerHTML = dotsHTML() + stepDone(redirecting);
+        if (!redirecting) bindStep();
       });
       return;
     }
 
     if (state.step === "done") {
-      $("pq-done-close").addEventListener("click", close);
+      var dc = $("pq-done-close");
+      if (dc) dc.addEventListener("click", close);
     }
   }
 
   /* ============================================================
    * OPEN / CLOSE / TRIGGERS
    * ============================================================ */
+  var restored = false;
   function open() {
     if (overlay) return;
+    if (!restored) { restore(); restored = true; }
     var style = document.getElementById("pq-style");
     if (!style) {
       style = document.createElement("style");
