@@ -214,27 +214,31 @@
   /* ============================================================
    * STATE
    * ============================================================ */
-  var state = {
-    step: "zip",          // zip | notify | plan | details | done
-    zip: "",
-    dogs: 1,              // 1..9 or "10+"
-    freq: "weekly",
-    areasSel: [],         // multi-select of areaOptions ids; starts empty by design
-    yardSize: "s",
-    customYardSize: "",
-    lastCleaned: PQ_CONFIG.lastCleaned[0],
-    addons: [],
-    coupon: null,
-    phone: "",            // digits only
-    lastValidPhone: "",   // survives backspacing — see buildPayload
-    priceUnlocked: false,
-    startTiming: PQ_CONFIG.startTimingOptions[0],
-    notes: "",
-    contact: { first: "", last: "", email: "", street: "", city: "", state: "IN", consent: true },
-    questionOpen: false,
-    doneCustom: false,
-    eventId: ""
-  };
+  function freshState() {
+    return {
+      step: "zip",          // zip | notify | plan | details | done
+      zip: "",
+      dogs: 1,              // 1..9 or "10+"
+      freq: "weekly",
+      areasSel: [],         // multi-select of areaOptions ids; starts empty by design
+      yardSize: "s",
+      customYardSize: "",
+      lastCleaned: PQ_CONFIG.lastCleaned[0],
+      addons: [],
+      coupon: null,
+      phone: "",            // digits only
+      lastValidPhone: "",   // survives backspacing — see buildPayload
+      priceUnlocked: false,
+      startTiming: PQ_CONFIG.startTimingOptions[0],
+      notes: "",
+      contact: { first: "", last: "", email: "", street: "", city: "", state: "IN", consent: true },
+      questionOpen: false,
+      doneCustom: false,
+      doneOneTime: false,
+      eventId: ""
+    };
+  }
+  var state = freshState();
 
   /* ---------- persistence: resume an abandoned quote for 24h ---------- */
   var STORE_KEY = "pq_quote_v2";
@@ -265,6 +269,13 @@
     } catch (e) {}
   }
   function clearStore() { try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
+
+  // Full wipe for a brand-new quote (e.g. quoting for a neighbor after booking).
+  function resetState() {
+    state = freshState();
+    sender.lastKey = {};
+    clearStore();
+  }
 
   function freqDef(id) {
     for (var i = 0; i < PQ_CONFIG.frequencies.length; i++)
@@ -855,7 +866,9 @@
       '<p class="pq-p" style="max-width:440px;margin:0 auto 16px">' + esc(body) + "</p>" +
       '<div class="pq-free" style="justify-content:center">' + PQ_CONFIG.freebies.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>" +
       (redirecting ? '<p class="pq-note" style="margin-top:18px">' + esc(c.redirectNote) + "</p>" :
-        '<div class="pq-foot" style="justify-content:center;margin-top:22px"><button class="pq-btn pq-btn-ghost" id="pq-done-close">Close</button></div>') +
+        '<div class="pq-foot" style="justify-content:center;margin-top:22px">' +
+        '<button class="pq-btn pq-btn-ghost" id="pq-done-close">Close</button>' +
+        '<button class="pq-btn pq-btn-ghost" id="pq-done-new">Start Another Quote</button></div>') +
       "</div>";
   }
 
@@ -1156,6 +1169,8 @@
     if (state.step === "done") {
       var dc = $("pq-done-close");
       if (dc) dc.addEventListener("click", close);
+      var dn = $("pq-done-new");
+      if (dn) dn.addEventListener("click", function () { resetState(); render(); });
     }
   }
 
@@ -1219,6 +1234,9 @@
     overlay = null;
     bodyEl = null;
     document.body.style.overflow = "";
+    // A finished quote shouldn't greet the next visitor (or the same visitor
+    // quoting for someone else) — any close from the confirmation starts fresh.
+    if (state.step === "done") resetState();
   }
 
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
