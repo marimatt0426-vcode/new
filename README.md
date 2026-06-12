@@ -491,12 +491,12 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 **1 — Instant quote (Workflow 2, ~1 min after phone capture)**
 
-> Hey, it's Matt with Purge Pros 🐾 Here's the quote you just built at itspurgepros.com:
+> Hey, it's Matt with Purge Pros 🐾 Here's the quote you just built:
 > {{contact.quote_dogs}} dog(s) · {{contact.quote_frequency}} ·
-> ${{contact.quote_price_per_visit}} per visit. You pay per visit — never a monthly
-> bill, no contracts. Bonus: your initial deep-clean fee ($99+ value) is WAIVED —
-> visit #1 preps your yard back to zero and you pay just that same per-visit rate.
-> Want it? Just reply YES and I'll get you on the schedule. Reply STOP to opt out.
+> ${{contact.quote_price_per_visit}} per visit. No contracts, no monthly bills — you
+> only ever pay per visit. And your first visit? We waive the $99+ initial yard prep,
+> so it's just your regular rate. Whenever you're ready, reply YES and I'll grab your
+> spot on the route. Reply STOP to opt out.
 
 **2 — Nurture touch 1 (45 min)**
 
