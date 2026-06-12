@@ -38,9 +38,14 @@ tools/place-id-from-url.js   Derives a Google Place ID from a full Maps URL
    reveal shows the per-visit breakdown (never a monthly figure), the freebies, the
    **first-visit deep clean ON US** banner with explainer popup, and only now the
    WYSIWash add-on and coupon row.
-4. **Details** — name, email, address, consent checkbox → "Book My First Visit".
+4. **Details** — name, email, address, an optional **"When would you like us to
+   start?"** dropdown (ASAP / within a week / next few weeks / just looking — feeds
+   route planning and lets you triage hot leads), consent checkbox → "Lock In My Spot".
    One-time cleans get a deposit/overtime reminder here.
-5. **Confirmation** — then (optionally) an automatic redirect to your conversion page.
+5. **Confirmation** — deliberately worded around how scheduling actually works: *the
+   rate is locked, a real person now checks routes near you and texts to set your first
+   visit day; sign-ups outside business hours hear back first thing.* Nothing promises
+   an instant slot. Then (optionally) an automatic redirect to your conversion page.
 
 An in-progress quote is saved in the browser for 24 hours, so someone who closes the
 popup and comes back resumes where they left off instead of starting over.
@@ -69,7 +74,8 @@ Every payload carries the full quote context:
   "stage": "phone_captured",
   "zip": "46032", "dogs": "2", "frequency": "Weekly",
   "areas": "Back & Front Yard", "yardSize": "Medium · ¼ acre",
-  "lastCleaned": "2 Weeks", "addons": "WYSIWash Treatment",
+  "lastCleaned": "2 Weeks", "startTiming": "As soon as possible",
+  "addons": "WYSIWash Treatment",
   "coupon": "", "perVisitPrice": "53.98",
   "phone": "3175551234", "firstName": "", "lastName": "", "email": "",
   "street": "", "city": "", "state": "IN",
@@ -210,6 +216,7 @@ Create these **text** fields (exact names keep the mapping obvious):
 | `Quote Areas`          | `areas` (e.g. "Back & Front Yard")     |
 | `Quote Yard Size`      | `yardSize`                             |
 | `Quote Last Cleaned`   | `lastCleaned`                          |
+| `Quote Start Timing`   | `startTiming` ("As soon as possible" …)|
 | `Quote Addons`         | `addons`                               |
 | `Quote Price Per Visit`| `perVisitPrice` (e.g. "28.99")         |
 | `Quote Stage`          | `stage` (latest stage seen)            |
@@ -291,14 +298,48 @@ Four touches over ~6 days, then silence. More than that burns numbers and goodwi
 
 ### G. Workflow 4 — `Booking Confirmation` (trigger: tag `service-requested` added)
 
+**Important context:** submitting the form does NOT put anyone on the schedule. You
+check your routes first and confirm the visit day by text. Everything below is written
+around that — the automated text confirms the *rate* and the *request*, sets the
+expectation that a human is checking routes, and invites them to reply with preferred
+days. The actual scheduling conversation is yours, in the GHL inbox.
+
 - Action 1: **If/Else on `Quote Frequency`**:
   - equals `One-Time Clean` → SMS → **message 7** (one-time + deposit version)
   - everything else → SMS → **message 6** (recurring version)
-- Action 2: **Internal notification** (**message 11**) to you/your team — this is your
-  cue to schedule the job (and create it in Housecall Pro while that's still your
-  scheduling system).
+- Action 2: **Internal notification** (**message 11**) to you/your team. This is your
+  cue to do the route check.
 - Action 3 (optional): confirmation **email** (**message 12**) — receipts feel more
-  official with an email behind them.
+  official with an email behind them. The email also repeats the "we'll text you to set
+  your day" expectation so nobody sits waiting for a calendar invite.
+
+**The human scheduling loop (your part):**
+
+1. Notification arrives with everything you need: address, ZIP, dog count, frequency,
+   price, and **Quote Start Timing** (their own urgency — "As soon as possible" gets
+   handled before "Just looking for now").
+2. Check your routes for that ZIP/neighborhood.
+3. Open the contact's conversation in GHL — messages 6/7 are already sitting in the
+   thread — and reply with your proposal, e.g.:
+   > *"Alright {{first_name}}, checked our routes — we're in your neighborhood Tuesdays.
+   > I can get your first deep clean done this Tuesday morning. Lock it in?"*
+4. They reply, you confirm, you create the job in Housecall Pro (while that's still
+   your scheduling system). Move the opportunity to **Won**.
+
+**Response-time guardrails:** the confirmation texts promise "usually quick during
+business hours; evenings/weekends you'll hear from us first thing." Hold yourself to
+that — a captured booking that waits a day starts shopping again.
+
+### G2. Workflow 4b (optional) — `Scheduling Reminder` (trigger: tag `service-requested` added)
+
+A safety net so no booking slips through on a busy day:
+
+- Wait **4 hours** (with operating hours set, so an 11 p.m. booking checks at ~1 p.m.
+  next day).
+- **If/Else:** opportunity still in stage *Booked* (i.e., you haven't moved it to *Won*)
+  → send yourself another internal notification: *"⏰ Still unscheduled:
+  {{contact.first_name}} · {{contact.phone}} · {{contact.quote_zip}} — booked 4+ hours
+  ago, route check pending."*
 
 ### H. Workflow 5 — `Custom Estimate Request` (trigger: tag `estimate-requested` added)
 
@@ -379,19 +420,22 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 **6 — Booking confirmation, recurring (Workflow 4)**
 
-> 🎉 You're in! Got your request for {{contact.quote_frequency}} service at
-> {{contact.address1}}. I'll text you shortly with your first visit day. What happens
-> next: visit #1 is the full deep clean (free with your plan), then it's
-> ${{contact.quote_price_per_visit}} per visit — you'll get a heads-up text before every
-> arrival and a gate photo when we're done. Welcome aboard! — Matt @ Purge Pros 🐾
+> 🎉 Got it — your rate is locked: ${{contact.quote_price_per_visit}}/visit for
+> {{contact.quote_frequency}} service at {{contact.address1}}. Here's how scheduling
+> works: we build each week around routes, so I'm checking which day we're in your
+> neighborhood and I'll text you right back to set your first visit (the free deep
+> clean). If you signed up outside business hours, you'll hear from me first thing.
+> Got a day that works best for you? Reply with it and I'll do my best to match it.
+> — Matt @ Purge Pros 🐾
 
 **7 — Booking confirmation, one-time (Workflow 4)**
 
 > 🎉 Got your one-time clean request for {{contact.address1}}! Quick recap: $89.99 base
 > covers your first 30 minutes of labor, then $1/min until the yard is spotless — waste
-> hauled away included. I'll text you a secure link for the base-rate deposit to lock in
-> your slot, and anything beyond the 30 minutes settles up after the job. Talk soon!
-> — Matt @ Purge Pros
+> hauled away included. I'm checking our routes for your area now and I'll text you back
+> with available days plus a secure link for the base-rate deposit that locks your slot.
+> Signed up after hours? You'll hear from me first thing. Got a day that works best?
+> Reply with it. — Matt @ Purge Pros
 
 **8 — Custom estimate acknowledgment (Workflow 5)**
 
@@ -418,19 +462,20 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 **11 — Internal notification (Workflows 4/5, to you)**
 
-> 🔔 NEW {{contact.quote_stage}}: {{contact.first_name}} {{contact.last_name}} ·
-> {{contact.phone}} · {{contact.address1}}, {{contact.city}} {{contact.quote_zip}} ·
-> {{contact.quote_dogs}} dogs · {{contact.quote_frequency}} ·
-> ${{contact.quote_price_per_visit}}/visit · Add-ons: {{contact.quote_addons}} ·
+> 🔔 NEW {{contact.quote_stage}} — ROUTE CHECK NEEDED: {{contact.first_name}}
+> {{contact.last_name}} · {{contact.phone}} · {{contact.address1}}, {{contact.city}}
+> {{contact.quote_zip}} · {{contact.quote_dogs}} dogs · {{contact.quote_frequency}} ·
+> ${{contact.quote_price_per_visit}}/visit · Wants to start:
+> {{contact.quote_start_timing}} · Add-ons: {{contact.quote_addons}} ·
 > Last cleaned: {{contact.quote_last_cleaned}} · Notes: {{contact.quote_notes}}
 
 **12 — Booking confirmation email (optional, Workflow 4)**
 
-> **Subject:** Your Purge Pros service is confirmed 🎉
+> **Subject:** Your Purge Pros rate is locked in 🎉
 >
 > Hi {{contact.first_name}},
 >
-> You're officially on the Purge Pros schedule. Here's your plan:
+> Your Purge Pros rate is locked in. Here's your plan:
 >
 > - **Service:** {{contact.quote_frequency}} · {{contact.quote_dogs}} dog(s)
 > - **Coverage:** {{contact.quote_areas}} · {{contact.quote_yard_size}}
@@ -438,8 +483,11 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 >   never monthly, no contracts
 > - **First visit:** full deep clean, on us
 >
-> Before every visit you'll get a text, and a gate photo when we're done. Questions?
-> Just reply to the text thread or this email.
+> **What happens next:** we build our weeks around routes, so we're checking which day
+> we're in your neighborhood — you'll get a text shortly to set your first visit day
+> (if you signed up in the evening or on a weekend, expect it first thing). After that,
+> you'll get a heads-up text before every visit and a gate photo when we're done.
+> Questions? Just reply to the text thread or this email.
 >
 > — The Purge Pros Team · (317) 961-5865 · itspurgepros.com
 

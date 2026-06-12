@@ -128,6 +128,9 @@
 
     lastCleaned: ["1 Week", "2 Weeks", "3 Weeks", "1 Month", "2 Months", "3–4 Months", "5–6 Months", "6+ Months"],
 
+    // Asked (optionally) at checkout — feeds route planning, not pricing.
+    startTimingOptions: ["As soon as possible", "Within the next week", "In the next few weeks", "Just looking for now"],
+
     addons: [
       { id: "wysiwash", label: "WYSIWash Treatment",
         desc: "Professional deodorizing & sanitizing treatment applied after we scoop",
@@ -172,14 +175,15 @@
       consent: "I agree to receive service-related texts and emails from Purge Pros. Msg & data rates may apply. Reply STOP to opt out.",
       outOfAreaTitle: "We haven’t made it there… yet",
       outOfArea: "We’re expanding around the Indy area fast. Leave your email and you’ll be the first to know when {zip} goes live.",
-      detailsTitle: "Last step — lock it in",
-      detailsBody: "Tell us who you are and where the yard is.",
+      detailsTitle: "Last step — lock in your rate",
+      detailsBody: "Tell us who you are and where the yard is. Once you submit, a real person checks our routes near you and texts you to set your first visit day.",
+      startTimingLabel: "When would you like us to start?",
       oneTimeCheckout: "Heads up: one-time cleans require a deposit of the base rate at scheduling — we’ll text you to square that away. Time beyond the included 30 minutes is billed after the job is complete.",
-      ctaStandard: "Book My First Visit",
+      ctaStandard: "Lock In My Spot",
       ctaCustom: "Request My Estimate",
-      doneTitle: "You’re in! 🎉",
-      doneBody: "Watch your texts — we’ll confirm your first visit shortly. You’ll get a heads-up message before every visit and a gate photo when we wrap up.",
-      doneOneTimeExtra: "We’ll also reach out about your base-rate deposit to get you on the schedule.",
+      doneTitle: "Got it — your rate is locked! 🎉",
+      doneBody: "Here’s how scheduling works: we build each week around routes, so a real person is checking which day we’re in your neighborhood and will text you to set your first visit. During business hours that’s usually quick — evenings and weekends, you’ll hear from us first thing. Have a day that works best? Just reply to that text.",
+      doneOneTimeExtra: "That text will also cover your base-rate deposit so we can lock your slot.",
       doneCustomTitle: "Request received! ✅",
       doneCustomBody: "Our team is reviewing your property details now. Expect a text with your hand-built estimate shortly — usually the same business day.",
       redirectNote: "Hang tight — taking you back to the site…"
@@ -202,6 +206,7 @@
     coupon: null,
     phone: "",            // digits only
     priceUnlocked: false,
+    startTiming: PQ_CONFIG.startTimingOptions[0],
     notes: "",
     contact: { first: "", last: "", email: "", street: "", city: "", state: "IN", consent: true },
     questionOpen: false,
@@ -220,7 +225,7 @@
           yardSize: state.yardSize, customYardSize: state.customYardSize,
           lastCleaned: state.lastCleaned, addons: state.addons, coupon: state.coupon,
           phone: state.phone, priceUnlocked: state.priceUnlocked,
-          notes: state.notes, contact: state.contact
+          startTiming: state.startTiming, notes: state.notes, contact: state.contact
         }
       }));
     } catch (e) {}
@@ -339,6 +344,7 @@
       areas: areaLabel(),
       yardSize: isCustom() ? state.customYardSize : ((byId(PQ_CONFIG.yardSizes, state.yardSize) || {}).label || ""),
       lastCleaned: state.lastCleaned,
+      startTiming: state.startTiming,
       addons: state.addons.map(function (id) { return (byId(PQ_CONFIG.addons, id) || {}).label; }).join(", "),
       coupon: state.coupon || "",
       perVisitPrice: q ? q.total.toFixed(2) : "",
@@ -756,6 +762,11 @@
       "<div><span class='pq-label' style='margin-top:0'>City</span><input class='pq-input' id='pq-city' autocomplete='address-level2' value='" + esc(ct.city) + "'></div>" +
       "<div><span class='pq-label' style='margin-top:0'>State</span><input class='pq-input' id='pq-state' autocomplete='address-level1' value='" + esc(ct.state) + "'></div>" +
       "</div>" +
+      "<span class='pq-label'>" + esc(c.startTimingLabel) + "</span>" +
+      '<select class="pq-select" id="pq-start">' +
+      PQ_CONFIG.startTimingOptions.map(function (o) {
+        return '<option' + (o === state.startTiming ? " selected" : "") + ">" + esc(o) + "</option>";
+      }).join("") + "</select>" +
       '<label class="pq-consent"><input type="checkbox" id="pq-consent"' + (ct.consent ? " checked" : "") + ">" +
       "<span>" + esc(c.consent) + "</span></label>" +
       '<div class="pq-err" id="pq-d-err">Please fill in the required fields.</div>' +
@@ -1041,6 +1052,7 @@
         ct.street = $("pq-street").value.trim();
         ct.city = $("pq-city").value.trim();
         ct.state = $("pq-state").value.trim();
+        state.startTiming = $("pq-start").value;
         ct.consent = $("pq-consent").checked;
         state.phone = digitsOf($("pq-dphone").value) || state.phone;
         var ok = ct.first && ct.last && validEmail(ct.email) && ct.street && state.phone.length === 10;
