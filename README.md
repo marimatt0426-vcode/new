@@ -94,9 +94,10 @@ Note the deployed URL, e.g. `https://purge-lead-relay.YOURNAME.workers.dev`.
 Open `widget/purge-quote.js` — everything editable is in `PQ_CONFIG` at the top:
 
 - `leadEndpoint`: your worker URL from step 1 (leave `""` to test — leads log to console)
+- `reviewsEndpoint`: worker URL + `/reviews` for the live Google review chip (see below)
 - `tracking`: conversion redirect + pixel events (see section above)
-- `brand.phoneDisplay` / `phoneHref`: **TODO — placeholder right now**, set your real line
-- `brand.chips`: trust badges (set your real Google review count when you want it shown)
+- `brand.chips`: trust badges — the first chip is replaced by live Google data when
+  `reviewsEndpoint` is set, and stays as the static fallback otherwise
 - `serviceZips`, `frequencies`, `areaOptions`/`areaPricing`, `yardSizes`, `addons`: your
   live pricing table (`areaPricing` is keyed by *how many* areas are selected: 1 → $0,
   2 → +$2.50, 3 → +$5)
@@ -141,6 +142,38 @@ Then build your automations off those tags, all inside GHL (no Make needed):
   (and your Housecall Pro handoff, until/unless GHL fully takes over scheduling).
 - **Custom estimate**: tag `estimate-requested` → internal notification + SMS ack.
 - **Expansion waitlist**: tag `out-of-area` → store ZIP, notify on launch.
+
+## Live Google review chip
+
+The first trust chip ("5.0 Google rating") can show your **live rating and review
+count** pulled from your Google Business Profile, e.g. "5.0★ Google · 102 reviews".
+
+How it works: the worker's `GET /reviews` route calls the Google Places API (New) for
+just `rating` and `userRatingCount`, and caches the answer at the Cloudflare edge for
+6 hours. Visitors' browsers additionally cache it for 12 hours. Net result: Google sees
+roughly **4 API calls per day** no matter how much traffic the site gets — comfortably
+inside the free tier.
+
+To enable it you need two things:
+
+1. **Your Place ID** — find it at
+   https://developers.google.com/maps/documentation/places/web-service/place-id
+   (search your business name, copy the `ChIJ…` string).
+2. **A Google Cloud API key** — create a project at console.cloud.google.com, enable
+   **Places API (New)**, create an API key, and restrict the key to that API only
+   (it lives server-side as a worker secret, never in your page source).
+
+Then:
+
+```bash
+cd worker
+npx wrangler secret put GOOGLE_PLACES_API_KEY
+npx wrangler secret put GOOGLE_PLACE_ID
+```
+
+…and set `reviewsEndpoint` in `PQ_CONFIG` to `https://YOUR-WORKER-URL/reviews`.
+If anything fails (quota, outage, misconfig), the chip silently falls back to the
+static text — the funnel never breaks over a badge.
 
 ## Testing locally
 

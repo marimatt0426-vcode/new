@@ -5,11 +5,18 @@
  * URL never appears in your site's source, and so junk traffic can be
  * rejected in one place.
  *
+ * Routes:
+ *   POST /            lead relay -> GHL inbound webhook
+ *   GET  /reviews     live Google rating + review count, edge-cached 6h
+ *
  * Secrets / vars (set with `wrangler secret put` or in the dashboard):
- *   GHL_WEBHOOK_URL  - GHL workflow "Inbound Webhook" trigger URL (required)
- *   ALLOWED_ORIGINS  - comma-separated origins allowed to post, e.g.
- *                      "https://itspurgepros.com,https://www.itspurgepros.com"
- *                      (optional; if unset, any origin is accepted)
+ *   GHL_WEBHOOK_URL        - GHL workflow "Inbound Webhook" trigger URL (required)
+ *   ALLOWED_ORIGINS        - comma-separated origins allowed to post, e.g.
+ *                            "https://itspurgepros.com,https://www.itspurgepros.com"
+ *                            (optional; if unset, any origin is accepted)
+ *   GOOGLE_PLACES_API_KEY  - Google Cloud API key with Places API (New) enabled
+ *                            (only needed for /reviews)
+ *   GOOGLE_PLACE_ID        - your Google Business Profile Place ID
  */
 
 const VALID_STAGES = [
@@ -39,6 +46,46 @@ function originAllowed(origin, env) {
   return env.ALLOWED_ORIGINS.split(",").map(s => s.trim()).includes(origin);
 }
 
+// Rating + review count are public data, so /reviews is served with open CORS
+// and cached at the edge: Google gets a handful of calls per day regardless of
+// site traffic.
+const REVIEWS_TTL_SECONDS = 21600; // 6h
+
+async function handleReviews(request, env) {
+  const jsonHeaders = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Cache-Control": `public, max-age=${REVIEWS_TTL_SECONDS}`
+  };
+  if (!env.GOOGLE_PLACES_API_KEY || !env.GOOGLE_PLACE_ID) {
+    return new Response(JSON.stringify({ error: "reviews not configured" }), { status: 500, headers: jsonHeaders });
+  }
+
+  const cache = caches.default;
+  const cacheKey = new Request(new URL("/reviews", request.url));
+  const cached = await cache.match(cacheKey);
+  if (cached) return cached;
+
+  const upstream = await fetch(
+    `https://places.googleapis.com/v1/places/${env.GOOGLE_PLACE_ID}`,
+    { headers: {
+        "X-Goog-Api-Key": env.GOOGLE_PLACES_API_KEY,
+        "X-Goog-FieldMask": "rating,userRatingCount"
+    } }
+  );
+  if (!upstream.ok) {
+    return new Response(JSON.stringify({ error: "upstream" }), { status: 502, headers: jsonHeaders });
+  }
+  const place = await upstream.json();
+  const body = JSON.stringify({
+    rating: place.rating ?? null,
+    count: place.userRatingCount ?? null
+  });
+  const response = new Response(body, { status: 200, headers: jsonHeaders });
+  await cache.put(cacheKey, response.clone());
+  return response;
+}
+
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin");
@@ -46,6 +93,9 @@ export default {
 
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: cors });
+    }
+    if (request.method === "GET" && new URL(request.url).pathname.endsWith("/reviews")) {
+      return handleReviews(request, env);
     }
     if (request.method !== "POST") {
       return new Response("Method not allowed", { status: 405, headers: cors });

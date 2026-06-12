@@ -61,11 +61,17 @@
       trackCustomBookings: true
     },
 
+    // Live Google review count. Point this at the worker's /reviews route
+    // (e.g. "https://purge-lead-relay.YOU.workers.dev/reviews"). Leave "" and
+    // the static first chip below is shown instead.
+    reviewsEndpoint: "",
+
     brand: {
       name: "Purge Pros",
-      // TODO: set the real business line customers should call
-      phoneDisplay: "(317) 555-0123",
-      phoneHref: "tel:+13175550123",
+      phoneDisplay: "(317) 961-5865",
+      phoneHref: "tel:+13179615865",
+      // The first chip is replaced by live data when reviewsEndpoint is set.
+      reviewChipTemplate: "{rating}★ Google · {count} reviews",
       chips: [
         "5.0 Google rating",
         "Pay per visit — never billed monthly",
@@ -491,7 +497,9 @@
 
   function headHTML() {
     var b = PQ_CONFIG.brand, c = PQ_CONFIG.copy;
-    var chips = b.chips.map(function (t) { return '<span class="pq-chip">' + esc(t) + "</span>"; }).join("");
+    var chips = b.chips.map(function (t, i) {
+      return '<span class="pq-chip' + (i === 0 ? " pq-chip-reviews" : "") + '">' + esc(t) + "</span>";
+    }).join("");
     return '<div class="pq-head">' +
       '<div class="pq-eyebrow">' + esc(c.eyebrow) + "</div>" +
       '<h2 class="pq-title">' + esc(c.title) + "</h2>" +
@@ -1061,6 +1069,31 @@
   }
 
   /* ============================================================
+   * LIVE GOOGLE REVIEW CHIP
+   * One fetch per visitor per 12h (sessionStorage-cached); the worker caches
+   * Google's answer at the edge too, so Google sees a handful of calls a day.
+   * ============================================================ */
+  function applyReviews(r) {
+    var chip = overlay && overlay.querySelector(".pq-chip-reviews");
+    if (chip && r && r.rating && r.count) {
+      chip.textContent = PQ_CONFIG.brand.reviewChipTemplate
+        .replace("{rating}", r.rating)
+        .replace("{count}", r.count);
+    }
+  }
+  function hydrateReviews() {
+    if (!PQ_CONFIG.reviewsEndpoint) return;
+    try {
+      var cached = JSON.parse(sessionStorage.getItem("pq_reviews") || "null");
+      if (cached && Date.now() - cached.t < 12 * 3600 * 1000) { applyReviews(cached.r); return; }
+    } catch (e) {}
+    fetch(PQ_CONFIG.reviewsEndpoint).then(function (res) { return res.json(); }).then(function (r) {
+      applyReviews(r);
+      try { sessionStorage.setItem("pq_reviews", JSON.stringify({ t: Date.now(), r: r })); } catch (e) {}
+    }).catch(function () { /* static chip stays */ });
+  }
+
+  /* ============================================================
    * OPEN / CLOSE / TRIGGERS
    * ============================================================ */
   var restored = false;
@@ -1085,6 +1118,7 @@
     });
     document.body.appendChild(overlay);
     document.body.style.overflow = "hidden";
+    hydrateReviews();
     render();
   }
 

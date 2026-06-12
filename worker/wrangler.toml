@@ -4,6 +4,8 @@ compatibility_date = "2026-06-01"
 
 # Set secrets after deploying:
 #   wrangler secret put GHL_WEBHOOK_URL
+#   wrangler secret put GOOGLE_PLACES_API_KEY   # for the live review chip
+#   wrangler secret put GOOGLE_PLACE_ID         # your Business Profile Place ID
 #
 # Optional plain-text var (uncomment and edit):
 # [vars]
