@@ -17,6 +17,9 @@
  *   GOOGLE_PLACES_API_KEY  - Google Cloud API key with Places API (New) enabled
  *                            (only needed for /reviews)
  *   GOOGLE_PLACE_ID        - your Google Business Profile Place ID
+ *   META_PIXEL_ID          - Facebook/Meta pixel ID (optional; enables server-side
+ *                            Conversions API backup for bookings)
+ *   META_CAPI_TOKEN        - Meta Conversions API access token (optional, ditto)
  */
 
 const VALID_STAGES = [
@@ -86,8 +89,53 @@ async function handleReviews(request, env) {
   return response;
 }
 
+/**
+ * Server-side Meta Conversions API backup for bookings.
+ * The browser pixel fires the same Lead with the same eventId, so Meta
+ * deduplicates the pair — this path only "wins" when the browser event was
+ * lost (tab closed instantly, ad blocker, iOS privacy). Runs after the
+ * response is returned (ctx.waitUntil), so it never slows the lead down.
+ */
+async function sha256Hex(s) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function sendMetaCapi(lead, request, env) {
+  if (!env.META_PIXEL_ID || !env.META_CAPI_TOKEN) return;
+  if (lead.stage !== "service_requested" && lead.stage !== "estimate_requested") return;
+
+  const user_data = {
+    client_ip_address: request.headers.get("CF-Connecting-IP") || undefined,
+    client_user_agent: request.headers.get("User-Agent") || undefined
+  };
+  if (/^\d{10}$/.test(lead.phone || "")) user_data.ph = [await sha256Hex("1" + lead.phone)];
+  if (lead.email) user_data.em = [await sha256Hex(lead.email.trim().toLowerCase())];
+  if (lead.fbp) user_data.fbp = lead.fbp;
+  if (lead.fbc) user_data.fbc = lead.fbc;
+  else if (lead.fbclid) user_data.fbc = "fb.1." + Date.now() + "." + lead.fbclid;
+
+  const body = {
+    data: [{
+      event_name: "Lead",
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: lead.eventId || undefined,
+      action_source: "website",
+      event_source_url: lead.page || undefined,
+      user_data
+    }]
+  };
+
+  try {
+    await fetch(
+      `https://graph.facebook.com/v21.0/${env.META_PIXEL_ID}/events?access_token=${env.META_CAPI_TOKEN}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }
+    );
+  } catch (e) { /* backup path only — never fail the lead over it */ }
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = request.headers.get("Origin");
     const cors = corsHeaders(originAllowed(origin, env) ? origin : "null");
 
@@ -139,6 +187,8 @@ export default {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(forward)
     });
+
+    ctx.waitUntil(sendMetaCapi(lead, request, env));
 
     if (!resp.ok) {
       return new Response("Upstream error", { status: 502, headers: cors });

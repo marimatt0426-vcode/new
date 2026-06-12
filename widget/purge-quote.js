@@ -20,14 +20,17 @@
     // Leave "" during development: payloads log to the console instead.
     leadEndpoint: "",
 
-    // Conversion tracking.
-    // redirectUrl keeps your existing page-visit conversions working: after the
-    // confirmation screen, the browser goes to this page (same mechanism as the
-    // old Housecall Pro flow). Set "" to disable the redirect.
-    // firePixelEvents also pushes events to gtag/fbq/dataLayer when those exist
-    // on the page, including an early "quote_unlocked" event at phone capture.
+    // Conversion tracking — events fire IN PLACE at the moment of submit (no
+    // navigation, nothing to wait for), via the site's existing gtag/fbq tags.
     tracking: {
-      redirectUrl: "https://itspurgepros.com/submit-true",
+      // Google Ads conversion label, e.g. "AW-123456789/AbC-dEfGhIjK".
+      // Created in Google Ads > Goals > Conversion actions (see README).
+      // "" = a generic generate_lead event still fires for GA4/GTM.
+      googleAdsSendTo: "",
+      // Legacy page-based tracking. Leave "" (recommended): the confirmation
+      // stays in the popup and events fire instantly. Only set a URL if you
+      // still need the old /submit-true page-visit conversion as well.
+      redirectUrl: "",
       redirectDelayMs: 3500,
       firePixelEvents: true,
       trackCustomBookings: true
@@ -163,6 +166,41 @@
   };
 
   /* ============================================================
+   * AD CLICK IDS
+   * Captured from the landing URL the moment the script loads (visitors from
+   * ads carry ?gclid= / ?fbclid=), remembered across pages, and sent with the
+   * lead so server-side conversion tracking can attribute the booking even if
+   * the browser closed before pixels finished.
+   * ============================================================ */
+  var CLICK_IDS = (function () {
+    function save(key, val, days) {
+      try { localStorage.setItem(key, JSON.stringify({ v: val, t: Date.now(), d: days })) } catch (e) {}
+    }
+    function load(key) {
+      try {
+        var d = JSON.parse(localStorage.getItem(key) || "null");
+        if (d && Date.now() - d.t < d.d * 864e5) return d.v;
+      } catch (e) {}
+      return "";
+    }
+    try {
+      var p = new URLSearchParams(location.search);
+      if (p.get("gclid")) save("pq_gclid", p.get("gclid"), 90);
+      if (p.get("fbclid")) save("pq_fbclid", p.get("fbclid"), 7);
+    } catch (e) {}
+    function cookie(name) {
+      var m = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+      return m ? decodeURIComponent(m[1]) : "";
+    }
+    return {
+      gclid: function () { return load("pq_gclid"); },
+      fbclid: function () { return load("pq_fbclid"); },
+      fbp: function () { return cookie("_fbp"); },
+      fbc: function () { return cookie("_fbc"); }
+    };
+  })();
+
+  /* ============================================================
    * STATE
    * ============================================================ */
   var state = {
@@ -182,7 +220,8 @@
     notes: "",
     contact: { first: "", last: "", email: "", street: "", city: "", state: "IN", consent: true },
     questionOpen: false,
-    doneCustom: false
+    doneCustom: false,
+    eventId: ""
   };
 
   /* ---------- persistence: resume an abandoned quote for 24h ---------- */
@@ -329,7 +368,12 @@
       state: state.contact.state,
       notes: state.notes,
       question: state.question || "",
-      consent: state.contact.consent ? "yes" : "no"
+      consent: state.contact.consent ? "yes" : "no",
+      gclid: CLICK_IDS.gclid(),
+      fbclid: CLICK_IDS.fbclid(),
+      fbp: CLICK_IDS.fbp(),
+      fbc: CLICK_IDS.fbc(),
+      eventId: state.eventId || ""
     };
   }
 
@@ -363,18 +407,31 @@
     try { if (typeof window.gtag === "function") window.gtag("event", "quote_unlocked", { event_category: "quote_widget" }); } catch (e) {}
     try { (window.dataLayer = window.dataLayer || []).push({ event: "pq_quote_unlocked" }); } catch (e) {}
   }
+  // Fires synchronously at the submit click — before the confirmation renders,
+  // before any navigation. Beacon transport means the browser delivers the hit
+  // even if the tab closes immediately after. The eventID lets Meta dedupe this
+  // browser event against the worker's server-side CAPI event for the same lead.
   function trackBooking(kind) {
     var t = PQ_CONFIG.tracking || {};
-    if (kind === "custom" && t.trackCustomBookings === false) return;
+    if (kind === "custom" && t.trackCustomBookings === false) return false;
     if (t.firePixelEvents !== false) {
-      try { if (typeof window.fbq === "function") window.fbq("track", "Lead", { content_name: "quote_widget_" + kind }); } catch (e) {}
-      try { if (typeof window.gtag === "function") window.gtag("event", "generate_lead", { event_category: "quote_widget", event_label: kind }); } catch (e) {}
-      try { (window.dataLayer = window.dataLayer || []).push({ event: "pq_booking", pq_kind: kind }); } catch (e) {}
+      try {
+        if (typeof window.fbq === "function")
+          window.fbq("track", "Lead", { content_name: "quote_widget_" + kind }, { eventID: state.eventId });
+      } catch (e) {}
+      try {
+        if (typeof window.gtag === "function") {
+          if (t.googleAdsSendTo)
+            window.gtag("event", "conversion", { send_to: t.googleAdsSendTo, transport_type: "beacon" });
+          window.gtag("event", "generate_lead", { event_category: "quote_widget", event_label: kind, transport_type: "beacon" });
+        }
+      } catch (e) {}
+      try { (window.dataLayer = window.dataLayer || []).push({ event: "pq_booking", pq_kind: kind, pq_event_id: state.eventId }); } catch (e) {}
     }
     if (t.redirectUrl) {
       setTimeout(function () { location.href = t.redirectUrl; },
         t.redirectDelayMs == null ? 3500 : t.redirectDelayMs);
-      return true; // caller can show the "taking you back" note
+      return true; // caller shows the "taking you back" note
     }
     return false;
   }
@@ -1036,9 +1093,12 @@
         if (!ok) { show($("pq-d-err"), true); return; }
         state.doneCustom = isCustom();
         state.doneOneTime = isOneTime();
+        // One event id shared by the browser pixel and the worker's server-side
+        // CAPI event, so Meta counts the booking exactly once.
+        state.eventId = "pq-" + Date.now() + "-" + Math.random().toString(36).slice(2, 10);
+        var redirecting = trackBooking(isCustom() ? "custom" : "standard");
         sender.send(isCustom() ? "estimate_requested" : "service_requested");
         clearStore();
-        var redirecting = trackBooking(isCustom() ? "custom" : "standard");
         state.step = "done";
         bodyEl.innerHTML = dotsHTML() + stepDone(redirecting);
         if (!redirecting) bindStep();

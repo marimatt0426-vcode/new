@@ -5,6 +5,8 @@ compatibility_date = "2026-06-01"
 # Set secrets after deploying:
 #   wrangler secret put GHL_WEBHOOK_URL
 #   wrangler secret put GOOGLE_PLACES_API_KEY   # for the live review chip
+#   wrangler secret put META_PIXEL_ID           # optional: server-side CAPI backup
+#   wrangler secret put META_CAPI_TOKEN         # optional: server-side CAPI backup
 
 [vars]
 # Purge Pros - Pet Waste Removal (Google Business Profile)

@@ -86,23 +86,58 @@ Every payload carries the full quote context:
 
 ## Conversion tracking (Google / Facebook)
 
-Configured in `PQ_CONFIG.tracking`:
+**Design principle: no redirects, no waiting.** A page redirect after booking loses
+conversions — people close the tab or lock their phone the second they see the
+confirmation, and a page-load over a mobile connection is a gamble. Instead, events
+fire **in place, at the millisecond of the submit click**, before the confirmation
+even renders, using beacon transport (the browser delivers the hit even if the tab
+closes immediately after). A server-side backup covers the rest.
 
-- **`redirectUrl`** (default `https://itspurgepros.com/submit-true`): after the
-  confirmation screen, the browser redirects there — the exact same page-visit mechanism
-  the Housecall Pro flow used, so **existing Google and Facebook conversions keep firing
-  with zero pixel changes**. Set `""` to disable.
-- **`firePixelEvents`** (default on): if `gtag`, `fbq`, or `dataLayer` exist on the page,
-  the widget also fires events directly:
-  - `quote_unlocked` / fbq `QuoteUnlocked` — the moment a phone number unlocks the price.
-    Import this into Google Ads / Meta as a *secondary* conversion and you can optimize
-    campaigns toward "lead captured," not just "booked."
-  - `generate_lead` / fbq `Lead` / dataLayer `pq_booking` — on final submit.
-- **`trackCustomBookings`**: whether custom-estimate requests also count as conversions.
+Three layers, most reliable wins:
 
-Longer term you can move to server-side conversions (Google Enhanced Conversions / Meta
-CAPI fed from GHL workflows), which survives ad blockers — the webhook already carries
-everything needed. Not required to launch.
+1. **Browser events at submit click** (`PQ_CONFIG.tracking`):
+   - Google Ads: set **`googleAdsSendTo`** to your conversion label
+     (`"AW-123456789/AbC-dEfGhIjK"`). To create it: Google Ads → **Goals → Conversions →
+     + New conversion action → Website → enter your URL → "Add a conversion action
+     manually"** → category *Submit lead form*, count *One*. On the "use Google tag"
+     screen, choose the option that shows the **tag snippet / event snippet** — the
+     `send_to` value inside it is what you paste into the config. Requires the Google
+     tag (`gtag.js`) installed sitewide, which you already have if conversions fire
+     today.
+   - Meta: nothing to configure — if the Meta pixel (`fbq`) is on the page, the widget
+     fires a standard **Lead** event with a unique `eventID`.
+   - A generic `generate_lead` (GA4) and a `dataLayer` push fire too, for GTM users.
+
+2. **Server-side Meta CAPI backup (recommended):** the worker re-sends the same Lead
+   to Meta's Conversions API with the **same `eventID`**, so Meta deduplicates the
+   pair automatically — the server event only "wins" when the browser one was lost
+   (instant tab close, ad blocker, iOS privacy). User data is SHA-256-hashed
+   (phone/email) per Meta's spec, plus `fbp`/`fbc` cookies and click IDs the widget
+   captures from ad-click URLs. Setup: Meta **Events Manager → your pixel → Settings →
+   Conversions API → Generate access token**, then:
+   ```bash
+   npx wrangler secret put META_PIXEL_ID
+   npx wrangler secret put META_CAPI_TOKEN
+   ```
+   That's it — it activates automatically and never slows a lead down.
+
+3. **Google server-side (optional, later):** the widget captures `gclid` from ad
+   landings (stored 90 days, sent with every lead). Map it to a `Quote GCLID` contact
+   field in the intake workflow and you can use **Google Ads offline conversion
+   import / Enhanced Conversions for Leads** — e.g. only count bookings you actually
+   scheduled (opportunity → Won) as conversions. Nice upgrade once volume justifies it;
+   layer 1 is plenty to launch.
+
+Also fired (layer 1 only): `quote_unlocked` / fbq `QuoteUnlocked` the moment a phone
+number unlocks the price. Import it as a *secondary* conversion in Google Ads / Meta
+and you can optimize campaigns toward "lead captured," not just "booked."
+
+**`redirectUrl`** still exists for the legacy `/submit-true` page-visit mechanism but
+defaults to `""` — leave it off. If you ever set it, it redirects *after* the events
+above have already fired, so it can only add, never lose.
+
+**`trackCustomBookings`**: whether custom-estimate requests also count as conversions
+(default yes — a kennel lead is worth more than a 1-dog booking).
 
 ## Live Google review chip
 
@@ -513,10 +548,15 @@ never send two texts without a reply in between except across nurture days.
 - [ ] You receive message 1 (~1 min later)
 - [ ] Don't book; confirm message 2 arrives after ~45 min
 - [ ] Re-walk and book; confirm message 6 arrives AND nurture stops (goal exit)
-- [ ] Booking redirect lands on `/submit-true` and your Google/FB conversions register
+- [ ] Meta Events Manager → **Test Events**: book once and watch the Lead arrive —
+      with CAPI configured you'll see browser + server events deduped into one
+- [ ] Google: with `googleAdsSendTo` set, use Tag Assistant (tagassistant.google.com)
+      to confirm the conversion event fires at the submit click
 
 **Go-live:**
 - [ ] `purge-quote.js` hosted, `leadEndpoint`/`reviewsEndpoint` set to production worker
+- [ ] `googleAdsSendTo` set with your Google Ads conversion label
+- [ ] `META_PIXEL_ID` / `META_CAPI_TOKEN` secrets on the worker (server-side backup)
 - [ ] Script tag in GHL site footer; quote buttons point at `#quote`
 - [ ] `ALLOWED_ORIGINS` set on the worker (locks the lead endpoint to your domain)
 - [ ] Old Housecall Pro booking embed retired
