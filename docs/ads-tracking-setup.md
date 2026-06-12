@@ -203,8 +203,14 @@ not the platform dashboards**. Weekly: spend per campaign vs. opportunities move
 *Won*, plus each campaign's **unlock→book ratio** — cheap captures with a bad ratio
 means the creative attracts tire kickers; kill the creative, not the strategy.
 
-And anchor on **cost per booked customer**, never cost per lead: a weekly customer at
-~$25/visit is $1,300+/year, so even $75 per booked customer is a great trade.
+And anchor on **cost per booked customer (CAC), never cost per lead.** In pet waste
+removal, $150+ CAC is normal and healthy: a weekly customer at ~$25/visit is $1,300+/
+year, so $150 pays back in about 6 weeks of service and returns ~8x in year one.
+Practical implications: don't kill a campaign over an "expensive" $30–50 cost per
+capture if the unlock→book ratio is healthy — that math can still land at a $150 CAC
+that's winning. Kill creative when the *ratio* is broken (cheap captures, no bookings),
+scale when CAC ≤ ~$150 with steady volume, and treat anything under $100 as a
+scale-it-now signal, not a reason to bank the savings.
 
 - [ ] Tag Assistant shows the `AW-` conversion firing at unlock and at booking
 - [ ] Google Ads: both conversion actions exist; `Quote Booked` = Primary,

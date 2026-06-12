@@ -41,7 +41,9 @@ tools/place-id-from-url.js   Derives a Google Place ID from a full Maps URL
 4. **Details** — name, email, address, an optional **"When would you like us to
    start?"** dropdown (ASAP / within a week / next few weeks / just looking — feeds
    route planning and lets you triage hot leads), consent checkbox → "Lock In My Spot".
-   One-time cleans get a deposit/overtime reminder here.
+   Recurring plans see a **"nothing is charged today"** reassurance (card on file
+   comes later, charged per visit on service day); one-time cleans get the
+   deposit/overtime reminder instead.
 5. **Confirmation** — deliberately worded around how scheduling actually works: *the
    rate is locked, a real person now checks routes near you and texts to set your first
    visit day; sign-ups outside business hours hear back first thing.* Nothing promises
@@ -359,11 +361,12 @@ days. The actual scheduling conversation is yours, in the GHL inbox.
    handled before "Just looking for now").
 2. Check your routes for that ZIP/neighborhood.
 3. Open the contact's conversation in GHL — messages 6/7 are already sitting in the
-   thread — and reply with your proposal, e.g.:
-   > *"Alright {{first_name}}, checked our routes — we're in your neighborhood Tuesdays.
-   > I can get your first deep clean done this Tuesday morning. Lock it in?"*
-4. They reply, you confirm, you create the job in Housecall Pro (while that's still
-   your scheduling system). Move the opportunity to **Won**.
+   thread — and send **message 13** (saved as a GHL Snippet) with the route days and
+   next opening filled in.
+4. Once the date is agreed, send **message 14** (the full onboarding message: card-on-
+   file link coming, night-before reminder, day-of ETA text, portal), send the secure
+   payment link, create the job in Housecall Pro (while that's still your scheduling
+   system), and move the opportunity to **Won**.
 
 **Response-time guardrails:** the confirmation texts promise "usually quick during
 business hours; evenings/weekends you'll hear from us first thing." Hold yourself to
@@ -485,12 +488,11 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 **6 — Booking confirmation, recurring (Workflow 4)**
 
 > 🎉 Got it — your rate is locked: ${{contact.quote_price_per_visit}}/visit for
-> {{contact.quote_frequency}} service at {{contact.address1}}. Here's how scheduling
-> works: we build each week around routes, so I'm checking which day we're in your
-> neighborhood and I'll text you right back to set your first visit (the free deep
-> clean). If you signed up outside business hours, you'll hear from me first thing.
-> Got a day that works best for you? Reply with it and I'll do my best to match it.
-> — Matt @ Purge Pros 🐾
+> {{contact.quote_frequency}} service at {{contact.address1}}. We build each week
+> around routes, so I'm checking which days we're in your neighborhood right now —
+> your visit-day options are coming in my next text. If you signed up outside business
+> hours, you'll hear from me first thing. And just so you know: nothing is charged
+> today. — Matt @ Purge Pros 🐾
 
 **7 — Booking confirmation, one-time (Workflow 4)**
 
@@ -554,6 +556,36 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 > Questions? Just reply to the text thread or this email.
 >
 > — The Purge Pros Team · (317) 961-5865 · itspurgepros.com
+
+**13 — Manual dispatch: route check result (you send this, Workflow 4 step 3)**
+
+Save as a **Snippet** in GHL (Conversations → Snippets) so it's one click with
+blanks to fill. Message 6 already thanked them, so this one gets straight to it:
+
+> Alright, routes checked! We're in your area on **[DAYS]** — the next opening is
+> **[DATE]**. Would that work for your first service? — Matt @ Purge Pros
+
+**14 — Manual dispatch: officially scheduled (you send this once the date is agreed)**
+
+Also save as a Snippet. This is the full onboarding message:
+
+> Awesome, thank you! You are officially on the schedule for **[DAY, MM/DD]** 🐾
+>
+> Here's what to expect next:
+>
+> 💳 Payment: I'm sending a separate text with a secure link to add your card on file
+> before your first service. No monthly bills — we only charge per visit, on the day
+> of service, once our ETA text goes out.
+>
+> ⏱️ Timing: Your online portal may show a placeholder time, but our routes change
+> daily. We'll text you the night before as a reminder, then on the day with an exact
+> ETA when we're on the way, and again the moment we're finished!
+>
+> 📱 Your Portal: Check your email for your portal link — past/future appointments,
+> invoices, and service photos (like proof of a locked gate) all live there.
+>
+> Thank you for choosing Purge Pros! Save this number — we're here 24/7/365. Have a
+> wonderful day!
 
 Writing tips baked into the above, if you edit: lead with their number ("your quote",
 "$28.99/visit") not your pitch; one idea per text; always end with the single action

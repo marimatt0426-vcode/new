@@ -183,6 +183,7 @@
       outOfArea: "We’re expanding around the Indy area fast. Leave your email and you’ll be the first to know when {zip} goes live.",
       detailsTitle: "Last step — lock in your rate",
       detailsBody: "Tell us who you are and where the yard is. Once you submit, a real person checks our routes near you and texts you to set your first visit day.",
+      noPaymentNote: "💳 Nothing is charged today. We only add a card on file once your visit day is set — and you're only ever charged per visit, on the day of service.",
       startTimingLabel: "When would you like us to start?",
       oneTimeCheckout: "Heads up: one-time cleans require a deposit of the base rate at scheduling — we’ll text you to square that away. Time beyond the included 30 minutes is billed after the job is complete.",
       ctaStandard: "Lock In My Spot",
@@ -817,6 +818,7 @@
       '<p class="pq-p">' + esc(c.detailsBody) + "</p>" +
       '<div class="pq-summary"><span>' + esc(summary) + '</span><span class="amt">' + esc(amt) + "</span></div>" +
       (isOneTime() ? '<div class="pq-callout" style="margin:0 0 14px">' + esc(c.oneTimeCheckout) + "</div>" : "") +
+      (!isOneTime() && !isCustom() ? '<div class="pq-callout" style="margin:0 0 14px">' + esc(c.noPaymentNote) + "</div>" : "") +
       '<div class="pq-grid pq-grid-2">' +
       "<div><span class='pq-label' style='margin-top:0'>First name *</span><input class='pq-input' id='pq-first' autocomplete='given-name' value='" + esc(ct.first) + "'></div>" +
       "<div><span class='pq-label' style='margin-top:0'>Last name *</span><input class='pq-input' id='pq-last' autocomplete='family-name' value='" + esc(ct.last) + "'></div>" +
