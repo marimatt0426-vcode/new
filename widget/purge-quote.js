@@ -226,6 +226,7 @@
     addons: [],
     coupon: null,
     phone: "",            // digits only
+    lastValidPhone: "",   // survives backspacing — see buildPayload
     priceUnlocked: false,
     startTiming: PQ_CONFIG.startTimingOptions[0],
     notes: "",
@@ -246,7 +247,7 @@
           zip: state.zip, dogs: state.dogs, freq: state.freq, areasSel: state.areasSel,
           yardSize: state.yardSize, customYardSize: state.customYardSize,
           lastCleaned: state.lastCleaned, addons: state.addons, coupon: state.coupon,
-          phone: state.phone, priceUnlocked: state.priceUnlocked,
+          phone: state.phone, lastValidPhone: state.lastValidPhone, priceUnlocked: state.priceUnlocked,
           startTiming: state.startTiming, notes: state.notes, contact: state.contact
         }
       }));
@@ -369,7 +370,9 @@
       addons: state.addons.map(function (id) { return (byId(PQ_CONFIG.addons, id) || {}).label; }).join(", "),
       coupon: state.coupon || "",
       perVisitPrice: q ? q.total.toFixed(2) : "",
-      phone: state.phone,
+      // If they typed a valid number and then backspaced it, the lead still
+      // carries the last complete number they entered.
+      phone: state.phone.length === 10 ? state.phone : state.lastValidPhone,
       firstName: state.contact.first,
       lastName: state.contact.last,
       email: state.contact.email,
@@ -756,6 +759,7 @@
 
       '<span class="pq-label">' + esc(isCustom() ? "Where should we text your estimate?" : c.phoneLabel) + "</span>" +
       '<input class="pq-input" id="pq-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(317) 555-1234" value="' + esc(phoneFmt) + '">' +
+      '<div class="pq-err" id="pq-phone-err">Please enter your mobile number above to see your price and continue.</div>' +
       '<div class="pq-note">' + esc(c.phoneHint) + "</div>" +
 
       priceBoxHTML() +
@@ -764,7 +768,7 @@
 
       '<div class="pq-foot">' +
       '<button class="pq-btn pq-btn-ghost" id="pq-q-toggle">' + (state.questionOpen ? "Hide the question box" : "Got a question first?") + "</button>" +
-      '<button class="pq-btn" id="pq-continue"' + (canContinue() ? "" : " disabled") + ">" + esc(isCustom() ? c.ctaCustom : c.ctaPlan) + "</button>" +
+      '<button class="pq-btn" id="pq-continue">' + esc(isCustom() ? c.ctaCustom : c.ctaPlan) + "</button>" +
       "</div>" +
       questionPanel() +
       '<div class="pq-foot"><button class="pq-back" id="pq-plan-back">← Different ZIP</button></div>';
@@ -774,6 +778,7 @@
     var c = PQ_CONFIG.copy;
     return '<span class="pq-label">' + esc(c.areasLabel) + ' <span class="pq-hintright">' + esc(c.areasHint) + "</span></span>" +
       '<div class="pq-grid pq-grid-2">' + areaCards() + "</div>" +
+      '<div class="pq-err" id="pq-area-err">Please select at least one area for us to cover — tap the boxes above.</div>' +
       '<span class="pq-label">' + esc(c.sizeLabel) + "</span>" +
       '<div class="pq-grid pq-grid-2">' + sizeCards() + "</div>" +
       '<span class="pq-label">' + esc(c.lastCleanLabel) + "</span>" +
@@ -799,9 +804,6 @@
       '<textarea class="pq-textarea" id="pq-cnotes" rows="3" placeholder="Kennel layout, gate codes, commercial property details…">' + esc(state.notes) + "</textarea></div>";
   }
 
-  function canContinue() {
-    return state.phone.length === 10 && (isCustom() || state.areasSel.length > 0);
-  }
 
   /* ---------- Step 3: Details ---------- */
   function stepDetails() {
@@ -825,7 +827,7 @@
       "</div>" +
       "<span class='pq-label'>Street address *</span><input class='pq-input' id='pq-street' autocomplete='street-address' value='" + esc(ct.street) + "'>" +
       '<div class="pq-grid pq-grid-2" style="margin-top:10px">' +
-      "<div><span class='pq-label' style='margin-top:0'>City</span><input class='pq-input' id='pq-city' autocomplete='address-level2' value='" + esc(ct.city) + "'></div>" +
+      "<div><span class='pq-label' style='margin-top:0'>City *</span><input class='pq-input' id='pq-city' autocomplete='address-level2' value='" + esc(ct.city) + "'></div>" +
       "<div><span class='pq-label' style='margin-top:0'>State</span><input class='pq-input' id='pq-state' autocomplete='address-level1' value='" + esc(ct.state) + "'></div>" +
       "</div>" +
       "<span class='pq-label'>" + esc(c.startTimingLabel) + "</span>" +
@@ -1047,6 +1049,8 @@
         var fmt = formatPhone(d);
         if (ph.value !== fmt) { ph.value = fmt; if (caretAtEnd) ph.setSelectionRange(fmt.length, fmt.length); }
         if (d.length === 10) {
+          state.lastValidPhone = d;
+          show($("pq-phone-err"), false);
           sender.queue("phone_captured", 800);
           persist();
           if (!state.priceUnlocked) {
@@ -1059,11 +1063,6 @@
             return;
           }
           refreshPriceBox();
-          var btn = $("pq-continue");
-          if (btn) btn.disabled = !canContinue();
-        } else {
-          var btn2 = $("pq-continue");
-          if (btn2) btn2.disabled = true;
         }
       });
       ph.addEventListener("blur", function () {
@@ -1094,7 +1093,20 @@
       });
 
       $("pq-continue").addEventListener("click", function () {
-        if (!canContinue()) return;
+        // Never dead-end: point at whatever is missing instead of doing nothing.
+        if (state.phone.length !== 10) {
+          var pe = $("pq-phone-err");
+          show(pe, true);
+          var phEl = $("pq-phone");
+          if (phEl) { phEl.scrollIntoView({ behavior: "smooth", block: "center" }); phEl.focus(); }
+          return;
+        }
+        if (!isCustom() && !state.areasSel.length) {
+          var ae = $("pq-area-err");
+          show(ae, true);
+          if (ae) ae.scrollIntoView({ behavior: "smooth", block: "center" });
+          return;
+        }
         if (isCustom() && state.dogs !== "10+" && !state.dogs) state.dogs = "10+";
         state.step = "details";
         persist();
@@ -1118,8 +1130,9 @@
         state.startTiming = $("pq-start").value;
         ct.consent = $("pq-consent").checked;
         state.phone = digitsOf($("pq-dphone").value) || state.phone;
-        var ok = ct.first && ct.last && validEmail(ct.email) && ct.street && state.phone.length === 10;
-        ["pq-first", "pq-last", "pq-email", "pq-street", "pq-dphone"].forEach(function (id) {
+        if (state.phone.length === 10) state.lastValidPhone = state.phone;
+        var ok = ct.first && ct.last && validEmail(ct.email) && ct.street && ct.city && state.phone.length === 10;
+        ["pq-first", "pq-last", "pq-email", "pq-street", "pq-city", "pq-dphone"].forEach(function (id) {
           var el = $(id);
           var bad = !el.value.trim() || (id === "pq-email" && !validEmail(el.value)) || (id === "pq-dphone" && digitsOf(el.value).length !== 10);
           el.classList.toggle("pq-bad", !!bad);
