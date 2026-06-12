@@ -328,11 +328,18 @@ copy later without touching the plumbing.
 
    | Branch                | Actions                                                                 |
    |-----------------------|-------------------------------------------------------------------------|
-   | `phone_captured`      | Add tag `quote-unlocked` · **Create/Update Opportunity** → *Quote Funnel* / stage *Quote Unlocked* (allow duplicates: No; allow moving to previous stage: No) |
+   | `phone_captured`      | Add tag `quote-unlocked` · **Find Opportunity** (*Quote Funnel*) → If/Else: **not found** → **Create Opportunity** (stage *Quote Unlocked*, name/source/value); **found** → nothing (guards against duplicate cards and against demoting someone already Booked/Won) |
    | `question_submitted`  | Add tag `question-asked`                                                |
-   | `service_requested`   | Add tag `service-requested` · **Create/Update Opportunity** → same pipeline, stage *Booked* (this is how a card "moves" — the action updates the existing opportunity in place) |
-   | `estimate_requested`  | Add tag `estimate-requested` · **Create/Update Opportunity** → same pipeline, stage *Custom Estimate* |
+   | `service_requested`   | Add tag `service-requested` · **Update Opportunity** → *Quote Funnel*, stage *Booked* (updating the stage IS the "move") |
+   | `estimate_requested`  | Add tag `estimate-requested` · **Update Opportunity** → *Quote Funnel*, stage *Custom Estimate* |
    | `out_of_area`         | Add tag `out-of-area`                                                   |
+
+   Opportunity name template: `{{inboundWebhookRequest.frequency}} ·
+   {{inboundWebhookRequest.dogs}} dogs · {{inboundWebhookRequest.zip}}` · source
+   `quote-widget` · value `{{inboundWebhookRequest.perVisitPrice}}`. (GHL's legacy
+   **Create/Update Opportunity** action also works with duplicates off and
+   previous-stage moves off, but it's marked for deprecation — new builds should use
+   Find/Create/Update.)
 
    (`quote_updated` needs no branch — steps 2–3 already refreshed the fields.)
 
