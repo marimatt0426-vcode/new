@@ -29,17 +29,23 @@ tools/place-id-from-url.js   Derives a Google Place ID from a full Maps URL
    (stage `out_of_area` in GHL — that's your expansion waitlist).
 2. **Build your plan** — dog count (dropdown) → frequency → yard coverage → yard size →
    last cleaned. **No dollar amounts appear anywhere before the phone gate.** Yard
-   coverage is multi-select (Back / Front / Side(s) plus a one-tap **Yard+** that selects
-   everything): one area = base rate, any two = +$2.50/visit, all three = +$5/visit.
+   coverage is multi-select with **no preselection** — every chip toggles freely on/off
+   (Back / Front / Side(s) plus a one-tap **Yard+** that selects everything): one area =
+   base rate, any two = +$2.50/visit, all three = +$5/visit. The price won't render
+   until at least one area is chosen, with a prompt pointing at the chips.
    Selecting **10+ dogs**, **Over 1 acre**, or **Custom Booking** switches to the custom
    path (typed dog count, kennel/commercial sizes, notes, no instant price). Selecting
    **One-Time** shows an inline note that it's a flat base rate + time on site.
 3. **Phone gate** — price stays hidden until a valid 10-digit phone is entered. The
    reveal shows the per-visit breakdown (never a monthly figure), the freebies, the
-   **"Visit #1 is our $99+ deep clean — you pay just your per-visit rate"** banner
-   with explainer popup (precise wording matters: the deep-clean *fee* is waived, the
-   visit itself is billed at the normal rate), and only now the
-   WYSIWash add-on and coupon row.
+   **"Initial Deep-Clean Fee ($99+ value): WAIVED"** banner with explainer popup
+   (precise wording matters: lead with WAIVED; the visit itself is billed at the
+   normal per-visit rate), and only now the
+   WYSIWash treatment and coupon row. **Treatments are deliberately excluded from the
+   per-visit total** — they're shown as "+$X/treatment" in their own block ("billed
+   per treatment, only when you book one — never added to every visit; most yards do
+   about one a month"), because customers aren't locked into a treatment every visit
+   and folding it into the per-visit price would misstate what they'll be charged.
 4. **Details** — name, email, address, an optional **"When would you like us to
    start?"** dropdown (ASAP / within a week / next few weeks / just looking — feeds
    route planning and lets you triage hot leads), consent checkbox → "Lock In My Spot".
@@ -476,17 +482,17 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 > Hey, it's Matt with Purge Pros 🐾 Here's the quote you just built at itspurgepros.com:
 > {{contact.quote_dogs}} dog(s) · {{contact.quote_frequency}} ·
 > ${{contact.quote_price_per_visit}} per visit. You pay per visit — never a monthly
-> bill, no contracts. And visit #1 is our full $99+ deep clean for just that same
-> per-visit rate — we eat the difference. Want it? Just reply YES and I'll get you on
-> the schedule. Reply STOP to opt out.
+> bill, no contracts. Bonus: your initial deep-clean fee ($99+ value) is WAIVED —
+> visit #1 preps your yard back to zero and you pay just that same per-visit rate.
+> Want it? Just reply YES and I'll get you on the schedule. Reply STOP to opt out.
 
 **2 — Nurture touch 1 (45 min)**
 
 > Still thinking it over? Totally fine — your quote is saved:
 > ${{contact.quote_price_per_visit}}/visit for {{contact.quote_dogs}} dog(s),
-> {{contact.quote_frequency}}. And that first visit? It's the full $99+ deep clean,
-> still at just your regular rate — that deal stays on the table with any recurring
-> plan. Reply YES whenever you're ready and consider it handled. — Matt @ Purge Pros
+> {{contact.quote_frequency}}. And the $99+ initial deep-clean fee stays waived with
+> any recurring plan — your first visit costs just your regular rate. Reply YES
+> whenever you're ready and consider it handled. — Matt @ Purge Pros
 
 **3 — Nurture touch 2 (next day)**
 
@@ -500,8 +506,8 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 > Heads up — we're locking in next week's routes around {{contact.quote_zip}} right now.
 > If you want your yard on the schedule before the weekend, today's the day: reply YES
-> and you're in. Your first visit is the big $99+ catch-up clean, and you still pay
-> just your regular per-visit rate. — Purge Pros 🐾
+> and you're in. The $99+ initial deep-clean fee is still waived — your first visit
+> (the big catch-up clean) costs just your regular per-visit rate. — Purge Pros 🐾
 
 **5 — Nurture touch 4, breakup + closer offer (day 6)**
 
@@ -574,8 +580,8 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 > - **Coverage:** {{contact.quote_areas}} · {{contact.quote_yard_size}}
 > - **Your rate:** ${{contact.quote_price_per_visit}} per visit — billed per visit,
 >   never monthly, no contracts
-> - **First visit:** the full $99+ deep clean, billed at just your regular per-visit
->   rate — the extra labor is on us
+> - **First visit:** initial deep clean — the $99+ fee is waived; you're billed just
+>   your regular per-visit rate
 >
 > **What happens next:** we build our weeks around routes, so we're checking which day
 > we're in your neighborhood — you'll get a text shortly to set your first visit day

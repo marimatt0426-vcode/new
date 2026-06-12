@@ -37,11 +37,11 @@ const worker = `// GENERATED FILE — rebuild with: node tools/build-dist.js
 // ╔══════════════════════ EDIT THESE LINES ONLY ══════════════════════╗
 // Everything below this block is generated — never edit it by hand.
 
-// Your purge-lead-relay worker URL. Leave "" for dev mode (leads log to console).
-const LEAD_ENDPOINT = "";
+// Your purge-lead-relay worker URL — pre-filled; verify it matches yours.
+const LEAD_ENDPOINT = "https://purge-lead-relay.purgepros.workers.dev";
 
-// Same relay URL + "/reviews" for the live Google review chip. "" = static chip.
-const REVIEWS_ENDPOINT = "";
+// Same relay URL + "/reviews" for the live Google review chip.
+const REVIEWS_ENDPOINT = "https://purge-lead-relay.purgepros.workers.dev/reviews";
 
 // Google Ads conversion labels, e.g. "AW-123456789/AbC-dEfGhIjK". "" = off.
 const GOOGLE_ADS_SEND_TO = "";        // fires at booking

@@ -46,6 +46,9 @@
 
     brand: {
       name: "Purge Pros",
+      // Hardcoded so the popup looks identical on any site, regardless of the
+      // host page's fonts.
+      fontFamily: '"Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif',
       phoneDisplay: "(317) 961-5865",
       phoneHref: "tel:+13179615865",
       // The first chip is replaced by live data when reviewsEndpoint is set.
@@ -111,7 +114,7 @@
 
     addons: [
       { id: "wysiwash", label: "WYSIWash Treatment",
-        desc: "Professional deodorizing & sanitizing treatment applied after we scoop",
+        desc: "Pro-grade deodorizer & sanitizer. Most yards do one a month, or before get-togethers — you pick when.",
         prices: { twice: 19.99, weekly: 24.99, biweekly: 29.99, onetime: 29.99 } }
     ],
 
@@ -139,17 +142,20 @@
       freqLabel: "How often should we come?",
       freqHint: "Most customers pick Weekly",
       areasLabel: "Which areas should we cover?",
-      areasHint: "Tap all that apply",
+      areasHint: "Tap all that apply · tap again to unselect",
       sizeLabel: "Roughly how big is the yard?",
       lastCleanLabel: "When did the yard last get a full cleanup?",
       lastCleanNote: "No effect on price — it just tells us how much time to block off for visit #1.",
       phoneLabel: "Pop in your mobile number to unlock your price",
       phoneHint: "By entering your number, you agree to receive texts from Purge Pros about your quote and service. Msg & data rates may apply; msg frequency varies. Reply STOP to opt out, HELP for help. We never sell your info.",
       lockedBox: "🔒 Your price is ready — enter your mobile number above to unlock it.",
+      pickAreasBox: "👆 Almost there — tap which areas we should cover above and your price will appear.",
       perVisitLabel: "Your per-visit price",
       oneTimeLabel: "One-time total",
-      waiverText: "💰 Visit #1 is our $99+ deep clean — you pay just your per-visit rate",
+      waiverTitle: "🎁 Initial Deep-Clean Fee ($99+ value): WAIVED",
+      waiverSub: "Visit #1 preps your yard back to zero — and you pay only your regular per-visit rate.",
       waiverButton: "How does that work?",
+      treatmentNote: "Treatments are billed per treatment, only when you book one — never added to every visit. Most yards: about once a month, or before get-togethers.",
       consent: "I agree to receive service-related texts and emails from Purge Pros. Msg & data rates may apply. Reply STOP to opt out.",
       outOfAreaTitle: "We haven’t made it there… yet",
       outOfArea: "We’re expanding around the Indy area fast. Leave your email and you’ll be the first to know when {zip} goes live.",
@@ -158,6 +164,7 @@
       noPaymentNote: "💳 Nothing is charged today. We only add a card on file once your visit day is set — and you're only ever charged per visit, on the day of service.",
       startTimingLabel: "When would you like us to start?",
       oneTimeCheckout: "Heads up: one-time cleans require a deposit of the base rate at scheduling — we’ll text you to square that away. Time beyond the included 30 minutes is billed after the job is complete.",
+      ctaPlan: "Claim My Price →",
       ctaStandard: "Lock In My Spot",
       ctaCustom: "Request My Estimate",
       doneTitle: "Got it — your rate is locked! 🎉",
@@ -212,7 +219,7 @@
     zip: "",
     dogs: 1,              // 1..9 or "10+"
     freq: "weekly",
-    areasSel: ["back"],   // multi-select of areaOptions ids
+    areasSel: [],         // multi-select of areaOptions ids; starts empty by design
     yardSize: "s",
     customYardSize: "",
     lastCleaned: PQ_CONFIG.lastCleaned[0],
@@ -253,7 +260,7 @@
       if (!d || !d.s || Date.now() - d.t > 24 * 3600 * 1000) { localStorage.removeItem(STORE_KEY); return; }
       for (var k in d.s) if (Object.prototype.hasOwnProperty.call(state, k)) state[k] = d.s[k];
       if (state.step !== "zip" && !state.zip) state.step = "zip";
-      if (!state.areasSel || !state.areasSel.length) state.areasSel = ["back"];
+      if (!Array.isArray(state.areasSel)) state.areasSel = [];
     } catch (e) {}
   }
   function clearStore() { try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
@@ -278,6 +285,7 @@
 
   function areaLabel() {
     var n = state.areasSel.length;
+    if (!n) return "";
     if (n === PQ_CONFIG.areaOptions.length) return PQ_CONFIG.areaPlusLabel;
     var shorts = PQ_CONFIG.areaOptions
       .filter(function (a) { return state.areasSel.indexOf(a.id) >= 0; })
@@ -293,6 +301,7 @@
       rows.push({ label: "One-time clean (any # of dogs)", amt: f.flat });
       total = f.flat;
     } else {
+      if (!state.areasSel.length) return null; // no coverage chosen yet, no price
       var base = f.prices[state.dogs];
       if (base == null) return null;
       rows.push({ label: state.dogs + (state.dogs === 1 ? " dog" : " dogs") + " · " + f.label, amt: base });
@@ -302,11 +311,8 @@
       var size = byId(PQ_CONFIG.yardSizes, state.yardSize);
       if (size && size.add) { rows.push({ label: size.label, amt: size.add }); total += size.add; }
     }
-    for (var i = 0; i < state.addons.length; i++) {
-      var a = byId(PQ_CONFIG.addons, state.addons[i]);
-      var p = a && a.prices[state.freq];
-      if (p != null) { rows.push({ label: a.label, amt: p }); total += p; }
-    }
+    // NOTE: add-on treatments are deliberately NOT in the per-visit total —
+    // they're billed per treatment, whenever the customer books one.
     if (state.coupon && PQ_CONFIG.coupons[state.coupon]) {
       var c = PQ_CONFIG.coupons[state.coupon];
       var off = c.type === "percent" ? total * (c.value / 100) : c.value;
@@ -449,9 +455,10 @@
   /* ============================================================
    * STYLES
    * ============================================================ */
+  var PQ_FONT = PQ_CONFIG.brand.fontFamily || "system-ui, sans-serif";
   var CSS = "" +
     ".pq-overlay{position:fixed;inset:0;z-index:99999;background:rgba(10,12,16,.72);display:flex;align-items:flex-start;justify-content:center;padding:24px 12px;overflow-y:auto;-webkit-overflow-scrolling:touch;backdrop-filter:blur(3px)}" +
-    ".pq-modal{position:relative;width:100%;max-width:760px;background:#0d0f12;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.5);overflow:hidden;font-family:inherit;margin:auto 0;border:1px solid rgba(56,182,255,.25)}" +
+    ".pq-modal{position:relative;width:100%;max-width:760px;background:#0d0f12;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.5);overflow:hidden;font-family:" + PQ_FONT + ";margin:auto 0;border:1px solid rgba(56,182,255,.25)}" +
     ".pq-modal *{box-sizing:border-box;margin:0;font-family:inherit}" +
     ".pq-close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;color:#0d0f12;font-size:18px;line-height:1;cursor:pointer;z-index:3}" +
     ".pq-close:hover{background:#38b6ff;color:#fff}" +
@@ -517,7 +524,7 @@
     ".pq-done{text-align:center;padding:26px 8px}" +
     ".pq-done .big{font-size:46px}" +
     ".pq-feewrap{position:fixed;inset:0;z-index:100000;background:rgba(10,12,16,.6);display:flex;align-items:center;justify-content:center;padding:18px}" +
-    ".pq-fee{background:#fff;border:2px solid #38b6ff;border-radius:16px;max-width:430px;width:100%;padding:24px;position:relative;color:#16191d;max-height:90vh;overflow-y:auto}" +
+    ".pq-fee{background:#fff;border:2px solid #38b6ff;border-radius:16px;max-width:430px;width:100%;padding:24px;position:relative;color:#16191d;max-height:90vh;overflow-y:auto;font-family:" + PQ_FONT + "}" +
     ".pq-fee h3{font-size:19px;font-weight:900;margin-bottom:12px}" +
     ".pq-fee p{font-size:14px;margin-bottom:10px;color:#3c4750}" +
     ".pq-feebox{background:#f6f8fa;border:1px solid #e1e8ee;border-radius:12px;padding:14px 16px;margin:12px 0}" +
@@ -653,10 +660,11 @@
       var on = state.addons.indexOf(a.id) >= 0;
       return '<label class="pq-addon' + (on ? " sel" : "") + '"><input type="checkbox" data-addon="' + a.id + '"' + (on ? " checked" : "") + ">" +
         "<span><strong>" + esc(a.label) + "</strong><small style='display:block;color:#5b6770'>" + esc(a.desc) + "</small></span>" +
-        '<span class="price">+' + money(p) + "/visit</span></label>";
+        '<span class="price">+' + money(p) + "/treatment</span></label>";
     }).join("");
     if (!rows) return "";
-    return '<span class="pq-label">Optional extras <span class="pq-hintright">' + PQ_CONFIG.addons.length + " available</span></span>" + rows;
+    return '<span class="pq-label">Optional treatments <span class="pq-hintright">Billed per treatment — never every visit</span></span>' + rows +
+      '<div class="pq-note">Checking one adds it to your first visit — after that, just text us whenever you want another.</div>';
   }
 
   function couponRow() {
@@ -677,7 +685,9 @@
       return '<div class="pq-pricebox locked" id="pq-pricebox">' + esc(c.lockedBox) + "</div>";
     }
     var q = quote();
-    if (!q) return "";
+    if (!q) {
+      return '<div class="pq-pricebox locked" id="pq-pricebox">' + esc(c.pickAreasBox) + "</div>";
+    }
     var f = freqDef();
     var rows = q.rows.map(function (r) {
       return '<div class="pq-prow"><span>' + esc(r.label) + "</span><span>" + money(r.amt) + (f.flat == null ? "/visit" : "") + "</span></div>";
@@ -686,15 +696,31 @@
     if (isOneTime() && f.notes) {
       notes = f.notes.map(function (n) { return '<div class="pq-note">• ' + esc(n) + "</div>"; }).join("");
     }
+    // Selected treatments live OUTSIDE the per-visit total: billed per treatment,
+    // whenever the customer wants one.
+    var treatments = "";
+    if (state.addons.length && !isCustom()) {
+      var tRows = state.addons.map(function (id) {
+        var a = byId(PQ_CONFIG.addons, id);
+        var p = a && a.prices[state.freq];
+        if (p == null) return "";
+        return '<div class="pq-prow"><span>' + esc(a.label) + " · first one on visit #1</span><span>+" + money(p) + "/treatment</span></div>";
+      }).join("");
+      if (tRows) {
+        treatments = '<div style="border-top:1.5px dashed #d6dee5;margin-top:8px;padding-top:8px">' + tRows +
+          '<div class="pq-note">' + esc(c.treatmentNote) + "</div></div>";
+      }
+    }
     var waiver = "";
     if (!isOneTime()) {
-      waiver = '<div class="pq-waiver">' + esc(c.waiverText) +
-        '<button type="button" id="pq-fee-info">' + esc(c.waiverButton) + "</button></div>";
+      waiver = '<div class="pq-waiver"><div>' + esc(c.waiverTitle) + "</div>" +
+        '<div style="font-weight:500;margin-top:3px;color:#2e7d4f">' + esc(c.waiverSub) +
+        ' <button type="button" id="pq-fee-info">' + esc(c.waiverButton) + "</button></div></div>";
     }
     var free = '<div class="pq-free">' + PQ_CONFIG.freebies.map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("") + "</div>";
     return '<div class="pq-pricebox" id="pq-pricebox">' + rows +
       '<div class="pq-prow total"><span>' + esc(f.flat != null ? c.oneTimeLabel : c.perVisitLabel) + '</span><span class="amt">' + money(q.total) + "</span></div>" +
-      notes + waiver + free + "</div>";
+      notes + treatments + waiver + free + "</div>";
   }
 
   function questionPanel() {
@@ -738,7 +764,7 @@
 
       '<div class="pq-foot">' +
       '<button class="pq-btn pq-btn-ghost" id="pq-q-toggle">' + (state.questionOpen ? "Hide the question box" : "Got a question first?") + "</button>" +
-      '<button class="pq-btn" id="pq-continue"' + (canContinue() ? "" : " disabled") + ">" + esc(isCustom() ? c.ctaCustom : "Keep Going →") + "</button>" +
+      '<button class="pq-btn" id="pq-continue"' + (canContinue() ? "" : " disabled") + ">" + esc(isCustom() ? c.ctaCustom : c.ctaPlan) + "</button>" +
       "</div>" +
       questionPanel() +
       '<div class="pq-foot"><button class="pq-back" id="pq-plan-back">← Different ZIP</button></div>';
@@ -774,7 +800,7 @@
   }
 
   function canContinue() {
-    return state.phone.length === 10;
+    return state.phone.length === 10 && (isCustom() || state.areasSel.length > 0);
   }
 
   /* ---------- Step 3: Details ---------- */
@@ -837,7 +863,7 @@
     wrap.className = "pq-feewrap";
     wrap.innerHTML = '<div class="pq-fee">' +
       '<button class="pq-close" style="top:10px;right:10px" data-fee-close>×</button>' +
-      "<h3>🤔 What’s the deep-clean deal?</h3>" +
+      "<h3>🤔 What’s the Initial Deep Clean?</h3>" +
       "<p>Every new recurring customer starts with a <strong>full-yard reset</strong>. 💩 We don’t skim it — we clear <em>everything</em> so visit #2 starts from zero. 🐕✨</p>" +
       "<p>That first visit takes real time and elbow grease. Here’s what that labor normally runs <em>on top of</em> a regular visit:</p>" +
       '<div class="pq-feebox">' +
@@ -960,15 +986,12 @@
           var id = el.getAttribute("data-area");
           var allIds = PQ_CONFIG.areaOptions.map(function (a) { return a.id; });
           if (id === "__all") {
-            // Yard+ toggles everything on; tapping again drops back to one area
-            state.areasSel = state.areasSel.length === allIds.length ? [allIds[0]] : allIds.slice();
+            // Yard+ toggles everything on; tapping again clears the selection
+            state.areasSel = state.areasSel.length === allIds.length ? [] : allIds.slice();
           } else {
             var i = state.areasSel.indexOf(id);
-            if (i >= 0) {
-              if (state.areasSel.length > 1) state.areasSel.splice(i, 1); // never allow zero areas
-            } else {
-              state.areasSel.push(id);
-            }
+            if (i >= 0) state.areasSel.splice(i, 1);
+            else state.areasSel.push(id);
           }
           afterOptionChange();
         });
@@ -1037,7 +1060,7 @@
           }
           refreshPriceBox();
           var btn = $("pq-continue");
-          if (btn) btn.disabled = false;
+          if (btn) btn.disabled = !canContinue();
         } else {
           var btn2 = $("pq-continue");
           if (btn2) btn2.disabled = true;
