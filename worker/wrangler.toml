@@ -1,0 +1,10 @@
+name = "purge-lead-relay"
+main = "worker.js"
+compatibility_date = "2026-06-01"
+
+# Set secrets after deploying:
+#   wrangler secret put GHL_WEBHOOK_URL
+#
+# Optional plain-text var (uncomment and edit):
+# [vars]
+# ALLOWED_ORIGINS = "https://itspurgepros.com,https://www.itspurgepros.com"
