@@ -328,10 +328,10 @@ copy later without touching the plumbing.
 
    | Branch                | Actions                                                                 |
    |-----------------------|-------------------------------------------------------------------------|
-   | `phone_captured`      | Add tag `quote-unlocked` · Create opportunity in *Quote Funnel* → stage *Quote Unlocked* |
+   | `phone_captured`      | Add tag `quote-unlocked` · **Create/Update Opportunity** → *Quote Funnel* / stage *Quote Unlocked* (allow duplicates: No; allow moving to previous stage: No) |
    | `question_submitted`  | Add tag `question-asked`                                                |
-   | `service_requested`   | Add tag `service-requested` · Move opportunity → *Booked*               |
-   | `estimate_requested`  | Add tag `estimate-requested` · Move opportunity → *Custom Estimate*     |
+   | `service_requested`   | Add tag `service-requested` · **Create/Update Opportunity** → same pipeline, stage *Booked* (this is how a card "moves" — the action updates the existing opportunity in place) |
+   | `estimate_requested`  | Add tag `estimate-requested` · **Create/Update Opportunity** → same pipeline, stage *Custom Estimate* |
    | `out_of_area`         | Add tag `out-of-area`                                                   |
 
    (`quote_updated` needs no branch — steps 2–3 already refreshed the fields.)
