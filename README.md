@@ -223,10 +223,22 @@ Sanity-check the reviews route in a browser:
    leadEndpoint:    "https://purge-lead-relay.YOU.workers.dev",
    reviewsEndpoint: "https://purge-lead-relay.YOU.workers.dev/reviews",
    ```
-2. Host the file anywhere public. Easiest: Cloudflare dashboard → **Workers & Pages →
-   Create → Pages → Upload assets** → drag the `widget` folder in. You get
-   `https://something.pages.dev/purge-quote.js`. (GHL's media library also works if it
-   serves raw `.js` files.)
+2. Host the file anywhere public. **Easiest path — a second Worker (no Pages needed):**
+   in the Cloudflare dashboard create a Worker (e.g. `purge-quote`) → **Edit code** →
+   select all → paste the entire contents of **`dist/purge-quote-host.worker.js`** →
+   **Deploy**. That worker then serves:
+   - `https://purge-quote.YOU.workers.dev/purge-quote.js` — the widget, for your site's
+     script tag
+   - `https://purge-quote.YOU.workers.dev/` — a live demo page you can open anywhere,
+     including your phone
+
+   The paste-in file is **generated** — after any edit to `widget/purge-quote.js`
+   (config, copy, pricing), run `node tools/build-dist.js` and re-paste. Changes go
+   live within ~5 minutes (the JS is edge-cached briefly).
+
+   Alternative: Cloudflare **Pages** (Workers & Pages → Create → the *Pages* tab →
+   Upload assets → drag the `widget` folder) gives a `*.pages.dev` URL — same result,
+   different UI.
 
 ### Step 5 — Embed in your GHL site
 
