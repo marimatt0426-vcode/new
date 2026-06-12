@@ -330,8 +330,8 @@ copy later without touching the plumbing.
    |-----------------------|-------------------------------------------------------------------------|
    | `phone_captured`      | Add tag `quote-unlocked` · **Find Opportunity** (*Quote Funnel*) → If/Else: **not found** → **Create Opportunity** (stage *Quote Unlocked*, name/source/value); **found** → nothing (guards against duplicate cards and against demoting someone already Booked/Won) |
    | `question_submitted`  | Add tag `question-asked`                                                |
-   | `service_requested`   | Add tag `service-requested` · **Update Opportunity** → *Quote Funnel*, stage *Booked* (updating the stage IS the "move") |
-   | `estimate_requested`  | Add tag `estimate-requested` · **Update Opportunity** → *Quote Funnel*, stage *Custom Estimate* |
+   | `service_requested`   | Add tag `service-requested` · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Booked* (the Find puts the card "in context" — without it the Update has nothing to act on and silently does nothing) |
+   | `estimate_requested`  | Add tag `estimate-requested` · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Custom Estimate* |
    | `out_of_area`         | Add tag `out-of-area`                                                   |
 
    If the action exposes them (sometimes behind a "show advanced/add fields"
