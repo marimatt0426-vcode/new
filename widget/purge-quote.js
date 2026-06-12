@@ -138,6 +138,9 @@
       zipButton: "Check Coverage",
       planTitle: "Let’s price out your yard",
       planBody: "About 30 seconds of questions, then your exact per-visit price. Never billed monthly.",
+      dealBadge: "✓ DEAL AUTO-APPLIED",
+      dealTitle: "🎁 Initial Deep-Clean Fee ($99+ value): WAIVED",
+      dealSub: "New recurring customers: your first visit preps the yard back to zero, and you pay only your regular per-visit rate. No contracts — pay per visit, never monthly.",
       dogsLabel: "How many dogs do we scoop after?",
       freqLabel: "How often should we come?",
       freqHint: "Most customers pick Weekly",
@@ -220,7 +223,7 @@
       zip: "",
       dogs: 1,              // 1..9 or "10+"
       freq: "weekly",
-      areasSel: [],         // multi-select of areaOptions ids; starts empty by design
+      areasSel: ["back"],   // Back Yard preselected (most common); all chips toggle freely
       yardSize: "s",
       customYardSize: "",
       lastCleaned: PQ_CONFIG.lastCleaned[0],
@@ -521,6 +524,11 @@
     ".pq-prow.total .amt{color:#1a9b4a;font-size:22px}" +
     ".pq-free{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}" +
     ".pq-free span{font-size:12px;background:#eef8ff;border:1px solid #bfe5ff;color:#1273ad;border-radius:999px;padding:4px 10px;font-weight:600}" +
+    ".pq-deal{position:relative;border:2px dashed #1a9b4a;background:#effaf2;border-radius:12px;padding:14px 14px 12px;margin:6px 0 4px}" +
+    ".pq-deal-badge{position:absolute;top:-10px;left:12px;background:#1a9b4a;color:#fff;font-size:10.5px;font-weight:800;border-radius:999px;padding:3px 10px;letter-spacing:.05em}" +
+    ".pq-deal-title{font-size:14.5px;font-weight:800;color:#15703a}" +
+    ".pq-deal-sub{font-size:12.5px;color:#2e7d4f;margin-top:4px}" +
+    ".pq-deal button{background:none;border:0;color:#1273ad;font-weight:800;cursor:pointer;text-decoration:underline;font-size:12.5px;padding:0}" +
     ".pq-waiver{margin-top:10px;font-size:13px;background:#effaf2;border:1px solid #bfe8cc;border-radius:10px;padding:10px 12px;color:#15703a;font-weight:600}" +
     ".pq-waiver button{background:none;border:0;color:#1273ad;font-weight:800;cursor:pointer;text-decoration:underline;font-size:13px;padding:0;margin-left:4px}" +
     ".pq-addon{display:flex;align-items:flex-start;gap:10px;border:1.5px solid #d6dee5;border-radius:12px;padding:12px;cursor:pointer;margin-top:8px}" +
@@ -758,8 +766,15 @@
     var f = freqDef();
     var freqNote = (f && f.selectedNote && state.freq === f.id)
       ? '<div class="pq-callout">' + esc(f.selectedNote) + "</div>" : "";
+    var dealBanner = (!isOneTime() && !isCustom())
+      ? '<div class="pq-deal"><span class="pq-deal-badge">' + esc(c.dealBadge) + "</span>" +
+        '<div class="pq-deal-title">' + esc(c.dealTitle) + "</div>" +
+        '<div class="pq-deal-sub">' + esc(c.dealSub) +
+        ' <button type="button" id="pq-deal-info">' + esc(c.waiverButton) + "</button></div></div>"
+      : "";
     return '<h3 class="pq-h">' + esc(c.planTitle) + "</h3>" +
       '<p class="pq-p">' + esc(c.planBody) + "</p>" +
+      dealBanner +
 
       '<span class="pq-label">' + esc(c.dogsLabel) + "</span>" + dogsDropdown() +
 
@@ -1084,6 +1099,8 @@
 
       var feeBtn = $("pq-fee-info");
       if (feeBtn) feeBtn.addEventListener("click", openFeeModal);
+      var dealBtn = $("pq-deal-info");
+      if (dealBtn) dealBtn.addEventListener("click", openFeeModal);
 
       $("pq-q-toggle").addEventListener("click", function () {
         state.questionOpen = !state.questionOpen;
