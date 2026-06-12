@@ -330,7 +330,7 @@ copy later without touching the plumbing.
    |-----------------------|-------------------------------------------------------------------------|
    | `phone_captured`      | Add tag `quote-unlocked` · **Find Opportunity** (*Quote Funnel*) → If/Else: **not found** → **Create Opportunity** (stage *Quote Unlocked*, name/source/value); **found** → nothing (guards against duplicate cards and against demoting someone already Booked/Won) |
    | `question_submitted`  | Add tag `question-asked`                                                |
-   | `service_requested`   | Add tag `service-requested` · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Booked* (the Find puts the card "in context" — without it the Update has nothing to act on and silently does nothing) |
+   | `service_requested`   | Add tag `service-requested` · **Internal notification** (**message 11**) — lives here, not in Workflow 4, so repeat bookings from existing customers still ping you (re-adding an existing tag fires nothing) · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Booked* (the Find puts the card "in context" — without it the Update has nothing to act on and silently does nothing) |
    | `estimate_requested`  | Add tag `estimate-requested` · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Custom Estimate* |
    | `out_of_area`         | Add tag `out-of-area`                                                   |
 
@@ -390,11 +390,12 @@ days. The actual scheduling conversation is yours, in the GHL inbox.
 - Action 1: **If/Else on `Quote Frequency`**:
   - equals `One-Time Clean` → SMS → **message 7** (one-time + deposit version)
   - everything else → SMS → **message 6** (recurring version)
-- Action 2: **Internal notification** (**message 11**) to you/your team. This is your
-  cue to do the route check.
-- Action 3 (optional): confirmation **email** (**message 12**) — receipts feel more
+- Action 2: confirmation **email** (**message 12**, optional) — receipts feel more
   official with an email behind them. The email also repeats the "we'll text you to set
-  your day" expectation so nobody sits waiting for a calendar invite.
+  your day" expectation so nobody sits waiting for a calendar invite. (The internal
+  booking notification lives in the intake workflow's `service_requested` branch — see
+  Workflow 1 — so it fires on every booking, including repeats from existing customers
+  that won't re-trigger this tag-based workflow.)
 
 **The human scheduling loop (your part):**
 
