@@ -318,7 +318,10 @@ copy later without touching the plumbing.
    In the trigger's mapping screen the JSON keys (`zip`, `dogs`, `frequency`…) appear.
 2. **Action: Create/Update Contact** — map Phone ← `phone`, Email ← `email`,
    First Name ← `firstName`, Last Name ← `lastName`, Address ← `street`, City ← `city`,
-   State ← `state`. GHL upserts by phone, so all later stages enrich the same contact.
+   State ← `state`, Postal Code ← `zip`. GHL upserts by phone, so all later stages
+   enrich the same contact. (`zip` is mapped twice on purpose: Postal Code completes
+   the standard address; the `Quote ZIP` custom field in step 3 is what the message
+   templates reference and preserves the ZIP they quoted with.)
 3. **Actions: Update Contact Field** — one per custom field from section A, mapped from
    the webhook values. Always write `Quote Stage` ← `stage`.
 4. **Action: If/Else on `stage`** with five branches:
