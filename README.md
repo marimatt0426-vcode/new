@@ -654,6 +654,20 @@ ghost protection (it requires starting a recurring plan and paying the per-visit
 rate). Frame it as the deal everywhere; hold the visit-2-free card for closers and,
 later, win-back campaigns on 30+ day-old `quote-abandoned` contacts.
 
+**15 — Internal notification: hot lead at phone capture (Workflow 2, action 3)**
+
+> **Title:** 🔥 Quote unlocked — {{contact.phone}}
+>
+> 🔥 HOT LEAD (quote unlocked, NOT booked yet)
+> {{contact.quote_dogs}} dog(s) · {{contact.quote_frequency}} ·
+> ${{contact.quote_price_per_visit}}/visit
+> ZIP {{contact.quote_zip}} · {{contact.quote_areas}} · {{contact.quote_yard_size}} ·
+> Last cleaned: {{contact.quote_last_cleaned}}
+>
+> Automation status: instant quote text just went out; abandon-nurture starts in
+> ~45 min if they don't book. No action required — but if you're free, a personal
+> reply in the conversation within a few minutes closes these at the highest rate.
+
 Writing tips baked into the above, if you edit: lead with their number ("your quote",
 "$28.99/visit") not your pitch; one idea per text; always end with the single action
 (reply YES); sign a human name — reply rates to "Matt" beat reply rates to "Purge Pros";
