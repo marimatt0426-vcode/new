@@ -397,14 +397,39 @@ A safety net so no booking slips through on a busy day:
 
 ### A2P/compliance notes
 
+- **Point-of-collection consent:** the phone field carries explicit consent language
+  ("By entering your number, you agree to receive texts… Msg & data rates may apply;
+  msg frequency varies. Reply STOP to opt out, HELP for help."). This is the disclosure
+  carriers look for — **screenshot the phone-gate step and keep it on file**; A2P 10DLC
+  campaign reviews ask you to show exactly where and how opt-in happens. A checkbox is
+  NOT required at the point of collection — clear disclosure + the affirmative act of
+  entering the number is the accepted pattern (and a checkbox there would tax your
+  highest-converting moment). The express-consent checkbox at checkout is the second,
+  stronger layer.
 - You're already texting from GHL, so your A2P 10DLC registration should cover this —
-  but the volume will rise; if you ever see carrier filtering, check your registered
-  use-case throughput.
-- The widget collects consent ("service-related texts and emails," checkbox at booking,
-  disclosure under the phone field). Keep "Reply STOP to opt out" in the **first**
-  message of any thread (it's in the copy below), and GHL handles STOP automatically.
+  but volume will rise; if you ever see carrier filtering, check your registered
+  use-case throughput. If you update your campaign registration, describe the opt-in
+  as: "Customer enters phone number on itspurgepros.com quote form after on-screen
+  consent disclosure; express consent checkbox at booking."
+- GHL handles STOP/UNSUBSCRIBE automatically (marks the contact DND) and HELP replies.
+  Never message around DND.
 - Operating hours on every messaging workflow: 9:00–19:30 local. Nobody books from a
   10 p.m. text; some people report them.
+
+### Running ads against this funnel
+
+- **Meta: optimize for Leads, never Purchase.** Purchase is an e-commerce event;
+  miscategorizing hurts Meta's optimization and benchmarks. Run a sales/conversions
+  campaign optimizing for the **Lead** event (fires at booking, browser + CAPI deduped).
+- **If booking volume is too low for learning** (Meta wants ~50 events/week/ad set):
+  create a **custom conversion from the `QuoteUnlocked` event** in Events Manager and
+  optimize on that — it fires at phone capture, so it's more frequent and still
+  represents a real captured lead. Switch optimization to Lead once volume supports it.
+- **Google Ads:** the conversion action you created (`googleAdsSendTo`) is the primary
+  goal; you can additionally import `quote_unlocked` via GA4/GTM as a secondary action.
+- These are *self-qualified* website leads — they walked your whole pricing flow before
+  converting. Expect higher cost-per-lead than instant forms but far higher close rates;
+  judge campaigns on booked customers, not raw lead count.
 
 ---
 

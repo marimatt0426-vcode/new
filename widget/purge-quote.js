@@ -141,7 +141,7 @@
       lastCleanLabel: "When did the yard last get a full cleanup?",
       lastCleanNote: "No effect on price — it just tells us how much time to block off for visit #1.",
       phoneLabel: "Pop in your mobile number to unlock your price",
-      phoneHint: "Used for your quote and service updates only — never spam, opt out anytime.",
+      phoneHint: "By entering your number, you agree to receive texts from Purge Pros about your quote and service. Msg & data rates may apply; msg frequency varies. Reply STOP to opt out, HELP for help. We never sell your info.",
       lockedBox: "🔒 Your price is ready — enter your mobile number above to unlock it.",
       perVisitLabel: "Your per-visit price",
       oneTimeLabel: "One-time total",
