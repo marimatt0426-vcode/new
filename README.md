@@ -86,6 +86,10 @@ Every payload carries the full quote context:
 
 ## Conversion tracking (Google / Facebook)
 
+> **Hands-on setup guide:** [docs/ads-tracking-setup.md](docs/ads-tracking-setup.md)
+> walks both platforms click by click — creating the conversion actions, grabbing the
+> labels, CAPI token, live testing, and which event to optimize campaigns on.
+
 **Design principle: no redirects, no waiting.** A page redirect after booking loses
 conversions — people close the tab or lock their phone the second they see the
 confirmation, and a page-load over a mobile connection is a gamble. Instead, events

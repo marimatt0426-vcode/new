@@ -125,6 +125,9 @@ async function sendMetaCapi(lead, request, env) {
       user_data
     }]
   };
+  // Set META_TEST_EVENT_CODE (from Events Manager > Test Events) while setting
+  // up: server events then appear live in the Test Events tab. Remove it after.
+  if (env.META_TEST_EVENT_CODE) body.test_event_code = env.META_TEST_EVENT_CODE;
 
   try {
     await fetch(

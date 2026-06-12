@@ -7,6 +7,7 @@ compatibility_date = "2026-06-01"
 #   wrangler secret put GOOGLE_PLACES_API_KEY   # for the live review chip
 #   wrangler secret put META_PIXEL_ID           # optional: server-side CAPI backup
 #   wrangler secret put META_CAPI_TOKEN         # optional: server-side CAPI backup
+#   wrangler secret put META_TEST_EVENT_CODE    # temporary, only while testing CAPI
 
 [vars]
 # Purge Pros - Pet Waste Removal (Google Business Profile)

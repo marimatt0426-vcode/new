@@ -52,9 +52,12 @@
     // navigation, nothing to wait for), via the site's existing gtag/fbq tags.
     tracking: {
       // Google Ads conversion label, e.g. "AW-123456789/AbC-dEfGhIjK".
-      // Created in Google Ads > Goals > Conversion actions (see README).
+      // Created in Google Ads > Goals > Conversion actions (see docs/ads-tracking-setup.md).
       // "" = a generic generate_lead event still fires for GA4/GTM.
       googleAdsSendTo: "",
+      // Optional second Google Ads label fired the moment a phone number unlocks
+      // the price (your earlier, higher-volume conversion). Leave "" to skip.
+      googleAdsSendToUnlock: "",
       // Legacy page-based tracking. Leave "" (recommended): the confirmation
       // stays in the popup and events fire instantly. Only set a URL if you
       // still need the old /submit-true page-visit conversion as well.
@@ -432,7 +435,13 @@
     var t = PQ_CONFIG.tracking || {};
     if (t.firePixelEvents === false) return;
     try { if (typeof window.fbq === "function") window.fbq("trackCustom", "QuoteUnlocked"); } catch (e) {}
-    try { if (typeof window.gtag === "function") window.gtag("event", "quote_unlocked", { event_category: "quote_widget" }); } catch (e) {}
+    try {
+      if (typeof window.gtag === "function") {
+        if (t.googleAdsSendToUnlock)
+          window.gtag("event", "conversion", { send_to: t.googleAdsSendToUnlock, transport_type: "beacon" });
+        window.gtag("event", "quote_unlocked", { event_category: "quote_widget" });
+      }
+    } catch (e) {}
     try { (window.dataLayer = window.dataLayer || []).push({ event: "pq_quote_unlocked" }); } catch (e) {}
   }
   // Fires synchronously at the submit click — before the confirmation renders,
