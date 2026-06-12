@@ -334,12 +334,14 @@ copy later without touching the plumbing.
    | `estimate_requested`  | Add tag `estimate-requested` · **Update Opportunity** → *Quote Funnel*, stage *Custom Estimate* |
    | `out_of_area`         | Add tag `out-of-area`                                                   |
 
-   Opportunity name template: `{{inboundWebhookRequest.frequency}} ·
-   {{inboundWebhookRequest.dogs}} dogs · {{inboundWebhookRequest.zip}}` · source
-   `quote-widget` · value `{{inboundWebhookRequest.perVisitPrice}}`. (GHL's legacy
-   **Create/Update Opportunity** action also works with duplicates off and
-   previous-stage moves off, but it's marked for deprecation — new builds should use
-   Find/Create/Update.)
+   If the action exposes them (sometimes behind a "show advanced/add fields"
+   expander), set opportunity name `{{inboundWebhookRequest.frequency}} ·
+   {{inboundWebhookRequest.dogs}} dogs · {{inboundWebhookRequest.zip}}`, source
+   `quote-widget`, value `{{inboundWebhookRequest.perVisitPrice}}` — but these are
+   cosmetic/reporting niceties; skip them if the new actions don't offer the fields.
+   (GHL's legacy **Create/Update Opportunity** action also works with duplicates off
+   and previous-stage moves off, but it's marked for deprecation — new builds should
+   use Find/Create/Update.)
 
    (`quote_updated` needs no branch — steps 2–3 already refreshed the fields.)
 
