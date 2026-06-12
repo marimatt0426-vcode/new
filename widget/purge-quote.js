@@ -148,8 +148,8 @@
       lockedBox: "🔒 Your price is ready — enter your mobile number above to unlock it.",
       perVisitLabel: "Your per-visit price",
       oneTimeLabel: "One-time total",
-      waiverText: "💰 First-visit deep clean ($99+ value): ON US",
-      waiverButton: "How’s it free?",
+      waiverText: "💰 Visit #1 is our $99+ deep clean — you pay just your per-visit rate",
+      waiverButton: "How does that work?",
       consent: "I agree to receive service-related texts and emails from Purge Pros. Msg & data rates may apply. Reply STOP to opt out.",
       outOfAreaTitle: "We haven’t made it there… yet",
       outOfArea: "We’re expanding around the Indy area fast. Leave your email and you’ll be the first to know when {zip} goes live.",
@@ -837,16 +837,16 @@
     wrap.className = "pq-feewrap";
     wrap.innerHTML = '<div class="pq-fee">' +
       '<button class="pq-close" style="top:10px;right:10px" data-fee-close>×</button>' +
-      "<h3>🤔 Wait — how is the first deep clean free?</h3>" +
+      "<h3>🤔 What’s the deep-clean deal?</h3>" +
       "<p>Every new recurring customer starts with a <strong>full-yard reset</strong>. 💩 We don’t skim it — we clear <em>everything</em> so visit #2 starts from zero. 🐕✨</p>" +
-      "<p>That first visit takes real time and elbow grease. Here’s what it would normally run:</p>" +
+      "<p>That first visit takes real time and elbow grease. Here’s what that labor normally runs <em>on top of</em> a regular visit:</p>" +
       '<div class="pq-feebox">' +
       '<div class="pq-feerow"><span>⏱️ First 30 minutes on site:</span><span class="strike">$39.99</span></div>' +
       '<div class="pq-feerow"><span>👷 Every minute after ($1/min):</span><span class="strike">~$60.00+</span></div>' +
-      '<div class="pq-feerow red"><span>🏷️ WHAT THAT ADDS UP TO:</span><span class="strike">$99.99+</span></div>' +
-      '<div class="pq-feerow green"><span>🎉 WHAT YOU PAY:</span><span class="amt">$0.00</span></div>' +
+      '<div class="pq-feerow red"><span>🏷️ TYPICAL DEEP-CLEAN FEE:</span><span class="strike">$99.99+</span></div>' +
+      '<div class="pq-feerow green"><span>🎉 YOUR DEEP-CLEAN FEE:</span><span class="amt">$0.00</span></div>' +
       "</div>" +
-      '<p class="mid">✅ Your card only ever sees your <strong>per-visit rate</strong>.<br>The reset labor? That one’s on us. 🏠💙</p>' +
+      '<p class="mid">✅ Visit #1 costs you just your regular <strong>per-visit rate</strong> —<br>the $99+ of reset labor is on us. 🏠💙</p>' +
       '<p class="fine">* For new recurring customers only. Doesn’t apply to One-Time cleans. *</p>' +
       "</div>";
     wrap.addEventListener("click", function (e) {

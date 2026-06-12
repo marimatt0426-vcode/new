@@ -36,7 +36,9 @@ tools/place-id-from-url.js   Derives a Google Place ID from a full Maps URL
    **One-Time** shows an inline note that it's a flat base rate + time on site.
 3. **Phone gate** — price stays hidden until a valid 10-digit phone is entered. The
    reveal shows the per-visit breakdown (never a monthly figure), the freebies, the
-   **first-visit deep clean ON US** banner with explainer popup, and only now the
+   **"Visit #1 is our $99+ deep clean — you pay just your per-visit rate"** banner
+   with explainer popup (precise wording matters: the deep-clean *fee* is waived, the
+   visit itself is billed at the normal rate), and only now the
    WYSIWash add-on and coupon row.
 4. **Details** — name, email, address, an optional **"When would you like us to
    start?"** dropdown (ASAP / within a week / next few weeks / just looking — feeds
@@ -452,16 +454,17 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 > Hey, it's Matt with Purge Pros 🐾 Here's the quote you just built at itspurgepros.com:
 > {{contact.quote_dogs}} dog(s) · {{contact.quote_frequency}} ·
 > ${{contact.quote_price_per_visit}} per visit. You pay per visit — never a monthly
-> bill, no contracts. Your first-visit deep clean ($99+ value) is on us. Want it? Just
-> reply YES and I'll get you on the schedule. Reply STOP to opt out.
+> bill, no contracts. And visit #1 is our full $99+ deep clean for just that same
+> per-visit rate — we eat the difference. Want it? Just reply YES and I'll get you on
+> the schedule. Reply STOP to opt out.
 
 **2 — Nurture touch 1 (45 min)**
 
 > Still thinking it over? Totally fine — your quote is saved:
 > ${{contact.quote_price_per_visit}}/visit for {{contact.quote_dogs}} dog(s),
-> {{contact.quote_frequency}}. The free first-visit deep clean stays on the table when
-> you start any recurring plan. Reply YES whenever you're ready and consider it handled.
-> — Matt @ Purge Pros
+> {{contact.quote_frequency}}. And that first visit? It's the full $99+ deep clean,
+> still at just your regular rate — that deal stays on the table with any recurring
+> plan. Reply YES whenever you're ready and consider it handled. — Matt @ Purge Pros
 
 **3 — Nurture touch 2 (next day)**
 
@@ -475,15 +478,17 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 > Heads up — we're locking in next week's routes around {{contact.quote_zip}} right now.
 > If you want your yard on the schedule before the weekend, today's the day: reply YES
-> and you're in. First visit (the big catch-up clean) is free with your plan.
-> — Purge Pros 🐾
+> and you're in. Your first visit is the big $99+ catch-up clean, and you still pay
+> just your regular per-visit rate. — Purge Pros 🐾
 
-**5 — Nurture touch 4, breakup (day 6)**
+**5 — Nurture touch 4, breakup + closer offer (day 6)**
 
-> Last text from me, promise 🙂 I'll keep your ${{contact.quote_price_per_visit}}/visit
-> quote on file for 30 days. If the yard ever gets away from you — vacation, busy
-> season, new puppy chaos — just text this number and we'll reset it to zero.
-> — Matt @ Purge Pros
+> Last text from me, promise 🙂 Two things before I leave you alone: (1) your
+> ${{contact.quote_price_per_visit}}/visit quote stays on file for 30 days — if the
+> yard ever gets away from you, just text this number. (2) If you start your plan this
+> week, your SECOND visit is on us. First visit deep-cleans the yard at your regular
+> rate, second one's free, and by then you'll get why people stay. Reply YES to grab
+> it. — Matt @ Purge Pros 🐾
 
 **6 — Booking confirmation, recurring (Workflow 4)**
 
@@ -547,7 +552,8 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 > - **Coverage:** {{contact.quote_areas}} · {{contact.quote_yard_size}}
 > - **Your rate:** ${{contact.quote_price_per_visit}} per visit — billed per visit,
 >   never monthly, no contracts
-> - **First visit:** full deep clean, on us
+> - **First visit:** the full $99+ deep clean, billed at just your regular per-visit
+>   rate — the extra labor is on us
 >
 > **What happens next:** we build our weeks around routes, so we're checking which day
 > we're in your neighborhood — you'll get a text shortly to set your first visit day
@@ -586,6 +592,27 @@ Also save as a Snippet. This is the full onboarding message:
 >
 > Thank you for choosing Purge Pros! Save this number — we're here 24/7/365. Have a
 > wonderful day!
+
+### Offer strategy — discounts that don't attract ghosts
+
+Two rules learned the hard way (yours and every agency's):
+
+1. **Never discount the first visit.** Visit #1 is your most expensive visit (the deep
+   clean) — a "$9.99 first visit" or "free first clean" hands your costliest labor to
+   exactly the people most likely to take it and vanish. You already got hosed by this
+   once; the structure was the problem, not the customers.
+2. **Discount visit #2, not visit #1.** "Start this week and your second visit is on
+   us" is ghost-proof: they pay full rate for the expensive deep-clean visit, the card
+   is already on file, and the freebie only exists *after* they've paid once. It costs
+   you ~one routine visit (~$25 of labor) and lands right when the habit is forming.
+   That's why it sits in **message 5 only** — the final touch, so you never give it to
+   the majority who book without it. Don't move it earlier: an offer in touch 1 trains
+   every future lead to wait for the discount.
+
+The deep-clean fee waiver IS your headline offer — a real $99+ value with built-in
+ghost protection (it requires starting a recurring plan and paying the per-visit
+rate). Frame it as the deal everywhere; hold the visit-2-free card for closers and,
+later, win-back campaigns on 30+ day-old `quote-abandoned` contacts.
 
 Writing tips baked into the above, if you edit: lead with their number ("your quote",
 "$28.99/visit") not your pitch; one idea per text; always end with the single action
