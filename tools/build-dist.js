@@ -27,22 +27,44 @@ const standalone = demo
 fs.writeFileSync(path.join(root, "widget", "demo-standalone.html"), standalone);
 
 // --- paste-in hosting worker ---
-const worker = `// GENERATED FILE — do not edit by hand. Rebuild with: node tools/build-dist.js
-// Paste the ENTIRE contents of this file into a Cloudflare Worker (e.g. the
-// "purge-quote" worker) via Edit code -> select all -> replace -> Deploy.
+const worker = `// GENERATED FILE — rebuild with: node tools/build-dist.js
+// Paste the ENTIRE contents into a Cloudflare Worker (e.g. "purge-quote") via
+// Edit code -> select all -> replace -> Deploy.
 //
 //   https://<worker-url>/purge-quote.js   the widget (use in your site's script tag)
 //   https://<worker-url>/                 a live demo page
+
+// ╔══════════════════════ EDIT THESE LINES ONLY ══════════════════════╗
+// Everything below this block is generated — never edit it by hand.
+
+// Your purge-lead-relay worker URL. Leave "" for dev mode (leads log to console).
+const LEAD_ENDPOINT = "";
+
+// Same relay URL + "/reviews" for the live Google review chip. "" = static chip.
+const REVIEWS_ENDPOINT = "";
+
+// Google Ads conversion labels, e.g. "AW-123456789/AbC-dEfGhIjK". "" = off.
+const GOOGLE_ADS_SEND_TO = "";        // fires at booking
+const GOOGLE_ADS_SEND_TO_UNLOCK = ""; // fires at phone capture
+
+// ╚═══════════════════════════════════════════════════════════════════╝
 
 const WIDGET_JS = ${JSON.stringify(js)};
 
 const DEMO_HTML = ${JSON.stringify(demo)};
 
+// Injects the settings above into the widget at serve time.
+const WIDGET_JS_FINAL = WIDGET_JS
+  .replace('leadEndpoint: ""', "leadEndpoint: " + JSON.stringify(LEAD_ENDPOINT))
+  .replace('reviewsEndpoint: ""', "reviewsEndpoint: " + JSON.stringify(REVIEWS_ENDPOINT))
+  .replace('googleAdsSendTo: ""', "googleAdsSendTo: " + JSON.stringify(GOOGLE_ADS_SEND_TO))
+  .replace('googleAdsSendToUnlock: ""', "googleAdsSendToUnlock: " + JSON.stringify(GOOGLE_ADS_SEND_TO_UNLOCK));
+
 export default {
   async fetch(request) {
     const path = new URL(request.url).pathname;
     if (path === "/purge-quote.js") {
-      return new Response(WIDGET_JS, {
+      return new Response(WIDGET_JS_FINAL, {
         headers: {
           "Content-Type": "application/javascript; charset=utf-8",
           // short cache so config edits go live within ~5 minutes
