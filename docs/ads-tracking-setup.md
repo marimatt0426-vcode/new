@@ -179,7 +179,32 @@ googleAdsSendToUnlock: "AW-123456789/XyZ-aBcDeFgH",   // Quote Unlocked label
 
 ---
 
-## Part 3 — Sanity checklist when you're done
+## Part 4 — The optimization ladder (what an agency would do)
+
+Ad algorithms learn from whatever event you optimize on, and they're volume-hungry:
+Meta's learning phase wants ~50 events/week per ad set; Google Smart Bidding gets
+unstable below ~15–30 conversions/month. A new local-service account rarely produces
+that many *bookings* — but phone captures run several times higher. So:
+
+1. **Launch optimizing on phone capture.**
+   - Meta: ad set conversion event = the `Quote Unlocked` custom conversion.
+   - Google: `Quote Unlocked` = **Primary**, `Quote Booked` = **Secondary**.
+     (Google blends every Primary action into bidding — keep exactly one primary,
+     or unlock+book from the same person counts twice.)
+2. **Track both events regardless** — already wired; the choice above only changes
+   what steers bidding, not what gets recorded.
+3. **Climb down when ads drive ~10–15 bookings/week:** Meta ad sets → `Lead`;
+   Google → swap which action is Primary. Expect a 1–2 week re-learning wobble;
+   don't panic-edit during it.
+
+**Managing the price-shopper risk** of optimizing on captures: the nurture sequence
+exists to close the capture→booking gap, and the scorecard is the **GHL pipeline,
+not the platform dashboards**. Weekly: spend per campaign vs. opportunities moved to
+*Won*, plus each campaign's **unlock→book ratio** — cheap captures with a bad ratio
+means the creative attracts tire kickers; kill the creative, not the strategy.
+
+And anchor on **cost per booked customer**, never cost per lead: a weekly customer at
+~$25/visit is $1,300+/year, so even $75 per booked customer is a great trade.
 
 - [ ] Tag Assistant shows the `AW-` conversion firing at unlock and at booking
 - [ ] Google Ads: both conversion actions exist; `Quote Booked` = Primary,
