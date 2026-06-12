@@ -218,11 +218,21 @@ Sanity-check the reviews route in a browser:
 
 ### Step 4 — Configure & host the widget
 
-1. Open `widget/purge-quote.js`, set at the top of `PQ_CONFIG`:
+**Which worker is which:** `purge-lead-relay` is the back office — it *receives* leads
+and review lookups, so both endpoints below point at it. The hosting worker
+(`purge-quote`) is just a file server — its URL only ever appears in the site's
+script tag and as the live demo address, never as an endpoint.
+
+1. Set the endpoints. With the paste-in hosting worker (recommended, step 2 below)
+   this happens in the labeled box at the top of that worker's code — you do NOT need
+   to edit the source file:
    ```js
-   leadEndpoint:    "https://purge-lead-relay.YOU.workers.dev",
-   reviewsEndpoint: "https://purge-lead-relay.YOU.workers.dev/reviews",
+   const LEAD_ENDPOINT    = "https://purge-lead-relay.YOU.workers.dev";
+   const REVIEWS_ENDPOINT = "https://purge-lead-relay.YOU.workers.dev/reviews";
    ```
+   (Only if hosting some other way — e.g. Cloudflare Pages — set the same two values
+   as `leadEndpoint`/`reviewsEndpoint` in `PQ_CONFIG` at the top of
+   `widget/purge-quote.js` and rebuild with `node tools/build-dist.js`.)
 2. Host the file anywhere public. **Easiest path — a second Worker (no Pages needed):**
    in the Cloudflare dashboard create a Worker (e.g. `purge-quote`) → **Edit code** →
    select all → paste the entire contents of **`dist/purge-quote-host.worker.js`** →
