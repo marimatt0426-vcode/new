@@ -329,7 +329,7 @@ copy later without touching the plumbing.
    | Branch                | Actions                                                                 |
    |-----------------------|-------------------------------------------------------------------------|
    | `phone_captured`      | Add tag `quote-unlocked` · **Find Opportunity** (*Quote Funnel*) → If/Else: **not found** → **Create Opportunity** (stage *Quote Unlocked*, name/source/value); **found** → nothing (guards against duplicate cards and against demoting someone already Booked/Won) |
-   | `question_submitted`  | Add tag `question-asked` · **Internal notification** with `{{contact.quote_question}}` + quote context — lives here so repeat questions from the same contact still ping you (re-adding an existing tag fires nothing) |
+   | `question_submitted`  | Add tag `question-asked` · **Internal notification** (**message 16**) — lives here so repeat questions from the same contact still ping you (re-adding an existing tag fires nothing) |
    | `service_requested`   | Add tag `service-requested` · **Internal notification** (**message 11**) — lives here, not in Workflow 4, so repeat bookings from existing customers still ping you (re-adding an existing tag fires nothing) · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Booked* (the Find puts the card "in context" — without it the Update has nothing to act on and silently does nothing) |
    | `estimate_requested`  | Add tag `estimate-requested` · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Custom Estimate* |
    | `out_of_area`         | Add tag `out-of-area`                                                   |
@@ -584,14 +584,15 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 > Got your request! Bigger properties deserve a real number, not a guess — I'm looking
 > at your details now ({{contact.quote_dogs}} dogs, {{contact.quote_yard_size}}) and
-> you'll have a personalized estimate by text today. Anything you want to add, just
+> you'll have a personalized estimate by text today. If it's after hours right now,
+> you'll hear from me first thing in the morning. Anything you want to add, just
 > reply here. — Matt @ Purge Pros
 
 **9 — Question acknowledgment (Workflow 6)**
 
 > Got your question — a real human (me) is on it, not a bot 🙂 You'll have an answer
-> shortly. Your quote details came through with it, so no need to repeat anything.
-> — Matt @ Purge Pros
+> shortly (if it's after hours, first thing in the morning). Your quote details came
+> through with it, so no need to repeat anything. — Matt @ Purge Pros
 
 **10 — Out-of-area waitlist email (Workflow 7)**
 
@@ -699,6 +700,22 @@ later, win-back campaigns on 30+ day-old `quote-abandoned` contacts.
 > Automation status: instant quote text just went out; abandon-nurture starts in
 > ~45 min if they don't book. No action required — but if you're free, a personal
 > reply in the conversation within a few minutes closes these at the highest rate.
+
+**16 — Internal notification: new question (Workflow 1, `question_submitted` branch)**
+
+> **Title:** ❓ Question — {{contact.first_name}} · {{contact.phone}}
+>
+> ❓ NEW QUESTION (not booked yet)
+> "{{contact.quote_question}}"
+>
+> Their quote: {{contact.quote_dogs}} dog(s) · {{contact.quote_frequency}} ·
+> ${{contact.quote_price_per_visit}}/visit
+> ZIP {{contact.quote_zip}} · {{contact.quote_areas}} · {{contact.quote_yard_size}} ·
+> Last cleaned: {{contact.quote_last_cleaned}}
+> Email: {{contact.email}}
+>
+> Auto-ack already went out promising a real human. Reply from this contact's
+> conversation thread — a question answered fast is a booking.
 
 Writing tips baked into the above, if you edit: lead with their number ("your quote",
 "$28.99/visit") not your pitch; one idea per text; always end with the single action
