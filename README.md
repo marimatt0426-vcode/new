@@ -369,21 +369,37 @@ add a reply-trigger workflow later once volume justifies it.
 
 ### F. Workflow 3 — `Abandoned Quote Nurture` (trigger: tag `quote-unlocked` added)
 
-- Workflow settings: re-entry OFF, and set **operating hours 9:00–19:30** so waits never
-  release a text at 2 a.m.
-- **Goal Event** (the workflow's exit door): *Contact tag added* = `service-requested`.
-  The instant they book, GHL pulls them out of this sequence mid-wait. Add the same goal
-  for tag `nurture-stop`.
+- Settings: re-entry **OFF** · **Stop on response ON** (any reply halts the sequence —
+  a human takes over in the conversation) · time window ~9:00–19:30 (workflow-level if
+  available, otherwise restrict each Wait's resume hours) so a midnight quote never
+  produces a 1 a.m. text.
+- Every If/Else guard below uses identical conditions: **Contact Details → Tags →
+  Includes** `service-requested` OR `estimate-requested` OR `nurture-stop`. The
+  matching branch is always **empty** (ends); the sequence continues inside the
+  **None** branch, so the canvas cascades — that's expected.
 
-Sequence (each If/Else checks "has tag `service-requested` OR `estimate-requested`" →
-end, as a belt-and-suspenders backup to the goal):
+Canvas, top to bottom:
 
-| Step | Wait      | Action                                  |
-|------|-----------|------------------------------------------|
-| 1    | 45 min    | SMS → **message 2** (gentle nudge + free deep clean) |
-| 2    | 1 day     | SMS → **message 3** (social proof)       |
-| 3    | 2 days    | SMS → **message 4** (route scarcity)     |
-| 4    | 3 days    | SMS → **message 5** (30-day breakup) · Add tag `quote-abandoned` · Move opportunity → *Lost* |
+1. **Wait 45 min**
+2. **If/Else guard** → None:
+3. **SMS message 2** (gentle nudge)
+4. **Wait 1 day**
+5. **If/Else guard** → None:
+6. **SMS message 3** (social proof)
+7. **Wait 2 days**
+8. **If/Else guard** → None:
+9. **SMS message 4** (route scarcity)
+10. **Wait 3 days**
+11. **If/Else guard** → None:
+12. **SMS message 5** (breakup + second-visit-free closer)
+13. **Add tag `quote-abandoned`**
+14. **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Lost*
+15. **GOAL EVENT — the very last card on the canvas**, below step 14: tags
+    `service-requested` / `estimate-requested` / `nurture-stop` (one card if the
+    picker multi-selects, stacked cards if not), set to "continue anyway," with
+    **nothing after it**. The goal teleports anyone who books mid-wait straight past
+    every remaining text and out; placed any higher, contacts would land back inside
+    the sequence.
 
 Four touches over ~6 days, then silence. More than that burns numbers and goodwill.
 
