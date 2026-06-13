@@ -329,7 +329,7 @@ copy later without touching the plumbing.
    | Branch                | Actions                                                                 |
    |-----------------------|-------------------------------------------------------------------------|
    | `phone_captured`      | Add tag `quote-unlocked` · **Find Opportunity** (*Quote Funnel*) → If/Else: **not found** → **Create Opportunity** (stage *Quote Unlocked*, name/source/value); **found** → nothing (guards against duplicate cards and against demoting someone already Booked/Won) |
-   | `question_submitted`  | Add tag `question-asked`                                                |
+   | `question_submitted`  | Add tag `question-asked` · **Internal notification** with `{{contact.quote_question}}` + quote context — lives here so repeat questions from the same contact still ping you (re-adding an existing tag fires nothing) |
    | `service_requested`   | Add tag `service-requested` · **Internal notification** (**message 11**) — lives here, not in Workflow 4, so repeat bookings from existing customers still ping you (re-adding an existing tag fires nothing) · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Booked* (the Find puts the card "in context" — without it the Update has nothing to act on and silently does nothing) |
    | `estimate_requested`  | Add tag `estimate-requested` · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Custom Estimate* |
    | `out_of_area`         | Add tag `out-of-area`                                                   |
@@ -462,9 +462,12 @@ A safety net so no booking slips through on a busy day:
 
 ### I. Workflow 6 — `Question Asked` (trigger: tag `question-asked` added)
 
-- Action 1: SMS → **message 9** (instant "real human is on it" ack).
-- Action 2: Internal notification including `Quote Question` + all quote fields. Reply
-  from the GHL conversation view — the thread is already open with their full context.
+- Action 1: SMS → **message 9** (instant "real human is on it" ack — fires once per
+  contact; that's fine).
+- The internal notification with the question text lives in the intake workflow's
+  `question_submitted` branch (see Workflow 1), so every question — including a second
+  one from the same contact — pings you. Reply from the GHL conversation view; the
+  thread is already open with their full context.
 
 ### J. Workflow 7 — `Out-of-Area Waitlist` (trigger: tag `out-of-area` added)
 
