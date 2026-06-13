@@ -351,7 +351,11 @@ The crown jewel. The lead gets their price **in writing, by text, within a minut
 typing their number** — even if they close the popup one second later. They now carry
 your quote in their pocket with a one-word path to booking.
 
-- Workflow settings: **allow re-entry OFF** (one instant text per contact).
+- Workflow settings: **allow re-entry OFF** (one instant text per contact) · **Stop on
+  response ON** — if the lead texts in during the 3-minute window, the queued auto-quote
+  cancels and the human conversation takes over. (Stop-on-response belongs ONLY here
+  and on Workflow 3 — the instant-send workflows 4/5/6 must stay OFF so confirmations
+  and acks can't be cancelled by a fast reply.)
 - **Goal Event**: contact tag added = `service-requested` (add `estimate-requested`
   too). Critical: plenty of people finish checkout in under a minute, and the goal
   pulls them out of this workflow **mid-wait** the instant they book — so the quote
