@@ -596,13 +596,32 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 **10 — Out-of-area waitlist email (Workflow 7)**
 
+This is a **commercial** email, so CAN-SPAM requires a physical postal address and a
+working unsubscribe link. Insert the unsubscribe via GHL's built-in **Unsubscribe
+link/element** (don't hand-type a URL — the managed link is what actually records the
+opt-out); it's shown as `{{ unsubscribe }}` below. The out-of-area flow captures only an
+email (no name), so the greeting stays generic — don't use `{{contact.first_name}}` here
+or it renders "Hi ,". See `docs/email-deliverability.md` for the sending-domain setup
+that keeps these out of spam.
+
 > **Subject:** You're on the Purge Pros launch list 🐾
 >
-> Hey there — thanks for checking on ZIP {{contact.quote_zip}}! We're not scooping your
-> neighborhood quite yet, but we're expanding around the Indy area fast and you're now
-> first in line. The moment we launch in your area, you'll get an email from us with
-> founding-customer pricing. Until then: may your shoes stay clean.
-> — The Purge Pros Team · itspurgepros.com
+> Hey there,
+>
+> Thanks for checking coverage for ZIP {{contact.quote_zip}}! We're not scooping your
+> neighborhood just yet — but we're expanding across the Indy area fast, and you're
+> officially first in line. The moment we launch near you, we'll email you with
+> founding-customer pricing.
+>
+> Until then, may your shoes stay clean. 🐾
+>
+> — The Purge Pros Team
+> (317) 961-5865 · itspurgepros.com
+>
+> ---
+> Purge Pros · [mailing address, City, IN ZIP]
+> You're getting this because you asked us to notify you when we launch in
+> {{contact.quote_zip}}. No longer interested? {{ unsubscribe }}
 
 **11 — Internal notification (Workflows 4/5, to you)**
 
@@ -615,26 +634,37 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 **12 — Booking confirmation email (optional, Workflow 4)**
 
+This one is **transactional** (a receipt for a booking they just made), so an
+unsubscribe link isn't legally required and you may not want customers opting out of
+service notices — but still include the physical postal address. If GHL auto-appends an
+unsubscribe footer, that's fine.
+
 > **Subject:** Your Purge Pros rate is locked in 🎉
 >
 > Hi {{contact.first_name}},
 >
-> Your Purge Pros rate is locked in. Here's your plan:
+> Your rate is locked in — here's your plan:
 >
 > - **Service:** {{contact.quote_frequency}} · {{contact.quote_dogs}} dog(s)
 > - **Coverage:** {{contact.quote_areas}} · {{contact.quote_yard_size}}
 > - **Your rate:** ${{contact.quote_price_per_visit}} per visit — billed per visit,
 >   never monthly, no contracts
-> - **First visit:** initial deep clean — the $99+ fee is waived; you're billed just
+> - **First visit:** initial deep clean included — the $99+ fee is waived; you pay just
 >   your regular per-visit rate
 >
 > **What happens next:** we build our weeks around routes, so we're checking which day
-> we're in your neighborhood — you'll get a text shortly to set your first visit day
-> (if you signed up in the evening or on a weekend, expect it first thing). After that,
-> you'll get a heads-up text before every visit and a gate photo when we're done.
-> Questions? Just reply to the text thread or this email.
+> we're near you. You'll get a text shortly to set your first visit (signed up in the
+> evening or on a weekend? Expect it first thing the next business day). After that: a
+> heads-up text before every visit, and a gate photo when we're done.
 >
-> — The Purge Pros Team · (317) 961-5865 · itspurgepros.com
+> Questions? Just reply to this email or your text thread — a real person answers.
+>
+> — The Purge Pros Team
+> (317) 961-5865 · itspurgepros.com
+>
+> ---
+> Purge Pros · [mailing address, City, IN ZIP]
+> This is a service confirmation for your Purge Pros booking.
 
 **13 — Manual dispatch: route check result (you send this, Workflow 4 step 3)**
 
