@@ -393,16 +393,15 @@ add a reply-trigger workflow later once volume justifies it.
 
 ### F. Workflow 3 — `Abandoned Quote Nurture` (trigger: tag `quote-unlocked` added)
 
-- Settings: re-entry **OFF** · **Stop on response ON** — *verify this is actually enabled
-  and that it includes SMS.* This is the real-time catch that halts the sequence the
-  instant a contact replies **anything** (a "thanks," a human-worded "please stop," any
-  message), so the bot never talks over a live conversation or an opt-out that wasn't the
-  exact `STOP` keyword. **⚠️ If a contact ever receives a nurture text after replying,
-  this setting is off or scoped to the wrong channel — fix that first.** (Exact `STOP`
-  also sets DND, which independently blocks all sends; Stop-on-response is what covers the
-  human-worded opt-outs GHL's keyword matcher misses.) · time window ~9:00–19:30
-  (workflow-level if available, otherwise restrict each Wait's resume hours) so a midnight
-  quote never produces a 1 a.m. text.
+- Settings: re-entry **OFF** · **Stop on response ON** — but know its real limit (read the
+  toggle's own description): GHL stop-on-response **only ends the workflow if the contact
+  replies to a message *this* workflow sent** (messages 2–5). A reply to the Workflow 2
+  quote text, to your *manual* inbox answer, or an unprompted inbound does **not** trip it.
+  That gap — which caused real over-texting — is closed by **Workflow 8 (Stop Automation on
+  Reply)** below, which removes the contact from the nurture on *any* inbound reply. Keep
+  this toggle on anyway (it still catches replies to the nurture's own texts); Workflow 8 is
+  the actual safety net. · time window ~9:00–19:30 (workflow-level if available, otherwise
+  restrict each Wait's resume hours) so a midnight quote never produces a 1 a.m. text.
 - Every If/Else guard below uses identical conditions: **Tags → Includes**
   `service-requested` OR `estimate-requested` OR `question-asked` OR `nurture-stop`,
   **OR** `Quote Frequency` **is** `Custom Booking` **or** `One-Time Clean`. The matching
@@ -531,6 +530,34 @@ pipeline stays honest.
   language matters).
 - When you expand: Contacts → Smart List filtered by tag `out-of-area` + `Quote ZIP` =
   the new ZIPs → bulk email "we just launched in your area" with the quote link.
+
+### K. Workflow 8 — `Stop Automation on Reply` (trigger: Customer Replied)
+
+**Why this exists:** GHL's per-workflow **Stop on response only ends the workflow if the
+contact replies to a message *that workflow itself* sent** (read the toggle's own
+description). So a contact who replies to the Workflow 2 quote text, to your **manual**
+answer in the inbox, or who texts in unprompted does **not** stop the **nurture**
+(Workflow 3) — its stop-on-response only watches its own messages 2–5. This single
+workflow closes the gap by catching **any** inbound reply and pulling the contact out of
+the multi-touch automations. It's the real "a human conversation started — bots stand
+down" switch.
+
+- Trigger: **Customer Replied** (Inbound Message · channel **SMS**).
+- Action 1: **Remove Contact from Workflows** → **Workflow 2 (Instant Quote)** and
+  **Workflow 3 (Nurture)**.
+- Action 2: **Add tag `nurture-stop`** (deterministic backstop for the WF3 guards, and a
+  visible "a human has this" flag).
+- Settings: **Allow re-entry ON** (every reply should be able to re-trigger the removal).
+
+Keep stop-on-response ON in WF2/WF3 too (belt-and-suspenders for replies to their own
+sends), and remember an exact `STOP` independently sets **DND**, which blocks all sends
+account-wide. Three layers: this workflow (any reply), the tag guards (deterministic), and
+DND (global send block).
+
+**The one case nothing automated can see:** *you* text a nurturing lead first and they
+never reply — no inbound means no trigger. For that, drop the `nurture-stop` tag by hand
+when you take over a lead (one click, or a Snippet). Question-askers are already covered by
+the `question-asked` guard in Workflow 3.
 
 ### A2P/compliance notes
 
