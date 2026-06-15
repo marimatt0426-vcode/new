@@ -381,7 +381,11 @@ your quote in their pocket with a one-word path to booking.
   goal; the `Custom Booking` check suppresses the instant *quote* text for custom leads,
   who have no per-visit price — Workflow 5 acknowledges them on submit instead); no →
   continue.
-- Action 3: **SMS → message 1** from the [copy library](#message-copy-library).
+- Action 3: **If/Else on `Quote Frequency` = `One-Time Clean`** → **yes** → **SMS →
+  message 1b** (one-time quote — deposit + $1/min model, none of the recurring-plan
+  claims); **no** → **SMS → message 1** (recurring quote). Both from the
+  [copy library](#message-copy-library). (Custom leads were already routed to End in
+  Action 2, so only standard-recurring and one-time reach here.)
 - Action 4 (optional): **Internal notification** → **message 15** — new hot lead.
 
 When they reply "YES", it lands in your GHL conversation inbox — close it by hand, or
@@ -395,14 +399,17 @@ add a reply-trigger workflow later once volume justifies it.
   produces a 1 a.m. text.
 - Every If/Else guard below uses identical conditions: **Tags → Includes**
   `service-requested` OR `estimate-requested` OR `nurture-stop`, **OR** `Quote Frequency`
-  **is** `Custom Booking`. The matching branch is always **empty** (ends); the sequence
-  continues inside the **None** branch, so the canvas cascades — that's expected.
-  (The `Custom Booking` condition keeps custom-estimate leads out of the price-based
-  nurture: they carry no per-visit price, so messages 2–5 would render a blank `$/visit`.
-  They're acknowledged by Workflow 5 instead. A custom lead trips the first guard at the
-  45-min mark — before message 2 and before the *In Nurture* move — so they correctly
-  stay in *Quote Unlocked* until their estimate submission routes them to *Custom
-  Estimate*.)
+  **is** `Custom Booking` **or** `One-Time Clean`. The matching branch is always **empty**
+  (ends); the sequence continues inside the **None** branch, so the canvas cascades —
+  that's expected. (Two frequencies are excluded from this recurring drip: **Custom
+  Booking** leads carry no per-visit price at all — messages 2–5 would render a blank
+  `$/visit` — and **One-Time Clean** leads aren't recurring, so the drip's recurring perks
+  (waived deep-clean, free second visit) don't apply to them. Custom leads are handled by
+  Workflow 5; one-time leads get an accurate instant quote from Workflow 2's message 1b.
+  Either trips the first guard at the 45-min mark — before message 2 and before the
+  *In Nurture* move — so they correctly stay in *Quote Unlocked*. If you ever want a single
+  one-time follow-up, clone a tiny workflow filtered to `Quote Frequency` is `One-Time
+  Clean` with one Wait + one SMS — one touch is plenty for a transactional buyer.)
 
 Canvas, top to bottom:
 
@@ -483,6 +490,23 @@ A safety net so no booking slips through on a busy day:
 - Action 2: Internal notification (**message 11** works, retitled) — custom requests are
   high-value (kennels, acreage, commercial); call these back personally and fast.
 
+**Stale-card safety net** — custom cards have no nurture to terminate them, so they'd
+pile up in *Custom Estimate* forever. Add a follow-up + auto-close (all gated on the card
+still sitting in *Custom Estimate*, so anything you personally move to *Won* exits first):
+
+- Action 3: **Wait 2 days.**
+- Action 4: **If/Else — opportunity still in stage *Custom Estimate*?** → **no** → End
+  (you already worked it). **Yes** → continue.
+- Action 5: **SMS → message 8b** (gentle "still want that estimate?" nudge).
+- Action 6: **Wait 5 days.**
+- Action 7: **If/Else — still in stage *Custom Estimate*?** → **yes** → **Find
+  Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity → stage *Lost***
+  (auto-closes after ~7 unworked days; *Custom Estimate → Lost* is a forward move, so the
+  "previous stage" toggle doesn't block it). **No** → End.
+
+You still work every custom lead by hand — this only sweeps the ones that go cold so the
+pipeline stays honest.
+
 ### I. Workflow 6 — `Question Asked` (trigger: tag `question-asked` added)
 
 - Action 1: SMS → **message 9** (instant "real human is on it" ack — fires once per
@@ -553,6 +577,14 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 > so it's just your regular rate. Whenever you're ready, reply YES and I'll grab your
 > spot on the route. Reply STOP to opt out.
 
+**1b — Instant quote, one-time clean (Workflow 2 — no recurring claims)**
+
+> Hey, it's Matt with Purge Pros 🐾 Here's your one-time clean quote: $89.99 base — that
+> covers the first 30 min of labor, then $1/min until the yard's spotless, with all the
+> waste hauled away. No contracts, and nothing's charged today; we only collect the
+> base-rate deposit once we lock your day. Reply YES and I'll get you on the route. Reply
+> STOP to opt out.
+
 **2 — Nurture touch 1 (45 min)**
 
 > Still thinking it over? Totally fine — your quote is saved:
@@ -610,6 +642,12 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 > you'll have a personalized estimate by text today. If it's after hours right now,
 > you'll hear from me first thing in the morning. Anything you want to add, just
 > reply here. — Matt @ Purge Pros
+
+**8b — Custom estimate follow-up (Workflow 5, ~2 days later)**
+
+> Hey, it's Matt with Purge Pros — circling back on your custom estimate. Still happy to
+> put real numbers to your property whenever you're ready; just reply here with any
+> details or questions and I'll take it from there. No rush, no pressure. 🐾
 
 **9 — Question acknowledgment (Workflow 6)**
 
