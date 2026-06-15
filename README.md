@@ -393,15 +393,24 @@ add a reply-trigger workflow later once volume justifies it.
 
 ### F. Workflow 3 — `Abandoned Quote Nurture` (trigger: tag `quote-unlocked` added)
 
-- Settings: re-entry **OFF** · **Stop on response ON** (any reply halts the sequence —
-  a human takes over in the conversation) · time window ~9:00–19:30 (workflow-level if
-  available, otherwise restrict each Wait's resume hours) so a midnight quote never
-  produces a 1 a.m. text.
+- Settings: re-entry **OFF** · **Stop on response ON** — *verify this is actually enabled
+  and that it includes SMS.* This is the real-time catch that halts the sequence the
+  instant a contact replies **anything** (a "thanks," a human-worded "please stop," any
+  message), so the bot never talks over a live conversation or an opt-out that wasn't the
+  exact `STOP` keyword. **⚠️ If a contact ever receives a nurture text after replying,
+  this setting is off or scoped to the wrong channel — fix that first.** (Exact `STOP`
+  also sets DND, which independently blocks all sends; Stop-on-response is what covers the
+  human-worded opt-outs GHL's keyword matcher misses.) · time window ~9:00–19:30
+  (workflow-level if available, otherwise restrict each Wait's resume hours) so a midnight
+  quote never produces a 1 a.m. text.
 - Every If/Else guard below uses identical conditions: **Tags → Includes**
-  `service-requested` OR `estimate-requested` OR `nurture-stop`, **OR** `Quote Frequency`
-  **is** `Custom Booking` **or** `One-Time Clean`. The matching branch is always **empty**
-  (ends); the sequence continues inside the **None** branch, so the canvas cascades —
-  that's expected. (Two frequencies are excluded from this recurring drip: **Custom
+  `service-requested` OR `estimate-requested` OR `question-asked` OR `nurture-stop`,
+  **OR** `Quote Frequency` **is** `Custom Booking` **or** `One-Time Clean`. The matching
+  branch is always **empty** (ends); the sequence continues inside the **None** branch, so
+  the canvas cascades — that's expected. (`question-asked` is here because a submitted
+  question means a *human conversation* is now happening — the bot must stand down and not
+  fire "still thinking it over?" over your live reply. This is the deterministic backstop;
+  Stop-on-response is the real-time one. Use both.) (Two frequencies are excluded from this recurring drip: **Custom
   Booking** leads carry no per-visit price at all — messages 2–5 would render a blank
   `$/visit` — and **One-Time Clean** leads aren't recurring, so the drip's recurring perks
   (waived deep-clean, free second visit) don't apply to them. Custom leads are handled by
