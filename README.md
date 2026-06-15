@@ -542,9 +542,12 @@ workflow closes the gap by catching **any** inbound reply and pulling the contac
 the multi-touch automations. It's the real "a human conversation started — bots stand
 down" switch.
 
-- Trigger: **Customer Replied** (Inbound Message · channel **SMS**).
+- Trigger: **Customer Replied** — filters: **Reply Channel is SMS** (text replies only)
+  **and** **Contact Tag includes `quote-unlocked`** (scopes it to funnel leads so a random
+  existing customer texting in doesn't get tagged/processed).
 - Action 1: **Remove Contact from Workflows** → **Workflow 2 (Instant Quote)** and
-  **Workflow 3 (Nurture)**.
+  **Workflow 3 (Nurture)**. (If your version only removes one workflow per action, add the
+  action twice.)
 - Action 2: **Add tag `nurture-stop`** (deterministic backstop for the WF3 guards, and a
   visible "a human has this" flag).
 - Settings: **Allow re-entry ON** (every reply should be able to re-trigger the removal).
