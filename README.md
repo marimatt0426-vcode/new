@@ -363,8 +363,11 @@ your quote in their pocket with a one-word path to booking.
   from Workflow 4 instead).
 - Action 1: **Wait 3 minutes** — long enough to separate stalled quote-viewers (who
   need this nudge) from active form-fillers (who don't).
-- Action 2: **If/Else — has tag `service-requested` OR `estimate-requested`?** → yes →
-  End (belt-and-suspenders behind the goal); no → continue.
+- Action 2: **If/Else — has tag `service-requested` OR `estimate-requested`, OR
+  `Quote Frequency` is `Custom Booking`?** → yes → End (belt-and-suspenders behind the
+  goal; the `Custom Booking` check suppresses the instant *quote* text for custom leads,
+  who have no per-visit price — Workflow 5 acknowledges them on submit instead); no →
+  continue.
 - Action 3: **SMS → message 1** from the [copy library](#message-copy-library).
 - Action 4 (optional): **Internal notification** → **message 15** — new hot lead.
 
@@ -377,28 +380,35 @@ add a reply-trigger workflow later once volume justifies it.
   a human takes over in the conversation) · time window ~9:00–19:30 (workflow-level if
   available, otherwise restrict each Wait's resume hours) so a midnight quote never
   produces a 1 a.m. text.
-- Every If/Else guard below uses identical conditions: **Contact Details → Tags →
-  Includes** `service-requested` OR `estimate-requested` OR `nurture-stop`. The
-  matching branch is always **empty** (ends); the sequence continues inside the
-  **None** branch, so the canvas cascades — that's expected.
+- Every If/Else guard below uses identical conditions: **Tags → Includes**
+  `service-requested` OR `estimate-requested` OR `nurture-stop`, **OR** `Quote Frequency`
+  **is** `Custom Booking`. The matching branch is always **empty** (ends); the sequence
+  continues inside the **None** branch, so the canvas cascades — that's expected.
+  (The `Custom Booking` condition keeps custom-estimate leads out of the price-based
+  nurture: they carry no per-visit price, so messages 2–5 would render a blank `$/visit`.
+  They're acknowledged by Workflow 5 instead. A custom lead trips the first guard at the
+  45-min mark — before message 2 and before the *In Nurture* move — so they correctly
+  stay in *Quote Unlocked* until their estimate submission routes them to *Custom
+  Estimate*.)
 
 Canvas, top to bottom:
 
 1. **Wait 45 min**
 2. **If/Else guard** → None:
-3. **SMS message 2** (gentle nudge)
-4. **Wait 1 day**
-5. **If/Else guard** → None:
-6. **SMS message 3** (social proof)
-7. **Wait 2 days**
-8. **If/Else guard** → None:
-9. **SMS message 4** (route scarcity)
-10. **Wait 3 days**
-11. **If/Else guard** → None:
-12. **SMS message 5** (breakup + second-visit-free closer)
-13. **Add tag `quote-abandoned`**
-14. **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Lost*
-15. **GOAL EVENT — the very last card on the canvas**, below step 14: tags
+3. **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *In Nurture* (the 45-min wait elapsed without a booking, so the card leaves *Quote Unlocked* and enters the column that means "captured, not booked, actively being worked." A quick-booker never reaches this step — the goal/guards pull them out first, so *Quote Unlocked* stays your "brand-new, still-deciding" column and *In Nurture* your "drip is running" column.)
+4. **SMS message 2** (gentle nudge)
+5. **Wait 1 day**
+6. **If/Else guard** → None:
+7. **SMS message 3** (social proof)
+8. **Wait 2 days**
+9. **If/Else guard** → None:
+10. **SMS message 4** (route scarcity)
+11. **Wait 3 days**
+12. **If/Else guard** → None:
+13. **SMS message 5** (breakup + second-visit-free closer)
+14. **Add tag `quote-abandoned`**
+15. **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Lost*
+16. **GOAL EVENT — the very last card on the canvas**, below step 15: tags
     `service-requested` / `estimate-requested` / `nurture-stop` (one card if the
     picker multi-selects, stacked cards if not), set to "continue anyway," with
     **nothing after it**. The goal teleports anyone who books mid-wait straight past
