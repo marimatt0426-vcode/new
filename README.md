@@ -330,8 +330,8 @@ copy later without touching the plumbing.
    |-----------------------|-------------------------------------------------------------------------|
    | `phone_captured`      | Add tag `quote-unlocked` · **Find Opportunity** (*Quote Funnel*) → If/Else: **not found** → **Create Opportunity** (stage *Quote Unlocked*, name/source/value); **found** → nothing (guards against duplicate cards and against demoting someone already Booked/Won) |
    | `question_submitted`  | Add tag `question-asked` · **Internal notification** (**message 16**) — lives here so repeat questions from the same contact still ping you (re-adding an existing tag fires nothing) |
-   | `service_requested`   | Add tag `service-requested` · **Internal notification** (**message 11**) — lives here, not in Workflow 4, so repeat bookings from existing customers still ping you (re-adding an existing tag fires nothing) · **Find Opportunity** (*Quote Funnel*, most recent) → **If/Else: is the card's stage already *Won*?** → **yes** → nothing (never demote an active customer back to *Booked* on a re-quote); **no** → **Update Opportunity** → stage *Booked* (the Find puts the card "in context" — without it the Update has nothing to act on and silently does nothing) |
-   | `estimate_requested`  | Add tag `estimate-requested` · **Find Opportunity** (*Quote Funnel*, most recent) → **If/Else: stage already *Won*?** → **yes** → nothing; **no** → **Update Opportunity** → stage *Custom Estimate* |
+   | `service_requested`   | Add tag `service-requested` · **Internal notification** (**message 11**) — lives here, not in Workflow 4, so repeat bookings from existing customers still ping you (re-adding an existing tag fires nothing) · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Booked* (the Find puts the card "in context" — without it the Update silently does nothing). Keep the Update's **"Allow opportunity to move to any previous stage" OFF** (default) — see the stage-direction note below |
+   | `estimate_requested`  | Add tag `estimate-requested` · **Find Opportunity** (*Quote Funnel*, most recent) → **Update Opportunity** → stage *Custom Estimate* (same — keep **"move to previous stage" OFF**) |
    | `out_of_area`         | Add tag `out-of-area`                                                   |
 
    If the action exposes them (sometimes behind a "show advanced/add fields"
@@ -343,11 +343,18 @@ copy later without touching the plumbing.
    and previous-stage moves off, but it's marked for deprecation — new builds should
    use Find/Create/Update.)
 
-   **The *Won* guard (both branches above):** match it to how you actually mark a
-   customer won. This build treats **Won as a pipeline *stage***, so the If/Else checks
-   **Stage `is` Won**. If instead you click GHL's green **"Won" status** button, check
-   **Status `is` Won**. Guard *Won only* — never *Lost*: a Lost lead who comes back and
-   books *should* move to *Booked*, so leave that path open.
+   **Stage-direction safety (no If/Else needed):** leave **"Allow opportunity to move
+   to any previous stage in pipeline" OFF** (the default) on *every* Update Opportunity
+   action. Because the stages run *Quote Unlocked → In Nurture → Booked → Custom Estimate
+   → Won → Lost*, every legitimate move is *forward* and works, while the one backward
+   move you want to prevent — demoting a *Won* customer to *Booked* when they re-quote —
+   is blocked automatically (Booked sits earlier than Won). **One known edge:** *Lost* is
+   the last stage, so a lead you marked *Lost* who later returns and books won't
+   auto-advance — the move to *Booked* is backward and gets ignored, so the card stays at
+   *Lost* until you nudge it by hand. Rare and harmless (they still get the booking text +
+   your internal notification; you'll catch it processing the booking). Automating even
+   that would mean tracking Won/Lost via the opportunity **Status** instead of as pipeline
+   **stages** — a bigger rebuild not worth it for an edge case.
 
    (`quote_updated` needs no branch — steps 2–3 already refreshed the fields.)
 
