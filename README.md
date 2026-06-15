@@ -581,9 +581,9 @@ rather than typing blind). Adjust the sign-off name to whoever actually answers 
 
 > Hey, it's Matt with Purge Pros 🐾 Here's your one-time clean quote: $89.99 base — that
 > covers the first 30 min of labor, then $1/min until the yard's spotless, with all the
-> waste hauled away. No contracts, and nothing's charged today; we only collect the
-> base-rate deposit once we lock your day. Reply YES and I'll get you on the route. Reply
-> STOP to opt out.
+> waste hauled away. No contracts. We do kindly ask to collect the base-rate deposit once
+> we lock your day in for scheduling. Reply YES and I'll get you on the route. Reply STOP
+> to opt out.
 
 **2 — Nurture touch 1 (45 min)**
 
