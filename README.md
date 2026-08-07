@@ -6,6 +6,7 @@ This repository contains the tested Purge Pros v3 quote/service-request widget a
 
 - Owner implementation guide: `docs/OWNER-DASHBOARD-LAUNCH-GUIDE.md`
 - Complete Cloudflare copy/paste file: `dist/COPY-PASTE-INTO-purge-lead-relay.js`
+- Verified GHL email-domain and deliverability guide: `docs/email-deliverability.md`
 
 The owner does not run PowerShell, a terminal, NPM, Node, Wrangler, migrations, or a local build. The generated copy/paste file is installed unchanged through the Cloudflare dashboard.
 
