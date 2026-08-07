@@ -2,15 +2,19 @@ name = "purge-lead-relay"
 main = "worker.js"
 compatibility_date = "2026-06-01"
 
-# Set secrets after deploying:
-#   wrangler secret put GHL_WEBHOOK_URL
-#   wrangler secret put GOOGLE_PLACES_API_KEY   # for the live review chip
-#   wrangler secret put META_PIXEL_ID           # optional: server-side CAPI backup
-#   wrangler secret put META_CAPI_TOKEN         # optional: server-side CAPI backup
-#   wrangler secret put META_TEST_EVENT_CODE    # temporary, only while testing CAPI
+# Existing production secrets: verify their names with `wrangler secret list`.
+# Do not replace a working value merely because code is being deployed.
+#   GHL_WEBHOOK_URL
+#   GHL_WEBHOOK_URL_V3
+#   META_PIXEL_ID
+#   META_CAPI_TOKEN
+# Optional feature secret:
+#   GOOGLE_PLACES_API_KEY   # live Google review chip
+# Temporary test-only secret; delete after Meta Test Events QA:
+#   META_TEST_EVENT_CODE
 
 [vars]
 # Purge Pros - Pet Waste Removal (Google Business Profile)
 GOOGLE_PLACE_ID = "ChIJwxBb4j_CQ2IRKXPCYz1Nk78"
-# Uncomment to lock the lead endpoint to your site:
-# ALLOWED_ORIGINS = "https://itspurgepros.com,https://www.itspurgepros.com"
+# Browser submissions are accepted only from the live Purge Pros domains.
+ALLOWED_ORIGINS = "https://itspurgepros.com,https://www.itspurgepros.com,https://purge-quote.purgepros.workers.dev"

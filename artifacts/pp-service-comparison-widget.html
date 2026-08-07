@@ -1,0 +1,387 @@
+<style>
+  /* Scoped to this widget so it cannot restyle other GHL elements. */
+  #pp-competitor-widget,
+  #pp-competitor-widget * {
+    box-sizing: border-box;
+  }
+
+  #pp-competitor-widget {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 60px 20px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-competitor-widget .pp-container-inner {
+    position: relative;
+    display: block !important;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto !important;
+  }
+
+  #pp-competitor-widget .pp-center {
+    text-align: center;
+  }
+
+  #pp-competitor-widget .pp-eyebrow {
+    margin-bottom: 9px;
+    color: #0877b9;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #pp-competitor-widget .pp-h2 {
+    margin: 0 0 16px;
+    color: #073652;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  #pp-competitor-widget .pp-p {
+    max-width: 800px;
+    margin: 0 auto;
+    color: #526c7a;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  #pp-competitor-widget .pp-comp-table-wrap {
+    width: 100%;
+    margin-top: 30px;
+    overflow-x: auto;
+    border: 1px solid #dbe7ed;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 15px 40px rgba(5, 52, 80, 0.1);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #pp-competitor-widget .pp-comp-table {
+    width: 100%;
+    min-width: 680px;
+    margin: 0;
+    border-collapse: collapse;
+    background: #fff;
+  }
+
+  #pp-competitor-widget .pp-comp-table th,
+  #pp-competitor-widget .pp-comp-table td {
+    padding: 19px 20px;
+    border-bottom: 1px solid #e7eef2;
+    color: #294555;
+    font-size: 15px;
+    line-height: 1.4;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  #pp-competitor-widget .pp-comp-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  #pp-competitor-widget .pp-comp-table th {
+    background: #081d29;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  #pp-competitor-widget .pp-feature-title {
+    display: block;
+    color: #17394b;
+    font-size: 16px;
+    font-weight: 900;
+  }
+
+  #pp-competitor-widget .pp-feature-detail,
+  #pp-competitor-widget .pp-cell-detail {
+    display: block;
+    margin-top: 4px;
+    color: #718692;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  #pp-competitor-widget .pp-our-col {
+    border-right: 2px solid #38b6ff;
+    border-left: 2px solid #38b6ff;
+    background: #eef9ff;
+    color: #075f91 !important;
+    font-weight: 900;
+    text-align: center !important;
+  }
+
+  #pp-competitor-widget .pp-our-col-header {
+    border-right: 2px solid #38b6ff;
+    border-left: 2px solid #38b6ff;
+    background: #38b6ff !important;
+    color: #05283c !important;
+    text-align: center !important;
+  }
+
+  #pp-competitor-widget .pp-compare-col {
+    color: #536d7a !important;
+    font-weight: 700;
+    text-align: center !important;
+  }
+
+  #pp-competitor-widget .pp-check {
+    color: #0877b9;
+    font-weight: 950;
+  }
+
+  #pp-competitor-widget .pp-waived {
+    color: #117b3b;
+    font-size: 19px;
+    font-weight: 950;
+  }
+
+  #pp-competitor-widget .pp-offer-note {
+    margin-top: 14px;
+    padding: 13px 15px;
+    border-left: 4px solid #159447;
+    border-radius: 10px;
+    background: #effbf3;
+    color: #37684a;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  #pp-competitor-widget .pp-cta-wrap {
+    margin-top: 27px;
+    text-align: center;
+  }
+
+  #pp-competitor-widget .pp-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 25px;
+    border: 2px solid #0877b9;
+    border-radius: 999px;
+    background: #0877b9;
+    color: #fff !important;
+    box-shadow: 0 10px 24px rgba(8, 119, 185, 0.2);
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-competitor-widget .pp-cta:hover,
+  #pp-competitor-widget .pp-cta:focus-visible {
+    background: #fff;
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  #pp-competitor-widget .pp-cta-note {
+    display: block;
+    margin-top: 8px;
+    color: #718692;
+    font-size: 11px;
+  }
+
+  @media (max-width: 700px) {
+    #pp-competitor-widget {
+      padding: 42px 14px;
+    }
+
+    #pp-competitor-widget .pp-eyebrow {
+      font-size: 11px;
+    }
+
+    #pp-competitor-widget .pp-h2 {
+      font-size: 28px;
+    }
+
+    #pp-competitor-widget .pp-p {
+      font-size: 16px;
+    }
+
+    #pp-competitor-widget .pp-comp-table-wrap {
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    #pp-competitor-widget .pp-comp-table,
+    #pp-competitor-widget .pp-comp-table tbody,
+    #pp-competitor-widget .pp-comp-table tr,
+    #pp-competitor-widget .pp-comp-table td {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+
+    #pp-competitor-widget .pp-comp-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    #pp-competitor-widget .pp-comp-table tr {
+      margin-bottom: 13px;
+      overflow: hidden;
+      border: 1px solid #dbe7ed;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgba(5, 52, 80, 0.08);
+    }
+
+    #pp-competitor-widget .pp-comp-table td {
+      padding: 13px 14px;
+      border: 0;
+      border-bottom: 1px solid #e7eef2;
+      text-align: left !important;
+    }
+
+    #pp-competitor-widget .pp-comp-table td:first-child {
+      background: #081d29;
+    }
+
+    #pp-competitor-widget .pp-comp-table td:first-child .pp-feature-title {
+      color: #fff;
+    }
+
+    #pp-competitor-widget .pp-comp-table td:first-child .pp-feature-detail {
+      color: #c2d7e2;
+    }
+
+    #pp-competitor-widget .pp-comp-table td[data-label]::before {
+      display: block;
+      margin-bottom: 4px;
+      color: #6f8592;
+      font-size: 9px;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      content: attr(data-label);
+    }
+
+    #pp-competitor-widget .pp-our-col {
+      border-right: 0;
+      border-left: 4px solid #38b6ff;
+    }
+
+    #pp-competitor-widget .pp-compare-col {
+      border-bottom: 0 !important;
+    }
+
+    #pp-competitor-widget .pp-offer-note {
+      margin-top: 8px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-competitor-widget .pp-cta {
+      transition: none;
+    }
+  }
+</style>
+
+<section id="pp-competitor-widget" aria-labelledby="pp-comparison-heading">
+  <div class="pp-container-inner">
+    <div class="pp-center">
+      <div class="pp-eyebrow">The Purge Pros Standard</div>
+      <h2 id="pp-comparison-heading" class="pp-h2">What Sets Purge Pros Apart?</h2>
+      <p class="pp-p">Pet waste removal should feel dependable from the first quote through every completed visit. Here is what Purge Pros includes—and what is worth asking before choosing any provider.</p>
+    </div>
+
+    <div class="pp-comp-table-wrap">
+      <table class="pp-comp-table">
+        <thead>
+          <tr>
+            <th scope="col">What Matters</th>
+            <th scope="col" class="pp-our-col-header">Purge Pros</th>
+            <th scope="col">Ask Other Providers</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span class="pp-feature-title">Separate Initial Cleanup Fee</span>
+              <span class="pp-feature-detail">Normally starts at $39.99 for 30 minutes, then $1 per additional minute</span>
+            </td>
+            <td class="pp-our-col" data-label="Purge Pros">
+              <span class="pp-waived">Waived — $0</span>
+              <span class="pp-cell-detail">For eligible new recurring customers</span>
+            </td>
+            <td class="pp-compare-col" data-label="Ask Other Providers">
+              Confirm first-visit fees
+              <span class="pp-cell-detail">Cleanup policies and rates vary by provider</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="pp-feature-title">Closed-Gate Photo Confirmation</span>
+              <span class="pp-feature-detail">A visual confirmation after every completed visit</span>
+            </td>
+            <td class="pp-our-col" data-label="Purge Pros">
+              <span class="pp-check">✓ Standard every visit</span>
+            </td>
+            <td class="pp-compare-col" data-label="Ask Other Providers">
+              Ask whether gate confirmation is included
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="pp-feature-title">Tools and Boots Sanitized Between Yards</span>
+              <span class="pp-feature-detail">A consistent cross-yard sanitation process</span>
+            </td>
+            <td class="pp-our-col" data-label="Purge Pros">
+              <span class="pp-check">✓ Part of our process</span>
+            </td>
+            <td class="pp-compare-col" data-label="Ask Other Providers">
+              Ask how equipment is sanitized between properties
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="pp-feature-title">Service Commitment</span>
+              <span class="pp-feature-detail">Know the payment and cancellation terms before starting</span>
+            </td>
+            <td class="pp-our-col" data-label="Purge Pros">
+              <span class="pp-check">✓ No long-term contract</span>
+              <span class="pp-cell-detail">Pay per visit</span>
+            </td>
+            <td class="pp-compare-col" data-label="Ask Other Providers">
+              Confirm minimum terms and cancellation policies
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pp-offer-note">
+      <strong>Initial-cleanup offer:</strong> New recurring customers pay their regular per-visit rate on visit #1 with no separate initial-cleanup fee. This offer does not apply to one-time cleanups. A 60-minute initial cleanup would normally be $69.99 under standard initial-cleanup pricing; actual savings depend on the time required.
+    </div>
+
+    <div class="pp-cta-wrap">
+      <a class="pp-cta" href="#quote">See My Exact Price →</a>
+      <span class="pp-cta-note">Build your plan and view the per-visit price before requesting service.</span>
+    </div>
+  </div>
+</section>

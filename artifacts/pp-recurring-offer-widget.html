@@ -1,0 +1,347 @@
+<style>
+  /* Scoped to #pp-offer-widget so nothing leaks into the surrounding GHL page. */
+  #pp-offer-widget,
+  #pp-offer-widget * {
+    box-sizing: border-box;
+  }
+
+  #pp-offer-widget {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 60px 20px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-offer-widget .pp-container-inner {
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto !important;
+  }
+
+  #pp-offer-widget .pp-grid-2 {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+  }
+
+  #pp-offer-widget .pp-col {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
+  #pp-offer-widget .pp-eyebrow {
+    margin-bottom: 9px;
+    color: #0877b9;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #pp-offer-widget .pp-h2 {
+    margin: 0 0 18px;
+    color: #073652;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  #pp-offer-widget .pp-h3 {
+    margin: 0 0 9px;
+    color: #073652;
+    font-size: 23px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  #pp-offer-widget .pp-card-subtitle {
+    margin: 0 0 15px;
+    color: #718692;
+    font-size: 12px;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  #pp-offer-widget .pp-p {
+    margin: 0 0 18px;
+    color: #526c7a;
+    font-size: 18px;
+    line-height: 1.58;
+  }
+
+  #pp-offer-widget .pp-callout {
+    margin-top: 22px;
+    padding: 15px 16px;
+    border-left: 4px solid #38b6ff;
+    border-radius: 10px;
+    background: #eef9ff;
+    color: #214c63;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.5;
+  }
+
+  #pp-offer-widget .pp-callout strong {
+    color: #075f91;
+  }
+
+  #pp-offer-widget .pp-offer-card {
+    position: relative;
+    width: 100%;
+    max-width: 470px;
+    margin: 0 auto;
+    padding: 34px 32px 28px;
+    border: 2px solid #38b6ff;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 18px 45px rgba(5, 52, 80, 0.14);
+  }
+
+  #pp-offer-widget .pp-badge {
+    position: absolute;
+    top: -17px;
+    left: 50%;
+    padding: 7px 14px;
+    border: 3px solid #fff;
+    border-radius: 999px;
+    background: #117b3b;
+    box-shadow: 0 6px 16px rgba(17, 123, 59, 0.25);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 950;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+
+  #pp-offer-widget .pp-price-list {
+    margin-top: 17px;
+    padding: 3px 15px;
+    border: 1px solid #d9e7ee;
+    border-radius: 13px;
+    background: #f8fbfd;
+  }
+
+  #pp-offer-widget .pp-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 11px 0;
+    border-bottom: 1px solid #e4edf2;
+    color: #536d7a;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  #pp-offer-widget .pp-price-row:last-child {
+    border-bottom: 0;
+  }
+
+  #pp-offer-widget .pp-price-row strong {
+    color: #17394b;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  #pp-offer-widget .pp-example {
+    font-weight: 800;
+  }
+
+  #pp-offer-widget .pp-total {
+    margin-top: 13px;
+    padding: 15px;
+    border: 2px solid #b5dfc3;
+    border-radius: 12px;
+    background: #effbf3;
+    text-align: center;
+  }
+
+  #pp-offer-widget .pp-total-label {
+    display: block;
+    color: #37684a;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  #pp-offer-widget .pp-total-price {
+    display: block;
+    margin-top: 3px;
+    color: #159447;
+    font-size: 34px;
+    font-weight: 950;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  #pp-offer-widget .pp-offer-terms {
+    margin-top: 13px;
+    color: #617985;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  #pp-offer-widget .pp-offer-terms strong {
+    color: #31586b;
+  }
+
+  #pp-offer-widget .pp-btn-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+    padding: 17px 0 0;
+  }
+
+  #pp-offer-widget .pp-quote-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 51px;
+    padding: 14px 18px;
+    border: 2px solid #0877b9;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #38b6ff, #0877b9);
+    box-shadow: 0 9px 22px rgba(8, 119, 185, 0.25);
+    color: #fff !important;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #pp-offer-widget .pp-quote-btn:hover,
+  #pp-offer-widget .pp-quote-btn:focus-visible {
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(8, 119, 185, 0.3);
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 850px) {
+    #pp-offer-widget {
+      padding: 44px 15px;
+    }
+
+    #pp-offer-widget .pp-grid-2 {
+      flex-direction: column !important;
+      gap: 42px;
+    }
+
+    #pp-offer-widget .pp-col {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    #pp-offer-widget .pp-h2 {
+      font-size: 29px;
+    }
+
+    #pp-offer-widget .pp-p {
+      font-size: 16px;
+    }
+
+    #pp-offer-widget .pp-offer-card {
+      padding: 32px 22px 23px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #pp-offer-widget .pp-h2 {
+      font-size: 26px;
+    }
+
+    #pp-offer-widget .pp-badge {
+      font-size: 10px;
+    }
+
+    #pp-offer-widget .pp-quote-btn {
+      padding: 13px 12px;
+      font-size: 13px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-offer-widget .pp-quote-btn {
+      transition: none;
+    }
+  }
+</style>
+
+<section id="pp-offer-widget" aria-labelledby="pp-offer-heading">
+  <div class="pp-container-inner">
+    <div class="pp-grid-2">
+      <div class="pp-col">
+        <div class="pp-eyebrow">New Recurring Customer Offer</div>
+        <h2 id="pp-offer-heading" class="pp-h2">Start Service Without a Separate Initial Cleanup Fee</h2>
+
+        <p class="pp-p">A first visit can take extra time because we clear the full serviced yard before recurring maintenance begins.</p>
+
+        <p class="pp-p">For eligible new recurring customers, Purge Pros waives that separate time-based initial-cleanup charge. You pay your regular per-visit service rate for visit #1—without an additional initial-cleanup fee.</p>
+
+        <div class="pp-callout">
+          <strong>Recurring service only:</strong> the separate initial-cleanup fee is waived automatically. One-time cleanups use separate pricing.
+        </div>
+      </div>
+
+      <div class="pp-col">
+        <div class="pp-offer-card">
+          <div class="pp-badge">$39.99+ Value Waived</div>
+          <h3 class="pp-h3">How the Offer Works</h3>
+          <p class="pp-card-subtitle">Standard initial-cleanup pricing for comparison</p>
+
+          <div class="pp-price-list">
+            <div class="pp-price-row">
+              <span>First 30 minutes</span>
+              <strong>$39.99</strong>
+            </div>
+            <div class="pp-price-row">
+              <span>Additional cleanup time</span>
+              <strong>$1 per minute</strong>
+            </div>
+            <div class="pp-price-row pp-example">
+              <span>60-minute cleanup example</span>
+              <strong>$69.99</strong>
+            </div>
+          </div>
+
+          <div class="pp-total">
+            <span class="pp-total-label">Your Separate Initial Cleanup Fee</span>
+            <span class="pp-total-price">$0</span>
+          </div>
+
+          <div class="pp-offer-terms">
+            <strong>Your regular per-visit rate still applies on visit #1.</strong><br>
+            New recurring customers only. Not valid for one-time cleanups. Actual savings depend on the cleanup time required.
+          </div>
+
+          <div class="pp-btn-wrapper">
+            <a href="#quote" class="pp-quote-btn">See My Exact Price →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,401 @@
+<style>
+  /* Scoped to #pp-employee-standard so nothing leaks into the surrounding GHL page. */
+  #pp-employee-standard,
+  #pp-employee-standard * {
+    box-sizing: border-box;
+  }
+
+  #pp-employee-standard {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 66px 20px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-employee-standard .pp-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto !important;
+  }
+
+  #pp-employee-standard .pp-layout {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    align-items: center;
+    gap: 68px;
+  }
+
+  #pp-employee-standard .pp-image-column {
+    flex: 1 1 44%;
+    min-width: 0;
+  }
+
+  #pp-employee-standard .pp-content-column {
+    flex: 1 1 56%;
+    min-width: 0;
+  }
+
+  #pp-employee-standard .pp-image-card {
+    position: relative;
+    width: 100%;
+    max-width: 470px;
+    margin: 0 auto;
+    padding: 11px;
+    border: 1px solid #d6e8f1;
+    border-radius: 25px;
+    background: #fff;
+    box-shadow: 0 22px 52px rgba(5, 52, 80, 0.15);
+  }
+
+  #pp-employee-standard .pp-image-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 4.7;
+    border-radius: 18px;
+    background: #eaf4f9;
+  }
+
+  #pp-employee-standard .pp-field-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #pp-employee-standard .pp-image-gradient {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 35%;
+    background: linear-gradient(to top, rgba(3, 34, 51, 0.76), transparent);
+    pointer-events: none;
+  }
+
+  #pp-employee-standard .pp-image-caption {
+    position: absolute;
+    right: 22px;
+    bottom: 21px;
+    left: 22px;
+    color: #fff;
+  }
+
+  #pp-employee-standard .pp-caption-label {
+    display: block;
+    margin-bottom: 2px;
+    color: #afe3ff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  #pp-employee-standard .pp-caption-title {
+    display: block;
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+
+  #pp-employee-standard .pp-team-badge {
+    position: absolute;
+    top: 27px;
+    left: -17px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border: 3px solid #fff;
+    border-radius: 999px;
+    background: #0877b9;
+    box-shadow: 0 8px 20px rgba(8, 119, 185, 0.28);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.07em;
+    line-height: 1.25;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  #pp-employee-standard .pp-team-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: 50%;
+    background: #72db9a;
+    box-shadow: 0 0 0 4px rgba(114, 219, 154, 0.18);
+  }
+
+  #pp-employee-standard .pp-eyebrow {
+    margin-bottom: 8px;
+    color: #0877b9;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  #pp-employee-standard .pp-title {
+    margin: 0;
+    color: #073652;
+    font-size: 37px;
+    font-weight: 950;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  #pp-employee-standard .pp-intro {
+    margin: 18px 0 24px;
+    color: #526c7a;
+    font-size: 17px;
+    line-height: 1.62;
+  }
+
+  #pp-employee-standard .pp-proof-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 11px;
+    margin: 0;
+  }
+
+  #pp-employee-standard .pp-proof-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 14px 15px;
+    border: 1px solid #dceaf1;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(5, 52, 80, 0.045);
+  }
+
+  #pp-employee-standard .pp-proof-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    border-radius: 11px;
+    background: #e8f6fe;
+    color: #0877b9;
+  }
+
+  #pp-employee-standard .pp-proof-icon svg {
+    display: block;
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.9;
+  }
+
+  #pp-employee-standard .pp-proof-copy {
+    min-width: 0;
+  }
+
+  #pp-employee-standard .pp-proof-title {
+    display: block;
+    color: #17394b;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.3;
+  }
+
+  #pp-employee-standard .pp-proof-detail {
+    display: block;
+    margin-top: 3px;
+    color: #718692;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  #pp-employee-standard .pp-closing {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-top: 17px;
+    padding: 13px 15px;
+    border-left: 4px solid #38b6ff;
+    border-radius: 9px;
+    background: #eef9ff;
+    color: #31586b;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.45;
+  }
+
+  #pp-employee-standard .pp-closing-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    border-radius: 50%;
+    background: #0877b9;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  @media (max-width: 900px) {
+    #pp-employee-standard {
+      padding: 49px 15px;
+    }
+
+    #pp-employee-standard .pp-layout {
+      flex-direction: column !important;
+      gap: 45px;
+    }
+
+    #pp-employee-standard .pp-image-column,
+    #pp-employee-standard .pp-content-column {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    #pp-employee-standard .pp-content-column {
+      max-width: 690px;
+      margin: 0 auto;
+    }
+
+    #pp-employee-standard .pp-eyebrow,
+    #pp-employee-standard .pp-title,
+    #pp-employee-standard .pp-intro {
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 560px) {
+    #pp-employee-standard .pp-image-card {
+      max-width: 410px;
+      padding: 9px;
+      border-radius: 21px;
+    }
+
+    #pp-employee-standard .pp-image-frame {
+      aspect-ratio: 4 / 4.4;
+      border-radius: 14px;
+    }
+
+    #pp-employee-standard .pp-team-badge {
+      top: 17px;
+      left: 17px;
+      padding: 8px 12px;
+      font-size: 10px;
+    }
+
+    #pp-employee-standard .pp-title {
+      font-size: 29px;
+    }
+
+    #pp-employee-standard .pp-intro {
+      font-size: 16px;
+    }
+
+    #pp-employee-standard .pp-proof-item {
+      padding: 13px;
+    }
+
+    #pp-employee-standard .pp-closing {
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<section id="pp-employee-standard" aria-labelledby="pp-employee-heading">
+  <div class="pp-container">
+    <div class="pp-layout">
+      <div class="pp-image-column">
+        <div class="pp-image-card">
+          <div class="pp-image-frame">
+            <img
+              src="https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/68c9df0e1ed4416bf751aeb8.png"
+              alt="Purge Pros pet waste removal equipment at a serviced property"
+              class="pp-field-image"
+              loading="lazy"
+              decoding="async"
+            >
+            <div class="pp-image-gradient" aria-hidden="true"></div>
+            <div class="pp-image-caption">
+              <span class="pp-caption-label">The Purge Pros Standard</span>
+              <strong class="pp-caption-title">Professional care at every property.</strong>
+            </div>
+          </div>
+
+          <div class="pp-team-badge">
+            <span class="pp-team-dot" aria-hidden="true"></span>
+            <span>W-2 Service Team</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pp-content-column">
+        <div class="pp-eyebrow">Built In-House. Held to Our Standards.</div>
+        <h2 id="pp-employee-heading" class="pp-title">Real Employees. Real Accountability.</h2>
+        <p class="pp-intro">Your service is completed by Purge Pros W-2 employees&#8212;not app-dispatched gig workers or unknown subcontractors. That gives us direct responsibility for the people representing our company on your property.</p>
+
+        <div class="pp-proof-list">
+          <div class="pp-proof-item">
+            <span class="pp-proof-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 3 5 6v5c0 4.8 2.9 8.4 7 10 4.1-1.6 7-5.2 7-10V6l-7-3Z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </span>
+            <span class="pp-proof-copy">
+              <strong class="pp-proof-title">Background Checked</strong>
+              <span class="pp-proof-detail">Team members complete screening before entering the field.</span>
+            </span>
+          </div>
+
+          <div class="pp-proof-item">
+            <span class="pp-proof-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 5.5h11a3 3 0 0 1 3 3v10H7a3 3 0 0 1-3-3v-10Z"></path>
+                <path d="M7 5.5v10a3 3 0 0 0 3 3M18 9h2a1 1 0 0 1 1 1v8.5h-3"></path>
+              </svg>
+            </span>
+            <span class="pp-proof-copy">
+              <strong class="pp-proof-title">Trained to Purge Pros Standards</strong>
+              <span class="pp-proof-detail">Structured field training covers service quality, sanitation, gates, and customer-property care.</span>
+            </span>
+          </div>
+
+          <div class="pp-proof-item">
+            <span class="pp-proof-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="3.5"></circle>
+                <path d="M5 20c.7-4 3.1-6 7-6s6.3 2 7 6"></path>
+                <path d="m16.5 11.5 1.5 1.5 3-3"></path>
+              </svg>
+            </span>
+            <span class="pp-proof-copy">
+              <strong class="pp-proof-title">Uniformed and Accountable</strong>
+              <span class="pp-proof-detail">An identifiable service team follows your saved access, gate, and property instructions.</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="pp-closing">
+          <span class="pp-closing-mark" aria-hidden="true">&#10003;</span>
+          <span>Reliability is not a side gig. It is how we run our business.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

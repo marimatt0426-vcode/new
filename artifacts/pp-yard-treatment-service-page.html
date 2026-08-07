@@ -1,0 +1,1024 @@
+<style>
+  /* Complete optional yard-treatment service page, fully scoped for GHL. */
+  #pp-yard-treatment-page,
+  #pp-yard-treatment-page * {
+    box-sizing: border-box;
+  }
+
+  #pp-yard-treatment-page {
+    display: block !important;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff;
+    color: #17394b;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-yard-treatment-page .pp-section {
+    width: 100%;
+    padding: 68px 20px;
+  }
+
+  #pp-yard-treatment-page .pp-container {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  #pp-yard-treatment-page .pp-eyebrow {
+    margin-bottom: 8px;
+    color: #0877b9;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  #pp-yard-treatment-page .pp-heading {
+    margin: 0;
+    color: #073652;
+    font-size: 38px;
+    font-weight: 950;
+    letter-spacing: -0.043em;
+    line-height: 1.1;
+  }
+
+  #pp-yard-treatment-page .pp-lead {
+    margin: 17px 0 0;
+    color: #526c7a;
+    font-size: 17px;
+    line-height: 1.62;
+  }
+
+  #pp-yard-treatment-page .pp-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 640px;
+    padding: 72px 20px 64px;
+    background:
+      radial-gradient(circle at 84% 18%, rgba(56, 182, 255, 0.18), transparent 32%),
+      linear-gradient(135deg, #031f30 0%, #073652 58%, #05283d 100%);
+    color: #fff;
+  }
+
+  #pp-yard-treatment-page .pp-hero-layout,
+  #pp-yard-treatment-page .pp-two-column {
+    display: flex;
+    align-items: center;
+    gap: 66px;
+  }
+
+  #pp-yard-treatment-page .pp-hero-copy {
+    flex: 1 1 56%;
+    min-width: 0;
+  }
+
+  #pp-yard-treatment-page .pp-hero-visual {
+    flex: 1 1 44%;
+    min-width: 0;
+  }
+
+  #pp-yard-treatment-page .pp-hero .pp-eyebrow,
+  #pp-yard-treatment-page .pp-dark .pp-eyebrow {
+    color: #72ccff;
+  }
+
+  #pp-yard-treatment-page .pp-hero-title {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(43px, 5.2vw, 65px);
+    font-weight: 950;
+    letter-spacing: -0.052em;
+    line-height: 0.99;
+    text-transform: uppercase;
+  }
+
+  #pp-yard-treatment-page .pp-hero-title span {
+    display: block;
+    margin-top: 8px;
+    color: #38b6ff;
+  }
+
+  #pp-yard-treatment-page .pp-hero-lead {
+    max-width: 640px;
+    margin: 23px 0 0;
+    color: #d5e7ef;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.58;
+  }
+
+  #pp-yard-treatment-page .pp-hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 21px;
+  }
+
+  #pp-yard-treatment-page .pp-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #edf8fc;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  #pp-yard-treatment-page .pp-pill-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    border-radius: 50%;
+    background: #38b6ff;
+    color: #05283d;
+    font-size: 9px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-yard-treatment-page .pp-action {
+    margin-top: 28px;
+  }
+
+  #pp-yard-treatment-page .pp-primary-button,
+  #pp-yard-treatment-page .pp-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-weight: 950;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none !important;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-yard-treatment-page .pp-primary-button {
+    gap: 10px;
+    width: min(360px, 100%);
+    min-height: 57px;
+    padding: 15px 21px;
+    border: 2px solid #fff;
+    background: linear-gradient(135deg, #38b6ff 0%, #1596dd 55%, #0877b9 100%);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.26);
+    color: #fff !important;
+    font-size: 14px;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+  }
+
+  #pp-yard-treatment-page .pp-primary-button:hover,
+  #pp-yard-treatment-page .pp-primary-button:focus-visible {
+    background: #fff;
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  #pp-yard-treatment-page .pp-secondary-button {
+    min-height: 47px;
+    padding: 12px 17px;
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff !important;
+    font-size: 12px;
+  }
+
+  #pp-yard-treatment-page .pp-secondary-button:hover,
+  #pp-yard-treatment-page .pp-secondary-button:focus-visible {
+    background: #fff;
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  #pp-yard-treatment-page .pp-primary-button:focus-visible,
+  #pp-yard-treatment-page .pp-secondary-button:focus-visible,
+  #pp-yard-treatment-page .pp-page-nav a:focus-visible {
+    outline: 3px solid rgba(56, 182, 255, 0.42);
+    outline-offset: 3px;
+  }
+
+  #pp-yard-treatment-page .pp-action-note {
+    margin: 9px 0 0;
+    color: #b8d1dd;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  #pp-yard-treatment-page .pp-image-card {
+    position: relative;
+    max-width: 470px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid rgba(176, 226, 250, 0.32);
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 58px rgba(0, 0, 0, 0.31);
+  }
+
+  #pp-yard-treatment-page .pp-image-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 4.4;
+    border-radius: 18px;
+    background: #eaf4f9;
+  }
+
+  #pp-yard-treatment-page .pp-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #pp-yard-treatment-page .pp-image-overlay {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 36%;
+    background: linear-gradient(to top, rgba(3, 34, 51, 0.8), transparent);
+    pointer-events: none;
+  }
+
+  #pp-yard-treatment-page .pp-image-caption {
+    position: absolute;
+    right: 21px;
+    bottom: 20px;
+    left: 21px;
+    color: #fff;
+  }
+
+  #pp-yard-treatment-page .pp-image-caption small {
+    display: block;
+    color: #afe3ff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #pp-yard-treatment-page .pp-image-caption strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 19px;
+    font-weight: 900;
+    line-height: 1.25;
+  }
+
+  #pp-yard-treatment-page .pp-review-badge {
+    position: absolute;
+    top: 27px;
+    left: -18px;
+    padding: 10px 14px;
+    border: 3px solid #fff;
+    border-radius: 999px;
+    background: #0877b9;
+    box-shadow: 0 9px 22px rgba(0, 0, 0, 0.22);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.07em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  #pp-yard-treatment-page .pp-page-nav-section {
+    padding: 0 20px;
+    border-bottom: 1px solid #dceaf1;
+    background: #fff;
+    box-shadow: 0 6px 20px rgba(5, 52, 80, 0.06);
+  }
+
+  #pp-yard-treatment-page .pp-page-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 12px 0;
+    scrollbar-width: none;
+  }
+
+  #pp-yard-treatment-page .pp-page-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  #pp-yard-treatment-page .pp-page-nav a {
+    flex: 0 0 auto;
+    padding: 8px 13px;
+    border-radius: 999px;
+    color: #31586b !important;
+    font-size: 11px;
+    font-weight: 850;
+    line-height: 1.3;
+    text-decoration: none !important;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #pp-yard-treatment-page .pp-page-nav a:hover,
+  #pp-yard-treatment-page .pp-page-nav a:focus-visible {
+    background: #e8f6fe;
+    color: #0877b9 !important;
+  }
+
+  #pp-yard-treatment-page .pp-white {
+    background: #fff;
+  }
+
+  #pp-yard-treatment-page .pp-soft {
+    background: #f4f9fc;
+  }
+
+  #pp-yard-treatment-page .pp-dark {
+    background:
+      radial-gradient(circle at 18% 20%, rgba(56, 182, 255, 0.14), transparent 30%),
+      linear-gradient(135deg, #031f30, #073652);
+    color: #fff;
+  }
+
+  #pp-yard-treatment-page .pp-two-column > * {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
+  #pp-yard-treatment-page .pp-light-image-card {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #d6e8f1;
+    border-radius: 23px;
+    background: #fff;
+    box-shadow: 0 20px 48px rgba(5, 52, 80, 0.13);
+  }
+
+  #pp-yard-treatment-page .pp-light-image-card img {
+    display: block;
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  #pp-yard-treatment-page .pp-point-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  #pp-yard-treatment-page .pp-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #425e6c;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #pp-yard-treatment-page .pp-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: #e8f6fe;
+    color: #0877b9;
+    font-size: 11px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-yard-treatment-page .pp-note {
+    margin-top: 20px;
+    padding: 14px 15px;
+    border-left: 4px solid #38b6ff;
+    border-radius: 9px;
+    background: #eef9ff;
+    color: #31586b;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.52;
+  }
+
+  #pp-yard-treatment-page .pp-centered-heading {
+    max-width: 790px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  #pp-yard-treatment-page .pp-fit-grid,
+  #pp-yard-treatment-page .pp-boundary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 35px;
+  }
+
+  #pp-yard-treatment-page .pp-info-card {
+    min-width: 0;
+    padding: 22px 18px;
+    border: 1px solid #d9e8ef;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(5, 52, 80, 0.06);
+  }
+
+  #pp-yard-treatment-page .pp-info-icon,
+  #pp-yard-treatment-page .pp-process-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #e8f6fe;
+    color: #0877b9;
+  }
+
+  #pp-yard-treatment-page .pp-info-icon svg,
+  #pp-yard-treatment-page .pp-process-icon svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.9;
+  }
+
+  #pp-yard-treatment-page .pp-card-title {
+    margin: 15px 0 0;
+    color: #17394b;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.3;
+  }
+
+  #pp-yard-treatment-page .pp-card-copy {
+    margin: 7px 0 0;
+    color: #617985;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  #pp-yard-treatment-page .pp-tech-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+    align-items: center;
+    gap: 60px;
+  }
+
+  #pp-yard-treatment-page .pp-dark .pp-heading {
+    color: #fff;
+  }
+
+  #pp-yard-treatment-page .pp-dark .pp-lead {
+    color: #c7dce6;
+  }
+
+  #pp-yard-treatment-page .pp-dark-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  #pp-yard-treatment-page .pp-dark-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #d0e2ea;
+    font-size: 13px;
+    line-height: 1.52;
+  }
+
+  #pp-yard-treatment-page .pp-tech-image {
+    max-width: 470px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid rgba(176, 226, 250, 0.32);
+    border-radius: 23px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.26);
+  }
+
+  #pp-yard-treatment-page .pp-tech-image img {
+    display: block;
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  #pp-yard-treatment-page .pp-label-note {
+    margin-top: 19px;
+    padding: 13px 14px;
+    border: 1px solid rgba(157, 222, 255, 0.25);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #bfd6e1;
+    font-size: 11px;
+    font-weight: 650;
+    line-height: 1.55;
+  }
+
+  #pp-yard-treatment-page .pp-process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 35px;
+  }
+
+  #pp-yard-treatment-page .pp-process-card {
+    position: relative;
+    min-width: 0;
+    padding: 22px 18px 20px;
+    border: 1px solid #d9e8ef;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(5, 52, 80, 0.06);
+  }
+
+  #pp-yard-treatment-page .pp-process-number {
+    position: absolute;
+    top: 13px;
+    right: 14px;
+    color: #c5e7f8;
+    font-size: 28px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-yard-treatment-page .pp-boundary-card {
+    min-width: 0;
+    padding: 20px 18px;
+    border: 1px solid rgba(157, 222, 255, 0.23);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  #pp-yard-treatment-page .pp-boundary-card strong {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.35;
+  }
+
+  #pp-yard-treatment-page .pp-boundary-card span {
+    display: block;
+    margin-top: 5px;
+    color: #bfd6e1;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  #pp-yard-treatment-page .pp-faq-list {
+    display: grid;
+    gap: 9px;
+    max-width: 940px;
+    margin: 34px auto 0;
+  }
+
+  #pp-yard-treatment-page .pp-faq-item {
+    overflow: hidden;
+    border: 1px solid #d9e8ef;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 7px 20px rgba(5, 52, 80, 0.06);
+  }
+
+  #pp-yard-treatment-page .pp-faq-item[open] {
+    border-color: #38b6ff;
+    box-shadow: inset 4px 0 0 #38b6ff, 0 10px 26px rgba(5, 52, 80, 0.09);
+  }
+
+  #pp-yard-treatment-page .pp-faq-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 61px;
+    padding: 11px 15px;
+    cursor: pointer;
+    list-style: none;
+    outline: none;
+  }
+
+  #pp-yard-treatment-page .pp-faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #pp-yard-treatment-page .pp-question {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 33px;
+    height: 33px;
+    flex: 0 0 33px;
+    border-radius: 10px;
+    background: #e8f6fe;
+    color: #0877b9;
+    font-size: 15px;
+    font-weight: 950;
+  }
+
+  #pp-yard-treatment-page .pp-faq-text {
+    flex: 1 1 auto;
+    color: #17394b;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.35;
+  }
+
+  #pp-yard-treatment-page .pp-plus {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+    border: 1px solid #d1e5ef;
+    border-radius: 50%;
+    background: #f4f9fb;
+  }
+
+  #pp-yard-treatment-page .pp-plus::before,
+  #pp-yard-treatment-page .pp-plus::after {
+    position: absolute;
+    top: 11px;
+    left: 6px;
+    width: 11px;
+    height: 2px;
+    border-radius: 2px;
+    background: #31586b;
+    content: "";
+  }
+
+  #pp-yard-treatment-page .pp-plus::after {
+    transform: rotate(90deg);
+    transition: transform 0.2s ease;
+  }
+
+  #pp-yard-treatment-page .pp-faq-item[open] .pp-plus::after {
+    transform: rotate(0deg);
+  }
+
+  #pp-yard-treatment-page .pp-answer {
+    padding: 0 20px 18px 60px;
+  }
+
+  #pp-yard-treatment-page .pp-answer-inner {
+    padding: 14px 14px 0;
+    border-top: 1px solid #e0ecf1;
+    color: #526c7a;
+    font-size: 13px;
+    line-height: 1.62;
+  }
+
+  #pp-yard-treatment-page .pp-answer-inner p {
+    margin: 0;
+  }
+
+  #pp-yard-treatment-page .pp-answer-inner p + p {
+    margin-top: 9px;
+  }
+
+  #pp-yard-treatment-page .pp-final {
+    padding: 66px 20px;
+    background: #fff;
+  }
+
+  #pp-yard-treatment-page .pp-final-panel {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 42px 34px;
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at 90% 20%, rgba(56, 182, 255, 0.18), transparent 35%),
+      linear-gradient(135deg, #031f30, #073652);
+    box-shadow: 0 20px 48px rgba(5, 52, 80, 0.2);
+    color: #fff;
+    text-align: center;
+  }
+
+  #pp-yard-treatment-page .pp-final-panel .pp-heading {
+    color: #fff;
+  }
+
+  #pp-yard-treatment-page .pp-final-panel .pp-lead {
+    max-width: 670px;
+    margin-right: auto;
+    margin-left: auto;
+    color: #c7dce6;
+  }
+
+  #pp-yard-treatment-page .pp-final-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  @media (max-width: 980px) {
+    #pp-yard-treatment-page .pp-hero-layout,
+    #pp-yard-treatment-page .pp-two-column {
+      flex-direction: column;
+    }
+
+    #pp-yard-treatment-page .pp-hero-copy,
+    #pp-yard-treatment-page .pp-hero-visual,
+    #pp-yard-treatment-page .pp-two-column > * {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    #pp-yard-treatment-page .pp-hero-copy {
+      max-width: 760px;
+      text-align: center;
+    }
+
+    #pp-yard-treatment-page .pp-hero-pills {
+      justify-content: center;
+    }
+
+    #pp-yard-treatment-page .pp-action-note {
+      text-align: center;
+    }
+
+    #pp-yard-treatment-page .pp-fit-grid,
+    #pp-yard-treatment-page .pp-boundary-grid,
+    #pp-yard-treatment-page .pp-process-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #pp-yard-treatment-page .pp-tech-layout {
+      grid-template-columns: 1fr;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 680px) {
+    #pp-yard-treatment-page .pp-section {
+      padding: 51px 15px;
+    }
+
+    #pp-yard-treatment-page .pp-hero {
+      min-height: 0;
+      padding: 58px 15px 52px;
+    }
+
+    #pp-yard-treatment-page .pp-hero-layout {
+      gap: 42px;
+    }
+
+    #pp-yard-treatment-page .pp-hero-title {
+      font-size: clamp(38px, 11.5vw, 51px);
+    }
+
+    #pp-yard-treatment-page .pp-hero-lead {
+      font-size: 16px;
+    }
+
+    #pp-yard-treatment-page .pp-review-badge {
+      top: 17px;
+      left: 17px;
+      font-size: 9px;
+    }
+
+    #pp-yard-treatment-page .pp-page-nav-section {
+      padding: 0 8px;
+    }
+
+    #pp-yard-treatment-page .pp-page-nav {
+      justify-content: flex-start;
+    }
+
+    #pp-yard-treatment-page .pp-heading {
+      font-size: 30px;
+    }
+
+    #pp-yard-treatment-page .pp-lead {
+      font-size: 16px;
+    }
+
+    #pp-yard-treatment-page .pp-fit-grid,
+    #pp-yard-treatment-page .pp-boundary-grid,
+    #pp-yard-treatment-page .pp-process-grid {
+      grid-template-columns: 1fr;
+    }
+
+    #pp-yard-treatment-page .pp-faq-summary {
+      padding: 10px 12px;
+    }
+
+    #pp-yard-treatment-page .pp-answer {
+      padding: 0 13px 15px;
+    }
+
+    #pp-yard-treatment-page .pp-answer-inner {
+      padding: 13px 3px 0;
+    }
+
+    #pp-yard-treatment-page .pp-final {
+      padding: 46px 15px;
+    }
+
+    #pp-yard-treatment-page .pp-final-panel {
+      padding: 34px 19px;
+      border-radius: 19px;
+    }
+
+    #pp-yard-treatment-page .pp-final-actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    #pp-yard-treatment-page .pp-final-actions a {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-yard-treatment-page .pp-primary-button,
+    #pp-yard-treatment-page .pp-secondary-button,
+    #pp-yard-treatment-page .pp-page-nav a,
+    #pp-yard-treatment-page .pp-plus::after {
+      transition: none;
+    }
+  }
+</style>
+
+<div id="pp-yard-treatment-page">
+  <section class="pp-hero" aria-labelledby="pp-yard-treatment-title">
+    <div class="pp-container pp-hero-layout">
+      <div class="pp-hero-copy">
+        <div class="pp-eyebrow">Optional Outdoor Treatment &bull; Availability Reviewed Separately</div>
+        <h1 id="pp-yard-treatment-title" class="pp-hero-title">Yard Deodorizing &amp;<span>Sanitation Treatment.</span></h1>
+        <p class="pp-hero-lead">A separately reviewed follow-up service for eligible outdoor dog areas where odor control and a product-label-directed treatment may be appropriate.</p>
+
+        <div class="pp-hero-pills" aria-label="Treatment highlights">
+          <span class="pp-pill"><span class="pp-pill-check" aria-hidden="true">&#10003;</span> Waste Removal Comes First</span>
+          <span class="pp-pill"><span class="pp-pill-check" aria-hidden="true">&#10003;</span> Property Review Required</span>
+          <span class="pp-pill"><span class="pp-pill-check" aria-hidden="true">&#10003;</span> Label-Directed Application</span>
+        </div>
+
+        <div class="pp-action">
+          <a href="sms:+13179615865" class="pp-primary-button"><span>Ask About Availability</span><span aria-hidden="true">&#8594;</span></a>
+          <p class="pp-action-note">This service is not currently selectable in the instant-price tool.</p>
+        </div>
+      </div>
+
+      <div class="pp-hero-visual">
+        <div class="pp-image-card">
+          <div class="pp-image-frame">
+            <img src="https://storage.googleapis.com/msgsndr/YzqccfNpAoMTt4EZO92d/media/69646aecc7683b48a0bcee35.png" alt="Outdoor yard treatment being applied" class="pp-image" loading="eager" decoding="async">
+            <div class="pp-image-overlay" aria-hidden="true"></div>
+            <div class="pp-image-caption"><small>Optional Follow-Up Service</small><strong>Reviewed for the property, weather, and requested treatment area.</strong></div>
+          </div>
+          <div class="pp-review-badge">Available by Request</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="pp-page-nav-section" aria-label="Yard-treatment page">
+    <div class="pp-container pp-page-nav">
+      <a href="#pp-yt-overview">Overview</a>
+      <a href="#pp-yt-fit">When It May Fit</a>
+      <a href="#pp-yt-technology">Application</a>
+      <a href="#pp-yt-process">Process</a>
+      <a href="#pp-yt-expectations">Expectations</a>
+      <a href="#pp-yt-faq">Questions</a>
+    </div>
+  </nav>
+
+  <section id="pp-yt-overview" class="pp-section pp-white">
+    <div class="pp-container pp-two-column">
+      <div>
+        <div class="pp-light-image-card"><img src="https://storage.googleapis.com/msgsndr/YzqccfNpAoMTt4EZO92d/media/69646bcef13bc33467b1c423.png" alt="Residential outdoor area after routine yard care" loading="lazy" decoding="async"></div>
+      </div>
+      <div>
+        <div class="pp-eyebrow">Start With Physical Removal</div>
+        <h2 class="pp-heading">Treatment Does Not Replace Scooping.</h2>
+        <p class="pp-lead">The first and most important step is physically removing the pet waste. An optional follow-up treatment is considered only after the source material has been collected from the requested areas.</p>
+        <div class="pp-point-list">
+          <div class="pp-point"><span class="pp-check" aria-hidden="true">&#10003;</span><span>Waste removal addresses the material creating the immediate mess.</span></div>
+          <div class="pp-point"><span class="pp-check" aria-hidden="true">&#10003;</span><span>A follow-up application may be considered for eligible outdoor surfaces and odor concerns.</span></div>
+          <div class="pp-point"><span class="pp-check" aria-hidden="true">&#10003;</span><span>Weather, temperature, drainage, surfaces, water access, and product directions can affect eligibility.</span></div>
+        </div>
+        <div class="pp-note">This is not a promise to sterilize soil, eliminate every odor, or prevent disease. Product choice, application, contact time, and re-entry instructions must follow the label used for the service.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-yt-fit" class="pp-section pp-soft">
+    <div class="pp-container">
+      <div class="pp-centered-heading">
+        <div class="pp-eyebrow">Individually Reviewed</div>
+        <h2 class="pp-heading">When an Optional Treatment May Make Sense</h2>
+        <p class="pp-lead">The service is evaluated by request rather than automatically added to every yard.</p>
+      </div>
+
+      <div class="pp-fit-grid">
+        <article class="pp-info-card"><span class="pp-info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 18c2-6 6-10 13-12M4 20h16"></path><path d="M8 15h4M13 10v5"></path></svg></span><h3 class="pp-card-title">Higher-Use Dog Areas</h3><p class="pp-card-copy">Frequently used outdoor areas where odor concerns remain after waste is physically removed.</p></article>
+        <article class="pp-info-card"><span class="pp-info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3"></circle><circle cx="16" cy="9" r="3"></circle><path d="M3 20c.4-4 2.1-6 5-6s4.6 2 5 6M11 20c.4-4 2.1-6 5-6s4.6 2 5 6"></path></svg></span><h3 class="pp-card-title">Multiple-Dog Properties</h3><p class="pp-card-copy">Yards with greater use and recurring odor concerns that need a separately evaluated treatment plan.</p></article>
+        <article class="pp-info-card"><span class="pp-info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"></path></svg></span><h3 class="pp-card-title">Seasonal Odor Concerns</h3><p class="pp-card-copy">Warm-weather conditions or a specific outdoor event where an additional odor-control step is requested.</p></article>
+        <article class="pp-info-card"><span class="pp-info-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V8l8-5 8 5v13M8 21v-7h8v7"></path><path d="M7 10h2M15 10h2"></path></svg></span><h3 class="pp-card-title">Kennel or Custom Requests</h3><p class="pp-card-copy">Larger, commercial, or nonstandard animal-use areas requiring scope and site-condition review.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-yt-technology" class="pp-section pp-dark">
+    <div class="pp-container pp-tech-layout">
+      <div>
+        <div class="pp-eyebrow">Product-Based Application</div>
+        <h2 class="pp-heading">When WYSIWash Is Used</h2>
+        <p class="pp-lead">WYSIWash is a chlorine-based outdoor animal-area treatment delivered through its compatible application system. Purge Pros uses it only when the property and requested scope are appropriate for a label-directed application.</p>
+        <div class="pp-dark-list">
+          <div class="pp-dark-point"><span class="pp-pill-check" aria-hidden="true">&#10003;</span><span>Visible waste is removed before a treatment is considered.</span></div>
+          <div class="pp-dark-point"><span class="pp-pill-check" aria-hidden="true">&#10003;</span><span>The requested surfaces, water access, weather, drainage, and surrounding area are reviewed.</span></div>
+          <div class="pp-dark-point"><span class="pp-pill-check" aria-hidden="true">&#10003;</span><span>Mixing, application, contact time, precautions, and re-entry directions follow the product label in use.</span></div>
+          <div class="pp-dark-point"><span class="pp-pill-check" aria-hidden="true">&#10003;</span><span>Customers receive any applicable after-service instructions for people and pets.</span></div>
+        </div>
+        <div class="pp-label-note">WYSIWash is a third-party product and trademark. Product availability and directions can change. The current product label and service-day conditions control how and whether an application is performed.</div>
+      </div>
+      <div>
+        <div class="pp-tech-image"><img src="https://storage.googleapis.com/msgsndr/YzqccfNpAoMTt4EZO92d/media/69646d5898efbd0ad703adc0.png" alt="WYSIWash outdoor treatment application equipment" loading="lazy" decoding="async"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-yt-process" class="pp-section pp-soft">
+    <div class="pp-container">
+      <div class="pp-centered-heading">
+        <div class="pp-eyebrow">A Separate Request Process</div>
+        <h2 class="pp-heading">How Treatment Requests Are Handled</h2>
+        <p class="pp-lead">Because this service depends on property conditions and product directions, it is reviewed outside the instant-price flow.</p>
+      </div>
+      <div class="pp-process-grid">
+        <article class="pp-process-card"><span class="pp-process-number">1</span><span class="pp-process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5"></rect><path d="M9 6.5h6M9 10h6M10 17.5h4"></path></svg></span><h3 class="pp-card-title">Request Availability</h3><p class="pp-card-copy">Text the team with the address, treatment areas, and the concern you want evaluated.</p></article>
+        <article class="pp-process-card"><span class="pp-process-number">2</span><span class="pp-process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg></span><h3 class="pp-card-title">Property Review</h3><p class="pp-card-copy">We evaluate surfaces, access, water, drainage, weather, scope, and current service availability.</p></article>
+        <article class="pp-process-card"><span class="pp-process-number">3</span><span class="pp-process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6L5 8Z"></path><path d="M8 8V5h8v3M3 8h18"></path></svg></span><h3 class="pp-card-title">Remove the Waste</h3><p class="pp-card-copy">Physical removal and any required area preparation occur before the optional treatment.</p></article>
+        <article class="pp-process-card"><span class="pp-process-number">4</span><span class="pp-process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17c4-6 8-9 16-11M4 20h16"></path><path d="M8 15h4M14 10v5"></path></svg></span><h3 class="pp-card-title">Apply as Directed</h3><p class="pp-card-copy">If approved, the treatment is applied according to the current label and site-specific instructions.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-yt-expectations" class="pp-section pp-dark">
+    <div class="pp-container">
+      <div class="pp-centered-heading">
+        <div class="pp-eyebrow">Clear Expectations</div>
+        <h2 class="pp-heading">What This Service Does Not Promise</h2>
+        <p class="pp-lead">Responsible treatment starts with being precise about its limits.</p>
+      </div>
+      <div class="pp-boundary-grid">
+        <div class="pp-boundary-card"><strong>Not Soil Sterilization</strong><span>Outdoor soil and grass are living, uncontrolled environments. No responsible service should promise a permanently sterile yard.</span></div>
+        <div class="pp-boundary-card"><strong>Not Guaranteed Illness Prevention</strong><span>The service does not replace vaccination, veterinary care, parasite prevention, public-health advice, or proper pet-waste removal.</span></div>
+        <div class="pp-boundary-card"><strong>Not Universal Odor Elimination</strong><span>Odor results depend on the source, saturation, drainage, weather, surfaces, and whether new waste or urine continues.</span></div>
+        <div class="pp-boundary-card"><strong>Not Appropriate Everywhere</strong><span>Some properties, surfaces, temperatures, weather conditions, or access arrangements may not be eligible for treatment.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-yt-faq" class="pp-section pp-white">
+    <div class="pp-container">
+      <div class="pp-centered-heading">
+        <div class="pp-eyebrow">Before Requesting Treatment</div>
+        <h2 class="pp-heading">Common Questions</h2>
+      </div>
+
+      <div class="pp-faq-list">
+        <details class="pp-faq-item" name="pp-yard-treatment-faq" open><summary class="pp-faq-summary"><span class="pp-question" aria-hidden="true">?</span><span class="pp-faq-text">Can I add this through the instant-price tool?</span><span class="pp-plus" aria-hidden="true"></span></summary><div class="pp-answer"><div class="pp-answer-inner"><p>No. This treatment was intentionally removed from the instant-price flow because availability and pricing require a separate property and scope review. Text the team to ask whether it is currently available for your address.</p></div></div></details>
+        <details class="pp-faq-item" name="pp-yard-treatment-faq"><summary class="pp-faq-summary"><span class="pp-question" aria-hidden="true">?</span><span class="pp-faq-text">Is the treatment automatically safe for every pet, plant, and surface?</span><span class="pp-plus" aria-hidden="true"></span></summary><div class="pp-answer"><div class="pp-answer-inner"><p>No product should be described as universally safe in every circumstance. Eligibility, application, precautions, contact time, and re-entry instructions depend on the current label and site conditions. Follow every instruction provided for people, pets, plants, and treated areas.</p></div></div></details>
+        <details class="pp-faq-item" name="pp-yard-treatment-faq"><summary class="pp-faq-summary"><span class="pp-question" aria-hidden="true">?</span><span class="pp-faq-text">Will it eliminate every yard odor?</span><span class="pp-plus" aria-hidden="true"></span></summary><div class="pp-answer"><div class="pp-answer-inner"><p>Results vary. Persistent odor can come from ongoing urine exposure, deeply saturated materials, drainage, standing water, heat, or another source. Treatment may help with an eligible concern, but permanent or complete odor elimination is not guaranteed.</p></div></div></details>
+        <details class="pp-faq-item" name="pp-yard-treatment-faq"><summary class="pp-faq-summary"><span class="pp-question" aria-hidden="true">?</span><span class="pp-faq-text">Does this guarantee protection from Parvo, Giardia, or other illnesses?</span><span class="pp-plus" aria-hidden="true"></span></summary><div class="pp-answer"><div class="pp-answer-inner"><p>No. We do not promise illness prevention, diagnosis, or treatment. Product efficacy claims depend on the exact organism, surface, concentration, contact time, and current product label. Consult your veterinarian about vaccination, exposure, symptoms, and animal-health concerns.</p></div></div></details>
+        <details class="pp-faq-item" name="pp-yard-treatment-faq"><summary class="pp-faq-summary"><span class="pp-question" aria-hidden="true">?</span><span class="pp-faq-text">How often would my property need treatment?</span><span class="pp-plus" aria-hidden="true"></span></summary><div class="pp-answer"><div class="pp-answer-inner"><p>There is no responsible universal schedule. Frequency depends on the property, dog use, odor source, weather, surfaces, product directions, and your goals. We review those factors before recommending whether treatment makes sense.</p></div></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="pp-final">
+    <div class="pp-final-panel">
+      <div class="pp-eyebrow">Availability Is Reviewed Separately</div>
+      <h2 class="pp-heading">Want Us to Evaluate Your Yard?</h2>
+      <p class="pp-lead">Text the property address, requested areas, and the odor or sanitation concern you want reviewed. We will tell you whether the service is currently available and appropriate.</p>
+      <div class="pp-final-actions">
+        <a href="sms:+13179615865" class="pp-primary-button">Text About Availability</a>
+        <a href="tel:+13179615865" class="pp-secondary-button">Call (317) 961-5865</a>
+      </div>
+    </div>
+  </section>
+</div>

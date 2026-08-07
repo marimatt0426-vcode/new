@@ -1,0 +1,150 @@
+<style>
+  /* Scoped to this navigation button so nothing affects other GHL elements. */
+  #pp-nav-quote-widget,
+  #pp-nav-quote-widget * {
+    box-sizing: border-box;
+  }
+
+  #pp-nav-quote-widget {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    margin: 0 !important;
+    padding: 4px 0;
+    font-family: Arial, sans-serif;
+    line-height: 1;
+  }
+
+  #pp-nav-quote-widget .pp-nav-quote-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 190px;
+    min-height: 52px;
+    overflow: hidden;
+    padding: 12px 21px;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #38b6ff 0%, #1596dd 55%, #0877b9 100%);
+    box-shadow:
+      0 7px 18px rgba(8, 119, 185, 0.28),
+      0 2px 6px rgba(5, 52, 80, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    color: #fff !important;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.045em;
+    line-height: 1.1;
+    text-align: center;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-nav-quote-widget .pp-nav-quote-button::after {
+    position: absolute;
+    top: -80%;
+    left: -45%;
+    width: 32%;
+    height: 260%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    content: "";
+    pointer-events: none;
+    transform: rotate(20deg);
+    transition: left 0.42s ease;
+  }
+
+  #pp-nav-quote-widget .pp-nav-quote-button:hover,
+  #pp-nav-quote-widget .pp-nav-quote-button:focus-visible {
+    border-color: #d9f2ff;
+    box-shadow:
+      0 10px 23px rgba(8, 119, 185, 0.35),
+      0 3px 8px rgba(5, 52, 80, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    color: #fff !important;
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  #pp-nav-quote-widget .pp-nav-quote-button:hover::after,
+  #pp-nav-quote-widget .pp-nav-quote-button:focus-visible::after {
+    left: 118%;
+  }
+
+  #pp-nav-quote-widget .pp-nav-quote-button:focus-visible {
+    outline: 3px solid rgba(56, 182, 255, 0.34);
+    outline-offset: 3px;
+  }
+
+  #pp-nav-quote-widget .pp-nav-paw {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 23px;
+    height: 23px;
+    flex: 0 0 23px;
+    fill: currentColor;
+  }
+
+  #pp-nav-quote-widget .pp-nav-button-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (max-width: 767px) {
+    #pp-nav-quote-widget {
+      justify-content: center;
+      padding: 3px 0;
+    }
+
+    #pp-nav-quote-widget .pp-nav-quote-button {
+      min-width: 148px;
+      min-height: 44px;
+      gap: 8px;
+      padding: 10px 15px;
+      border-radius: 13px;
+      font-size: 12px;
+    }
+
+    #pp-nav-quote-widget .pp-nav-paw {
+      width: 19px;
+      height: 19px;
+      flex-basis: 19px;
+    }
+
+    #pp-nav-quote-widget .pp-nav-button-full {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-nav-quote-widget .pp-nav-quote-button,
+    #pp-nav-quote-widget .pp-nav-quote-button::after {
+      transition: none;
+    }
+  }
+</style>
+
+<div id="pp-nav-quote-widget">
+  <a
+    href="#quote"
+    class="pp-nav-quote-button"
+    aria-label="Open the Purge Pros instant quote tool"
+  >
+    <svg class="pp-nav-paw" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <ellipse cx="5.1" cy="8.2" rx="2.25" ry="3.1" transform="rotate(-25 5.1 8.2)"></ellipse>
+      <ellipse cx="9.7" cy="5.1" rx="2.25" ry="3.15" transform="rotate(-7 9.7 5.1)"></ellipse>
+      <ellipse cx="14.4" cy="5.1" rx="2.25" ry="3.15" transform="rotate(7 14.4 5.1)"></ellipse>
+      <ellipse cx="18.9" cy="8.2" rx="2.25" ry="3.1" transform="rotate(25 18.9 8.2)"></ellipse>
+      <path d="M12 9.4c-3.75 0-7.15 3.35-7.15 6.75 0 2.2 1.62 3.45 3.55 3.45 1.22 0 2.18-.55 3.6-.55s2.38.55 3.6.55c1.93 0 3.55-1.25 3.55-3.45 0-3.4-3.4-6.75-7.15-6.75Z"></path>
+    </svg>
+    <span class="pp-nav-button-text">
+      Get <span class="pp-nav-button-full">My </span>Price
+    </span>
+  </a>
+</div>

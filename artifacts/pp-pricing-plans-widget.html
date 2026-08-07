@@ -1,0 +1,443 @@
+<style>
+  /* Scoped to #pp-pricing-widget so nothing leaks into the surrounding GHL page. */
+  #pp-pricing-widget,
+  #pp-pricing-widget * {
+    box-sizing: border-box;
+  }
+
+  #pp-pricing-widget {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 60px 20px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-pricing-widget .pp-container-inner {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto !important;
+  }
+
+  #pp-pricing-widget .pp-center {
+    margin-bottom: 48px;
+    text-align: center;
+  }
+
+  #pp-pricing-widget .pp-eyebrow {
+    margin-bottom: 8px;
+    color: #0877b9;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #pp-pricing-widget .pp-h2 {
+    margin: 0 0 14px;
+    color: #073652;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.12;
+    text-transform: uppercase;
+  }
+
+  #pp-pricing-widget .pp-subtitle {
+    max-width: 760px;
+    margin: 0 auto;
+    color: #526c7a;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  #pp-pricing-widget .pp-pricing-grid {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    align-items: stretch;
+    justify-content: center;
+    gap: 34px;
+  }
+
+  #pp-pricing-widget .pp-pricing-card {
+    position: relative;
+    display: flex;
+    flex: 1 1 50%;
+    flex-direction: column;
+    min-width: 0;
+    padding: 43px 34px 34px;
+    border-radius: 17px;
+    background: #fff;
+    box-shadow: 0 14px 38px rgba(5, 52, 80, 0.09);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-pricing-widget .pp-pricing-card:hover {
+    box-shadow: 0 18px 44px rgba(5, 52, 80, 0.14);
+    transform: translateY(-3px);
+  }
+
+  #pp-pricing-widget .pp-card-popular {
+    border: 3px solid #38b6ff;
+  }
+
+  #pp-pricing-widget .pp-card-standard {
+    border: 1px solid #dce8ee;
+  }
+
+  #pp-pricing-widget .pp-badge-popular {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    padding: 6px 22px;
+    border: 3px solid #fff;
+    border-radius: 999px;
+    background: #0877b9;
+    box-shadow: 0 6px 16px rgba(8, 119, 185, 0.24);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+
+  #pp-pricing-widget .pp-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 13px;
+    color: #073652;
+    font-size: 23px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  #pp-pricing-widget .pp-title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    border-radius: 50%;
+    background: #e7f6ff;
+    color: #0877b9;
+    font-size: 17px;
+    line-height: 1;
+  }
+
+  #pp-pricing-widget .pp-card-standard .pp-title-icon {
+    background: #f1f5f7;
+    color: #526c7a;
+  }
+
+  #pp-pricing-widget .pp-card-desc {
+    margin: 0 0 24px;
+    color: #526c7a;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  #pp-pricing-widget .pp-features {
+    flex-grow: 1;
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+  }
+
+  #pp-pricing-widget .pp-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+    color: #425e6c;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  #pp-pricing-widget .pp-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: #e8f8ee;
+    color: #117b3b;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  #pp-pricing-widget .pp-features strong {
+    color: #17394b;
+  }
+
+  #pp-pricing-widget .pp-pricing-details {
+    margin-bottom: 27px;
+    padding-top: 19px;
+    border-top: 1px solid #e5edf1;
+  }
+
+  #pp-pricing-widget .pp-price-line {
+    margin-bottom: 10px;
+    color: #284b5d;
+    font-size: 17px;
+    line-height: 1.45;
+  }
+
+  #pp-pricing-widget .pp-price-line.small {
+    margin: -4px 0 14px;
+    color: #718692;
+    font-size: 13px;
+    font-style: normal;
+    line-height: 1.48;
+  }
+
+  #pp-pricing-widget .pp-waived {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #e8f8ee;
+    color: #117b3b;
+    font-size: 14px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  #pp-pricing-widget .pp-one-time-price {
+    color: #b54545;
+    font-weight: 900;
+  }
+
+  #pp-pricing-widget .pp-eligibility {
+    margin: 2px 0 17px;
+    padding: 11px 12px;
+    border-left: 4px solid #38b6ff;
+    border-radius: 8px;
+    background: #eef9ff;
+    color: #31586b;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  #pp-pricing-widget .pp-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: auto;
+  }
+
+  #pp-pricing-widget .pp-quote-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 54px;
+    padding: 15px 18px;
+    border: 2px solid #0877b9;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #38b6ff, #0877b9);
+    box-shadow: 0 9px 22px rgba(8, 119, 185, 0.25);
+    color: #fff !important;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-pricing-widget .pp-card-standard .pp-quote-btn {
+    border-color: #526c7a;
+    background: #fff;
+    box-shadow: none;
+    color: #31586b !important;
+  }
+
+  #pp-pricing-widget .pp-quote-btn:hover,
+  #pp-pricing-widget .pp-quote-btn:focus-visible {
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(8, 119, 185, 0.28);
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  #pp-pricing-widget .pp-card-standard .pp-quote-btn:hover,
+  #pp-pricing-widget .pp-card-standard .pp-quote-btn:focus-visible {
+    border-color: #0877b9;
+    background: #eef9ff;
+    color: #0877b9 !important;
+  }
+
+  #pp-pricing-widget .pp-trust-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px 34px;
+    margin-top: 42px;
+    padding: 23px 28px;
+    border: 1px solid #dcecf4;
+    border-radius: 14px;
+    background: #f4f9fd;
+  }
+
+  #pp-pricing-widget .pp-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #3c5866;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  #pp-pricing-widget .pp-trust-icon {
+    color: #0877b9;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  @media (max-width: 850px) {
+    #pp-pricing-widget {
+      padding: 43px 15px;
+    }
+
+    #pp-pricing-widget .pp-pricing-grid {
+      flex-direction: column !important;
+      gap: 47px;
+    }
+
+    #pp-pricing-widget .pp-pricing-card {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    #pp-pricing-widget .pp-h2 {
+      font-size: 29px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #pp-pricing-widget .pp-center {
+      margin-bottom: 42px;
+    }
+
+    #pp-pricing-widget .pp-pricing-card {
+      padding: 40px 22px 25px;
+    }
+
+    #pp-pricing-widget .pp-h2 {
+      font-size: 26px;
+    }
+
+    #pp-pricing-widget .pp-subtitle {
+      font-size: 16px;
+    }
+
+    #pp-pricing-widget .pp-card-title {
+      font-size: 21px;
+    }
+
+    #pp-pricing-widget .pp-trust-strip {
+      align-items: flex-start;
+      flex-direction: column;
+      padding: 20px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-pricing-widget .pp-pricing-card,
+    #pp-pricing-widget .pp-quote-btn {
+      transition: none;
+    }
+  }
+</style>
+
+<section id="pp-pricing-widget" aria-labelledby="pp-pricing-heading">
+  <div class="pp-container-inner">
+    <div class="pp-center">
+      <div class="pp-eyebrow">Flexible Pet Waste Removal</div>
+      <h2 id="pp-pricing-heading" class="pp-h2">Choose the Service That Fits Your Yard</h2>
+      <p class="pp-subtitle">Keep your yard consistently clean with recurring service, or request a single cleanup when you need one. No contracts for recurring service.</p>
+    </div>
+
+    <div class="pp-pricing-grid">
+      <article class="pp-pricing-card pp-card-popular">
+        <div class="pp-badge-popular">Most Popular</div>
+
+        <h3 class="pp-card-title">
+          <span class="pp-title-icon" aria-hidden="true">&#8635;</span>
+          <span>Recurring Service</span>
+        </h3>
+        <p class="pp-card-desc">Routine service for pet parents who want a reliably clean yard without giving up their free time.</p>
+
+        <ul class="pp-features">
+          <li><span class="pp-check" aria-hidden="true">&#10003;</span><span><strong>Schedules:</strong> twice weekly, weekly, or every other week</span></li>
+          <li><span class="pp-check" aria-hidden="true">&#10003;</span><span><strong>Security:</strong> gate-closure photo after every visit</span></li>
+          <li><span class="pp-check" aria-hidden="true">&#10003;</span><span><strong>Hygiene:</strong> tools and footwear sanitized between yards</span></li>
+        </ul>
+
+        <div class="pp-pricing-details">
+          <div class="pp-price-line"><strong>Separate initial-cleanup fee:</strong> <span class="pp-waived">Waived ($0)</span></div>
+          <div class="pp-price-line small">A $39.99+ value: the standard initial-cleanup fee is $39.99 for the first 30 minutes, then $1 per additional minute.</div>
+
+          <div class="pp-eligibility"><strong>New recurring customers only.</strong> Your regular per-visit rate still applies on visit #1. This waiver does not apply to one-time cleanups. Actual savings depend on cleanup time.</div>
+
+          <div class="pp-price-line"><strong>Recurring pricing:</strong> starts at $15.99 per visit</div>
+          <div class="pp-price-line small">Pay per visit, never monthly. Nothing is charged today.</div>
+        </div>
+
+        <div class="pp-btn-wrapper">
+          <a href="#quote" class="pp-quote-btn">See My Recurring Price</a>
+        </div>
+      </article>
+
+      <article class="pp-pricing-card pp-card-standard">
+        <h3 class="pp-card-title">
+          <span class="pp-title-icon" aria-hidden="true">&#10022;</span>
+          <span>One-Time Cleanup</span>
+        </h3>
+        <p class="pp-card-desc">A single thorough cleanup for seasonal yard care, an upcoming event, moving, or any time you need a fresh start.</p>
+
+        <ul class="pp-features">
+          <li><span class="pp-check" aria-hidden="true">&#10003;</span><span><strong>Schedule:</strong> one service visit with no recurring commitment</span></li>
+          <li><span class="pp-check" aria-hidden="true">&#10003;</span><span><strong>Security:</strong> gate-closure photo after service</span></li>
+          <li><span class="pp-check" aria-hidden="true">&#10003;</span><span><strong>Included:</strong> collected pet waste hauled away</span></li>
+        </ul>
+
+        <div class="pp-pricing-details">
+          <div class="pp-price-line"><strong>Base rate:</strong> <span class="pp-one-time-price">$89.99</span></div>
+          <div class="pp-price-line small">Includes the first 30 minutes of cleanup time.</div>
+          <div class="pp-price-line"><strong>Additional time:</strong> $1 per minute after the first 30 minutes</div>
+          <div class="pp-price-line small">The $89.99 base-rate deposit is due when scheduling. Waste haul-away is included.</div>
+        </div>
+
+        <div class="pp-btn-wrapper">
+          <a href="#quote" class="pp-quote-btn">Price a One-Time Cleanup</a>
+        </div>
+      </article>
+    </div>
+
+    <div class="pp-trust-strip" aria-label="Service highlights">
+      <div class="pp-trust-item"><span class="pp-trust-icon" aria-hidden="true">&#9733;</span><span>5-Star Rated on Google</span></div>
+      <div class="pp-trust-item"><span class="pp-trust-icon" aria-hidden="true">&#10003;</span><span>No Recurring-Service Contracts</span></div>
+      <div class="pp-trust-item"><span class="pp-trust-icon" aria-hidden="true">&#9993;</span><span>Heads-Up Text Before Every Visit</span></div>
+      <div class="pp-trust-item"><span class="pp-trust-icon" aria-hidden="true">&#9635;</span><span>Gate Photo After Every Visit</span></div>
+    </div>
+  </div>
+</section>

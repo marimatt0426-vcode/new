@@ -1,0 +1,9 @@
+{
+  "name": "purge-pros-quote-widget",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build-dist.js",
+    "check": "node --check widget/purge-quote.js && node --check worker/worker.js && node --check tools/build-dist.js",
+    "test": "node --test tests/*.test.mjs"
+  }
+}

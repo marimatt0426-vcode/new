@@ -1,0 +1,402 @@
+<style>
+  /* Scoped to #pp-hero-widget so nothing leaks into the surrounding GHL page. */
+  #pp-hero-widget,
+  #pp-hero-widget * {
+    box-sizing: border-box;
+  }
+
+  #pp-hero-widget {
+    position: relative;
+    z-index: 0;
+    display: flex !important;
+    align-items: center;
+    width: 100%;
+    min-height: 650px;
+    margin: 0 auto !important;
+    padding: 76px 24px 70px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    isolation: isolate;
+  }
+
+  /* This shades the existing GHL section background without needing its image URL. */
+  #pp-hero-widget::before {
+    position: absolute;
+    z-index: -2;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(2, 18, 28, 0.92) 0%,
+        rgba(2, 18, 28, 0.82) 34%,
+        rgba(2, 18, 28, 0.46) 58%,
+        rgba(2, 18, 28, 0.18) 100%
+      );
+    content: "";
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  #pp-hero-widget::after {
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 110px;
+    background: linear-gradient(to top, rgba(2, 18, 28, 0.34), transparent);
+    content: "";
+    pointer-events: none;
+  }
+
+  #pp-hero-widget .pp-hero-inner {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  #pp-hero-widget .pp-hero-content {
+    width: min(680px, 100%);
+  }
+
+  #pp-hero-widget .pp-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 22px;
+    padding: 8px 13px;
+    border: 1px solid rgba(157, 222, 255, 0.36);
+    border-radius: 999px;
+    background: rgba(6, 40, 58, 0.62);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 850;
+    letter-spacing: 0.025em;
+    line-height: 1.3;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  #pp-hero-widget .pp-location-pin {
+    position: relative;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    flex: 0 0 14px;
+    border: 3px solid #38b6ff;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+  }
+
+  #pp-hero-widget .pp-location-pin::after {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #fff;
+    content: "";
+  }
+
+  #pp-hero-widget .pp-hero-title {
+    max-width: 670px;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(45px, 5.1vw, 68px);
+    font-weight: 950;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.38);
+    text-transform: uppercase;
+  }
+
+  #pp-hero-widget .pp-hero-title-accent {
+    display: block;
+    margin-top: 8px;
+    color: #38b6ff;
+  }
+
+  #pp-hero-widget .pp-hero-subtitle {
+    max-width: 620px;
+    margin: 25px 0 0;
+    color: #e5f1f6;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.38);
+  }
+
+  #pp-hero-widget .pp-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin: 22px 0 0;
+  }
+
+  #pp-hero-widget .pp-benefit {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    background: rgba(4, 30, 44, 0.58);
+    color: #eef8fc;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.25;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+  }
+
+  #pp-hero-widget .pp-benefit-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+    border-radius: 50%;
+    background: #38b6ff;
+    color: #052538;
+    font-size: 10px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-hero-widget .pp-action-area {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 29px;
+  }
+
+  #pp-hero-widget .pp-action-primary {
+    width: min(410px, 100%);
+  }
+
+  #pp-hero-widget .pp-quote-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 60px;
+    padding: 16px 24px;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #38b6ff, #0877b9);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3), 0 0 24px rgba(56, 182, 255, 0.22);
+    color: #fff !important;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 950;
+    letter-spacing: 0.045em;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-hero-widget .pp-quote-button:hover,
+  #pp-hero-widget .pp-quote-button:focus-visible {
+    background: #fff;
+    box-shadow: 0 15px 34px rgba(0, 0, 0, 0.34), 0 0 30px rgba(56, 182, 255, 0.27);
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  #pp-hero-widget .pp-arrow {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  #pp-hero-widget .pp-action-note {
+    margin: 9px 0 0;
+    color: #cee0e9;
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  #pp-hero-widget .pp-review-area {
+    position: relative;
+    min-width: 220px;
+    min-height: 76px;
+  }
+
+  /* Keeps the externally loaded Trustindex badge visually anchored to the hero. */
+  #pp-hero-widget .pp-review-area > * {
+    max-width: 100%;
+  }
+
+  #pp-hero-widget .pp-mobile-proof {
+    display: none;
+    margin-top: 18px;
+    color: #dcedf5;
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    #pp-hero-widget {
+      min-height: 620px;
+      padding: 68px 20px 61px;
+    }
+
+    #pp-hero-widget::before {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(2, 18, 28, 0.92) 0%,
+          rgba(2, 18, 28, 0.77) 54%,
+          rgba(2, 18, 28, 0.43) 100%
+        );
+    }
+
+    #pp-hero-widget .pp-hero-content {
+      width: min(625px, 100%);
+    }
+
+    #pp-hero-widget .pp-action-area {
+      flex-direction: column;
+    }
+
+    #pp-hero-widget .pp-review-area {
+      width: min(300px, 100%);
+    }
+  }
+
+  @media (max-width: 620px) {
+    #pp-hero-widget {
+      align-items: flex-end;
+      min-height: 690px;
+      padding: 76px 17px 45px;
+    }
+
+    #pp-hero-widget::before {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(2, 18, 28, 0.26) 0%,
+          rgba(2, 18, 28, 0.64) 32%,
+          rgba(2, 18, 28, 0.96) 72%,
+          rgba(2, 18, 28, 0.98) 100%
+        );
+    }
+
+    #pp-hero-widget .pp-hero-content {
+      width: 100%;
+      text-align: center;
+    }
+
+    #pp-hero-widget .pp-location {
+      margin-bottom: 17px;
+      font-size: 11px;
+    }
+
+    #pp-hero-widget .pp-hero-title {
+      font-size: clamp(38px, 11.6vw, 52px);
+      line-height: 1;
+    }
+
+    #pp-hero-widget .pp-hero-subtitle {
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    #pp-hero-widget .pp-benefits {
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    #pp-hero-widget .pp-action-area {
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    #pp-hero-widget .pp-action-primary {
+      width: 100%;
+    }
+
+    #pp-hero-widget .pp-quote-button {
+      min-height: 57px;
+      padding: 15px 17px;
+      font-size: 14px;
+    }
+
+    #pp-hero-widget .pp-review-area {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 390px) {
+    #pp-hero-widget .pp-benefit {
+      padding: 6px 9px;
+      font-size: 10px;
+    }
+
+    #pp-hero-widget .pp-quote-button {
+      letter-spacing: 0.025em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-hero-widget .pp-quote-button {
+      transition: none;
+    }
+  }
+</style>
+
+<section id="pp-hero-widget" aria-labelledby="pp-hero-heading">
+  <div class="pp-hero-inner">
+    <div class="pp-hero-content">
+      <div class="pp-location">
+        <span class="pp-location-pin" aria-hidden="true"></span>
+        <span>Serving Indianapolis &amp; Surrounding Communities</span>
+      </div>
+
+      <h1 id="pp-hero-heading" class="pp-hero-title">
+        Stop Scooping.
+        <span class="pp-hero-title-accent">Start Enjoying Your Yard.</span>
+      </h1>
+
+      <p class="pp-hero-subtitle">Dependable pet waste removal with clear service notifications, careful gate handling, and sanitized equipment practices&#8212;so a cleaner yard takes less work from you.</p>
+
+      <div class="pp-benefits" aria-label="Service highlights">
+        <span class="pp-benefit"><span class="pp-benefit-check" aria-hidden="true">&#10003;</span> Pay Per Visit</span>
+        <span class="pp-benefit"><span class="pp-benefit-check" aria-hidden="true">&#10003;</span> No Long-Term Contracts</span>
+        <span class="pp-benefit"><span class="pp-benefit-check" aria-hidden="true">&#10003;</span> Waste Hauled Away</span>
+      </div>
+
+      <div class="pp-action-area">
+        <div class="pp-action-primary">
+          <a href="#quote" class="pp-quote-button">
+            <span>See My Exact Per-Visit Price</span>
+            <span class="pp-arrow" aria-hidden="true">&#8594;</span>
+          </a>
+          <p class="pp-action-note">Takes about 60 seconds &bull; No payment today</p>
+        </div>
+
+        <div class="pp-review-area" aria-label="Purge Pros Google reviews">
+          <script async defer src="https://cdn.trustindex.io/loader.js?3d926517438f19989b962e763cb"></script>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

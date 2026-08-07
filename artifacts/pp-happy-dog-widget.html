@@ -1,0 +1,398 @@
+<style>
+  /* Scoped to #pp-happy-dog so nothing leaks into the surrounding GHL page. */
+  #pp-happy-dog,
+  #pp-happy-dog * {
+    box-sizing: border-box;
+  }
+
+  #pp-happy-dog {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 66px 20px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-happy-dog .pp-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto !important;
+  }
+
+  #pp-happy-dog .pp-layout {
+    display: flex !important;
+    flex-flow: row nowrap !important;
+    align-items: center;
+    gap: 67px;
+  }
+
+  #pp-happy-dog .pp-content-column {
+    flex: 1 1 56%;
+    min-width: 0;
+  }
+
+  #pp-happy-dog .pp-image-column {
+    flex: 1 1 44%;
+    min-width: 0;
+  }
+
+  #pp-happy-dog .pp-eyebrow {
+    margin-bottom: 8px;
+    color: #0877b9;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  #pp-happy-dog .pp-title {
+    margin: 0;
+    color: #073652;
+    font-size: 38px;
+    font-weight: 950;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  #pp-happy-dog .pp-intro {
+    margin: 18px 0 23px;
+    color: #526c7a;
+    font-size: 17px;
+    line-height: 1.62;
+  }
+
+  #pp-happy-dog .pp-intro strong {
+    color: #17394b;
+  }
+
+  #pp-happy-dog .pp-feature-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 11px;
+    margin: 0;
+  }
+
+  #pp-happy-dog .pp-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 14px 15px;
+    border: 1px solid #dceaf1;
+    border-radius: 13px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(5, 52, 80, 0.045);
+  }
+
+  #pp-happy-dog .pp-feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
+    border-radius: 11px;
+    background: #e8f6fe;
+    color: #0877b9;
+  }
+
+  #pp-happy-dog .pp-feature-icon svg {
+    display: block;
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.9;
+  }
+
+  #pp-happy-dog .pp-feature-copy {
+    min-width: 0;
+  }
+
+  #pp-happy-dog .pp-feature-title {
+    display: block;
+    color: #17394b;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.3;
+  }
+
+  #pp-happy-dog .pp-feature-detail {
+    display: block;
+    margin-top: 3px;
+    color: #718692;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  #pp-happy-dog .pp-safety-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin-top: 17px;
+    padding: 13px 15px;
+    border-left: 4px solid #38b6ff;
+    border-radius: 9px;
+    background: #eef9ff;
+    color: #31586b;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  #pp-happy-dog .pp-note-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: #0877b9;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  #pp-happy-dog .pp-image-card {
+    position: relative;
+    width: 100%;
+    max-width: 465px;
+    margin: 0 auto;
+    padding: 14px;
+    border: 1px solid #d6e8f1;
+    border-radius: 26px;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(56, 182, 255, 0.13), transparent 58%),
+      #fff;
+    box-shadow: 0 22px 52px rgba(5, 52, 80, 0.14);
+  }
+
+  #pp-happy-dog .pp-image-frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    border-radius: 18px;
+    background: #fff;
+  }
+
+  #pp-happy-dog .pp-mascot-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  #pp-happy-dog .pp-treat-badge {
+    position: absolute;
+    top: 27px;
+    left: -18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border: 3px solid #fff;
+    border-radius: 999px;
+    background: #117b3b;
+    box-shadow: 0 8px 20px rgba(17, 123, 59, 0.25);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.07em;
+    line-height: 1.25;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  #pp-happy-dog .pp-treat-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  #pp-happy-dog .pp-image-caption {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 11px 5px 0;
+    color: #526c7a;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  #pp-happy-dog .pp-caption-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    margin-top: 4px;
+    border-radius: 50%;
+    background: #38b6ff;
+  }
+
+  @media (max-width: 900px) {
+    #pp-happy-dog {
+      padding: 49px 15px;
+    }
+
+    #pp-happy-dog .pp-layout {
+      flex-direction: column !important;
+      gap: 43px;
+    }
+
+    #pp-happy-dog .pp-content-column,
+    #pp-happy-dog .pp-image-column {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    #pp-happy-dog .pp-content-column {
+      max-width: 690px;
+      margin: 0 auto;
+    }
+
+    #pp-happy-dog .pp-eyebrow,
+    #pp-happy-dog .pp-title,
+    #pp-happy-dog .pp-intro {
+      text-align: center;
+    }
+
+    #pp-happy-dog .pp-image-column {
+      order: -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    #pp-happy-dog .pp-image-card {
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 21px;
+    }
+
+    #pp-happy-dog .pp-image-frame {
+      border-radius: 14px;
+    }
+
+    #pp-happy-dog .pp-treat-badge {
+      top: 17px;
+      left: 17px;
+      padding: 8px 11px;
+      font-size: 9px;
+    }
+
+    #pp-happy-dog .pp-title {
+      font-size: 29px;
+    }
+
+    #pp-happy-dog .pp-intro {
+      font-size: 16px;
+    }
+
+    #pp-happy-dog .pp-feature-item {
+      padding: 13px;
+    }
+  }
+</style>
+
+<section id="pp-happy-dog" aria-labelledby="pp-happy-dog-heading">
+  <div class="pp-container">
+    <div class="pp-layout">
+      <div class="pp-content-column">
+        <div class="pp-eyebrow">Thoughtful, Pet-Aware Service</div>
+        <h2 id="pp-happy-dog-heading" class="pp-title">The Happy Dog Bonus</h2>
+        <p class="pp-intro">A new person entering the yard can feel unfamiliar to a dog. With your permission, our team can use treats and saved pet instructions to help make recurring visits feel more positive and predictable.</p>
+
+        <div class="pp-feature-list">
+          <div class="pp-feature-item">
+            <span class="pp-feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M5 12.5 9 16l10-10"></path>
+                <circle cx="12" cy="12" r="9"></circle>
+              </svg>
+            </span>
+            <span class="pp-feature-copy">
+              <strong class="pp-feature-title">Treats Only With Your Approval</strong>
+              <span class="pp-feature-detail">You decide whether treats are welcome, restricted, or completely off limits.</span>
+            </span>
+          </div>
+
+          <div class="pp-feature-item">
+            <span class="pp-feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 3h9l3 3v15H6V3Z"></path>
+                <path d="M14 3v4h4M9 11h6M9 15h6"></path>
+              </svg>
+            </span>
+            <span class="pp-feature-copy">
+              <strong class="pp-feature-title">Pet Preferences Saved</strong>
+              <span class="pp-feature-detail">Tell us about names, routines, dietary restrictions, allergies, and handling instructions.</span>
+            </span>
+          </div>
+
+          <div class="pp-feature-item">
+            <span class="pp-feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 3 5 6v5c0 4.8 2.9 8.4 7 10 4.1-1.6 7-5.2 7-10V6l-7-3Z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </span>
+            <span class="pp-feature-copy">
+              <strong class="pp-feature-title">Calmer, More Predictable Visits</strong>
+              <span class="pp-feature-detail">Familiar routines can help reduce surprises and unnecessary stress during recurring service.</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="pp-safety-note">
+          <span class="pp-note-mark" aria-hidden="true">!</span>
+          <span>Treats are optional and are never a substitute for following your pet-safety and access instructions. Please tell us about any allergies, dietary restrictions, or no-treat preferences.</span>
+        </div>
+      </div>
+
+      <div class="pp-image-column">
+        <div class="pp-image-card">
+          <div class="pp-image-frame">
+            <img
+              src="https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6a011fe1a3dd25aa2a0ff39a.jpg"
+              alt="Purge Pros Happy Dog mascot with a container of dog treats"
+              class="pp-mascot-image"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+
+          <div class="pp-treat-badge">
+            <span class="pp-treat-check" aria-hidden="true">&#10003;</span>
+            <span>Owner-Approved Treats</span>
+          </div>
+
+          <div class="pp-image-caption">
+            <span class="pp-caption-dot" aria-hidden="true"></span>
+            <span>A small extra designed to support positive, familiar recurring visits.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
