@@ -164,22 +164,21 @@
     .field small { display: block; margin-top: 6px; color: #758b98; font-size: 11px; line-height: 1.4; }
     .zip-wrap { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
     .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
-    .choice { position: relative; min-height: 76px; padding: 14px 42px 13px 14px; border: 1px solid #cfdee6; border-radius: 15px; background: #fff; color: #17384b; text-align: left; cursor: pointer; transition: border .16s, background .16s, transform .16s, box-shadow .16s; }
+    .choice { position: relative; min-height: 76px; padding: 14px 96px 13px 14px; border: 1px solid #cfdee6; border-radius: 15px; background: #fff; color: #17384b; text-align: left; cursor: pointer; transition: border .16s, background .16s, transform .16s, box-shadow .16s; }
     .choice:hover:not(:disabled) { transform: translateY(-1px); border-color: #8ccce9; box-shadow: 0 8px 24px rgba(8,76,112,.08); }
-    .choice[aria-pressed="true"] { border-color: #1aa9ec; background: #eaf8ff; box-shadow: inset 0 0 0 1px #38b6ff; }
+    .choice[aria-pressed="true"] { border: 2px solid #087fb9; background: linear-gradient(135deg, #e7f7ff, #f8fdff); box-shadow: 0 0 0 3px rgba(56,182,255,.16), 0 10px 24px rgba(8,119,174,.12); }
+    .choice[aria-pressed="true"]:hover:not(:disabled) { border-color: #087fb9; box-shadow: 0 0 0 3px rgba(56,182,255,.2), 0 12px 28px rgba(8,119,174,.16); }
     .choice:disabled { border-style: dashed; border-color: #cdd9df; background: #f2f6f8; color: #82949e; cursor: not-allowed; box-shadow: none; }
     .choice:disabled small { color: #82949e; }
     .choice:disabled .choice-check { border-color: #c7d3d9; background: #e7eef1; color: #82949e; }
-    .popular-choice:not(:disabled) { border: 2px solid #1aa9ec; background: linear-gradient(135deg, #e9f8ff, #f9fdff); box-shadow: 0 9px 24px rgba(8, 119, 174, .12); }
-    .popular-choice:not(:disabled):hover { border-color: #0788c3; box-shadow: 0 11px 28px rgba(8, 119, 174, .18); }
     .custom-choice { grid-column: 1 / -1; min-height: 64px; }
     .custom-choice:not([aria-pressed="true"]) { border-style: dashed; border-color: #cbd7dd; background: #f7f9fa; color: #536b78; box-shadow: none; }
     .choice strong, .choice small { display: block; }
     .choice strong { font-size: 14px; }
     .choice small { margin-top: 5px; color: #718692; font-size: 11px; line-height: 1.35; }
-    .choice-check { position: absolute; top: 14px; right: 13px; width: 23px; height: 23px; display: grid; place-items: center; border: 2px solid #b7ceda; border-radius: 50%; color: transparent; background: #fff; font-weight: 950; }
-    .choice[aria-pressed="true"] .choice-check { border-color: #168fc7; background: #38b6ff; color: #05324b; }
-    .popular { display: inline-block; margin-bottom: 7px; padding: 4px 7px; border-radius: 999px; background: #0875ab; color: #fff; font-size: 9px; font-weight: 950; letter-spacing: .08em; }
+    .choice-check { position: absolute; top: 12px; right: 12px; width: 24px; min-width: 24px; height: 24px; display: grid; place-items: center; padding: 0; border: 2px solid #b7ceda; border-radius: 50%; color: transparent; background: #fff; font-size: 10px; font-weight: 950; line-height: 1; white-space: nowrap; }
+    .choice[aria-pressed="true"] .choice-check { width: auto; padding: 0 8px; border-color: #0873a8; border-radius: 999px; background: #087fb9; color: #fff; box-shadow: 0 4px 10px rgba(8,99,146,.22); font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }
+    .popular { display: inline-flex; align-items: center; margin-bottom: 7px; padding: 4px 8px; border: 1px solid #edc54a; border-radius: 999px; background: #fff3bd; color: #624800; font-size: 9px; font-weight: 950; letter-spacing: .07em; }
     .price-preview { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 20px; padding: 14px 16px; border-radius: 14px; background: #073652; color: #d8f2ff; }
     .price-preview span { font-size: 12px; font-weight: 800; }
     .price-preview strong { color: #8bdcff; font-size: 17px; }
@@ -588,12 +587,13 @@
   function frequencyChoice(id, definition) {
     const active = state.frequency === id;
     const eligibility = frequencyEligibility(id, definition);
-    return `<button class="choice${definition.popular ? " popular-choice" : ""}${definition.custom ? " custom-choice" : ""}" type="button" data-frequency="${id}" aria-pressed="${active}"${eligibility.allowed ? "" : ' disabled aria-disabled="true"'}><span class="choice-check" aria-hidden="true">${eligibility.allowed ? "✓" : "×"}</span>${definition.popular ? '<span class="popular">MOST POPULAR</span>' : ""}<strong>${escapeHtml(definition.label)}</strong><small>${escapeHtml(eligibility.note)}</small></button>`;
+    const selectionStatus = eligibility.allowed ? (active ? "✓ Selected" : "") : "×";
+    return `<button class="choice${definition.custom ? " custom-choice" : ""}" type="button" data-frequency="${id}" aria-pressed="${active}"${eligibility.allowed ? "" : ' disabled aria-disabled="true"'}><span class="choice-check" aria-hidden="true">${selectionStatus}</span>${definition.popular ? '<span class="popular">★ MOST POPULAR</span>' : ""}<strong>${escapeHtml(definition.label)}</strong><small>${escapeHtml(eligibility.note)}</small></button>`;
   }
 
   function areaChoice(id, label) {
     const active = state.areas.indexOf(id) >= 0;
-    return `<button class="choice" type="button" data-area="${id}" aria-pressed="${active}"><span class="choice-check" aria-hidden="true">✓</span><strong>${escapeHtml(label)}</strong><small>${active ? "Included in your plan" : "Select this area"}</small></button>`;
+    return `<button class="choice" type="button" data-area="${id}" aria-pressed="${active}"><span class="choice-check" aria-hidden="true">${active ? "✓ Selected" : ""}</span><strong>${escapeHtml(label)}</strong><small>${active ? "Included in your plan" : "Select this area"}</small></button>`;
   }
 
   function renderPlan() {
@@ -604,7 +604,7 @@
       <div class="field-row"><div class="field"><label for="pp-dogs">How many dogs use the yard?</label><select class="select" id="pp-dogs" data-field="dogCount"><option value="">Choose dogs</option>${Array.from({ length: 9 }, function (_, index) { const dog = index + 1; return `<option value="${dog}"${selected(String(dog) === String(state.dogCount))}>${dog} ${dog === 1 ? "dog" : "dogs"}</option>`; }).join("")}<option value="10"${selected(String(state.dogCount) === "10")}>10+ dogs · custom</option></select></div>
       <div class="field"><label for="pp-yard">Total lawn area we will service</label><select class="select" id="pp-yard" data-field="yardSize"><option value="">Choose yard size</option>${Object.keys(CONFIG.yardSizes).map(function (id) { const yard = CONFIG.yardSizes[id]; return `<option value="${id}"${selected(state.yardSize === id)}>${escapeHtml(yard.label)}${yard.custom ? " · custom" : ""}</option>`; }).join("")}</select><small>Use serviced lawn area, not the full parcel size.</small></div></div>
       <div class="field"><span class="field-label">How often should we scoop?</span><div class="choice-grid">${Object.keys(CONFIG.frequencies).map(function (id) { return frequencyChoice(id, CONFIG.frequencies[id]); }).join("")}</div></div>
-      <div class="field"><span class="field-label">Which areas should we cover?</span><div class="choice-grid">${Object.keys(CONFIG.areaLabels).map(function (id) { return areaChoice(id, CONFIG.areaLabels[id]); }).join("")}<button class="choice" type="button" data-area="all" aria-pressed="${state.areas.length === 3}"><span class="choice-check" aria-hidden="true">✓</span><strong>Yard+ · all areas</strong><small>Back, front and side yard(s)</small></button></div></div>
+      <div class="field"><span class="field-label">Which areas should we cover?</span><div class="choice-grid">${Object.keys(CONFIG.areaLabels).map(function (id) { return areaChoice(id, CONFIG.areaLabels[id]); }).join("")}<button class="choice" type="button" data-area="all" aria-pressed="${state.areas.length === 3}"><span class="choice-check" aria-hidden="true">${state.areas.length === 3 ? "✓ Selected" : ""}</span><strong>Yard+ · all areas</strong><small>Back, front and side yard(s)</small></button></div></div>
       <div class="field"><label for="pp-last-cleaned">When was the last full cleanup?</label><select class="select" id="pp-last-cleaned" data-field="lastCleaned"><option value="">Choose an answer</option>${["Within 1 week", "2–3 weeks", "About 1 month", "2–4 months", "5–6 months", "More than 6 months"].map(function (value) { return `<option value="${escapeHtml(value)}"${selected(state.lastCleaned === value)}>${escapeHtml(value)}</option>`; }).join("")}</select><small>This helps us plan the first visit. It does not change the recurring maintenance quote.</small></div>
       <div class="price-preview" aria-live="polite"><span>Your estimate</span><strong>${escapeHtml(preview)}</strong></div><div class="error" role="alert" tabindex="-1"></div><div class="actions"><button class="btn link" type="button" data-action="back">← Back</button><button class="btn primary" type="button" data-action="show-price">See my price →</button></div>`;
   }

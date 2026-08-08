@@ -19,9 +19,11 @@ test("recurring offer uses the defensible minimum value and explains the calcula
   assert.doesNotMatch(source, /\$99/);
 });
 
-test("features Weekly while keeping Custom Booking visually secondary", () => {
-  assert.match(source, /popular-choice/);
-  assert.match(source, /MOST POPULAR/);
+test("separates the Weekly recommendation from the customer's selected state", () => {
+  assert.doesNotMatch(source, /popular-choice/);
+  assert.match(source, /★ MOST POPULAR/);
+  assert.match(source, /✓ Selected/);
+  assert.match(source, /choice\[aria-pressed="true"\] \.choice-check/);
   assert.match(source, /custom-choice:not\(\[aria-pressed="true"\]\)/);
 });
 
