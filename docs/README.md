@@ -9,6 +9,7 @@ This directory is the durable reference for the production quote widget, website
 - [Cloudflare launch guide](CLOUDFLARE-LAUNCH-GUIDE.md)
 - [Email deliverability](email-deliverability.md)
 - [Owner reset plan](OWNER-RESET-PLAN.md)
+- [New-customer onboarding and `/welcome` page guide](onboarding/CUSTOMER-ONBOARDING-GHL-GUIDE.md)
 
 ## Analytics and paid acquisition
 

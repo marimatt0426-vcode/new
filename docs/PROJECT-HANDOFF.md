@@ -15,6 +15,7 @@
 - Cloudflare validates and recalculates the request before forwarding it to GoHighLevel.
 - Route-day approval remains manual.
 - Housecall Pro is used after route approval for customer/job setup and the secure card request.
+- The customer welcome package in `onboarding/` explains the post-approval process without exposing a secure card link or promising a fixed arrival time.
 - No database, Netlify app, payment form, automatic route optimizer, or local owner-side build process is required.
 
 ## Current customer journey
@@ -69,6 +70,15 @@ No service conversion fires on widget open, ZIP check, price display, contact en
 - The default factual minimum is `$39.99+`; a time-based example must be labeled as an example rather than a guaranteed savings amount.
 - Cloudflare `PROMO_*` variables can change or disable the campaign without redesigning the widget.
 
+## Post-approval customer onboarding
+
+- After manual route approval, send the short confirmation template and link the customer to `https://itspurgepros.com/welcome`.
+- The route day is consistent, but it is not a fixed appointment time.
+- The en-route message is a heads-up sent when the technician is generally 10–45 minutes away; never promise an exact ETA.
+- Billing is per visit, and the card on file is charged when the en-route text is sent.
+- The Housecall Pro secure card request and portal invitation are delivered separately.
+- The source page is `onboarding/pp-new-customer-welcome-widget.html`; the operating guide is `docs/onboarding/CUSTOMER-ONBOARDING-GHL-GUIDE.md`.
+
 ## Authoritative files
 
 | File | Purpose |
@@ -80,6 +90,8 @@ No service conversion fires on widget open, ZIP check, price display, contact en
 | `docs/OWNER-DASHBOARD-LAUNCH-GUIDE.md` | Detailed operational implementation guide |
 | `docs/ads-tracking-setup.md` | Exact analytics contract and identifiers |
 | `docs/facebook-ads/META-ADS-LAUNCH-GUIDE.md` | Current Meta launch structure, budget, and evaluation rules |
+| `onboarding/pp-new-customer-welcome-widget.html` | Complete GHL custom-code page for approved new customers |
+| `docs/onboarding/CUSTOMER-ONBOARDING-GHL-GUIDE.md` | Confirmation messages, phone script, page installation, and simple GHL/HCP handoff |
 
 ## Security boundaries
 

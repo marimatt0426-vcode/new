@@ -11,6 +11,8 @@ This repository contains the tested Purge Pros v3 quote/service-request widget a
 - Verified GHL email-domain and deliverability guide: `docs/email-deliverability.md`
 - Meta/Facebook launch guide: `docs/facebook-ads/META-ADS-LAUNCH-GUIDE.md`
 - SEO audit and roadmap: `docs/audits/SEO-AUDIT-2026-08-09.md`
+- New-customer welcome page: `onboarding/pp-new-customer-welcome-widget.html`
+- Post-approval onboarding guide and message templates: `docs/onboarding/CUSTOMER-ONBOARDING-GHL-GUIDE.md`
 
 The owner does not run PowerShell, a terminal, NPM, Node, Wrangler, migrations, or a local build. The generated copy/paste file is installed unchanged through the Cloudflare dashboard.
 
