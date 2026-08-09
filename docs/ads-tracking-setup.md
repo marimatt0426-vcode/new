@@ -1,6 +1,6 @@
 # Purge Pros v3 conversion tracking contract
 
-**Updated:** August 6, 2026
+**Updated:** August 9, 2026
 
 This file is the focused analytics companion to `OWNER-DASHBOARD-LAUNCH-GUIDE.md`.
 
@@ -27,6 +27,28 @@ Only after Cloudflare validates the form and HighLevel accepts it:
 | `question_submitted` | No | No | No | No |
 
 No conversion fires on widget open, ZIP check, price view, contact entry, SMS checkbox, a failed submission, or `/submit-true`.
+
+## Meta ad destination and URL parameters
+
+For an ad that should open the quote tool immediately, use these two separate Meta ad fields:
+
+**Website URL**
+
+```text
+https://itspurgepros.com/?open_quote=1
+```
+
+**URL parameters**
+
+```text
+utm_source={{site_source_name}}&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}&utm_term={{adset.name}}
+```
+
+In Ads Manager, the Website URL is under the ad's **Destination** section. The URL-parameter field is normally under **Tracking** or **Build a URL parameter** in that same ad. Paste only the parameter string into that field; do not add another `?` and do not paste the Website URL a second time.
+
+Meta replaces the brace values when someone clicks. The widget stores the resulting platform, campaign, ad, and ad-set names in session storage and sends them with an accepted request. These labels do not alter the customer-facing quote or count as conversions.
+
+The `open_quote=1` instruction opens the responsive quote tool after the branded website loads. The widget then removes only that instruction from the visible address while retaining the UTM values. Do not use the `workers.dev` preview as the ad destination; production CAPI intentionally ignores preview-origin submissions unless a Meta test-event code is present.
 
 ## Deduplication
 

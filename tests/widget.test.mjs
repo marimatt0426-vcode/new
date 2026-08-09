@@ -66,6 +66,20 @@ test("keeps existing GHL website trigger contract", () => {
   assert.match(source, /window\.PurgeProsQuote/);
 });
 
+test("auto-opens from an ad landing URL without discarding attribution", () => {
+  assert.match(source, /consumeAutoOpenRequest/);
+  assert.match(source, /searchParams\.get\("open_quote"\)/);
+  assert.match(source, /queryValue === "1"/);
+  assert.match(source, /hashValue === "#quote"/);
+  assert.match(source, /url\.searchParams\.delete\("open_quote"\)/);
+  assert.match(source, /history\.replaceState/);
+  assert.match(source, /utm_source/);
+  assert.match(source, /utm_campaign/);
+  assert.match(source, /utm_content/);
+  assert.match(source, /utm_term/);
+  assert.match(source, /queueMicrotask\(open\)/);
+});
+
 test("uses one unchecked service-text permission and no marketing checkbox", () => {
   assert.match(source, /preferredContact: "text"/);
   assert.match(source, /smsConsent: false/);

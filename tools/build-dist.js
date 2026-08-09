@@ -135,7 +135,7 @@ const relayCore = relay
     /export default \{\s*async fetch\(request, env, ctx\) \{/,
     "async function handleLeadSubmission(request, env, ctx) {"
   )
-  .replace(/\n  \}\n\};\s*$/, "\n}\n");
+  .replace(/\r?\n  \}\r?\n\};\s*$/, "\n}\n");
 
 if (!relayCore.includes("async function handleLeadSubmission")) {
   throw new Error("Could not convert relay handler for combined Worker");

@@ -859,6 +859,24 @@ The same button works on every device:
 
 There is no separate mobile link and no second GHL popup to maintain.
 
+### Paid-ad links that open the quote automatically
+
+For Meta or another paid channel, use the branded website landing URL below instead of the Cloudflare preview:
+
+```text
+https://itspurgepros.com/?open_quote=1
+```
+
+When that page loads, the website widget opens automatically. Desktop receives the overlay and mobile receives the responsive full-screen presentation. The widget removes the one-time `open_quote` instruction after opening so closing and refreshing does not immediately reopen it.
+
+In Meta Ads Manager, keep the Website URL above in the ad's **Destination** field. Put this separate string in the ad's **URL parameters** / **Build a URL parameter** field:
+
+```text
+utm_source={{site_source_name}}&utm_medium=paid_social&utm_campaign={{campaign.name}}&utm_content={{ad.name}}&utm_term={{adset.name}}
+```
+
+Do not add a leading `?` to the URL-parameter field. Meta appends the values to the Website URL, and the widget preserves them with `fbclid`, `_fbp`, and `_fbc` for attribution. These tracking labels do not display inside the quote and do not fire a conversion.
+
 ## 13. Live operational handoff
 
 When a v3 service request reaches `Service Requested / Route Review`:

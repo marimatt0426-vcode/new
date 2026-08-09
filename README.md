@@ -4,9 +4,13 @@ This repository contains the tested Purge Pros v3 quote/service-request widget a
 
 ## Start here
 
+- Documentation index: `docs/README.md`
+- Current-state project handoff: `docs/PROJECT-HANDOFF.md`
 - Owner implementation guide: `docs/OWNER-DASHBOARD-LAUNCH-GUIDE.md`
 - Complete Cloudflare copy/paste file: `dist/COPY-PASTE-INTO-purge-lead-relay.js`
 - Verified GHL email-domain and deliverability guide: `docs/email-deliverability.md`
+- Meta/Facebook launch guide: `docs/facebook-ads/META-ADS-LAUNCH-GUIDE.md`
+- SEO audit and roadmap: `docs/audits/SEO-AUDIT-2026-08-09.md`
 
 The owner does not run PowerShell, a terminal, NPM, Node, Wrangler, migrations, or a local build. The generated copy/paste file is installed unchanged through the Cloudflare dashboard.
 
@@ -43,7 +47,7 @@ No Netlify app, React app, database, SQL migration, queue, HCP API build, automa
 
 The recurring-customer offer defaults to **Initial cleanup fee ($39.99+ value): WAIVED**. It uses the factual minimum fee and a clearly labeled 60-minute example rather than claiming that every yard is worth $99. The main offer card explicitly says the promotion is for recurring service and does not apply to one-time cleanups; the card also disappears when One-time cleanup is selected. Cloudflare `PROMO_*` dashboard variables can disable or change the campaign without rebuilding the funnel.
 
-Desktop uses a polished overlay. Mobile uses the same responsive experience full-screen. Existing site CTAs use `#quote`, `#get-quote`, or `data-purge-quote`; no separate mobile link is required.
+Desktop uses a polished overlay. Mobile uses the same responsive experience full-screen. Existing site CTAs use `#quote`, `#get-quote`, or `data-purge-quote`; no separate mobile link is required. Paid-ad and other direct landing links can use `https://itspurgepros.com/?open_quote=1` to open the quote tool automatically on the branded website. The widget consumes that one-time instruction while preserving UTM and click-ID attribution.
 
 ## Final payload stages
 

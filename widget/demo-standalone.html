@@ -31,7 +31,8 @@
  * Self-contained, dependency-free, and hosted by the existing Cloudflare Worker.
  *
  * Embed: <script src="https://YOUR-HOST/purge-quote.js" defer><\/script>
- * Open:  links to #quote / #get-quote, [data-purge-quote], or PurgeProsQuote.open().
+ * Open:  links to #quote / #get-quote, [data-purge-quote], PurgeProsQuote.open(),
+ *        or a landing URL containing ?open_quote=1.
  */
 (function () {
   "use strict";
@@ -463,6 +464,24 @@
     });
     try { sessionStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(saved)); } catch (_) {}
     return saved;
+  }
+
+  function consumeAutoOpenRequest() {
+    const url = new URL(location.href);
+    const queryValue = String(url.searchParams.get("open_quote") || "").trim().toLowerCase();
+    const queryRequested = queryValue === "1" || queryValue === "true" || queryValue === "yes";
+    const hashValue = String(url.hash || "").toLowerCase();
+    const hashRequested = hashValue === "#quote" || hashValue === "#get-quote";
+    if (!queryRequested && !hashRequested) return false;
+
+    // Attribution was captured before this runs. Remove only the one-time open
+    // instruction so closing and refreshing the page does not reopen the widget.
+    url.searchParams.delete("open_quote");
+    if (hashRequested) url.hash = "";
+    try {
+      history.replaceState(history.state, "", url.pathname + url.search + url.hash);
+    } catch (_) {}
+    return true;
   }
 
   function cookieValue(name) {
@@ -1093,6 +1112,14 @@
   document.addEventListener("keydown", function (event) { if (event.key === "Escape" && host) close(); });
 
   window.PurgeProsQuote = { open: open, close: close, config: CONFIG };
+
+  if (consumeAutoOpenRequest()) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", open, { once: true });
+    } else {
+      queueMicrotask(open);
+    }
+  }
 })();
 
 </script>
