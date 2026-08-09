@@ -293,6 +293,11 @@
   let offerPreviousFocus = null;
   let previousOverflow = "";
   let restored = false;
+  let autoOpenObserver = null;
+  let autoOpenTimeout = null;
+
+  const AUTO_OPEN_CLASS = "pp-quote-auto-opening";
+  const AUTO_OPEN_STYLE_ID = "pp-quote-auto-opening-style";
 
   function freshState() {
     return {
@@ -454,6 +459,64 @@
       history.replaceState(history.state, "", url.pathname + url.search + url.hash);
     } catch (_) {}
     return true;
+  }
+
+  function showAutoOpenFeedback() {
+    const root = document.documentElement;
+    if (!root) return;
+    if (!document.getElementById(AUTO_OPEN_STYLE_ID)) {
+      const style = document.createElement("style");
+      style.id = AUTO_OPEN_STYLE_ID;
+      style.textContent =
+        "html." + AUTO_OPEN_CLASS + "::before{" +
+          "content:'';position:fixed;inset:0;z-index:2147482990;" +
+          "background:rgba(2,20,32,.82);backdrop-filter:blur(7px)" +
+        "}" +
+        "html." + AUTO_OPEN_CLASS + "::after{" +
+          "content:'Opening your 60-second price check...';" +
+          "position:fixed;z-index:2147482991;left:50%;top:50%;" +
+          "width:min(360px,calc(100% - 40px));padding:22px 24px;" +
+          "transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.72);" +
+          "border-radius:18px;background:#fff;color:#08283a;" +
+          "box-shadow:0 24px 70px rgba(0,0,0,.3);text-align:center;" +
+          "font:900 16px/1.35 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" +
+        "}";
+      (document.head || root).appendChild(style);
+    }
+    root.classList.add(AUTO_OPEN_CLASS);
+  }
+
+  function hideAutoOpenFeedback() {
+    if (autoOpenObserver) {
+      autoOpenObserver.disconnect();
+      autoOpenObserver = null;
+    }
+    if (autoOpenTimeout) {
+      window.clearTimeout(autoOpenTimeout);
+      autoOpenTimeout = null;
+    }
+    if (document.documentElement) document.documentElement.classList.remove(AUTO_OPEN_CLASS);
+    const style = document.getElementById(AUTO_OPEN_STYLE_ID);
+    if (style) style.remove();
+  }
+
+  function openWhenBodyReady() {
+    if (document.body) {
+      queueMicrotask(open);
+      return;
+    }
+
+    // The live GHL embed is async in <head>. Give ad visitors immediate feedback
+    // and open as soon as <body> exists instead of waiting for DOMContentLoaded.
+    showAutoOpenFeedback();
+    autoOpenObserver = new MutationObserver(function () {
+      if (!document.body) return;
+      autoOpenObserver.disconnect();
+      autoOpenObserver = null;
+      queueMicrotask(open);
+    });
+    autoOpenObserver.observe(document.documentElement, { childList: true, subtree: true });
+    autoOpenTimeout = window.setTimeout(hideAutoOpenFeedback, 12000);
   }
 
   function cookieValue(name) {
@@ -1038,6 +1101,7 @@
   }
 
   function open() {
+    hideAutoOpenFeedback();
     if (host) return;
     previousFocus = document.activeElement;
     previousOverflow = document.body.style.overflow;
@@ -1086,10 +1150,6 @@
   window.PurgeProsQuote = { open: open, close: close, config: CONFIG };
 
   if (consumeAutoOpenRequest()) {
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", open, { once: true });
-    } else {
-      queueMicrotask(open);
-    }
+    openWhenBodyReady();
   }
 })();

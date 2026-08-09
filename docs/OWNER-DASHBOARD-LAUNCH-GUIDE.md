@@ -869,6 +869,10 @@ https://itspurgepros.com/?open_quote=1
 
 When that page loads, the website widget opens automatically. Desktop receives the overlay and mobile receives the responsive full-screen presentation. The widget removes the one-time `open_quote` instruction after opening so closing and refreshing does not immediately reopen it.
 
+The current build does not wait for the full GHL homepage to finish parsing. When an ad visit reaches the site before the page body is ready, the widget displays **Opening your 60-second price check...** and opens as soon as the body exists. This reduces the otherwise blank delay in Meta's in-app browser while leaving ordinary website visits and button clicks unchanged.
+
+For this ad-startup optimization, do not edit the Meta ad, destination URL, URL parameters, GHL script tag, pipeline, workflow, or analytics. Replace only the `purge-lead-relay` Worker code with the complete current `dist/COPY-PASTE-INTO-purge-lead-relay.js` file and deploy it. Existing Cloudflare variables and secrets remain in the Worker settings.
+
 In Meta Ads Manager, keep the Website URL above in the ad's **Destination** field. Put this separate string in the ad's **URL parameters** / **Build a URL parameter** field:
 
 ```text

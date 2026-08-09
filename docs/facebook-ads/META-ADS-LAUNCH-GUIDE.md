@@ -73,6 +73,12 @@ Meta's notice that it stores the campaign, ad-set, and ad names at publication i
 
 The widget captures the UTM values and Meta click identifiers before consuming `open_quote=1`. Closing and refreshing does not continually reopen the quote tool.
 
+### Ad-landing startup behavior
+
+The production widget recognizes the ad instruction while the GHL page is still loading. If the script arrives before the page body exists, it displays **Opening your 60-second price check...** and opens the quote as soon as the body is available. It does not wait for the entire homepage, review widgets, or other GHL sections to finish parsing.
+
+This behavior is intentionally limited to URLs containing `open_quote=1` or the supported quote hash. Ordinary homepage visits do not receive a loading overlay, and normal website quote buttons retain their instant click behavior. Attribution is captured before the one-time instruction is removed.
+
 ## Why the starting budget is $50 per day
 
 `$50/day` is a deliberate middle position, not a universal Meta rule:

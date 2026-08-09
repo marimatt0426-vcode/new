@@ -49,7 +49,7 @@ The production paid-ad destination is:
 https://itspurgepros.com/?open_quote=1
 ```
 
-The latest widget captures UTM and click-ID attribution, opens the quote interface, removes only the one-time `open_quote` instruction from the visible URL, and retains the attribution values for an accepted request. This behavior is covered by `tests/widget.test.mjs`.
+The latest widget captures UTM and click-ID attribution, gives ad visitors immediate quote-opening feedback, opens as soon as the page body exists without waiting for the full GHL page, removes only the one-time `open_quote` instruction from the visible URL, and retains the attribution values for an accepted request. This behavior is covered by `tests/widget.test.mjs`.
 
 ## Conversion contract
 

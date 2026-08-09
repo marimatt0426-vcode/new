@@ -77,7 +77,80 @@ test("auto-opens from an ad landing URL without discarding attribution", () => {
   assert.match(source, /utm_campaign/);
   assert.match(source, /utm_content/);
   assert.match(source, /utm_term/);
-  assert.match(source, /queueMicrotask\(open\)/);
+  assert.match(source, /openWhenBodyReady/);
+  assert.match(source, /Opening your 60-second price check/);
+  assert.match(source, /new MutationObserver/);
+  assert.match(source, /if \(document\.body\)/);
+  assert.match(source, /autoOpenObserver\.observe\(document\.documentElement/);
+  assert.doesNotMatch(source, /addEventListener\("DOMContentLoaded", open/);
+});
+
+test("ad auto-open shows feedback and opens as soon as body is inserted", () => {
+  const blockStart = source.indexOf("function showAutoOpenFeedback()");
+  const blockEnd = source.indexOf("function cookieValue", blockStart);
+  assert.ok(blockStart > 0 && blockEnd > blockStart);
+  const autoOpenBlock = source.slice(blockStart, blockEnd);
+
+  const classes = new Set();
+  const elements = new Map();
+  const documentElement = {
+    classList: {
+      add(value) { classes.add(value); },
+      remove(value) { classes.delete(value); }
+    }
+  };
+  const fakeDocument = {
+    body: null,
+    documentElement,
+    head: {
+      appendChild(element) { elements.set(element.id, element); }
+    },
+    createElement() {
+      return {
+        id: "",
+        textContent: "",
+        remove() { elements.delete(this.id); }
+      };
+    },
+    getElementById(id) { return elements.get(id) || null; }
+  };
+
+  let observer = null;
+  class FakeMutationObserver {
+    constructor(callback) { this.callback = callback; observer = this; }
+    observe(target, options) { this.target = target; this.options = options; }
+    disconnect() { this.disconnected = true; }
+  }
+
+  const run = new Function("document", "window", "MutationObserver", "queueMicrotask", `
+    let autoOpenObserver = null;
+    let autoOpenTimeout = null;
+    const AUTO_OPEN_CLASS = "pp-quote-auto-opening";
+    const AUTO_OPEN_STYLE_ID = "pp-quote-auto-opening-style";
+    let opens = 0;
+    function open() { hideAutoOpenFeedback(); opens += 1; }
+    ${autoOpenBlock}
+    openWhenBodyReady();
+    return { get opens() { return opens; } };
+  `);
+
+  const result = run(
+    fakeDocument,
+    { setTimeout() { return 1; }, clearTimeout() {} },
+    FakeMutationObserver,
+    (callback) => callback()
+  );
+
+  assert.equal(result.opens, 0);
+  assert.equal(classes.has("pp-quote-auto-opening"), true);
+  assert.ok(observer);
+  assert.equal(observer.target, documentElement);
+  assert.deepEqual(observer.options, { childList: true, subtree: true });
+
+  fakeDocument.body = { style: {} };
+  observer.callback();
+  assert.equal(result.opens, 1);
+  assert.equal(classes.has("pp-quote-auto-opening"), false);
 });
 
 test("uses one unchecked service-text permission and no marketing checkbox", () => {
