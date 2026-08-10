@@ -1,0 +1,1172 @@
+<style>
+  /* Entire service-page experience, fully scoped for GHL. */
+  #pp-residential-page,
+  #pp-residential-page * {
+    box-sizing: border-box;
+  }
+
+  #pp-residential-page {
+    display: block !important;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff;
+    color: #17394b;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-residential-page .pp-section {
+    display: block;
+    width: 100%;
+    padding: 68px 20px;
+  }
+
+  #pp-residential-page .pp-container {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  #pp-residential-page .pp-eyebrow {
+    margin-bottom: 8px;
+    color: #0877b9;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  #pp-residential-page .pp-heading {
+    margin: 0;
+    color: #073652;
+    font-size: 38px;
+    font-weight: 950;
+    letter-spacing: -0.043em;
+    line-height: 1.1;
+  }
+
+  #pp-residential-page .pp-lead {
+    margin: 17px 0 0;
+    color: #526c7a;
+    font-size: 17px;
+    line-height: 1.62;
+  }
+
+  #pp-residential-page .pp-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 650px;
+    padding: 72px 20px 64px;
+    background:
+      radial-gradient(circle at 84% 18%, rgba(56, 182, 255, 0.17), transparent 32%),
+      linear-gradient(135deg, #031f30 0%, #073652 56%, #05283d 100%);
+    color: #fff;
+  }
+
+  #pp-residential-page .pp-hero::after {
+    position: absolute;
+    right: -100px;
+    bottom: -130px;
+    width: 420px;
+    height: 420px;
+    border: 1px solid rgba(114, 204, 255, 0.12);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 48px rgba(114, 204, 255, 0.035),
+      0 0 0 96px rgba(114, 204, 255, 0.025);
+    content: "";
+    pointer-events: none;
+  }
+
+  #pp-residential-page .pp-hero-layout {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 66px;
+  }
+
+  #pp-residential-page .pp-hero-copy {
+    flex: 1 1 55%;
+    min-width: 0;
+  }
+
+  #pp-residential-page .pp-hero-visual {
+    flex: 1 1 45%;
+    min-width: 0;
+  }
+
+  #pp-residential-page .pp-hero .pp-eyebrow {
+    color: #72ccff;
+  }
+
+  #pp-residential-page .pp-hero-title {
+    max-width: 660px;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(44px, 5.4vw, 67px);
+    font-weight: 950;
+    letter-spacing: -0.052em;
+    line-height: 0.98;
+    text-transform: uppercase;
+  }
+
+  #pp-residential-page .pp-hero-title span {
+    display: block;
+    margin-top: 8px;
+    color: #38b6ff;
+  }
+
+  #pp-residential-page .pp-hero-lead {
+    max-width: 620px;
+    margin: 23px 0 0;
+    color: #d6e8f0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.58;
+  }
+
+  #pp-residential-page .pp-hero-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 21px;
+  }
+
+  #pp-residential-page .pp-hero-benefit {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.19);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #edf8fc;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+
+  #pp-residential-page .pp-mini-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    border-radius: 50%;
+    background: #38b6ff;
+    color: #05283d;
+    font-size: 9px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-residential-page .pp-hero-action {
+    margin-top: 28px;
+  }
+
+  #pp-residential-page .pp-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: min(400px, 100%);
+    min-height: 58px;
+    padding: 15px 22px;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #38b6ff 0%, #1596dd 55%, #0877b9 100%);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.26);
+    color: #fff !important;
+    font-size: 15px;
+    font-weight: 950;
+    letter-spacing: 0.045em;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-residential-page .pp-primary-button:hover,
+  #pp-residential-page .pp-primary-button:focus-visible {
+    background: #fff;
+    box-shadow: 0 15px 34px rgba(0, 0, 0, 0.34);
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  #pp-residential-page .pp-primary-button:focus-visible,
+  #pp-residential-page .pp-secondary-button:focus-visible,
+  #pp-residential-page .pp-page-nav a:focus-visible {
+    outline: 3px solid rgba(56, 182, 255, 0.4);
+    outline-offset: 3px;
+  }
+
+  #pp-residential-page .pp-button-arrow {
+    font-size: 19px;
+    line-height: 1;
+  }
+
+  #pp-residential-page .pp-action-note {
+    margin: 9px 0 0;
+    color: #b9d2de;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  #pp-residential-page .pp-hero-image-card {
+    position: relative;
+    max-width: 470px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid rgba(176, 226, 250, 0.32);
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 24px 58px rgba(0, 0, 0, 0.31);
+  }
+
+  #pp-residential-page .pp-hero-image-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 4.45;
+    border-radius: 18px;
+    background: #eaf4f9;
+  }
+
+  #pp-residential-page .pp-hero-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #pp-residential-page .pp-image-shade {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 36%;
+    background: linear-gradient(to top, rgba(3, 34, 51, 0.78), transparent);
+    pointer-events: none;
+  }
+
+  #pp-residential-page .pp-image-copy {
+    position: absolute;
+    right: 21px;
+    bottom: 20px;
+    left: 21px;
+    color: #fff;
+  }
+
+  #pp-residential-page .pp-image-copy small {
+    display: block;
+    margin-bottom: 2px;
+    color: #afe3ff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #pp-residential-page .pp-image-copy strong {
+    display: block;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.25;
+  }
+
+  #pp-residential-page .pp-offer-chip {
+    position: absolute;
+    top: 27px;
+    left: -18px;
+    max-width: 265px;
+    padding: 10px 14px;
+    border: 3px solid #fff;
+    border-radius: 13px;
+    background: #117b3b;
+    box-shadow: 0 9px 22px rgba(0, 0, 0, 0.22);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  #pp-residential-page .pp-page-nav-section {
+    padding: 0 20px;
+    border-bottom: 1px solid #dceaf1;
+    background: #fff;
+    box-shadow: 0 6px 20px rgba(5, 52, 80, 0.06);
+  }
+
+  #pp-residential-page .pp-page-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 12px 0;
+    scrollbar-width: none;
+  }
+
+  #pp-residential-page .pp-page-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  #pp-residential-page .pp-page-nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    padding: 8px 13px;
+    border-radius: 999px;
+    color: #31586b !important;
+    font-size: 11px;
+    font-weight: 850;
+    line-height: 1.3;
+    text-decoration: none !important;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  #pp-residential-page .pp-page-nav a:hover,
+  #pp-residential-page .pp-page-nav a:focus-visible {
+    background: #e8f6fe;
+    color: #0877b9 !important;
+  }
+
+  #pp-residential-page .pp-overview {
+    background: #fff;
+  }
+
+  #pp-residential-page .pp-two-column {
+    display: flex;
+    align-items: center;
+    gap: 66px;
+  }
+
+  #pp-residential-page .pp-two-column > * {
+    flex: 1 1 50%;
+    min-width: 0;
+  }
+
+  #pp-residential-page .pp-overview-image-card {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 1px solid #d6e8f1;
+    border-radius: 23px;
+    background: #fff;
+    box-shadow: 0 20px 48px rgba(5, 52, 80, 0.13);
+  }
+
+  #pp-residential-page .pp-overview-image {
+    display: block;
+    width: 100%;
+    border-radius: 16px;
+  }
+
+  #pp-residential-page .pp-overview-points {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  #pp-residential-page .pp-overview-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #425e6c;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  #pp-residential-page .pp-point-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: #e8f6fe;
+    color: #0877b9;
+    font-size: 11px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-residential-page .pp-note-card {
+    margin-top: 20px;
+    padding: 14px 15px;
+    border-left: 4px solid #38b6ff;
+    border-radius: 9px;
+    background: #eef9ff;
+    color: #31586b;
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1.5;
+  }
+
+  #pp-residential-page .pp-options {
+    background: #f4f9fc;
+  }
+
+  #pp-residential-page .pp-centered-heading {
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  #pp-residential-page .pp-option-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 37px;
+  }
+
+  #pp-residential-page .pp-option-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 24px 20px 21px;
+    border: 1px solid #d9e8ef;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 9px 25px rgba(5, 52, 80, 0.07);
+  }
+
+  #pp-residential-page .pp-option-card.pp-popular {
+    border: 2px solid #38b6ff;
+    box-shadow: 0 13px 32px rgba(56, 182, 255, 0.16);
+  }
+
+  #pp-residential-page .pp-popular-label {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    padding: 5px 11px;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    background: #0877b9;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+
+  #pp-residential-page .pp-option-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #e8f6fe;
+    color: #0877b9;
+  }
+
+  #pp-residential-page .pp-option-icon svg,
+  #pp-residential-page .pp-feature-icon svg,
+  #pp-residential-page .pp-process-icon svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.9;
+  }
+
+  #pp-residential-page .pp-option-title {
+    margin: 16px 0 0;
+    color: #17394b;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.25;
+  }
+
+  #pp-residential-page .pp-option-copy {
+    margin: 9px 0 0;
+    color: #617985;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  #pp-residential-page .pp-custom-option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+    padding: 18px 20px;
+    border: 1px dashed #9dcde6;
+    border-radius: 14px;
+    background: #eef9ff;
+  }
+
+  #pp-residential-page .pp-custom-option .pp-option-copy {
+    margin-top: 3px;
+  }
+
+  #pp-residential-page .pp-custom-option .pp-option-title {
+    margin-top: 0;
+  }
+
+  #pp-residential-page .pp-included {
+    background: #fff;
+  }
+
+  #pp-residential-page .pp-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 35px;
+  }
+
+  #pp-residential-page .pp-feature-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    min-width: 0;
+    padding: 17px;
+    border: 1px solid #dceaf1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 7px 20px rgba(5, 52, 80, 0.05);
+  }
+
+  #pp-residential-page .pp-feature-icon,
+  #pp-residential-page .pp-process-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 12px;
+    background: #e8f6fe;
+    color: #0877b9;
+  }
+
+  #pp-residential-page .pp-feature-title {
+    display: block;
+    color: #17394b;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.3;
+  }
+
+  #pp-residential-page .pp-feature-detail {
+    display: block;
+    margin-top: 3px;
+    color: #718692;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  #pp-residential-page .pp-team-standard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 28px;
+    padding: 20px 22px;
+    border: 1px solid #cce3ee;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #eef9ff, #f9fcfe);
+  }
+
+  #pp-residential-page .pp-team-standard strong {
+    display: block;
+    color: #17394b;
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  #pp-residential-page .pp-team-standard span {
+    display: block;
+    margin-top: 3px;
+    color: #617985;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  #pp-residential-page .pp-team-badge {
+    flex: 0 0 auto;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: #0877b9;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+
+  #pp-residential-page .pp-offer {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(56, 182, 255, 0.14), transparent 30%),
+      linear-gradient(135deg, #031f30, #073652);
+    color: #fff;
+  }
+
+  #pp-residential-page .pp-offer-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    align-items: center;
+    gap: 58px;
+  }
+
+  #pp-residential-page .pp-offer .pp-eyebrow {
+    color: #72ccff;
+  }
+
+  #pp-residential-page .pp-offer .pp-heading {
+    color: #fff;
+  }
+
+  #pp-residential-page .pp-offer .pp-lead {
+    color: #c7dce6;
+  }
+
+  #pp-residential-page .pp-offer-terms {
+    margin-top: 18px;
+    color: #b9d2de;
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.55;
+  }
+
+  #pp-residential-page .pp-offer-card {
+    padding: 26px;
+    border: 1px solid rgba(157, 222, 255, 0.34);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.26);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+  }
+
+  #pp-residential-page .pp-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.11);
+    color: #c9dce5;
+    font-size: 12px;
+  }
+
+  #pp-residential-page .pp-price-row strong {
+    color: #fff;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  #pp-residential-page .pp-waived-total {
+    margin-top: 16px;
+    padding: 15px;
+    border: 1px solid rgba(114, 219, 154, 0.4);
+    border-radius: 12px;
+    background: rgba(17, 123, 59, 0.17);
+    text-align: center;
+  }
+
+  #pp-residential-page .pp-waived-total small {
+    display: block;
+    color: #bde9cd;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  #pp-residential-page .pp-waived-total strong {
+    display: block;
+    margin-top: 3px;
+    color: #72db9a;
+    font-size: 33px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-residential-page .pp-process {
+    background: #f4f9fc;
+  }
+
+  #pp-residential-page .pp-process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-top: 35px;
+  }
+
+  #pp-residential-page .pp-process-card {
+    position: relative;
+    min-width: 0;
+    padding: 22px 18px 20px;
+    border: 1px solid #d9e8ef;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(5, 52, 80, 0.06);
+  }
+
+  #pp-residential-page .pp-process-number {
+    position: absolute;
+    top: 13px;
+    right: 14px;
+    color: #c5e7f8;
+    font-size: 28px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-residential-page .pp-process-title {
+    margin: 15px 0 0;
+    color: #17394b;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.3;
+  }
+
+  #pp-residential-page .pp-process-copy {
+    margin: 7px 0 0;
+    color: #617985;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  #pp-residential-page .pp-process-note {
+    margin-top: 22px;
+    color: #617985;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  #pp-residential-page .pp-final-cta {
+    padding: 66px 20px;
+    background: #fff;
+  }
+
+  #pp-residential-page .pp-final-panel {
+    position: relative;
+    overflow: hidden;
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 42px 34px;
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at 90% 20%, rgba(56, 182, 255, 0.18), transparent 35%),
+      linear-gradient(135deg, #031f30, #073652);
+    box-shadow: 0 20px 48px rgba(5, 52, 80, 0.2);
+    color: #fff;
+    text-align: center;
+  }
+
+  #pp-residential-page .pp-final-panel .pp-heading {
+    color: #fff;
+  }
+
+  #pp-residential-page .pp-final-panel .pp-lead {
+    max-width: 650px;
+    margin-right: auto;
+    margin-left: auto;
+    color: #c7dce6;
+  }
+
+  #pp-residential-page .pp-final-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  #pp-residential-page .pp-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.43);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff !important;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-decoration: none !important;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-residential-page .pp-secondary-button:hover,
+  #pp-residential-page .pp-secondary-button:focus-visible {
+    background: #fff;
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 980px) {
+    #pp-residential-page .pp-hero-layout,
+    #pp-residential-page .pp-two-column {
+      flex-direction: column;
+    }
+
+    #pp-residential-page .pp-hero-copy,
+    #pp-residential-page .pp-hero-visual,
+    #pp-residential-page .pp-two-column > * {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    #pp-residential-page .pp-hero-copy {
+      max-width: 740px;
+      text-align: center;
+    }
+
+    #pp-residential-page .pp-hero-benefits {
+      justify-content: center;
+    }
+
+    #pp-residential-page .pp-action-note {
+      text-align: center;
+    }
+
+    #pp-residential-page .pp-two-column {
+      gap: 42px;
+    }
+
+    #pp-residential-page .pp-option-grid,
+    #pp-residential-page .pp-process-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #pp-residential-page .pp-feature-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #pp-residential-page .pp-offer-layout {
+      grid-template-columns: 1fr;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 680px) {
+    #pp-residential-page .pp-section {
+      padding: 51px 15px;
+    }
+
+    #pp-residential-page .pp-hero {
+      min-height: 0;
+      padding: 58px 15px 52px;
+    }
+
+    #pp-residential-page .pp-hero-layout {
+      gap: 42px;
+    }
+
+    #pp-residential-page .pp-hero-title {
+      font-size: clamp(39px, 12vw, 52px);
+    }
+
+    #pp-residential-page .pp-hero-lead {
+      font-size: 16px;
+    }
+
+    #pp-residential-page .pp-offer-chip {
+      top: 17px;
+      left: 17px;
+      max-width: 230px;
+      font-size: 9px;
+    }
+
+    #pp-residential-page .pp-page-nav-section {
+      padding: 0 8px;
+    }
+
+    #pp-residential-page .pp-page-nav {
+      justify-content: flex-start;
+    }
+
+    #pp-residential-page .pp-heading {
+      font-size: 30px;
+    }
+
+    #pp-residential-page .pp-lead {
+      font-size: 16px;
+    }
+
+    #pp-residential-page .pp-option-grid,
+    #pp-residential-page .pp-feature-grid,
+    #pp-residential-page .pp-process-grid {
+      grid-template-columns: 1fr;
+    }
+
+    #pp-residential-page .pp-custom-option,
+    #pp-residential-page .pp-team-standard {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    #pp-residential-page .pp-final-cta {
+      padding: 46px 15px;
+    }
+
+    #pp-residential-page .pp-final-panel {
+      padding: 34px 19px;
+      border-radius: 19px;
+    }
+
+    #pp-residential-page .pp-final-actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    #pp-residential-page .pp-final-actions .pp-primary-button,
+    #pp-residential-page .pp-final-actions .pp-secondary-button {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-residential-page .pp-primary-button,
+    #pp-residential-page .pp-secondary-button,
+    #pp-residential-page .pp-page-nav a {
+      transition: none;
+    }
+  }
+</style>
+
+<div id="pp-residential-page">
+  <section class="pp-hero" aria-labelledby="pp-residential-title">
+    <div class="pp-container pp-hero-layout">
+      <div class="pp-hero-copy">
+        <div class="pp-eyebrow">Residential Pet Waste Removal &bull; Indianapolis Area</div>
+        <h1 id="pp-residential-title" class="pp-hero-title">A Cleaner Yard.<span>More Time for What Matters.</span></h1>
+        <p class="pp-hero-lead">Purge Pros provides dependable recurring dog waste removal for homeowners who want a consistently usable yard without adding another chore to the week.</p>
+
+        <div class="pp-hero-benefits" aria-label="Residential service highlights">
+          <span class="pp-hero-benefit"><span class="pp-mini-check" aria-hidden="true">&#10003;</span> Pay Per Visit</span>
+          <span class="pp-hero-benefit"><span class="pp-mini-check" aria-hidden="true">&#10003;</span> No Long-Term Contracts</span>
+          <span class="pp-hero-benefit"><span class="pp-mini-check" aria-hidden="true">&#10003;</span> Waste Hauled Away</span>
+        </div>
+
+        <div class="pp-hero-action">
+          <a href="#quote" class="pp-primary-button">
+            <span>See My Exact Per-Visit Price</span>
+            <span class="pp-button-arrow" aria-hidden="true">&#8594;</span>
+          </a>
+          <p class="pp-action-note">About 60 seconds &bull; No payment today &bull; Route reviewed before scheduling</p>
+        </div>
+      </div>
+
+      <div class="pp-hero-visual">
+        <div class="pp-hero-image-card">
+          <div class="pp-hero-image-frame">
+            <img
+              src="https://storage.googleapis.com/msgsndr/YzqccfNpAoMTt4EZO92d/media/696468e102f1be0c74c37c1c.png"
+              alt="Clean residential backyard serviced by Purge Pros"
+              class="pp-hero-image"
+              loading="eager"
+              decoding="async"
+            >
+            <div class="pp-image-shade" aria-hidden="true"></div>
+            <div class="pp-image-copy">
+              <small>The Result</small>
+              <strong>A yard that feels ready to enjoy again.</strong>
+            </div>
+          </div>
+          <div class="pp-offer-chip">New recurring customers: separate initial-cleanup fee waived</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="pp-page-nav-section" aria-label="Residential service page">
+    <div class="pp-container pp-page-nav">
+      <a href="#pp-rsp-overview">Overview</a>
+      <a href="#pp-rsp-options">Service Options</a>
+      <a href="#pp-rsp-included">Every Visit</a>
+      <a href="#pp-rsp-offer">New-Customer Offer</a>
+      <a href="#pp-rsp-process">How It Starts</a>
+    </div>
+  </nav>
+
+  <section id="pp-rsp-overview" class="pp-section pp-overview">
+    <div class="pp-container pp-two-column">
+      <div>
+        <div class="pp-eyebrow">Your Yard Should Feel Usable</div>
+        <h2 class="pp-heading">Enjoy the Dog. Skip the Least Enjoyable Part.</h2>
+        <p class="pp-lead">Pet waste returns every week, whether or not your schedule has room for it. When it accumulates, mowing, outdoor play, gatherings, and ordinary time in the yard become harder to enjoy.</p>
+
+        <div class="pp-overview-points">
+          <div class="pp-overview-point"><span class="pp-point-check" aria-hidden="true">&#10003;</span><span>Routine removal keeps waste from lingering throughout the serviced areas.</span></div>
+          <div class="pp-overview-point"><span class="pp-point-check" aria-hidden="true">&#10003;</span><span>Consistent visits reduce unnecessary contact for family members, pets, shoes, and lawn equipment.</span></div>
+          <div class="pp-overview-point"><span class="pp-point-check" aria-hidden="true">&#10003;</span><span>You get one recurring chore off your schedule without committing to a monthly package.</span></div>
+        </div>
+
+        <div class="pp-note-card"><strong>You do not need to be home.</strong> Provide safe yard access and pet instructions; we send a heads-up text before service and a gate-closure photo afterward.</div>
+      </div>
+
+      <div>
+        <div class="pp-overview-image-card">
+          <img
+            src="https://storage.googleapis.com/msgsndr/YzqccfNpAoMTt4EZO92d/media/69646946c7683b85c3bc51e3.png"
+            alt="Residential yard before routine pet waste removal"
+            class="pp-overview-image"
+            loading="lazy"
+            decoding="async"
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-rsp-options" class="pp-section pp-options">
+    <div class="pp-container">
+      <div class="pp-centered-heading">
+        <div class="pp-eyebrow">Flexible Service Frequencies</div>
+        <h2 class="pp-heading">Choose the Rhythm That Fits Your Yard</h2>
+        <p class="pp-lead">The price tool adjusts available options based on dog count, yard details, and service needs, so you only see selections that make sense for the request.</p>
+      </div>
+
+      <div class="pp-option-grid">
+        <article class="pp-option-card">
+          <span class="pp-option-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4V5Z"></path><path d="M8 3v4M16 3v4M4 9h16"></path><path d="m8 14 2 2 5-5"></path></svg>
+          </span>
+          <h3 class="pp-option-title">Twice Weekly</h3>
+          <p class="pp-option-copy">More frequent upkeep for busier yards, multiple dogs, or households that want less accumulation between visits.</p>
+        </article>
+
+        <article class="pp-option-card pp-popular">
+          <span class="pp-popular-label">Most Popular</span>
+          <span class="pp-option-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+          </span>
+          <h3 class="pp-option-title">Weekly</h3>
+          <p class="pp-option-copy">A balanced recurring schedule that keeps most residential yards consistently ready for everyday use.</p>
+        </article>
+
+        <article class="pp-option-card">
+          <span class="pp-option-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4V5Z"></path><path d="M8 3v4M16 3v4M4 9h16"></path><path d="M8 13h3M13 13h3M8 16h3"></path></svg>
+          </span>
+          <h3 class="pp-option-title">Every Other Week</h3>
+          <p class="pp-option-copy">Lighter recurring upkeep for eligible lower-use yards. Availability depends on the details entered in the price tool.</p>
+        </article>
+
+        <article class="pp-option-card">
+          <span class="pp-option-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.8 2.9 8.4 7 10 4.1-1.6 7-5.2 7-10V6l-7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+          </span>
+          <h3 class="pp-option-title">One-Time Cleanup</h3>
+          <p class="pp-option-copy">A separately priced single visit for seasonal cleanup, an event, moving, or any time recurring service is not the right fit.</p>
+        </article>
+      </div>
+
+      <div class="pp-custom-option">
+        <span class="pp-option-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M7 12h10M9 17h6"></path><circle cx="7" cy="7" r="2"></circle><circle cx="17" cy="12" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg>
+        </span>
+        <div>
+          <h3 class="pp-option-title">Custom Service</h3>
+          <p class="pp-option-copy">For 10+ dogs, properties around an acre or larger, kennels, commercial locations, or unusual service conditions. Submit the details and our team will review the request.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-rsp-included" class="pp-section pp-included">
+    <div class="pp-container">
+      <div class="pp-centered-heading">
+        <div class="pp-eyebrow">The Purge Pros Standard</div>
+        <h2 class="pp-heading">What Every Recurring Visit Includes</h2>
+        <p class="pp-lead">The service is more than removing waste. It includes the communication and property-care details that make recurring service dependable.</p>
+      </div>
+
+      <div class="pp-feature-grid">
+        <div class="pp-feature-card"><span class="pp-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6L5 8Z"></path><path d="M8 8V5h8v3M3 8h18"></path></svg></span><span><strong class="pp-feature-title">Waste Hauled Away</strong><span class="pp-feature-detail">Collected pet waste leaves with us instead of being placed in your household trash.</span></span></div>
+        <div class="pp-feature-card"><span class="pp-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"></path></svg></span><span><strong class="pp-feature-title">Sanitized Equipment</strong><span class="pp-feature-detail">Tools and footwear are treated between customer yards as part of our sanitation process.</span></span></div>
+        <div class="pp-feature-card"><span class="pp-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2.5"></rect><path d="M9 6.5h6M9 10h6M10 17.5h4"></path></svg></span><span><strong class="pp-feature-title">Heads-Up Text</strong><span class="pp-feature-detail">Know when your service professional is on the way to the property.</span></span></div>
+        <div class="pp-feature-card"><span class="pp-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="12" cy="12" r="3.25"></circle><path d="m7 5 1.2-2h7.6L17 5"></path></svg></span><span><strong class="pp-feature-title">Gate-Closure Photo</strong><span class="pp-feature-detail">A gate photo is sent after each completed visit for documented peace of mind.</span></span></div>
+        <div class="pp-feature-card"><span class="pp-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6V3Z"></path><path d="M14 3v4h4M9 11h6M9 15h6"></path></svg></span><span><strong class="pp-feature-title">Saved Property Notes</strong><span class="pp-feature-detail">Access, gate, pet, and service-area instructions stay connected to your account.</span></span></div>
+        <div class="pp-feature-card"><span class="pp-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19c3-5 7-8 13-10M4 19h16"></path><path d="M8 15h4M13 11v5"></path></svg></span><span><strong class="pp-feature-title">Selected Areas Serviced</strong><span class="pp-feature-detail">The team follows the yard areas and service scope confirmed for your account.</span></span></div>
+      </div>
+
+      <div class="pp-team-standard">
+        <div><strong>Accountability starts with the people entering your yard.</strong><span>Residential field service is performed by background-checked W-2 employees trained to Purge Pros service, sanitation, gate, and property-care standards.</span></div>
+        <div class="pp-team-badge">Purge Pros Service Team</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-rsp-offer" class="pp-section pp-offer">
+    <div class="pp-container pp-offer-layout">
+      <div>
+        <div class="pp-eyebrow">New Recurring-Customer Offer</div>
+        <h2 class="pp-heading">Start Without a Separate Initial-Cleanup Fee</h2>
+        <p class="pp-lead">A first recurring visit can require extra cleanup time. For eligible new recurring customers, Purge Pros waives that separate time-based cleanup charge.</p>
+        <p class="pp-offer-terms"><strong>Your regular per-visit service rate still applies on visit #1.</strong> The waiver is for eligible new recurring customers and does not apply to one-time cleanups. Actual savings depend on the cleanup time that would otherwise have been required.</p>
+      </div>
+
+      <div class="pp-offer-card">
+        <div class="pp-price-row"><span>Standard first 30 minutes</span><strong>$39.99</strong></div>
+        <div class="pp-price-row"><span>Additional cleanup time</span><strong>$1 per minute</strong></div>
+        <div class="pp-price-row"><span>60-minute cleanup example</span><strong>$69.99</strong></div>
+        <div class="pp-waived-total"><small>Your Separate Initial-Cleanup Fee</small><strong>$0</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pp-rsp-process" class="pp-section pp-process">
+    <div class="pp-container">
+      <div class="pp-centered-heading">
+        <div class="pp-eyebrow">Clear From the Beginning</div>
+        <h2 class="pp-heading">How Residential Service Starts</h2>
+        <p class="pp-lead">The price check and request take about 60 seconds. Scheduling is confirmed only after the route review is complete.</p>
+      </div>
+
+      <div class="pp-process-grid">
+        <article class="pp-process-card"><span class="pp-process-number">1</span><span class="pp-process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4V5Z"></path><path d="M8 9h8M8 13h5"></path></svg></span><h3 class="pp-process-title">Check Availability</h3><p class="pp-process-copy">Enter your ZIP code, dogs, yard details, and preferred service frequency.</p></article>
+        <article class="pp-process-card"><span class="pp-process-number">2</span><span class="pp-process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3v18"></path><circle cx="12" cy="12" r="9"></circle></svg></span><h3 class="pp-process-title">See Your Price</h3><p class="pp-process-copy">Review the available per-visit pricing before submitting a service request.</p></article>
+        <article class="pp-process-card"><span class="pp-process-number">3</span><span class="pp-process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle></svg></span><h3 class="pp-process-title">Route Review</h3><p class="pp-process-copy">Our local team reviews the full address and confirms the available recurring route day.</p></article>
+        <article class="pp-process-card"><span class="pp-process-number">4</span><span class="pp-process-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h3"></path></svg></span><h3 class="pp-process-title">Secure Setup</h3><p class="pp-process-copy">After approval, receive service details and the secure link to place your payment card on file.</p></article>
+      </div>
+
+      <p class="pp-process-note">Nothing is charged during the online price check. Once service begins, billing is per visit when the ETA or on-my-way notification is sent shortly before arrival.</p>
+    </div>
+  </section>
+
+  <section class="pp-final-cta">
+    <div class="pp-final-panel">
+      <div class="pp-eyebrow">Your Cleaner Yard Starts Here</div>
+      <h2 class="pp-heading">Ready to Take Scooping Off Your Schedule?</h2>
+      <p class="pp-lead">See your available residential service options and exact per-visit price before deciding whether to request service.</p>
+      <div class="pp-final-actions">
+        <a href="#quote" class="pp-primary-button"><span>See My Exact Per-Visit Price</span><span class="pp-button-arrow" aria-hidden="true">&#8594;</span></a>
+        <a href="sms:+13179615865" class="pp-secondary-button">Text a Question</a>
+      </div>
+    </div>
+  </section>
+</div>

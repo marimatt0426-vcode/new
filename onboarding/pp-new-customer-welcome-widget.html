@@ -1,0 +1,939 @@
+<!--
+  PURGE PROS NEW-CUSTOMER WELCOME PAGE
+  Paste this entire file into one GoHighLevel Custom Code element on /welcome.
+  This public page intentionally contains no customer-specific or payment information.
+-->
+<style>
+  #pp-welcome,
+  #pp-welcome * {
+    box-sizing: border-box;
+  }
+
+  #pp-welcome {
+    --pp-blue: #38b6ff;
+    --pp-blue-dark: #078dcc;
+    --pp-ink: #0a2232;
+    --pp-navy: #061b29;
+    --pp-navy-soft: #0d3044;
+    --pp-text: #243746;
+    --pp-muted: #617384;
+    --pp-line: #d7e4ec;
+    --pp-surface: #f4f9fc;
+    --pp-success: #16834f;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    color: var(--pp-text);
+    background: #fff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+
+  #pp-welcome a {
+    color: inherit;
+  }
+
+  #pp-welcome .ppw-shell {
+    width: min(1200px, calc(100% - 40px));
+    margin: 0 auto;
+  }
+
+  #pp-welcome .ppw-eyebrow {
+    margin: 0 0 12px;
+    color: var(--pp-blue);
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+  }
+
+  #pp-welcome .ppw-hero {
+    position: relative;
+    isolation: isolate;
+    padding: 78px 0 96px;
+    color: #fff;
+    background:
+      radial-gradient(circle at 82% 25%, rgba(56, 182, 255, 0.2), transparent 31%),
+      linear-gradient(135deg, #041722 0%, #08283a 62%, #0b3449 100%);
+  }
+
+  #pp-welcome .ppw-hero::after {
+    position: absolute;
+    z-index: -1;
+    right: -90px;
+    bottom: -170px;
+    width: 430px;
+    height: 430px;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 50%;
+    box-shadow: 0 0 0 55px rgba(255,255,255,.025), 0 0 0 110px rgba(255,255,255,.018);
+    content: "";
+  }
+
+  #pp-welcome .ppw-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+    gap: 58px;
+    align-items: center;
+  }
+
+  #pp-welcome .ppw-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  #pp-welcome .ppw-brand img {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 12px rgba(0,0,0,.22));
+  }
+
+  #pp-welcome .ppw-brand-copy {
+    display: grid;
+    line-height: 1;
+  }
+
+  #pp-welcome .ppw-brand-name {
+    font-size: 21px;
+    font-weight: 950;
+    letter-spacing: -.5px;
+  }
+
+  #pp-welcome .ppw-brand-name span {
+    color: var(--pp-blue);
+  }
+
+  #pp-welcome .ppw-brand-service {
+    margin-top: 6px;
+    color: #b9cada;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+  }
+
+  #pp-welcome h1,
+  #pp-welcome h2,
+  #pp-welcome h3,
+  #pp-welcome p {
+    margin-top: 0;
+  }
+
+  #pp-welcome h1 {
+    max-width: 760px;
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: clamp(44px, 6.3vw, 76px);
+    font-weight: 950;
+    letter-spacing: -3px;
+    line-height: .98;
+    text-transform: uppercase;
+  }
+
+  #pp-welcome .ppw-hero-lead {
+    max-width: 730px;
+    margin-bottom: 26px;
+    color: #d8e6ef;
+    font-size: clamp(18px, 2vw, 22px);
+  }
+
+  #pp-welcome .ppw-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  #pp-welcome .ppw-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 8px 13px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(255,255,255,.06);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  #pp-welcome .ppw-pill::before {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--pp-blue);
+    box-shadow: 0 0 0 4px rgba(56,182,255,.12);
+    content: "";
+  }
+
+  #pp-welcome .ppw-start-card {
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,.17);
+    border-radius: 22px;
+    background: rgba(255,255,255,.09);
+    box-shadow: 0 24px 70px rgba(0,0,0,.23);
+    backdrop-filter: blur(8px);
+  }
+
+  #pp-welcome .ppw-start-icon {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 18px;
+    place-items: center;
+    border-radius: 14px;
+    color: var(--pp-navy);
+    background: var(--pp-blue);
+  }
+
+  #pp-welcome .ppw-start-icon svg,
+  #pp-welcome .ppw-step-icon svg,
+  #pp-welcome .ppw-card-icon svg {
+    width: 25px;
+    height: 25px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+  }
+
+  #pp-welcome .ppw-start-card h2 {
+    margin-bottom: 9px;
+    color: #fff;
+    font-size: 25px;
+    line-height: 1.15;
+  }
+
+  #pp-welcome .ppw-start-card p {
+    margin-bottom: 0;
+    color: #cad9e3;
+    font-size: 15px;
+  }
+
+  #pp-welcome .ppw-secure-note {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+    margin-top: 18px;
+    padding-top: 17px;
+    border-top: 1px solid rgba(255,255,255,.13);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  #pp-welcome .ppw-secure-note svg {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--pp-blue);
+    stroke-width: 2;
+  }
+
+  #pp-welcome .ppw-section {
+    padding: 86px 0;
+  }
+
+  #pp-welcome .ppw-section-muted {
+    background: var(--pp-surface);
+  }
+
+  #pp-welcome .ppw-heading-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 430px);
+    gap: 40px;
+    align-items: end;
+    margin-bottom: 42px;
+  }
+
+  #pp-welcome .ppw-heading-row h2,
+  #pp-welcome .ppw-section-title {
+    margin-bottom: 0;
+    color: var(--pp-ink);
+    font-size: clamp(33px, 4vw, 50px);
+    font-weight: 950;
+    letter-spacing: -1.7px;
+    line-height: 1.05;
+  }
+
+  #pp-welcome .ppw-heading-row > p {
+    margin-bottom: 0;
+    color: var(--pp-muted);
+    font-size: 17px;
+  }
+
+  #pp-welcome .ppw-route-callout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 18px 20px;
+    border: 1px solid #9bd8f6;
+    border-radius: 16px;
+    background: #eaf8ff;
+  }
+
+  #pp-welcome .ppw-route-callout strong {
+    color: var(--pp-ink);
+  }
+
+  #pp-welcome .ppw-route-callout p {
+    margin: 0;
+    color: #365265;
+    font-size: 15px;
+  }
+
+  #pp-welcome .ppw-route-callout svg {
+    width: 27px;
+    height: 27px;
+    fill: none;
+    stroke: var(--pp-blue-dark);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+  }
+
+  #pp-welcome .ppw-timeline {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  #pp-welcome .ppw-step {
+    position: relative;
+    min-height: 285px;
+    padding: 26px 22px 24px;
+    border: 1px solid var(--pp-line);
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(12,47,69,.07);
+  }
+
+  #pp-welcome .ppw-step-number {
+    position: absolute;
+    top: 21px;
+    right: 21px;
+    color: #b4c6d2;
+    font-size: 13px;
+    font-weight: 950;
+    letter-spacing: 1px;
+  }
+
+  #pp-welcome .ppw-step-icon,
+  #pp-welcome .ppw-card-icon {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 22px;
+    place-items: center;
+    border-radius: 14px;
+    color: #046b9d;
+    background: #e7f7ff;
+  }
+
+  #pp-welcome .ppw-step h3 {
+    margin-bottom: 11px;
+    color: var(--pp-ink);
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  #pp-welcome .ppw-step p {
+    margin-bottom: 0;
+    color: var(--pp-muted);
+    font-size: 15px;
+  }
+
+  #pp-welcome .ppw-check-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+    gap: 50px;
+    align-items: start;
+  }
+
+  #pp-welcome .ppw-check-intro {
+    position: sticky;
+    top: 120px;
+  }
+
+  #pp-welcome .ppw-check-intro .ppw-section-title {
+    margin-bottom: 20px;
+  }
+
+  #pp-welcome .ppw-check-intro > p:not(.ppw-eyebrow) {
+    max-width: 480px;
+    margin-bottom: 24px;
+    color: var(--pp-muted);
+    font-size: 18px;
+  }
+
+  #pp-welcome .ppw-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #007fbd;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  #pp-welcome .ppw-text-link:hover,
+  #pp-welcome .ppw-text-link:focus-visible {
+    text-decoration: underline;
+  }
+
+  #pp-welcome .ppw-checklist {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #pp-welcome .ppw-checkitem {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 15px;
+    align-items: start;
+    padding: 20px;
+    border: 1px solid var(--pp-line);
+    border-radius: 16px;
+    background: #fff;
+  }
+
+  #pp-welcome .ppw-checkmark {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--pp-success);
+    box-shadow: 0 8px 18px rgba(22,131,79,.2);
+  }
+
+  #pp-welcome .ppw-checkmark svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.5;
+  }
+
+  #pp-welcome .ppw-checkitem h3 {
+    margin: 1px 0 4px;
+    color: var(--pp-ink);
+    font-size: 17px;
+  }
+
+  #pp-welcome .ppw-checkitem p {
+    margin: 0;
+    color: var(--pp-muted);
+    font-size: 14px;
+  }
+
+  #pp-welcome .ppw-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 40px;
+  }
+
+  #pp-welcome .ppw-info-card {
+    padding: 28px;
+    border: 1px solid var(--pp-line);
+    border-radius: 19px;
+    background: #fff;
+    box-shadow: 0 12px 34px rgba(12,47,69,.06);
+  }
+
+  #pp-welcome .ppw-info-card h3 {
+    margin-bottom: 12px;
+    color: var(--pp-ink);
+    font-size: 21px;
+  }
+
+  #pp-welcome .ppw-info-card p {
+    margin-bottom: 0;
+    color: var(--pp-muted);
+    font-size: 15px;
+  }
+
+  #pp-welcome .ppw-info-card strong {
+    color: var(--pp-ink);
+  }
+
+  #pp-welcome .ppw-faq-wrap {
+    max-width: 920px;
+    margin: 42px auto 0;
+  }
+
+  #pp-welcome .ppw-faq {
+    margin-bottom: 11px;
+    overflow: hidden;
+    border: 1px solid var(--pp-line);
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(12,47,69,.05);
+  }
+
+  #pp-welcome .ppw-faq summary {
+    position: relative;
+    padding: 20px 58px 20px 21px;
+    color: var(--pp-ink);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 900;
+    list-style: none;
+  }
+
+  #pp-welcome .ppw-faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #pp-welcome .ppw-faq summary::after {
+    position: absolute;
+    top: 50%;
+    right: 21px;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid #057fb9;
+    border-bottom: 2px solid #057fb9;
+    content: "";
+    transform: translateY(-65%) rotate(45deg);
+    transition: transform .2s ease;
+  }
+
+  #pp-welcome .ppw-faq[open] summary::after {
+    transform: translateY(-30%) rotate(225deg);
+  }
+
+  #pp-welcome .ppw-faq summary:focus-visible {
+    outline: 3px solid rgba(56,182,255,.45);
+    outline-offset: -3px;
+  }
+
+  #pp-welcome .ppw-faq-answer {
+    padding: 0 21px 21px;
+    color: var(--pp-muted);
+    font-size: 15px;
+  }
+
+  #pp-welcome .ppw-faq-answer p {
+    margin: 0;
+  }
+
+  #pp-welcome .ppw-contact {
+    padding: 74px 0;
+    color: #fff;
+    background: var(--pp-navy);
+  }
+
+  #pp-welcome .ppw-contact-inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 36px;
+    align-items: center;
+  }
+
+  #pp-welcome .ppw-contact h2 {
+    margin-bottom: 9px;
+    color: #fff;
+    font-size: clamp(31px, 4vw, 47px);
+    font-weight: 950;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+  }
+
+  #pp-welcome .ppw-contact p {
+    margin-bottom: 0;
+    color: #c5d6e1;
+    font-size: 17px;
+  }
+
+  #pp-welcome .ppw-contact-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  #pp-welcome .ppw-btn {
+    display: inline-flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 13px 21px;
+    border: 2px solid var(--pp-blue);
+    border-radius: 12px;
+    color: #062234;
+    background: var(--pp-blue);
+    box-shadow: 0 11px 26px rgba(56,182,255,.22);
+    font-size: 15px;
+    font-weight: 950;
+    text-decoration: none;
+    transition: transform .18s ease, background .18s ease, color .18s ease;
+  }
+
+  #pp-welcome .ppw-btn:hover,
+  #pp-welcome .ppw-btn:focus-visible {
+    color: #062234;
+    background: #fff;
+    transform: translateY(-2px);
+  }
+
+  #pp-welcome .ppw-btn-secondary {
+    color: #fff;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  #pp-welcome .ppw-btn-secondary:hover,
+  #pp-welcome .ppw-btn-secondary:focus-visible {
+    color: #062234;
+    background: #fff;
+  }
+
+  #pp-welcome .ppw-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+  }
+
+  #pp-welcome .ppw-footnote {
+    padding: 22px 0;
+    color: #718291;
+    background: #fff;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  @media (max-width: 960px) {
+    #pp-welcome .ppw-hero-grid,
+    #pp-welcome .ppw-check-grid {
+      grid-template-columns: 1fr;
+    }
+
+    #pp-welcome .ppw-hero-grid {
+      gap: 36px;
+    }
+
+    #pp-welcome .ppw-start-card {
+      max-width: 620px;
+    }
+
+    #pp-welcome .ppw-timeline {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #pp-welcome .ppw-check-intro {
+      position: static;
+    }
+
+    #pp-welcome .ppw-info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    #pp-welcome .ppw-shell {
+      width: min(100% - 28px, 1200px);
+    }
+
+    #pp-welcome .ppw-hero {
+      padding: 48px 0 62px;
+    }
+
+    #pp-welcome h1 {
+      letter-spacing: -1.8px;
+    }
+
+    #pp-welcome .ppw-section {
+      padding: 64px 0;
+    }
+
+    #pp-welcome .ppw-heading-row {
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-bottom: 28px;
+    }
+
+    #pp-welcome .ppw-timeline {
+      grid-template-columns: 1fr;
+    }
+
+    #pp-welcome .ppw-step {
+      min-height: 0;
+    }
+
+    #pp-welcome .ppw-contact-inner {
+      grid-template-columns: 1fr;
+    }
+
+    #pp-welcome .ppw-contact-actions {
+      flex-wrap: wrap;
+    }
+
+    #pp-welcome .ppw-btn {
+      flex: 1 1 180px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-welcome *,
+    #pp-welcome *::before,
+    #pp-welcome *::after {
+      scroll-behavior: auto !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<main id="pp-welcome">
+  <section class="ppw-hero">
+    <div class="ppw-shell ppw-hero-grid">
+      <div>
+        <div class="ppw-brand" aria-label="Purge Pros Pet Waste Removal">
+          <img src="https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/69ffe0d6a7b9e0385a45dea3.png" alt="Purge Pros mascot">
+          <span class="ppw-brand-copy">
+            <span class="ppw-brand-name">PURGE <span>PROS</span></span>
+            <span class="ppw-brand-service">PET WASTE REMOVAL</span>
+          </span>
+        </div>
+        <p class="ppw-eyebrow">New customer welcome guide</p>
+        <h1>You're on the route.</h1>
+        <p class="ppw-hero-lead">Your first service is scheduled. Here is what happens before, during, and after each Purge Pros visit.</p>
+        <div class="ppw-pills" aria-label="Service highlights">
+          <span class="ppw-pill">Pay per visit</span>
+          <span class="ppw-pill">En-route text updates</span>
+          <span class="ppw-pill">Secure online portal</span>
+        </div>
+      </div>
+
+      <aside class="ppw-start-card" aria-label="Important payment setup information">
+        <span class="ppw-start-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h3"></path></svg>
+        </span>
+        <h2>Complete your secure card setup</h2>
+        <p>Your private Housecall Pro card request is sent separately. Please complete it before your first service so your account is ready when the route begins.</p>
+        <div class="ppw-secure-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+          <span>Purge Pros never asks you to reply with card information, and this public page never collects it.</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="ppw-section ppw-section-muted" aria-labelledby="ppw-visit-title">
+    <div class="ppw-shell">
+      <div class="ppw-heading-row">
+        <div>
+          <p class="ppw-eyebrow">What happens next</p>
+          <h2 id="ppw-visit-title">A clear update at every step.</h2>
+        </div>
+        <p>Your route day is consistent, but it is not a fixed appointment time. Daily routes can shift with weather, workload, and traffic.</p>
+      </div>
+
+      <div class="ppw-route-callout">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16c1.5-4 4-6 7-6s5.5-2 7-6"></path><circle cx="5" cy="17" r="2"></circle><circle cx="19" cy="4" r="2"></circle><path d="M12 10v9"></path><path d="m9 16 3 3 3-3"></path></svg>
+        <p><strong>Your en-route text is a heads-up, not an exact appointment time.</strong> We send it when the technician is heading your way, generally 10–45 minutes before arrival.</p>
+      </div>
+
+      <div class="ppw-timeline">
+        <article class="ppw-step">
+          <span class="ppw-step-number">01</span>
+          <span class="ppw-step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18"></path><path d="m8 15 2 2 5-5"></path></svg>
+          </span>
+          <h3>Route confirmed</h3>
+          <p>Your confirmation message identifies your first service date and normal route day.</p>
+        </article>
+
+        <article class="ppw-step">
+          <span class="ppw-step-number">02</span>
+          <span class="ppw-step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path><path d="M10 21h4"></path></svg>
+          </span>
+          <h3>Night-before reminder</h3>
+          <p>We send a reminder before your route day so you can make sure the service areas are accessible.</p>
+        </article>
+
+        <article class="ppw-step">
+          <span class="ppw-step-number">03</span>
+          <span class="ppw-step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 17h2l2-5h10l2 5h2"></path><path d="M5 17v3M19 17v3M7 20h10"></path><circle cx="8" cy="16" r="1"></circle><circle cx="16" cy="16" r="1"></circle></svg>
+          </span>
+          <h3>En-route heads-up</h3>
+          <p>We text when the technician is on the way, generally 10–45 minutes before arrival. Your per-visit charge is processed at that time.</p>
+        </article>
+
+        <article class="ppw-step">
+          <span class="ppw-step-number">04</span>
+          <span class="ppw-step-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16v12H5.5L4 17.5z"></path><path d="m8 10 2.5 2.5L16 7"></path><path d="M8 20h8"></path></svg>
+          </span>
+          <h3>Completion update</h3>
+          <p>We let you know when the visit is complete. Available service records and photos are kept with your account.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="ppw-section" aria-labelledby="ppw-ready-title">
+    <div class="ppw-shell ppw-check-grid">
+      <div class="ppw-check-intro">
+        <p class="ppw-eyebrow">Before the first visit</p>
+        <h2 class="ppw-section-title" id="ppw-ready-title">Help us make day one effortless.</h2>
+        <p>A few quick details keep the first service smooth, safe, and fully documented.</p>
+        <a class="ppw-text-link" href="sms:+13179615865">Text a question to (317) 961-5865 <span aria-hidden="true">→</span></a>
+      </div>
+
+      <ul class="ppw-checklist">
+        <li class="ppw-checkitem">
+          <span class="ppw-checkmark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></span>
+          <div><h3>Complete the secure card request</h3><p>Use only the private Housecall Pro link sent directly to you. Do not send payment details by reply.</p></div>
+        </li>
+        <li class="ppw-checkitem">
+          <span class="ppw-checkmark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></span>
+          <div><h3>Make the service areas accessible</h3><p>Unlock any required gates and move obstacles that could prevent safe access to the selected areas.</p></div>
+        </li>
+        <li class="ppw-checkitem">
+          <span class="ppw-checkmark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></span>
+          <div><h3>Share gate codes and property notes</h3><p>Text us any code, parking direction, access detail, or property instruction that should be saved to your account.</p></div>
+        </li>
+        <li class="ppw-checkitem">
+          <span class="ppw-checkmark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></span>
+          <div><h3>Tell us about dogs outside or changing conditions</h3><p>Let the office know ahead of time so current pet and access notes can be reflected on the route.</p></div>
+        </li>
+        <li class="ppw-checkitem">
+          <span class="ppw-checkmark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg></span>
+          <div><h3>Watch for the portal invitation</h3><p>It arrives separately by email. Check your spam or promotions folder if you do not see it.</p></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="ppw-section ppw-section-muted" aria-labelledby="ppw-account-title">
+    <div class="ppw-shell">
+      <div class="ppw-heading-row">
+        <div>
+          <p class="ppw-eyebrow">Your account at a glance</p>
+          <h2 id="ppw-account-title">Simple billing. Useful records. No guesswork.</h2>
+        </div>
+        <p>Your service confirmation controls your individual plan. This guide explains the standard process.</p>
+      </div>
+
+      <div class="ppw-info-grid">
+        <article class="ppw-info-card">
+          <span class="ppw-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h3"></path></svg></span>
+          <h3>Billing</h3>
+          <p>You pay <strong>per visit</strong>, not by monthly subscription. The card on file is charged when the en-route text is sent.</p>
+        </article>
+        <article class="ppw-info-card">
+          <span class="ppw-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"></path><path d="M8 8h8M8 12h8M8 16h5"></path></svg></span>
+          <h3>Customer portal</h3>
+          <p>Use the secure portal for available appointments, invoices, receipts, account details, and service records.</p>
+        </article>
+        <article class="ppw-info-card">
+          <span class="ppw-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17h16M6 13a6 6 0 0 1 12 0"></path><path d="M12 4v3M4.5 7.5l2 2M19.5 7.5l-2 2"></path></svg></span>
+          <h3>Weather and route changes</h3>
+          <p>Safety and weather can affect a route. If service timing or the route day must change, Purge Pros will send an update.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="ppw-section" aria-labelledby="ppw-faq-title">
+    <div class="ppw-shell">
+      <div style="text-align:center;max-width:760px;margin:0 auto;">
+        <p class="ppw-eyebrow">Quick answers</p>
+        <h2 class="ppw-section-title" id="ppw-faq-title">Before your first scoop.</h2>
+      </div>
+
+      <div class="ppw-faq-wrap">
+        <details class="ppw-faq" open>
+          <summary>Do I need to be home?</summary>
+          <div class="ppw-faq-answer"><p>No. As long as the selected service areas are safely accessible and your current access notes are on the account, service can be completed without you at home.</p></div>
+        </details>
+        <details class="ppw-faq">
+          <summary>What time will the technician arrive?</summary>
+          <div class="ppw-faq-answer"><p>Your route day is consistent, but it is not a fixed appointment time. We send an en-route text when the technician is heading your way, generally 10–45 minutes before arrival.</p></div>
+        </details>
+        <details class="ppw-faq">
+          <summary>When will my card be charged?</summary>
+          <div class="ppw-faq-answer"><p>You are charged per visit when the en-route text is sent. There is no flat monthly bill.</p></div>
+        </details>
+        <details class="ppw-faq">
+          <summary>Where do I add my card?</summary>
+          <div class="ppw-faq-answer"><p>Use the private Housecall Pro card request sent separately by Purge Pros. This page does not collect payment information, and you should never send card details in a text reply.</p></div>
+        </details>
+        <details class="ppw-faq">
+          <summary>Where is my customer portal?</summary>
+          <div class="ppw-faq-answer"><p>Your portal invitation is sent separately by email. Check spam or promotions if it is not in your main inbox, then save the link for future access.</p></div>
+        </details>
+        <details class="ppw-faq">
+          <summary>What if access, weather, or my plans change?</summary>
+          <div class="ppw-faq-answer"><p>Text the office as early as possible with gate, pet, property, or schedule changes. If weather affects the route, Purge Pros will communicate the updated plan.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="ppw-contact" aria-labelledby="ppw-contact-title">
+    <div class="ppw-shell ppw-contact-inner">
+      <div>
+        <p class="ppw-eyebrow">Need help?</p>
+        <h2 id="ppw-contact-title">Questions before your first visit?</h2>
+        <p>Text or call the Purge Pros office. We will respond as soon as possible.</p>
+      </div>
+      <div class="ppw-contact-actions">
+        <a class="ppw-btn" href="sms:+13179615865">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v12H7l-3 3z"></path></svg>
+          Text us
+        </a>
+        <a class="ppw-btn ppw-btn-secondary" href="tel:+13179615865">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3h3l1.5 5-2 1.5a15 15 0 0 0 5.4 5.4l1.5-2 5 1.5v3c0 2-1.6 3.6-3.6 3.6C9.4 21 3 14.6 3 6.6 3 4.6 4.6 3 6.6 3z"></path></svg>
+          Call (317) 961-5865
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="ppw-footnote">
+    <div class="ppw-shell">Your individual service confirmation and Purge Pros terms govern your plan.</div>
+  </div>
+</main>
+
+<script>
+  (function () {
+    var root = document.getElementById('pp-welcome');
+    if (!root) return;
+
+    var robots = document.querySelector('meta[name="robots"]');
+    if (!robots) {
+      robots = document.createElement('meta');
+      robots.setAttribute('name', 'robots');
+      document.head.appendChild(robots);
+    }
+    robots.setAttribute('content', 'noindex,follow');
+
+    var items = Array.prototype.slice.call(root.querySelectorAll('.ppw-faq'));
+    items.forEach(function (item) {
+      item.addEventListener('toggle', function () {
+        if (!item.open) return;
+        items.forEach(function (other) {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  }());
+</script>

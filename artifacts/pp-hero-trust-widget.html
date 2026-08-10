@@ -1,0 +1,198 @@
+<style>
+  /* Scoped to #pp-hero-trust so nothing leaks into the surrounding GHL page. */
+  #pp-hero-trust,
+  #pp-hero-trust * {
+    box-sizing: border-box;
+  }
+
+  #pp-hero-trust {
+    position: relative;
+    z-index: 1;
+    display: block !important;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 25px 20px;
+    border-top: 1px solid rgba(126, 211, 255, 0.2);
+    border-bottom: 1px solid rgba(126, 211, 255, 0.14);
+    background: linear-gradient(135deg, #062b40 0%, #073652 52%, #05283d 100%);
+    box-shadow: 0 15px 35px rgba(3, 34, 51, 0.16);
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+  }
+
+  #pp-hero-trust .pp-trust-inner {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  #pp-hero-trust .pp-trust-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    min-height: 62px;
+    padding: 5px 24px;
+  }
+
+  #pp-hero-trust .pp-trust-item + .pp-trust-item {
+    border-left: 1px solid rgba(198, 233, 250, 0.17);
+  }
+
+  #pp-hero-trust .pp-icon-shell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 43px;
+    flex: 0 0 43px;
+    border: 1px solid rgba(125, 213, 255, 0.34);
+    border-radius: 12px;
+    background: rgba(56, 182, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    color: #60c5ff;
+  }
+
+  #pp-hero-trust .pp-icon-shell svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.9;
+  }
+
+  #pp-hero-trust .pp-trust-copy {
+    min-width: 0;
+  }
+
+  #pp-hero-trust .pp-trust-title {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    line-height: 1.25;
+  }
+
+  #pp-hero-trust .pp-trust-detail {
+    display: block;
+    margin-top: 3px;
+    color: #b8d5e3;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  @media (max-width: 1040px) {
+    #pp-hero-trust {
+      padding: 20px;
+    }
+
+    #pp-hero-trust .pp-trust-inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #pp-hero-trust .pp-trust-item {
+      padding: 14px 24px;
+    }
+
+    #pp-hero-trust .pp-trust-item:nth-child(3) {
+      border-left: 0;
+    }
+
+    #pp-hero-trust .pp-trust-item:nth-child(n+3) {
+      border-top: 1px solid rgba(198, 233, 250, 0.17);
+    }
+  }
+
+  @media (max-width: 590px) {
+    #pp-hero-trust {
+      padding: 12px 17px;
+    }
+
+    #pp-hero-trust .pp-trust-inner {
+      grid-template-columns: 1fr;
+    }
+
+    #pp-hero-trust .pp-trust-item {
+      min-height: 70px;
+      padding: 13px 8px;
+      border-left: 0 !important;
+    }
+
+    #pp-hero-trust .pp-trust-item + .pp-trust-item {
+      border-top: 1px solid rgba(198, 233, 250, 0.17);
+    }
+
+    #pp-hero-trust .pp-trust-title {
+      font-size: 14px;
+    }
+
+    #pp-hero-trust .pp-trust-detail {
+      font-size: 11px;
+    }
+  }
+</style>
+
+<section id="pp-hero-trust" aria-label="Why customers trust Purge Pros">
+  <div class="pp-trust-inner">
+    <div class="pp-trust-item">
+      <span class="pp-icon-shell" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="m12 2.8 2.75 5.58 6.16.9-4.46 4.34 1.05 6.13L12 16.86l-5.5 2.89 1.05-6.13-4.46-4.34 6.16-.9L12 2.8Z"></path>
+        </svg>
+      </span>
+      <span class="pp-trust-copy">
+        <strong class="pp-trust-title">Highly Rated on Google</strong>
+        <span class="pp-trust-detail">Feedback from local customers</span>
+      </span>
+    </div>
+
+    <div class="pp-trust-item">
+      <span class="pp-icon-shell" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+          <circle cx="12" cy="12" r="3.25"></circle>
+          <path d="m7 5 1.2-2h7.6L17 5"></path>
+        </svg>
+      </span>
+      <span class="pp-trust-copy">
+        <strong class="pp-trust-title">Gate-Closure Photo</strong>
+        <span class="pp-trust-detail">Sent after every service visit</span>
+      </span>
+    </div>
+
+    <div class="pp-trust-item">
+      <span class="pp-icon-shell" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M18.36 5.64l-2.12 2.12M7.76 16.24l-2.12 2.12"></path>
+          <circle cx="12" cy="12" r="4.5"></circle>
+        </svg>
+      </span>
+      <span class="pp-trust-copy">
+        <strong class="pp-trust-title">Sanitized Tools &amp; Footwear</strong>
+        <span class="pp-trust-detail">Treated between customer yards</span>
+      </span>
+    </div>
+
+    <div class="pp-trust-item">
+      <span class="pp-icon-shell" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <rect x="5" y="2.5" width="14" height="19" rx="2.5"></rect>
+          <path d="M9 6.5h6M9 10h6M10 17.5h4"></path>
+        </svg>
+      </span>
+      <span class="pp-trust-copy">
+        <strong class="pp-trust-title">Heads-Up Text Alerts</strong>
+        <span class="pp-trust-detail">Know when your technician is on the way</span>
+      </span>
+    </div>
+  </div>
+</section>

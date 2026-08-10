@@ -1,0 +1,616 @@
+<style>
+  /* Scoped to #pp-faq-widget so nothing leaks into the surrounding GHL page. */
+  #pp-faq-widget,
+  #pp-faq-widget * {
+    box-sizing: border-box;
+  }
+
+  #pp-faq-widget {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 70px 20px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-faq-widget .pp-container {
+    width: 100%;
+    max-width: 1020px;
+    margin: 0 auto !important;
+  }
+
+  #pp-faq-widget .pp-heading-block {
+    max-width: 760px;
+    margin: 0 auto 34px;
+    text-align: center;
+  }
+
+  #pp-faq-widget .pp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    padding: 6px 12px;
+    border: 1px solid rgba(114, 204, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(4, 29, 43, 0.4);
+    color: #72ccff;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    line-height: 1.3;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  #pp-faq-widget .pp-title {
+    margin: 0;
+    color: #fff;
+    font-size: 41px;
+    font-weight: 950;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+    text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  #pp-faq-widget .pp-subtitle {
+    max-width: 650px;
+    margin: 13px auto 0;
+    color: #bdd4df;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  #pp-faq-widget .pp-faq-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  #pp-faq-widget .pp-faq-item {
+    overflow: hidden;
+    border: 1px solid rgba(9, 62, 88, 0.35);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 9px 24px rgba(0, 0, 0, 0.14);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-faq-widget .pp-faq-item:hover {
+    border-color: rgba(56, 182, 255, 0.65);
+  }
+
+  #pp-faq-widget .pp-faq-item[open] {
+    border-color: #38b6ff;
+    box-shadow:
+      0 14px 32px rgba(0, 0, 0, 0.18),
+      inset 4px 0 0 #38b6ff;
+  }
+
+  #pp-faq-widget .pp-faq-summary {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 64px;
+    padding: 11px 16px;
+    color: #17394b;
+    cursor: pointer;
+    list-style: none;
+    outline: none;
+    user-select: none;
+  }
+
+  #pp-faq-widget .pp-faq-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #pp-faq-widget .pp-faq-summary:focus-visible {
+    outline: 3px solid rgba(56, 182, 255, 0.38);
+    outline-offset: -4px;
+  }
+
+  #pp-faq-widget .pp-question-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    flex: 0 0 35px;
+    border-radius: 10px;
+    background: #e8f6fe;
+    color: #0877b9;
+    font-size: 16px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-faq-widget .pp-question-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: #17394b;
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.35;
+  }
+
+  #pp-faq-widget .pp-faq-item[open] .pp-question-text {
+    color: #0877b9;
+  }
+
+  #pp-faq-widget .pp-chevron {
+    position: relative;
+    width: 27px;
+    height: 27px;
+    flex: 0 0 27px;
+    border: 1px solid #d1e5ef;
+    border-radius: 50%;
+    background: #f4f9fb;
+    transition: background 0.2s ease, transform 0.24s ease;
+  }
+
+  #pp-faq-widget .pp-chevron::before,
+  #pp-faq-widget .pp-chevron::after {
+    position: absolute;
+    top: 12px;
+    width: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: #31586b;
+    content: "";
+  }
+
+  #pp-faq-widget .pp-chevron::before {
+    left: 6px;
+    transform: rotate(45deg);
+  }
+
+  #pp-faq-widget .pp-chevron::after {
+    right: 6px;
+    transform: rotate(-45deg);
+  }
+
+  #pp-faq-widget .pp-faq-item[open] .pp-chevron {
+    border-color: #b8def1;
+    background: #e8f6fe;
+    transform: rotate(180deg);
+  }
+
+  #pp-faq-widget .pp-faq-answer {
+    padding: 0 22px 20px 64px;
+  }
+
+  #pp-faq-widget .pp-answer-inner {
+    padding: 16px 17px 2px;
+    border-top: 1px solid #e0ecf1;
+    color: #526c7a;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  #pp-faq-widget .pp-answer-inner p {
+    margin: 0;
+  }
+
+  #pp-faq-widget .pp-answer-inner p + p {
+    margin-top: 10px;
+  }
+
+  #pp-faq-widget .pp-answer-inner strong {
+    color: #17394b;
+  }
+
+  #pp-faq-widget .pp-answer-list {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #pp-faq-widget .pp-answer-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  #pp-faq-widget .pp-list-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-top: 2px;
+    border-radius: 50%;
+    background: #e8f6fe;
+    color: #0877b9;
+    font-size: 10px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-faq-widget .pp-answer-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 12px;
+    padding: 11px 12px;
+    border-left: 3px solid #38b6ff;
+    border-radius: 7px;
+    background: #eef9ff;
+    color: #31586b;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  #pp-faq-widget .pp-note-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: #38b6ff;
+    color: #05283d;
+    font-size: 10px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-faq-widget .pp-help-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    margin-top: 24px;
+    padding: 18px 20px;
+    border: 1px solid rgba(142, 211, 245, 0.28);
+    border-radius: 15px;
+    background: rgba(4, 29, 43, 0.78);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.17);
+    color: #fff;
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+  }
+
+  #pp-faq-widget .pp-help-copy {
+    min-width: 0;
+  }
+
+  #pp-faq-widget .pp-help-title {
+    display: block;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1.3;
+  }
+
+  #pp-faq-widget .pp-help-detail {
+    display: block;
+    margin-top: 3px;
+    color: #bad2de;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  #pp-faq-widget .pp-help-actions {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex: 0 0 auto;
+  }
+
+  #pp-faq-widget .pp-help-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 15px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff !important;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-faq-widget .pp-help-link.pp-primary {
+    border-color: #38b6ff;
+    background: #38b6ff;
+    color: #05283d !important;
+  }
+
+  #pp-faq-widget .pp-help-link:hover,
+  #pp-faq-widget .pp-help-link:focus-visible {
+    border-color: #72ccff;
+    background: #fff;
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  #pp-faq-widget .pp-help-link:focus-visible {
+    outline: 3px solid rgba(114, 204, 255, 0.4);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 700px) {
+    #pp-faq-widget {
+      padding: 52px 14px;
+    }
+
+    #pp-faq-widget .pp-title {
+      font-size: 32px;
+    }
+
+    #pp-faq-widget .pp-faq-summary {
+      gap: 10px;
+      min-height: 60px;
+      padding: 10px 12px;
+    }
+
+    #pp-faq-widget .pp-question-mark {
+      width: 32px;
+      height: 32px;
+      flex-basis: 32px;
+      font-size: 14px;
+    }
+
+    #pp-faq-widget .pp-question-text {
+      font-size: 14px;
+    }
+
+    #pp-faq-widget .pp-faq-answer {
+      padding: 0 13px 15px;
+    }
+
+    #pp-faq-widget .pp-answer-inner {
+      padding: 14px 3px 0;
+      font-size: 13px;
+    }
+
+    #pp-faq-widget .pp-help-card {
+      align-items: stretch;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    #pp-faq-widget .pp-help-actions {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 420px) {
+    #pp-faq-widget .pp-title {
+      font-size: 29px;
+    }
+
+    #pp-faq-widget .pp-subtitle {
+      font-size: 14px;
+    }
+
+    #pp-faq-widget .pp-chevron {
+      width: 25px;
+      height: 25px;
+      flex-basis: 25px;
+    }
+
+    #pp-faq-widget .pp-chevron::before,
+    #pp-faq-widget .pp-chevron::after {
+      top: 11px;
+      width: 7px;
+    }
+
+    #pp-faq-widget .pp-chevron::before {
+      left: 6px;
+    }
+
+    #pp-faq-widget .pp-chevron::after {
+      right: 6px;
+    }
+
+    #pp-faq-widget .pp-help-actions {
+      flex-direction: column;
+    }
+
+    #pp-faq-widget .pp-help-link {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-faq-widget .pp-faq-item,
+    #pp-faq-widget .pp-chevron,
+    #pp-faq-widget .pp-help-link {
+      transition: none;
+    }
+  }
+</style>
+
+<section id="pp-faq-widget" aria-labelledby="pp-faq-heading">
+  <div class="pp-container">
+    <div class="pp-heading-block">
+      <div class="pp-eyebrow">Helpful Answers Before You Start</div>
+      <h2 id="pp-faq-heading" class="pp-title">Frequently Asked Questions</h2>
+      <p class="pp-subtitle">Everything you need to know about pricing, scheduling, payments, pets, weather, and recurring service.</p>
+    </div>
+
+    <div class="pp-faq-list">
+      <details class="pp-faq-item" name="pp-faq-group" open>
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">Do I need to be home during service?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p><strong>No.</strong> As long as the serviced areas are safely accessible and we have the access instructions we need, you can continue with your day.</p>
+            <p>We send a heads-up text before arrival and a gate-closure photo after the completed visit. Please leave the gate accessible or provide an approved access method, and follow any pet instructions discussed with our team.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">How do I know whether you service my address?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p>Start with the ZIP-code check in our online price tool. If your ZIP is currently covered, you can continue through pricing and submit a service request.</p>
+            <p>Because recurring service is route-based, we review the full address before confirming your service day. If we cannot currently fit the address into an active route, we will let you know rather than promising a day we cannot reliably support.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">What happens after I request recurring service?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p>Our local team reviews your address and available route capacity. After we approve and confirm the recurring route day, we send your service details and a secure link to place a payment card on file.</p>
+            <p>Completing that secure account setup prepares the account for your first confirmed service visit. You will receive service communication by your selected contact method.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">Do I have to sign a long-term contract?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p><strong>No long-term contract is required.</strong> Recurring service is billed per visit and continues on the confirmed schedule until you ask us to change or cancel it.</p>
+            <p>Your recurring price is based on the selected service frequency and normal accumulation between visits. If a lengthy pause or repeated skips create substantially more work, the return visit may require review and adjusted cleanup pricing. We will explain any adjustment before charging it.</p>
+            <div class="pp-answer-note">
+              <span class="pp-note-icon" aria-hidden="true">i</span>
+              <span>The separate initial-cleanup-fee waiver applies to eligible new recurring customers. Your regular per-visit rate still applies on visit #1, and the waiver does not apply to one-time cleanups.</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">How do billing and payment work?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p><strong>You pay per visit, not through a flat monthly service bill.</strong> After route approval, you use our secure link to place a major credit or debit card on file.</p>
+            <p>For each scheduled visit, your card is charged when the ETA or on-my-way notification is sent, shortly before service begins. A receipt is provided through the service system. We do not accept cash or checks left at the property.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">Do you offer one-time cleanups?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p><strong>Yes.</strong> One-time cleanups are available separately from recurring service and use their own time-based pricing. Choose the one-time option in the online price tool to see the current terms for your request.</p>
+            <p>The new recurring-customer initial-cleanup-fee waiver does not apply to one-time cleanups.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">Are you insured, and who performs the service?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p>Purge Pros carries business insurance, and field service is performed by background-checked W-2 employees trained to our service, sanitation, gate, and property-care standards.</p>
+            <p>You will receive a service notification before arrival, and your service professional will arrive identifiable as part of the Purge Pros team.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">How do you handle pets, gates, and property access?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <ul class="pp-answer-list">
+              <li><span class="pp-list-check" aria-hidden="true">&#10003;</span><span>We save the pet, access, and gate instructions you provide for the service team.</span></li>
+              <li><span class="pp-list-check" aria-hidden="true">&#10003;</span><span>Treats are offered only with your approval, and allergy, dietary, or no-treat preferences should be included in your notes.</span></li>
+              <li><span class="pp-list-check" aria-hidden="true">&#10003;</span><span>Tools and footwear are treated between customer yards as part of our sanitation process.</span></li>
+              <li><span class="pp-list-check" aria-hidden="true">&#10003;</span><span>We send a gate-closure photo after each completed visit.</span></li>
+            </ul>
+            <p>If a dog is reactive, protective, uncomfortable with visitors, or likely to leave through an open gate, please keep the dog securely inside during service. Our team may pause a visit when conditions do not appear safe.</p>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">Do you provide service year-round and during bad weather?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p><strong>Yes, recurring service operates year-round.</strong> We generally work through ordinary rain, cold, and snow when the property can be serviced safely.</p>
+            <p>Lightning, flooding, unsafe ice, extreme cold, or another hazardous condition may require us to delay or pause service. We will send an update and attempt to reschedule based on safe conditions and route availability.</p>
+            <div class="pp-answer-note">
+              <span class="pp-note-icon" aria-hidden="true">i</span>
+              <span>If Purge Pros cancels because of hazardous conditions and cannot safely reschedule, you are not charged for that visit. The accumulated waste is addressed at the next scheduled visit without an additional accumulation charge.</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-faq-item" name="pp-faq-group">
+        <summary class="pp-faq-summary">
+          <span class="pp-question-mark" aria-hidden="true">?</span>
+          <span class="pp-question-text">Can I skip, pause, or reschedule a service visit?</span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-faq-answer">
+          <div class="pp-answer-inner">
+            <p>Please contact us as early as possible&#8212;preferably at least <strong>48 hours before your route day</strong>. We will do our best to accommodate a change, but route-based scheduling means another day that same week may not always be available.</p>
+            <p>If your dogs will be away and no new waste will accumulate, tell us when requesting the pause. If dogs remain home, a skipped visit can create more accumulation than the recurring rate covers. A return visit may require review and adjusted cleanup pricing; any adjustment will be explained before it is charged.</p>
+            <p>A weather cancellation initiated by Purge Pros is not treated as a customer-requested skip.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="pp-help-card">
+      <div class="pp-help-copy">
+        <strong class="pp-help-title">Still have a question?</strong>
+        <span class="pp-help-detail">Reach the Purge Pros team directly. Text is usually the fastest way to get help.</span>
+      </div>
+      <div class="pp-help-actions">
+        <a href="sms:+13179615865" class="pp-help-link pp-primary">Text Us</a>
+        <a href="tel:+13179615865" class="pp-help-link">Call (317) 961-5865</a>
+      </div>
+    </div>
+  </div>
+</section>

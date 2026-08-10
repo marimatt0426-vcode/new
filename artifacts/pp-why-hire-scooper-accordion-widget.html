@@ -1,0 +1,480 @@
+<style>
+  /* Scoped to #pp-why-scooper so nothing leaks into the surrounding GHL page. */
+  #pp-why-scooper,
+  #pp-why-scooper * {
+    box-sizing: border-box;
+  }
+
+  #pp-why-scooper {
+    display: block !important;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 70px 20px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  #pp-why-scooper .pp-container {
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto !important;
+  }
+
+  #pp-why-scooper .pp-heading-block {
+    max-width: 780px;
+    margin: 0 auto 34px;
+    text-align: center;
+  }
+
+  #pp-why-scooper .pp-eyebrow {
+    margin-bottom: 8px;
+    color: #72ccff;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    line-height: 1.35;
+    text-transform: uppercase;
+  }
+
+  #pp-why-scooper .pp-title {
+    margin: 0;
+    color: #fff;
+    font-size: 42px;
+    font-weight: 950;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+    text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  #pp-why-scooper .pp-subtitle {
+    max-width: 680px;
+    margin: 14px auto 0;
+    color: #bfd6e1;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  #pp-why-scooper .pp-accordion {
+    display: grid;
+    gap: 11px;
+  }
+
+  #pp-why-scooper .pp-accordion-item {
+    overflow: hidden;
+    border: 1px solid rgba(142, 211, 245, 0.27);
+    border-radius: 15px;
+    background: rgba(4, 29, 43, 0.83);
+    box-shadow:
+      0 10px 28px rgba(0, 0, 0, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-why-scooper .pp-accordion-item:hover {
+    border-color: rgba(114, 204, 255, 0.48);
+  }
+
+  #pp-why-scooper .pp-accordion-item[open] {
+    border-color: rgba(114, 204, 255, 0.58);
+    box-shadow:
+      0 14px 34px rgba(0, 0, 0, 0.22),
+      inset 4px 0 0 #38b6ff;
+  }
+
+  #pp-why-scooper .pp-accordion-summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 74px;
+    padding: 13px 19px;
+    color: #fff;
+    cursor: pointer;
+    list-style: none;
+    outline: none;
+    user-select: none;
+  }
+
+  #pp-why-scooper .pp-accordion-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #pp-why-scooper .pp-accordion-summary:focus-visible {
+    outline: 3px solid rgba(114, 204, 255, 0.5);
+    outline-offset: -4px;
+  }
+
+  #pp-why-scooper .pp-summary-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border: 1px solid rgba(125, 213, 255, 0.32);
+    border-radius: 12px;
+    background: rgba(56, 182, 255, 0.12);
+    color: #65c7ff;
+  }
+
+  #pp-why-scooper .pp-summary-icon svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.9;
+  }
+
+  #pp-why-scooper .pp-summary-text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  #pp-why-scooper .pp-summary-title {
+    display: block;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    line-height: 1.28;
+  }
+
+  #pp-why-scooper .pp-summary-preview {
+    display: block;
+    margin-top: 3px;
+    color: #9fbdcc;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  #pp-why-scooper .pp-chevron {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    border: 1px solid rgba(125, 213, 255, 0.24);
+    border-radius: 50%;
+    background: rgba(56, 182, 255, 0.08);
+    transition: background 0.2s ease, transform 0.24s ease;
+  }
+
+  #pp-why-scooper .pp-chevron::before,
+  #pp-why-scooper .pp-chevron::after {
+    position: absolute;
+    top: 13px;
+    width: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: #cbe7f4;
+    content: "";
+  }
+
+  #pp-why-scooper .pp-chevron::before {
+    left: 7px;
+    transform: rotate(45deg);
+  }
+
+  #pp-why-scooper .pp-chevron::after {
+    right: 7px;
+    transform: rotate(-45deg);
+  }
+
+  #pp-why-scooper .pp-accordion-item[open] .pp-chevron {
+    background: rgba(56, 182, 255, 0.18);
+    transform: rotate(180deg);
+  }
+
+  #pp-why-scooper .pp-accordion-body {
+    padding: 0 23px 22px 75px;
+  }
+
+  #pp-why-scooper .pp-accordion-body-inner {
+    padding: 17px 18px;
+    border-top: 1px solid rgba(187, 224, 241, 0.13);
+    color: #c5d8e1;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  #pp-why-scooper .pp-accordion-body p {
+    margin: 0;
+  }
+
+  #pp-why-scooper .pp-accordion-body p + p {
+    margin-top: 11px;
+  }
+
+  #pp-why-scooper .pp-accordion-body strong {
+    color: #fff;
+  }
+
+  #pp-why-scooper .pp-result-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 13px;
+    padding: 11px 12px;
+    border-left: 3px solid #38b6ff;
+    border-radius: 7px;
+    background: rgba(56, 182, 255, 0.08);
+    color: #d7ecf5;
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.45;
+  }
+
+  #pp-why-scooper .pp-result-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: #38b6ff;
+    color: #05283d;
+    font-size: 10px;
+    font-weight: 950;
+    line-height: 1;
+  }
+
+  #pp-why-scooper .pp-section-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 22px;
+    color: #bdd4df;
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.45;
+    text-align: center;
+  }
+
+  #pp-why-scooper .pp-close-line {
+    width: 38px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(114, 204, 255, 0.72));
+  }
+
+  #pp-why-scooper .pp-close-line:last-child {
+    transform: rotate(180deg);
+  }
+
+  @media (max-width: 650px) {
+    #pp-why-scooper {
+      padding: 52px 14px;
+    }
+
+    #pp-why-scooper .pp-heading-block {
+      margin-bottom: 27px;
+    }
+
+    #pp-why-scooper .pp-title {
+      font-size: 32px;
+    }
+
+    #pp-why-scooper .pp-subtitle {
+      font-size: 15px;
+    }
+
+    #pp-why-scooper .pp-accordion-summary {
+      gap: 11px;
+      min-height: 70px;
+      padding: 11px 13px;
+    }
+
+    #pp-why-scooper .pp-summary-icon {
+      width: 38px;
+      height: 38px;
+      flex-basis: 38px;
+    }
+
+    #pp-why-scooper .pp-summary-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    #pp-why-scooper .pp-summary-title {
+      font-size: 14px;
+    }
+
+    #pp-why-scooper .pp-summary-preview {
+      display: none;
+    }
+
+    #pp-why-scooper .pp-accordion-body {
+      padding: 0 13px 14px;
+    }
+
+    #pp-why-scooper .pp-accordion-body-inner {
+      padding: 14px 5px 2px;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 390px) {
+    #pp-why-scooper .pp-title {
+      font-size: 29px;
+    }
+
+    #pp-why-scooper .pp-chevron {
+      width: 25px;
+      height: 25px;
+      flex-basis: 25px;
+    }
+
+    #pp-why-scooper .pp-chevron::before,
+    #pp-why-scooper .pp-chevron::after {
+      top: 11px;
+      width: 7px;
+    }
+
+    #pp-why-scooper .pp-chevron::before {
+      left: 6px;
+    }
+
+    #pp-why-scooper .pp-chevron::after {
+      right: 6px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-why-scooper .pp-accordion-item,
+    #pp-why-scooper .pp-chevron {
+      transition: none;
+    }
+  }
+</style>
+
+<section id="pp-why-scooper" aria-labelledby="pp-why-scooper-heading">
+  <div class="pp-container">
+    <div class="pp-heading-block">
+      <div class="pp-eyebrow">More Than a Cleaner Yard</div>
+      <h2 id="pp-why-scooper-heading" class="pp-title">Why Choose Professional Pet Waste Removal?</h2>
+      <p class="pp-subtitle">Routine service gives you time back, supports a cleaner outdoor space, and keeps one more recurring chore off your list.</p>
+    </div>
+
+    <div class="pp-accordion">
+      <details class="pp-accordion-item" name="pp-scooper-benefits" open>
+        <summary class="pp-accordion-summary">
+          <span class="pp-summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 7v5l3 2"></path>
+            </svg>
+          </span>
+          <span class="pp-summary-text">
+            <strong class="pp-summary-title">More Time for What Matters</strong>
+            <span class="pp-summary-preview">Take a repetitive outdoor chore off your schedule.</span>
+          </span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-accordion-body">
+          <div class="pp-accordion-body-inner">
+            <p>Searching the yard, scooping, bagging, and disposing of pet waste takes time&#8212;and the job returns every week.</p>
+            <p>Routine service gives that time back to you while keeping yard care from becoming another delayed weekend task.</p>
+            <div class="pp-result-line">
+              <span class="pp-result-check" aria-hidden="true">&#10003;</span>
+              <span><strong>The practical benefit:</strong> fewer chores competing with your family time, work, and weekends.</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-accordion-item" name="pp-scooper-benefits">
+        <summary class="pp-accordion-summary">
+          <span class="pp-summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="m3 11 9-7 9 7"></path>
+              <path d="M5.5 10v9h13v-9M9 19v-5h6v5"></path>
+              <path d="M3 21h18"></path>
+            </svg>
+          </span>
+          <span class="pp-summary-text">
+            <strong class="pp-summary-title">A Better-Looking Yard</strong>
+            <span class="pp-summary-preview">Keep waste from lingering throughout your outdoor space.</span>
+          </span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-accordion-body">
+          <div class="pp-accordion-body-inner">
+            <p>Dog waste is not an effective lawn fertilizer. When it accumulates, it can leave your yard looking neglected and make mowing, playtime, and outdoor gatherings less enjoyable.</p>
+            <p>Consistent removal keeps the serviced areas more presentable and ready to use.</p>
+            <div class="pp-result-line">
+              <span class="pp-result-check" aria-hidden="true">&#10003;</span>
+              <span><strong>The practical benefit:</strong> a yard that looks cared for and is easier to enjoy between visits.</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-accordion-item" name="pp-scooper-benefits">
+        <summary class="pp-accordion-summary">
+          <span class="pp-summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3 5 6v5c0 4.8 2.9 8.4 7 10 4.1-1.6 7-5.2 7-10V6l-7-3Z"></path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </span>
+          <span class="pp-summary-text">
+            <strong class="pp-summary-title">A Cleaner Outdoor Space</strong>
+            <span class="pp-summary-preview">Reduce unnecessary contact with lingering pet waste.</span>
+          </span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-accordion-body">
+          <div class="pp-accordion-body-inner">
+            <p>Pet waste can contain bacteria and parasites. Leaving it in commonly used yard areas increases the opportunity for people, pets, shoes, and equipment to come into contact with it.</p>
+            <p>Routine pickup reduces that exposure and keeps waste from remaining in the yard longer than necessary.</p>
+            <div class="pp-result-line">
+              <span class="pp-result-check" aria-hidden="true">&#10003;</span>
+              <span><strong>The practical benefit:</strong> cleaner spaces for pets, children, visitors, and everyday outdoor use.</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="pp-accordion-item" name="pp-scooper-benefits">
+        <summary class="pp-accordion-summary">
+          <span class="pp-summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+              <path d="M9 7h6M9 11h6M9 15h3"></path>
+              <path d="m14.5 16.5 1.5 1.5 3-3"></path>
+            </svg>
+          </span>
+          <span class="pp-summary-text">
+            <strong class="pp-summary-title">Reliable, Documented Service</strong>
+            <span class="pp-summary-preview">Know when service is happening and when the gate is secured.</span>
+          </span>
+          <span class="pp-chevron" aria-hidden="true"></span>
+        </summary>
+        <div class="pp-accordion-body">
+          <div class="pp-accordion-body-inner">
+            <p>Purge Pros sends a heads-up text before service and a gate-closure photo afterward, giving you clear communication around every completed visit.</p>
+            <p>Your saved access and property instructions help our team handle each visit consistently.</p>
+            <div class="pp-result-line">
+              <span class="pp-result-check" aria-hidden="true">&#10003;</span>
+              <span><strong>The practical benefit:</strong> one less recurring task to remember, manage, or follow up on.</span>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="pp-section-close">
+      <span class="pp-close-line" aria-hidden="true"></span>
+      <span>Professional service turns an unpleasant recurring chore into a handled routine.</span>
+      <span class="pp-close-line" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>

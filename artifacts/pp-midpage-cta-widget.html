@@ -1,0 +1,279 @@
+<style>
+  /* Scoped to #pp-midpage-cta so nothing leaks into the surrounding GHL page. */
+  #pp-midpage-cta,
+  #pp-midpage-cta * {
+    box-sizing: border-box;
+  }
+
+  #pp-midpage-cta {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 390px;
+    margin: 0 auto !important;
+    padding: 52px 20px;
+    background: transparent !important;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+  }
+
+  #pp-midpage-cta .pp-cta-panel {
+    position: relative;
+    width: min(820px, 100%);
+    overflow: hidden;
+    padding: 36px 42px 32px;
+    border: 1px solid rgba(176, 226, 250, 0.34);
+    border-radius: 24px;
+    background: rgba(3, 31, 47, 0.76);
+    box-shadow:
+      0 24px 55px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    text-align: center;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  #pp-midpage-cta .pp-cta-panel::before {
+    position: absolute;
+    top: 0;
+    right: 18%;
+    left: 18%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #38b6ff, transparent);
+    content: "";
+    pointer-events: none;
+  }
+
+  #pp-midpage-cta .pp-cta-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: #7ed3ff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  #pp-midpage-cta .pp-eyebrow-line {
+    width: 24px;
+    height: 2px;
+    border-radius: 2px;
+    background: #38b6ff;
+  }
+
+  #pp-midpage-cta .pp-cta-title {
+    margin: 0;
+    color: #fff;
+    font-size: 39px;
+    font-weight: 950;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    text-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  #pp-midpage-cta .pp-cta-copy {
+    max-width: 620px;
+    margin: 13px auto 0;
+    color: #d7e9f1;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.55;
+  }
+
+  #pp-midpage-cta .pp-cta-button-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 23px;
+  }
+
+  #pp-midpage-cta .pp-cta-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+    width: min(390px, 100%);
+    min-height: 58px;
+    overflow: hidden;
+    padding: 15px 23px;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #38b6ff 0%, #1596dd 55%, #0877b9 100%);
+    box-shadow:
+      0 11px 27px rgba(0, 0, 0, 0.32),
+      0 0 24px rgba(56, 182, 255, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    color: #fff !important;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 950;
+    letter-spacing: 0.045em;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  #pp-midpage-cta .pp-cta-button::after {
+    position: absolute;
+    top: -80%;
+    left: -45%;
+    width: 27%;
+    height: 260%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    content: "";
+    pointer-events: none;
+    transform: rotate(20deg);
+    transition: left 0.42s ease;
+  }
+
+  #pp-midpage-cta .pp-cta-button:hover,
+  #pp-midpage-cta .pp-cta-button:focus-visible {
+    background: #fff;
+    box-shadow:
+      0 14px 32px rgba(0, 0, 0, 0.36),
+      0 0 30px rgba(56, 182, 255, 0.26);
+    color: #0877b9 !important;
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  #pp-midpage-cta .pp-cta-button:hover::after,
+  #pp-midpage-cta .pp-cta-button:focus-visible::after {
+    left: 118%;
+  }
+
+  #pp-midpage-cta .pp-cta-button:focus-visible {
+    outline: 3px solid rgba(126, 211, 255, 0.38);
+    outline-offset: 4px;
+  }
+
+  #pp-midpage-cta .pp-cta-paw {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 23px;
+    height: 23px;
+    flex: 0 0 23px;
+    fill: currentColor;
+  }
+
+  #pp-midpage-cta .pp-cta-button-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  #pp-midpage-cta .pp-cta-details {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px 10px;
+    margin-top: 13px;
+    color: #bed5e0;
+    font-size: 11px;
+    font-weight: 750;
+    line-height: 1.35;
+  }
+
+  #pp-midpage-cta .pp-detail-dot {
+    width: 4px;
+    height: 4px;
+    flex: 0 0 4px;
+    border-radius: 50%;
+    background: #38b6ff;
+  }
+
+  @media (max-width: 650px) {
+    #pp-midpage-cta {
+      min-height: 410px;
+      padding: 42px 16px;
+    }
+
+    #pp-midpage-cta .pp-cta-panel {
+      padding: 31px 20px 28px;
+      border-radius: 20px;
+    }
+
+    #pp-midpage-cta .pp-cta-title {
+      font-size: 31px;
+      line-height: 1.13;
+    }
+
+    #pp-midpage-cta .pp-cta-copy {
+      font-size: 15px;
+    }
+
+    #pp-midpage-cta .pp-cta-button {
+      min-height: 55px;
+      padding: 14px 16px;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 390px) {
+    #pp-midpage-cta .pp-cta-title {
+      font-size: 28px;
+    }
+
+    #pp-midpage-cta .pp-cta-paw {
+      width: 20px;
+      height: 20px;
+      flex-basis: 20px;
+    }
+
+    #pp-midpage-cta .pp-cta-details {
+      flex-direction: column;
+    }
+
+    #pp-midpage-cta .pp-detail-dot {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-midpage-cta .pp-cta-button,
+    #pp-midpage-cta .pp-cta-button::after {
+      transition: none;
+    }
+  }
+</style>
+
+<section id="pp-midpage-cta" aria-labelledby="pp-midpage-cta-heading">
+  <div class="pp-cta-panel">
+    <div class="pp-cta-eyebrow">
+      <span class="pp-eyebrow-line" aria-hidden="true"></span>
+      <span>Your Cleaner Yard Starts Here</span>
+      <span class="pp-eyebrow-line" aria-hidden="true"></span>
+    </div>
+
+    <h2 id="pp-midpage-cta-heading" class="pp-cta-title">Ready to Take Scooping Off Your To-Do List?</h2>
+    <p class="pp-cta-copy">Answer a few quick questions to see your exact per-visit price and available service options.</p>
+
+    <div class="pp-cta-button-wrap">
+      <a href="#quote" class="pp-cta-button" aria-label="Open the Purge Pros quote tool">
+        <svg class="pp-cta-paw" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <ellipse cx="5.1" cy="8.2" rx="2.25" ry="3.1" transform="rotate(-25 5.1 8.2)"></ellipse>
+          <ellipse cx="9.7" cy="5.1" rx="2.25" ry="3.15" transform="rotate(-7 9.7 5.1)"></ellipse>
+          <ellipse cx="14.4" cy="5.1" rx="2.25" ry="3.15" transform="rotate(7 14.4 5.1)"></ellipse>
+          <ellipse cx="18.9" cy="8.2" rx="2.25" ry="3.1" transform="rotate(25 18.9 8.2)"></ellipse>
+          <path d="M12 9.4c-3.75 0-7.15 3.35-7.15 6.75 0 2.2 1.62 3.45 3.55 3.45 1.22 0 2.18-.55 3.6-.55s2.38.55 3.6.55c1.93 0 3.55-1.25 3.55-3.45 0-3.4-3.4-6.75-7.15-6.75Z"></path>
+        </svg>
+        <span class="pp-cta-button-text">See My Exact Per-Visit Price</span>
+      </a>
+    </div>
+
+    <div class="pp-cta-details" aria-label="Quote details">
+      <span>Takes about 60 seconds</span>
+      <span class="pp-detail-dot" aria-hidden="true"></span>
+      <span>No payment today</span>
+      <span class="pp-detail-dot" aria-hidden="true"></span>
+      <span>Pay per visit</span>
+    </div>
+  </div>
+</section>

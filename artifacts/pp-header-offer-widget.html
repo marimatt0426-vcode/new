@@ -1,0 +1,369 @@
+<style>
+  #pp-header-widget,
+  #pp-header-widget * {
+    box-sizing: border-box;
+  }
+
+  #pp-header-widget .poop-header-bar {
+    position: relative;
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100vw;
+    margin-right: calc(50% - 50vw);
+    margin-left: calc(50% - 50vw);
+    padding: 8px 10px;
+    background: #000;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+
+  #pp-header-widget .poop-bar-text {
+    min-width: 0;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  #pp-header-widget .poop-offer-label {
+    margin-right: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  #pp-header-widget .poop-highlight {
+    color: #38b6ff;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  #pp-header-widget .poop-disclaimer {
+    display: block;
+    margin-top: 2px;
+    color: #e1e1e1;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  #pp-header-widget .info-trigger {
+    appearance: none;
+    margin: 0;
+    padding: 0 0 2px;
+    border: 0;
+    border-bottom: 1px dashed #38b6ff;
+    background: transparent;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  #pp-header-widget .info-trigger:hover,
+  #pp-header-widget .info-trigger:focus-visible {
+    color: #fff;
+    outline: none;
+  }
+
+  #pp-header-widget .info-trigger:focus-visible {
+    box-shadow: 0 2px 0 #38b6ff;
+  }
+
+  #pp-header-widget .info-icon {
+    margin-left: 2px;
+    color: #38b6ff;
+    font-size: 11px;
+  }
+
+  #pp-header-widget .poop-bar-btn {
+    flex: 0 0 auto;
+    padding: 6px 16px;
+    border: 1px solid #38b6ff;
+    border-radius: 50px;
+    background: #38b6ff;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(56, 182, 255, 0.4);
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1.2;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #pp-header-widget .poop-bar-btn:hover,
+  #pp-header-widget .poop-bar-btn:focus-visible {
+    background: #fff;
+    color: #0877b9 !important;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  #pp-header-widget .pp-modal-overlay {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+  }
+
+  #pp-header-widget .pp-modal-overlay.is-open {
+    display: flex;
+  }
+
+  #pp-header-widget .pp-modal-content {
+    position: relative;
+    width: min(440px, 100%);
+    max-height: calc(100vh - 36px);
+    overflow-y: auto;
+    padding: 24px;
+    border: 2px solid #38b6ff;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.5);
+    color: #263844;
+    font-family: Arial, sans-serif;
+    text-align: left;
+    animation: ppFadeIn 0.22s ease-out;
+  }
+
+  #pp-header-widget .pp-modal-header {
+    margin: 0 32px 14px 0;
+    color: #073652;
+    font-size: 21px;
+    font-weight: 900;
+    line-height: 1.15;
+  }
+
+  #pp-header-widget .pp-modal-body p {
+    margin: 0 0 14px;
+    color: #4b626f;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  #pp-header-widget .pp-price-breakdown {
+    margin: 16px 0;
+    padding: 5px 15px;
+    border: 1px solid #d9e7ee;
+    border-radius: 12px;
+    background: #f8fbfd;
+  }
+
+  #pp-header-widget .pp-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e4edf2;
+    color: #516c7a;
+    font-size: 13px;
+  }
+
+  #pp-header-widget .pp-price-row:last-child {
+    border-bottom: 0;
+  }
+
+  #pp-header-widget .pp-price-row strong {
+    color: #17394b;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  #pp-header-widget .pp-example {
+    font-weight: 800;
+  }
+
+  #pp-header-widget .pp-your-price {
+    color: #159447 !important;
+    font-size: 21px;
+    font-weight: 900;
+  }
+
+  #pp-header-widget .pp-eligibility {
+    margin-top: 15px;
+    padding: 11px 12px;
+    border-left: 4px solid #38b6ff;
+    border-radius: 8px;
+    background: #eaf8ff;
+    color: #31586b;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  #pp-header-widget .pp-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    padding: 0;
+    border: 1px solid #cbdde6;
+    border-radius: 50%;
+    background: #f4f7f9;
+    color: #17384b;
+    font-size: 21px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  #pp-header-widget .pp-close-btn:hover,
+  #pp-header-widget .pp-close-btn:focus-visible {
+    border-color: #38b6ff;
+    background: #eaf8ff;
+    outline: none;
+  }
+
+  @keyframes ppFadeIn {
+    from { opacity: 0; transform: translateY(5px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @media (max-width: 600px) {
+    #pp-header-widget .poop-header-bar {
+      gap: 8px;
+      padding: 7px 6px;
+    }
+
+    #pp-header-widget .poop-bar-text {
+      font-size: 10.5px;
+      line-height: 1.22;
+    }
+
+    #pp-header-widget .poop-offer-label {
+      display: none;
+    }
+
+    #pp-header-widget .poop-disclaimer {
+      margin-top: 3px;
+      font-size: 8.5px;
+    }
+
+    #pp-header-widget .poop-bar-btn {
+      padding: 6px 10px;
+      font-size: 10px;
+    }
+
+    #pp-header-widget .pp-modal-content {
+      padding: 21px 18px 18px;
+    }
+
+    #pp-header-widget .pp-modal-header {
+      font-size: 19px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #pp-header-widget .poop-bar-btn,
+    #pp-header-widget .pp-modal-content {
+      animation: none;
+      transition: none;
+    }
+  }
+</style>
+
+<div id="pp-header-widget">
+  <div class="poop-header-bar">
+    <p class="poop-bar-text">
+      <span class="poop-offer-label">New customer offer:</span>
+      <button class="poop-highlight info-trigger" type="button" aria-haspopup="dialog" aria-controls="ppInfoModal">
+        Initial cleanup fee ($39.99+ value) waived <span class="info-icon" aria-hidden="true">ⓘ</span>
+      </button>
+      <span class="poop-disclaimer">New recurring service only · regular per-visit rate applies · not valid for one-time cleanups</span>
+    </p>
+
+    <a href="#quote" class="poop-bar-btn">See My Price →</a>
+  </div>
+
+  <div id="ppInfoModal" class="pp-modal-overlay" aria-hidden="true">
+    <section class="pp-modal-content" role="dialog" aria-modal="true" aria-labelledby="ppInfoModalTitle">
+      <button class="pp-close-btn" type="button" aria-label="Close offer details">&times;</button>
+
+      <h2 id="ppInfoModalTitle" class="pp-modal-header">Your initial cleanup fee is waived</h2>
+
+      <div class="pp-modal-body">
+        <p>A first visit can take extra time because we clear the full serviced yard before recurring maintenance begins. New recurring customers do not pay a separate fee for that initial cleanup.</p>
+
+        <div class="pp-price-breakdown" aria-label="Initial cleanup fee example">
+          <div class="pp-price-row">
+            <span>First 30 minutes</span>
+            <strong>$39.99</strong>
+          </div>
+          <div class="pp-price-row">
+            <span>Additional cleanup time</span>
+            <strong>$1 per minute</strong>
+          </div>
+          <div class="pp-price-row pp-example">
+            <span>60-minute cleanup example</span>
+            <strong>$69.99</strong>
+          </div>
+          <div class="pp-price-row">
+            <span>Your separate initial cleanup fee</span>
+            <strong class="pp-your-price">$0</strong>
+          </div>
+        </div>
+
+        <p>You pay only your regular per-visit service rate on visit #1. The additional initial-cleanup fee is waived automatically.</p>
+
+        <div class="pp-eligibility">
+          New recurring customers only. This offer does not apply to one-time cleanups. Actual savings depend on the cleanup time required.
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const root = document.getElementById("pp-header-widget");
+    if (!root) return;
+
+    const trigger = root.querySelector(".info-trigger");
+    const overlay = root.querySelector(".pp-modal-overlay");
+    const closeButton = root.querySelector(".pp-close-btn");
+    let previousFocus = null;
+    let previousOverflow = "";
+
+    function openModal() {
+      previousFocus = document.activeElement;
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      overlay.classList.add("is-open");
+      overlay.setAttribute("aria-hidden", "false");
+      closeButton.focus();
+    }
+
+    function closeModal() {
+      if (!overlay.classList.contains("is-open")) return;
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = previousOverflow;
+      if (previousFocus && typeof previousFocus.focus === "function") previousFocus.focus();
+    }
+
+    trigger.addEventListener("click", openModal);
+    closeButton.addEventListener("click", closeModal);
+    overlay.addEventListener("click", function (event) {
+      if (event.target === overlay) closeModal();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeModal();
+    });
+  })();
+</script>

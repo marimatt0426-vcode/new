@@ -1,35 +1,31 @@
-// GENERATED FILE — rebuild with: node tools/build-dist.js
-// Paste the ENTIRE contents into a Cloudflare Worker (e.g. "purge-quote") via
-// Edit code -> select all -> replace -> Deploy.
+// GENERATED, SINGLE-FILE CLOUDFLARE WORKER — OWNER COPY/PASTE FILE
+// Paste this entire file into the EXISTING "purge-lead-relay" Cloudflare Worker.
+// It preserves the old widget at POST / while adding the v3 widget and webhook
+// at separate routes. Do not replace the existing "purge-quote" Worker at launch.
 //
-//   https://<worker-url>/purge-quote.js   the widget (use in your site's script tag)
-//   https://<worker-url>/                 a live demo page
+// Routes:
+//   GET  /                 v3 preview page
+//   GET  /purge-quote.js   website widget script
+//   GET  /reviews          live Google review count/rating
+//   POST /                 existing widget -> existing GHL workflow
+//   POST /submit           v3 widget -> new GHL v3 workflow
+//
+// Existing required secret: GHL_WEBHOOK_URL (leave its current value untouched)
+// New required secret: GHL_WEBHOOK_URL_V3 (new v3 Inbound Webhook URL)
+// Optional secrets: GOOGLE_PLACES_API_KEY, GOOGLE_PLACE_ID,
+//                   META_PIXEL_ID, META_CAPI_TOKEN, META_TEST_EVENT_CODE
+// Plain variable: ALLOWED_ORIGINS=https://itspurgepros.com,https://www.itspurgepros.com,https://purge-quote.purgepros.workers.dev
+// Optional promotion variables: PROMO_ENABLED, PROMO_BADGE, PROMO_TITLE,
+//                               PROMO_DETAIL, PROMO_ELIGIBILITY, and popup PROMO_* fields.
+//
+// Google Ads service-request conversion retained from the current production code.
+// The former phone-unlock conversion is intentionally not fired by v3 because v3
+// shows pricing before contact information and therefore has no "quote unlock."
 
-// ╔══════════════════════ EDIT THESE LINES ONLY ══════════════════════╗
-// Everything below this block is generated — never edit it by hand.
-
-// Your purge-lead-relay worker URL — pre-filled; verify it matches yours.
-const LEAD_ENDPOINT = "https://purge-lead-relay.purgepros.workers.dev";
-
-// Same relay URL + "/reviews" for the live Google review chip.
-const REVIEWS_ENDPOINT = "https://purge-lead-relay.purgepros.workers.dev/reviews";
-
-// Existing Google Ads service-request conversion label, if you use one.
-// Example: "AW-123456789/AbC-dEfGhIjK". Leave blank when GTM/GA4 owns it.
 const GOOGLE_ADS_SEND_TO = "AW-17767139897/g9smCM7pkL4cELmUhJhC";
-
-// Keep true when this widget owns the browser Meta events. Set false only when
-// an existing GTM/Meta setup already fires the same events from this data layer.
 const FIRE_META_PIXEL_EVENTS = true;
 
-// Optional Cloudflare plaintext variables can change the offer without editing
-// this file: PROMO_ENABLED, PROMO_BADGE, PROMO_TITLE, PROMO_DETAIL, and the
-// additional PROMO_* popup fields documented in the owner guide.
-
-// ╚═══════════════════════════════════════════════════════════════════╝
-
 const WIDGET_JS = "/*!\r\n * Purge Pros — transparent-price quote and service-request widget.\r\n * Self-contained, dependency-free, and hosted by the existing Cloudflare Worker.\r\n *\r\n * Embed: <script src=\"https://YOUR-HOST/purge-quote.js\" defer></script>\r\n * Open:  links to #quote / #get-quote, [data-purge-quote], PurgeProsQuote.open(),\n *        or a landing URL containing ?open_quote=1.\n */\r\n(function () {\r\n  \"use strict\";\r\n  if (window.PurgeProsQuote) return;\r\n\r\n  const CONFIG = {\r\n    leadEndpoint: \"\",\r\n    reviewsEndpoint: \"\",\r\n    tracking: {\r\n      googleAdsSendTo: \"\",\r\n      firePixelEvents: true\r\n    },\r\n    brand: {\r\n      name: \"Purge Pros\",\r\n      phoneDisplay: \"(317) 961-5865\",\r\n      phoneHref: \"tel:+13179615865\",\r\n      iconUrl: \"https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/69ffe0d6a7b9e0385a45dea3.png\",\r\n      heroImageUrl: \"https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/69ffd15e54bc6e60ff18533a.jpg\",\r\n      privacyUrl: \"https://itspurgepros.com/privacy-policy\",\r\n      termsUrl: \"https://itspurgepros.com/terms-conditions\",\r\n      reviewChipTemplate: \"{rating}★ Google · {count} reviews\"\r\n    },\r\n    consentVersion: \"service-sms-2026-08-v1\",\r\n    termsVersion: \"2025-12-27\",\r\n    pricingVersion: \"2026-08-cloudflare-v1\",\r\n    promotion: {\r\n      enabled: true,\r\n      badge: \"NEW CUSTOMER OFFER · AUTOMATICALLY APPLIED\",\r\n      title: \"Initial cleanup fee ($39.99+ value): WAIVED\",\r\n      detail: \"Start recurring service and pay only your regular per-visit rate on visit #1—no separate initial cleanup charge.\",\r\n      eligibility: \"Recurring service only — does not apply to one-time cleanups.\",\r\n      linkLabel: \"See how the offer works\",\r\n      modalTitle: \"Your initial cleanup fee is waived\",\r\n      modalIntro: \"A first visit can take extra time because we clear the full serviced yard before recurring maintenance begins. New recurring customers do not pay a separate fee for that initial cleanup.\",\r\n      firstThirtyLabel: \"First 30 minutes\",\r\n      firstThirtyValue: \"$39.99\",\r\n      additionalLabel: \"Additional cleanup time\",\r\n      additionalValue: \"$1 per minute\",\r\n      exampleLabel: \"60-minute cleanup example\",\r\n      exampleValue: \"$69.99\",\r\n      customerLabel: \"Your separate initial cleanup fee\",\r\n      customerValue: \"$0\",\r\n      disclaimer: \"For new recurring customers only. One-time cleanups use separate pricing. Actual savings depend on the time required.\"\r\n    },\r\n    serviceZips: [\r\n      \"46011\", \"46013\", \"46014\", \"46015\", \"46016\", \"46032\", \"46033\", \"46034\", \"46037\",\r\n      \"46038\", \"46040\", \"46048\", \"46051\", \"46055\", \"46056\", \"46060\", \"46061\", \"46062\",\r\n      \"46064\", \"46074\", \"46075\", \"46077\", \"46112\", \"46113\", \"46122\", \"46123\", \"46140\",\r\n      \"46142\", \"46143\", \"46158\", \"46163\", \"46167\", \"46168\", \"46214\", \"46216\", \"46217\",\r\n      \"46220\", \"46221\", \"46227\", \"46228\", \"46231\", \"46234\", \"46236\", \"46237\", \"46239\",\r\n      \"46240\", \"46250\", \"46256\", \"46259\", \"46260\", \"46268\", \"46278\", \"46280\"\r\n    ],\r\n    frequencies: {\r\n      twice: {\r\n        label: \"Twice weekly\",\r\n        sub: \"For busy yards and multiple dogs\",\r\n        maxDogs: 9,\r\n        prices: { 1: 1599, 2: 1749, 3: 1899, 4: 2049, 5: 2199, 6: 2349, 7: 2499, 8: 2649, 9: 2799 }\r\n      },\r\n      weekly: {\r\n        label: \"Weekly\",\r\n        sub: \"The most popular maintenance plan\",\r\n        popular: true,\r\n        maxDogs: 5,\r\n        prices: { 1: 1999, 2: 2249, 3: 2499, 4: 2749, 5: 2999 }\r\n      },\r\n      biweekly: {\r\n        label: \"Every other week\",\r\n        sub: \"For lighter-use yards\",\r\n        maxDogs: 4,\r\n        prices: { 1: 2999, 2: 3349, 3: 3699, 4: 4049 }\r\n      },\r\n      onetime: {\r\n        label: \"One-time cleanup\",\r\n        sub: \"A one-visit pet waste cleanup\",\r\n        anyDogs: true,\r\n        flatPrice: 8999\r\n      },\r\n      custom: {\r\n        label: \"Custom booking\",\r\n        sub: \"10+ dogs · over 1 acre · kennels & commercial\",\r\n        custom: true\r\n      }\r\n    },\r\n    areaLabels: { back: \"Back yard\", front: \"Front yard\", side: \"Side yard(s)\" },\r\n    areaAdders: { 1: 0, 2: 250, 3: 500 },\r\n    yardSizes: {\r\n      s: { label: \"Up to ⅛ acre\", add: 0 },\r\n      m: { label: \"Up to ¼ acre\", add: 400 },\r\n      l: { label: \"Up to ½ acre\", add: 800 },\r\n      xl: { label: \"Up to 1 acre\", add: 1200 },\r\n      over: { label: \"Over 1 acre\", custom: true }\r\n    }\r\n  };\r\n\r\n  const ATTRIBUTION_KEYS = [\"utm_source\", \"utm_medium\", \"utm_campaign\", \"utm_content\", \"utm_term\", \"gclid\", \"wbraid\", \"gbraid\", \"fbclid\"];\r\n  const PROGRESS_LABELS = [\"Area\", \"Plan\", \"Price\", \"Details\", \"Review\"];\r\n  const LOW_RISK_STORAGE_KEY = \"pp_quote_progress_v3\";\r\n  const ATTRIBUTION_STORAGE_KEY = \"pp_quote_attribution_v3\";\r\n\r\n  const CSS = `\r\n    :host { all: initial; position: fixed; inset: 0; z-index: 2147483000; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif; color: #0b2537; }\r\n    *, *::before, *::after { box-sizing: border-box; }\r\n    button, input, select, textarea { font: inherit; }\r\n    button, a { -webkit-tap-highlight-color: transparent; }\r\n    a { color: #0877b9; }\r\n    .backdrop { position: fixed; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(2, 20, 32, .78); backdrop-filter: blur(10px); }\r\n    .modal { position: relative; width: min(1180px, 100%); height: min(780px, calc(100vh - 48px)); min-height: 620px; overflow: hidden; display: grid; grid-template-columns: minmax(330px, .86fr) minmax(520px, 1.24fr); border: 1px solid rgba(255,255,255,.58); border-radius: 28px; background: #f6fbfe; box-shadow: 0 34px 100px rgba(0, 20, 35, .35); }\r\n    .close { position: absolute; z-index: 5; top: 16px; right: 18px; width: 42px; height: 42px; border: 1px solid #cfe0e9; border-radius: 50%; background: rgba(255,255,255,.94); color: #073652; font-size: 25px; line-height: 1; cursor: pointer; box-shadow: 0 8px 22px rgba(5, 52, 80, .12); }\r\n    .close:hover, .close:focus-visible { background: #e9f7ff; outline: 3px solid rgba(56,182,255,.28); }\r\n    .trust { position: relative; overflow: hidden; padding: 40px 34px 28px; color: #fff; background: linear-gradient(152deg, #073652 0%, #075883 58%, #0b83bd 100%); display: flex; flex-direction: column; }\r\n    .trust::before { content: \"\"; position: absolute; width: 360px; height: 360px; border-radius: 50%; right: -185px; top: -170px; background: rgba(56,182,255,.25); }\r\n    .brand { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }\r\n    .brand-mark { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 14px; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.15); }\r\n    .brand-mark img { width: 34px; height: 34px; object-fit: contain; }\r\n    .brand strong { display: block; font-size: 18px; line-height: 1; letter-spacing: .07em; }\r\n    .brand small { display: block; margin-top: 6px; color: #bfeaff; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }\r\n    .trust-copy { position: relative; z-index: 1; margin-top: 28px; }\r\n    .eyebrow { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 9px; color: #0a75ad; font-size: 11px; line-height: 1; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }\r\n    .eyebrow.light { color: #8cddff; }\r\n    .trust h1 { margin: 0; font-size: clamp(31px, 3.2vw, 47px); line-height: 1.02; letter-spacing: -.045em; }\r\n    .trust h1 em { color: #8cddff; font-style: normal; }\r\n    .trust-copy > p { margin: 15px 0 0; max-width: 390px; color: #d6f2ff; font-size: 15px; line-height: 1.55; }\r\n    .yard-art { display: block; width: 100%; height: 230px; margin: auto 0 18px; border: 1px solid rgba(255,255,255,.34); border-radius: 22px; object-fit: cover; object-position: center; box-shadow: 0 18px 34px rgba(0,0,0,.2); }\r\n    .trust-chips { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 7px; margin-top: 17px; }\r\n    .trust-chip { padding: 7px 9px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(3,37,56,.3); color: #e7f7ff; font-size: 10px; font-weight: 800; }\r\n    .trust-call { position: relative; z-index: 1; margin: 12px 0 0; color: #d6f2ff; font-size: 11px; }\r\n    .trust-call a { color: #8cddff; font-weight: 900; }\r\n    .proof-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }\r\n    .proof { display: flex; gap: 9px; min-width: 0; padding: 10px; border: 1px solid rgba(255,255,255,.14); border-radius: 13px; background: rgba(3,37,56,.3); }\r\n    .proof-icon { flex: 0 0 22px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: #38b6ff; color: #06304a; font-weight: 950; }\r\n    .proof strong, .proof small { display: block; }\r\n    .proof strong { font-size: 12px; line-height: 1.2; }\r\n    .proof small { margin-top: 3px; color: #bfe5f7; font-size: 10px; line-height: 1.25; }\r\n    .quote-side { min-width: 0; overflow-y: auto; padding: 30px 38px 38px; background: linear-gradient(180deg, #fff 0%, #f6fbfe 100%); }\r\n    .mobile-brand { display: none; }\r\n    .progress { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 4px 46px 28px 0; }\r\n    .progress-step { position: relative; display: grid; justify-items: center; gap: 6px; color: #8699a6; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }\r\n    .progress-step::after { content: \"\"; position: absolute; top: 14px; left: calc(50% + 17px); width: calc(100% - 26px); height: 2px; background: #dce9ef; }\r\n    .progress-step:last-child::after { display: none; }\r\n    .progress-dot { position: relative; z-index: 1; width: 29px; height: 29px; display: grid; place-items: center; border: 2px solid #d4e3eb; border-radius: 50%; background: #fff; color: #6f8592; }\r\n    .progress-step.current, .progress-step.complete { color: #075f91; }\r\n    .progress-step.current .progress-dot, .progress-step.complete .progress-dot { border-color: #38b6ff; background: #38b6ff; color: #04304a; }\r\n    .progress-step.complete::after { background: #38b6ff; }\r\n    .stage { outline: none; }\r\n    .stage-header { margin-bottom: 23px; }\r\n    .stage-header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }\r\n    .stage-header h2 { margin: 0; color: #073652; font-size: clamp(26px, 3vw, 38px); line-height: 1.08; letter-spacing: -.035em; }\r\n    .stage-header > p { max-width: 680px; margin: 11px 0 0; color: #5a7180; font-size: 14px; line-height: 1.55; }\r\n    .badge { flex: 0 0 auto; padding: 7px 10px; border-radius: 999px; background: #e5f6ff; color: #086e9f; font-size: 10px; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }\r\n    .field, .field-row { margin-top: 18px; }\r\n    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }\r\n    label, .field-label { display: block; margin-bottom: 7px; color: #17384b; font-size: 13px; font-weight: 800; }\r\n    .input, .select, .textarea { width: 100%; border: 1px solid #c9dbe5; border-radius: 13px; background: #fff; color: #102f41; outline: none; transition: border .18s, box-shadow .18s; }\r\n    .input, .select { height: 49px; padding: 0 13px; }\r\n    .textarea { min-height: 110px; padding: 12px 13px; resize: vertical; }\r\n    .input:focus, .select:focus, .textarea:focus { border-color: #38b6ff; box-shadow: 0 0 0 4px rgba(56,182,255,.16); }\r\n    .field small { display: block; margin-top: 6px; color: #758b98; font-size: 11px; line-height: 1.4; }\r\n    .zip-wrap { display: grid; grid-template-columns: 1fr auto; gap: 10px; }\r\n    .choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }\r\n    .choice { position: relative; min-height: 76px; padding: 14px 96px 13px 14px; border: 1px solid #cfdee6; border-radius: 15px; background: #fff; color: #17384b; text-align: left; cursor: pointer; transition: border .16s, background .16s, transform .16s, box-shadow .16s; }\r\n    .choice:hover:not(:disabled) { transform: translateY(-1px); border-color: #8ccce9; box-shadow: 0 8px 24px rgba(8,76,112,.08); }\r\n    .choice[aria-pressed=\"true\"] { border: 2px solid #087fb9; background: linear-gradient(135deg, #e7f7ff, #f8fdff); box-shadow: 0 0 0 3px rgba(56,182,255,.16), 0 10px 24px rgba(8,119,174,.12); }\r\n    .choice[aria-pressed=\"true\"]:hover:not(:disabled) { border-color: #087fb9; box-shadow: 0 0 0 3px rgba(56,182,255,.2), 0 12px 28px rgba(8,119,174,.16); }\r\n    .choice:disabled { border-style: dashed; border-color: #cdd9df; background: #f2f6f8; color: #82949e; cursor: not-allowed; box-shadow: none; }\r\n    .choice:disabled small { color: #82949e; }\r\n    .choice:disabled .choice-check { border-color: #c7d3d9; background: #e7eef1; color: #82949e; }\r\n    .custom-choice { grid-column: 1 / -1; min-height: 64px; }\r\n    .custom-choice:not([aria-pressed=\"true\"]) { border-style: dashed; border-color: #cbd7dd; background: #f7f9fa; color: #536b78; box-shadow: none; }\r\n    .choice strong, .choice small { display: block; }\r\n    .choice strong { font-size: 14px; }\r\n    .choice small { margin-top: 5px; color: #718692; font-size: 11px; line-height: 1.35; }\r\n    .choice-check { position: absolute; top: 12px; right: 12px; width: 24px; min-width: 24px; height: 24px; display: grid; place-items: center; padding: 0; border: 2px solid #b7ceda; border-radius: 50%; color: transparent; background: #fff; font-size: 10px; font-weight: 950; line-height: 1; white-space: nowrap; }\r\n    .choice[aria-pressed=\"true\"] .choice-check { width: auto; padding: 0 8px; border-color: #0873a8; border-radius: 999px; background: #087fb9; color: #fff; box-shadow: 0 4px 10px rgba(8,99,146,.22); font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }\r\n    .popular { display: inline-flex; align-items: center; margin-bottom: 7px; padding: 4px 8px; border: 1px solid #edc54a; border-radius: 999px; background: #fff3bd; color: #624800; font-size: 9px; font-weight: 950; letter-spacing: .07em; }\r\n    .price-preview { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 20px; padding: 14px 16px; border-radius: 14px; background: #073652; color: #d8f2ff; }\r\n    .price-preview span { font-size: 12px; font-weight: 800; }\r\n    .price-preview strong { color: #8bdcff; font-size: 17px; }\r\n    .price-hero { padding: 21px; border: 1px solid #c7e8f8; border-radius: 19px; background: linear-gradient(135deg, #e9f8ff, #f9fdff); }\r\n    .price-label { color: #4e6c7d; font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: .06em; }\r\n    .price { margin-top: 5px; color: #073652; font-size: clamp(38px, 5vw, 56px); font-weight: 950; line-height: 1; letter-spacing: -.055em; }\r\n    .price small { font-size: 14px; letter-spacing: 0; color: #4f6f80; }\r\n    .price-hero p { margin: 11px 0 0; color: #5c7583; font-size: 12px; line-height: 1.45; }\r\n    .line-items { margin-top: 12px; padding: 2px 15px; border: 1px solid #d9e7ee; border-radius: 14px; background: #fff; }\r\n    .line-item, .summary-row { display: flex; justify-content: space-between; gap: 14px; padding: 11px 0; border-bottom: 1px solid #edf3f6; font-size: 12px; }\r\n    .line-item:last-child, .summary-row:last-child { border-bottom: 0; }\r\n    .addon { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; margin-top: 14px; padding: 15px; border: 2px solid #bad9e8; border-radius: 16px; background: #fff; cursor: pointer; }\r\n    .addon:has(input:checked) { border-color: #38b6ff; background: #eaf8ff; }\r\n    .addon input, .check input { width: 21px; height: 21px; margin: 0; accent-color: #159edc; }\r\n    .addon strong, .addon small { display: block; }\r\n    .addon small { margin-top: 4px; color: #6e8491; font-size: 11px; line-height: 1.35; }\r\n    .addon-price { color: #0877ae; font-size: 12px; font-weight: 900; white-space: nowrap; }\r\n    .info-list { display: grid; gap: 8px; margin-top: 17px; }\r\n    .info-item { display: flex; align-items: flex-start; gap: 10px; color: #506c7b; font-size: 12px; line-height: 1.4; }\r\n    .info-icon { flex: 0 0 24px; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: #dff5ff; color: #0576ab; font-size: 12px; font-weight: 950; }\r\n    .notice { margin-top: 15px; padding: 13px 14px; border-left: 4px solid #38b6ff; border-radius: 10px; background: #eef9fe; color: #496875; font-size: 12px; line-height: 1.48; }\r\n    .notice.orange { border-left-color: #ed7d32; background: #fff5ed; }\r\n    .promotion { position: relative; margin: 0 0 20px; padding: 18px 17px 15px; border: 2px dashed #159447; border-radius: 15px; background: #effbf3; color: #26633d; }\r\n    .promotion-badge { display: inline-flex; margin: -31px 0 8px -7px; padding: 5px 9px; border-radius: 999px; background: #117b3b; color: #fff; font-size: 9px; font-weight: 950; letter-spacing: .05em; text-transform: uppercase; }\r\n    .promotion h3 { margin: 0; color: #126a35; font-size: 15px; line-height: 1.25; }\r\n    .promotion p { margin: 6px 0 0; color: #34734a; font-size: 11px; line-height: 1.45; }\r\n    .promotion-limit { display: flex; width: fit-content; max-width: 100%; margin-top: 10px; padding: 6px 9px; border: 1px solid #a9d8b9; border-radius: 999px; background: #fff; color: #0d612d; font-size: 10px; line-height: 1.3; font-weight: 950; }\r\n    .promotion-link { display: inline-flex; margin-top: 7px; padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: #086b9b; font-size: 11px; font-weight: 900; cursor: pointer; }\r\n    .offer-layer[hidden] { display: none; }\r\n    .offer-layer { position: absolute; z-index: 12; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(2,20,32,.72); backdrop-filter: blur(5px); }\r\n    .offer-dialog { width: min(520px, 100%); max-height: calc(100% - 20px); overflow-y: auto; padding: 24px; border: 2px solid #38b6ff; border-radius: 22px; background: #fff; box-shadow: 0 30px 80px rgba(0,20,35,.35); }\r\n    .offer-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }\r\n    .offer-dialog h2 { margin: 0; color: #073652; font-size: 24px; line-height: 1.12; }\r\n    .offer-dialog p { color: #4f6876; font-size: 13px; line-height: 1.55; }\r\n    .offer-close { flex: 0 0 auto; width: 34px; height: 34px; border: 1px solid #cbdde6; border-radius: 50%; background: #fff; color: #17384b; cursor: pointer; }\r\n    .offer-table { margin-top: 14px; padding: 4px 14px; border: 1px solid #d9e7ee; border-radius: 14px; background: #f8fbfd; }\r\n    .offer-row { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid #e4edf2; color: #516c7a; font-size: 12px; }\r\n    .offer-row:last-child { border-bottom: 0; }\r\n    .offer-row strong { color: #17394b; text-align: right; }\r\n    .offer-row.savings { color: #126a35; font-weight: 900; }\r\n    .offer-row.savings strong { color: #159447; font-size: 20px; }\r\n    .offer-disclaimer { margin-bottom: 0 !important; color: #708691 !important; font-size: 10px !important; }\r\n    .radio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }\r\n    .radio-card { margin: 0; }\r\n    .radio-card input { position: absolute; opacity: 0; pointer-events: none; }\r\n    .radio-card span { min-height: 46px; display: grid; place-items: center; padding: 8px; border: 1px solid #cbdde6; border-radius: 12px; background: #fff; color: #385767; cursor: pointer; }\r\n    .radio-card input:checked + span { border-color: #209fd7; background: #e8f7ff; color: #075c86; box-shadow: inset 0 0 0 1px #38b6ff; }\r\n    .radio-card input:focus-visible + span { outline: 3px solid rgba(56,182,255,.28); }\r\n    .check { display: grid; grid-template-columns: auto 1fr; align-items: flex-start; gap: 11px; margin-top: 17px; padding: 14px; border: 1px solid #cbdce5; border-radius: 14px; background: #fff; color: #496675; font-size: 12px; font-weight: 500; line-height: 1.5; }\r\n    .check strong { color: #173a4c; }\r\n    .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }\r\n    .summary-card { padding: 16px; border: 1px solid #d7e5ec; border-radius: 16px; background: #fff; }\r\n    .summary-card h3 { margin: 0 0 4px; color: #073652; font-size: 14px; }\r\n    .summary-row span { color: #667e8c; }\r\n    .summary-row strong { text-align: right; color: #17394b; }\r\n    .error { display: none; margin-top: 16px; padding: 12px 14px; border: 1px solid #f0afa7; border-radius: 12px; background: #fff1ef; color: #9c2f22; font-size: 12px; line-height: 1.45; }\r\n    .error.show { display: block; }\r\n    .error ul { margin: 6px 0 0 18px; padding: 0; }\r\n    .actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 9px; margin-top: 22px; }\r\n    .btn { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; padding: 0 17px; border: 1px solid #bcd1dc; border-radius: 12px; background: #fff; color: #224b60; font-weight: 850; font-size: 12px; text-decoration: none; cursor: pointer; }\r\n    .btn:hover:not(:disabled) { transform: translateY(-1px); }\r\n    .btn.primary { border-color: #ed7d32; background: #ed7d32; color: #fff; box-shadow: 0 9px 24px rgba(237,125,50,.24); }\r\n    .btn.blue { border-color: #159edc; background: #159edc; color: #fff; }\r\n    .btn.link { margin-right: auto; border-color: transparent; background: transparent; color: #477084; }\r\n    .btn:disabled { opacity: .55; cursor: wait; }\r\n    .complete { text-align: center; padding-top: 20px; }\r\n    .success-mark { width: 68px; height: 68px; display: grid; place-items: center; margin: 0 auto 15px; border-radius: 50%; background: #38b6ff; color: #06344e; font-size: 32px; font-weight: 950; box-shadow: 0 14px 36px rgba(56,182,255,.28); }\r\n    .complete .stage-header > p { margin-left: auto; margin-right: auto; }\r\n    .complete .summary-card { max-width: 540px; margin: 17px auto 0; text-align: left; }\r\n    .request-id { margin: 13px 0 0; color: #77909e; font-size: 10px; text-align: center; overflow-wrap: anywhere; }\r\n    .help { color: #667f8d; font-size: 11px; line-height: 1.45; }\r\n    .spinner { width: 16px; height: 16px; margin-right: 8px; border: 2px solid rgba(255,255,255,.45); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }\r\n    @keyframes spin { to { transform: rotate(360deg); } }\r\n    @media (max-width: 900px) {\r\n      .backdrop { padding: 0; background: #f5fbfe; }\r\n      .modal { width: 100%; height: 100dvh; min-height: 0; grid-template-columns: 1fr; border: 0; border-radius: 0; }\r\n      .trust { display: none; }\r\n      .quote-side { padding: 20px 18px 38px; }\r\n      .mobile-brand { display: flex; align-items: center; gap: 10px; margin: 0 50px 19px 0; color: #073652; }\r\n      .mobile-brand .brand-mark { width: 40px; height: 40px; background: #e5f7ff; box-shadow: none; }\r\n      .mobile-brand strong, .mobile-brand small { display: block; }\r\n      .mobile-brand strong { font-size: 15px; letter-spacing: .06em; }\r\n      .mobile-brand small { margin-top: 3px; color: #6b8492; font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }\r\n      .progress { margin: 0 42px 24px 0; }\r\n      .progress-label { display: none; }\r\n      .close { top: 13px; right: 13px; }\r\n      .offer-layer { position: fixed; }\r\n    }\r\n    @media (max-width: 620px) {\r\n      .stage-header-row { display: block; }\r\n      .badge { display: inline-flex; margin-top: 10px; }\r\n      .field-row, .summary { grid-template-columns: 1fr; }\r\n      .choice-grid { grid-template-columns: 1fr; }\r\n      .radio-grid { grid-template-columns: 1fr; }\r\n      .zip-wrap { grid-template-columns: 1fr; }\r\n      .zip-wrap .btn { width: 100%; }\r\n      .addon { grid-template-columns: auto 1fr; }\r\n      .addon-price { grid-column: 2; }\r\n      .actions { align-items: stretch; }\r\n      .actions .btn:not(.link) { flex: 1 1 100%; }\r\n      .btn.link { order: 4; width: 100%; margin: 2px 0 0; }\r\n    }\r\n    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation-duration: .01ms !important; } }\r\n  `;\r\n\r\n  let host = null;\r\n  let shadow = null;\r\n  let stageElement = null;\r\n  let progressElement = null;\r\n  let previousFocus = null;\r\n  let offerPreviousFocus = null;\n  let previousOverflow = \"\";\n  let restored = false;\n  let autoOpenObserver = null;\n  let autoOpenTimeout = null;\n\n  const AUTO_OPEN_CLASS = \"pp-quote-auto-opening\";\n  const AUTO_OPEN_STYLE_ID = \"pp-quote-auto-opening-style\";\n\r\n  function freshState() {\r\n    return {\r\n      step: 1,\r\n      zip: \"\",\r\n      zipIneligible: false,\r\n      dogCount: \"\",\r\n      frequency: \"\",\r\n      areas: [],\r\n      yardSize: \"\",\r\n      lastCleaned: \"\",\r\n      intent: \"service_request\",\r\n      firstName: \"\",\r\n      lastName: \"\",\r\n      phone: \"\",\r\n      email: \"\",\r\n      address: \"\",\r\n      city: \"\",\r\n      startTiming: \"\",\r\n      preferredContact: \"text\",\r\n      smsConsent: false,\r\n      smsConsentCapturedAt: \"\",\r\n      question: \"\",\r\n      termsAccepted: false,\r\n      termsAcceptedAt: \"\",\r\n      submitting: false,\r\n      receipt: null,\r\n      attribution: captureAttribution()\r\n    };\r\n  }\r\n\r\n  let state = freshState();\r\n\r\n  function escapeHtml(value) {\r\n    return String(value == null ? \"\" : value)\r\n      .replaceAll(\"&\", \"&amp;\")\r\n      .replaceAll(\"<\", \"&lt;\")\r\n      .replaceAll(\">\", \"&gt;\")\r\n      .replaceAll('\"', \"&quot;\")\r\n      .replaceAll(\"'\", \"&#039;\");\r\n  }\r\n\r\n  function selected(condition) { return condition ? \" selected\" : \"\"; }\r\n  function checked(condition) { return condition ? \" checked\" : \"\"; }\r\n  function normalizeZip(value) { return String(value || \"\").replace(/\\D/g, \"\").slice(0, 5); }\r\n\r\n  function normalizePhone(value) {\r\n    let digits = String(value || \"\").replace(/\\D/g, \"\");\r\n    if (digits.length === 11 && digits.startsWith(\"1\")) digits = digits.slice(1);\r\n    if (!/^\\d{10}$/.test(digits)) return null;\r\n    return { digits: digits, e164: \"+1\" + digits };\r\n  }\r\n\r\n  function formatPhone(value) {\r\n    let digits = String(value || \"\").replace(/\\D/g, \"\");\r\n    if (digits.length > 10 && digits.startsWith(\"1\")) digits = digits.slice(1);\r\n    digits = digits.slice(0, 10);\r\n    if (digits.length <= 3) return digits;\r\n    if (digits.length <= 6) return \"(\" + digits.slice(0, 3) + \") \" + digits.slice(3);\r\n    return \"(\" + digits.slice(0, 3) + \") \" + digits.slice(3, 6) + \"-\" + digits.slice(6);\r\n  }\r\n\r\n  function money(cents) {\r\n    return new Intl.NumberFormat(\"en-US\", { style: \"currency\", currency: \"USD\" }).format(cents / 100);\r\n  }\r\n\r\n  function validEmail(value) { return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(value || \"\").trim()); }\r\n\r\n  function calculateQuote(input) {\r\n    const dogs = Number(input.dogCount);\r\n    const frequencyId = String(input.frequency || \"\");\r\n    const frequency = CONFIG.frequencies[frequencyId];\r\n    const yard = CONFIG.yardSizes[input.yardSize];\r\n    const areas = Array.from(new Set(Array.isArray(input.areas) ? input.areas : []))\r\n      .filter(function (area) { return Object.prototype.hasOwnProperty.call(CONFIG.areaLabels, area); });\r\n    const errors = [];\r\n    if (!Number.isInteger(dogs) || dogs < 1 || dogs > 10) errors.push(\"Choose the number of dogs.\");\r\n    if (!frequency) errors.push(\"Choose a service frequency.\");\r\n    if (!yard) errors.push(\"Choose the serviced yard size.\");\r\n    if (!areas.length) errors.push(\"Choose at least one service area.\");\r\n    if (!errors.length && yard.custom && !frequency.custom) errors.push(\"Choose Custom booking for yards over 1 acre.\");\r\n    if (!errors.length && !frequency.custom && frequencyId !== \"onetime\" && !frequency.prices[dogs]) errors.push(\"Choose an available service frequency for this dog count.\");\r\n    if (errors.length) return { ok: false, errors: errors };\r\n\r\n    const reasons = [];\r\n    if (frequency.custom) reasons.push(\"CUSTOM_BOOKING_SELECTED\");\r\n    if (dogs >= 10 && frequencyId !== \"onetime\") reasons.push(\"DOG_COUNT_10_PLUS\");\r\n    if (yard.custom) reasons.push(\"YARD_OVER_ONE_ACRE\");\r\n    if (reasons.length) return {\r\n      ok: true,\r\n      custom: true,\r\n      pricingVersion: CONFIG.pricingVersion,\r\n      reasons: reasons,\r\n      configuration: { dogCount: dogs, frequency: frequencyId, yardSize: input.yardSize, areas: areas }\r\n    };\r\n\r\n    if (frequencyId === \"onetime\") return {\r\n      ok: true,\r\n      custom: false,\r\n      pricingVersion: CONFIG.pricingVersion,\r\n      priceCents: frequency.flatPrice,\r\n      lineItems: [{ label: \"One-time cleanup · first 30 minutes\", cents: frequency.flatPrice }],\r\n      disclaimer: \"The first 30 minutes are included. Additional labor is $1 per minute.\",\r\n      configuration: { dogCount: dogs, frequency: frequencyId, yardSize: input.yardSize, areas: areas }\r\n    };\r\n\r\n    const base = frequency.prices[dogs];\r\n    const areaAdd = CONFIG.areaAdders[areas.length] || 0;\r\n    const yardAdd = yard.add || 0;\r\n    const lineItems = [{ label: frequency.label + \" · \" + dogs + \" \" + (dogs === 1 ? \"dog\" : \"dogs\"), cents: base }];\r\n    if (areaAdd) lineItems.push({ label: areas.map(function (id) { return CONFIG.areaLabels[id]; }).join(\" + \"), cents: areaAdd });\r\n    if (yardAdd) lineItems.push({ label: yard.label, cents: yardAdd });\r\n    return {\r\n      ok: true,\r\n      custom: false,\r\n      pricingVersion: CONFIG.pricingVersion,\r\n      priceCents: base + areaAdd + yardAdd,\r\n      lineItems: lineItems,\r\n      disclaimer: \"Your recurring maintenance price. Final service-day availability is confirmed before secure payment setup.\",\r\n      configuration: { dogCount: dogs, frequency: frequencyId, yardSize: input.yardSize, areas: areas }\r\n    };\r\n  }\r\n\r\n  function currentQuote() {\r\n    return calculateQuote({\r\n      dogCount: state.dogCount,\r\n      frequency: state.frequency,\r\n      areas: state.areas,\r\n      yardSize: state.yardSize\r\n    });\r\n  }\r\n\r\n  function priceUnit() { return state.frequency === \"onetime\" ? \"base price\" : \"per visit\"; }\r\n\r\n  function captureAttribution() {\n    const params = new URLSearchParams(location.search);\r\n    let saved = {};\r\n    try { saved = JSON.parse(sessionStorage.getItem(ATTRIBUTION_STORAGE_KEY) || \"{}\"); } catch (_) {}\r\n    ATTRIBUTION_KEYS.forEach(function (key) {\r\n      if (params.has(key)) saved[key] = String(params.get(key)).slice(0, 250);\r\n    });\r\n    try { sessionStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(saved)); } catch (_) {}\r\n    return saved;\n  }\n\n  function consumeAutoOpenRequest() {\n    const url = new URL(location.href);\n    const queryValue = String(url.searchParams.get(\"open_quote\") || \"\").trim().toLowerCase();\n    const queryRequested = queryValue === \"1\" || queryValue === \"true\" || queryValue === \"yes\";\n    const hashValue = String(url.hash || \"\").toLowerCase();\n    const hashRequested = hashValue === \"#quote\" || hashValue === \"#get-quote\";\n    if (!queryRequested && !hashRequested) return false;\n\n    // Attribution was captured before this runs. Remove only the one-time open\n    // instruction so closing and refreshing the page does not reopen the widget.\n    url.searchParams.delete(\"open_quote\");\n    if (hashRequested) url.hash = \"\";\n    try {\n      history.replaceState(history.state, \"\", url.pathname + url.search + url.hash);\n    } catch (_) {}\n    return true;\n  }\n\n  function showAutoOpenFeedback() {\n    const root = document.documentElement;\n    if (!root) return;\n    if (!document.getElementById(AUTO_OPEN_STYLE_ID)) {\n      const style = document.createElement(\"style\");\n      style.id = AUTO_OPEN_STYLE_ID;\n      style.textContent =\n        \"html.\" + AUTO_OPEN_CLASS + \"::before{\" +\n          \"content:'';position:fixed;inset:0;z-index:2147482990;\" +\n          \"background:rgba(2,20,32,.82);backdrop-filter:blur(7px)\" +\n        \"}\" +\n        \"html.\" + AUTO_OPEN_CLASS + \"::after{\" +\n          \"content:'Opening your 60-second price check...';\" +\n          \"position:fixed;z-index:2147482991;left:50%;top:50%;\" +\n          \"width:min(360px,calc(100% - 40px));padding:22px 24px;\" +\n          \"transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.72);\" +\n          \"border-radius:18px;background:#fff;color:#08283a;\" +\n          \"box-shadow:0 24px 70px rgba(0,0,0,.3);text-align:center;\" +\n          \"font:900 16px/1.35 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif\" +\n        \"}\";\n      (document.head || root).appendChild(style);\n    }\n    root.classList.add(AUTO_OPEN_CLASS);\n  }\n\n  function hideAutoOpenFeedback() {\n    if (autoOpenObserver) {\n      autoOpenObserver.disconnect();\n      autoOpenObserver = null;\n    }\n    if (autoOpenTimeout) {\n      window.clearTimeout(autoOpenTimeout);\n      autoOpenTimeout = null;\n    }\n    if (document.documentElement) document.documentElement.classList.remove(AUTO_OPEN_CLASS);\n    const style = document.getElementById(AUTO_OPEN_STYLE_ID);\n    if (style) style.remove();\n  }\n\n  function openWhenBodyReady() {\n    if (document.body) {\n      queueMicrotask(open);\n      return;\n    }\n\n    // The live GHL embed is async in <head>. Give ad visitors immediate feedback\n    // and open as soon as <body> exists instead of waiting for DOMContentLoaded.\n    showAutoOpenFeedback();\n    autoOpenObserver = new MutationObserver(function () {\n      if (!document.body) return;\n      autoOpenObserver.disconnect();\n      autoOpenObserver = null;\n      queueMicrotask(open);\n    });\n    autoOpenObserver.observe(document.documentElement, { childList: true, subtree: true });\n    autoOpenTimeout = window.setTimeout(hideAutoOpenFeedback, 12000);\n  }\n\r\n  function cookieValue(name) {\r\n    const match = document.cookie.match(new RegExp(\"(?:^|; )\" + name + \"=([^;]*)\"));\r\n    return match ? decodeURIComponent(match[1]) : \"\";\r\n  }\r\n\r\n  function saveLowRiskProgress() {\r\n    const safe = {\r\n      zip: state.zip,\r\n      dogCount: state.dogCount,\r\n      frequency: state.frequency,\r\n      areas: state.areas,\r\n      yardSize: state.yardSize,\r\n      lastCleaned: state.lastCleaned\r\n    };\r\n    try { sessionStorage.setItem(LOW_RISK_STORAGE_KEY, JSON.stringify(safe)); } catch (_) {}\r\n  }\r\n\r\n  function restoreLowRiskProgress() {\r\n    try {\r\n      const saved = JSON.parse(sessionStorage.getItem(LOW_RISK_STORAGE_KEY) || \"null\");\r\n      if (!saved) return;\r\n      [\"zip\", \"dogCount\", \"frequency\", \"areas\", \"yardSize\", \"lastCleaned\"].forEach(function (key) {\r\n        if (Object.prototype.hasOwnProperty.call(saved, key)) state[key] = saved[key];\r\n      });\r\n      reconcileFrequencySelection();\r\n    } catch (_) {}\r\n  }\r\n\r\n  function clearLowRiskProgress() {\r\n    try { sessionStorage.removeItem(LOW_RISK_STORAGE_KEY); } catch (_) {}\r\n  }\r\n\r\n  function track(name, params) {\r\n    const safe = params || {};\r\n    if (typeof window.gtag === \"function\") window.gtag(\"event\", name, safe);\r\n    else if (Array.isArray(window.dataLayer)) window.dataLayer.push(Object.assign({ event: name }, safe));\r\n    if (CONFIG.tracking.firePixelEvents && name === \"funnel_viewed\" && typeof window.fbq === \"function\") {\r\n      window.fbq(\"trackCustom\", \"QuoteFunnelViewed\", safe);\r\n    }\r\n  }\r\n\r\n  function trackSuccess(payload, requestId) {\r\n    const quote = currentQuote();\r\n    const params = {\r\n      event_id: requestId + \":\" + payload.stage,\r\n      transaction_id: requestId,\r\n      intent: state.intent,\r\n      frequency: state.frequency,\r\n      value: quote.custom ? undefined : quote.priceCents / 100,\r\n      currency: \"USD\"\r\n    };\r\n    track(payload.stage, params);\r\n    if (state.intent !== \"service_request\") return;\r\n    if (typeof window.gtag === \"function\") {\r\n      window.gtag(\"event\", \"generate_lead\", params);\r\n      if (CONFIG.tracking.googleAdsSendTo) {\r\n        window.gtag(\"event\", \"conversion\", Object.assign({}, params, { send_to: CONFIG.tracking.googleAdsSendTo, transport_type: \"beacon\" }));\r\n      }\r\n    } else if (Array.isArray(window.dataLayer)) window.dataLayer.push(Object.assign({ event: \"generate_lead\" }, params));\r\n    if (CONFIG.tracking.firePixelEvents && typeof window.fbq === \"function\") {\r\n      window.fbq(\"track\", \"Lead\", { value: params.value, currency: \"USD\" }, { eventID: params.event_id });\r\n    }\r\n  }\r\n\r\n  function shellHtml() {\r\n    return `<style>${CSS}</style>\r\n      <div class=\"backdrop\" data-backdrop>\r\n        <div class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pp-stage-title\">\r\n          <button class=\"close\" type=\"button\" data-action=\"close\" aria-label=\"Close quote builder\">×</button>\r\n          <aside class=\"trust\" aria-label=\"Why homeowners choose Purge Pros\">\r\n            <div class=\"brand\">\r\n              <span class=\"brand-mark\"><img src=\"${escapeHtml(CONFIG.brand.iconUrl)}\" alt=\"Purge Pros icon\"></span>\r\n              <span><strong>PURGE PROS</strong><small>Pet Waste Removal</small></span>\r\n            </div>\r\n            <div class=\"trust-copy\"><span class=\"eyebrow light\">60-SECOND PRICE CHECK</span><h1>See your exact<br><em>per-visit price.</em></h1><p>A few quick questions about your dogs and your yard—that’s it. You pay per visit, never a monthly bill.</p></div>\r\n            <div class=\"trust-chips\"><span class=\"trust-chip\" data-review-chip>4.9★ Google · 40 reviews</span><span class=\"trust-chip\">Pay per visit</span><span class=\"trust-chip\">No contracts</span><span class=\"trust-chip\">Heads-up text before every visit</span></div>\r\n            <p class=\"trust-call\">Rather talk to a person? Call <a href=\"${CONFIG.brand.phoneHref}\">${CONFIG.brand.phoneDisplay}</a></p>\r\n            <img class=\"yard-art\" src=\"${escapeHtml(CONFIG.brand.heroImageUrl)}\" alt=\"Purge Pros professional pet waste removal service\" loading=\"eager\">\r\n            <div class=\"proof-grid\">\r\n              <div class=\"proof\"><span class=\"proof-icon\">✓</span><span><strong>Professional local team</strong><small>Clean, uniformed service</small></span></div>\r\n              <div class=\"proof\"><span class=\"proof-icon\">✓</span><span><strong>Gate photo proof</strong><small>After completed visits</small></span></div>\r\n              <div class=\"proof\"><span class=\"proof-icon\">✓</span><span><strong>Sanitized equipment</strong><small>Between properties</small></span></div>\r\n              <div class=\"proof\"><span class=\"proof-icon\">✓</span><span><strong>No contracts</strong><small>Pay per visit</small></span></div>\r\n            </div>\r\n          </aside>\r\n          <section class=\"quote-side\">\r\n            <div class=\"mobile-brand\"><span class=\"brand-mark\"><img src=\"${escapeHtml(CONFIG.brand.iconUrl)}\" alt=\"Purge Pros icon\"></span><span><strong>PURGE PROS</strong><small>Pet Waste Removal</small></span></div>\r\n            <nav class=\"progress\" aria-label=\"Quote progress\"></nav>\r\n            <div class=\"stage\" tabindex=\"-1\" aria-live=\"polite\"></div>\r\n          </section>\r\n          ${offerModalHtml()}\r\n        </div>\r\n      </div>`;\r\n  }\r\n\r\n  function promotionCardHtml() {\r\n    if (!CONFIG.promotion.enabled) return \"\";\r\n    return `<aside class=\"promotion\" aria-label=\"New recurring-customer offer\"><span class=\"promotion-badge\">${escapeHtml(CONFIG.promotion.badge)}</span><h3>🎁 ${escapeHtml(CONFIG.promotion.title)}</h3><p>${escapeHtml(CONFIG.promotion.detail)}</p><span class=\"promotion-limit\">${escapeHtml(CONFIG.promotion.eligibility)}</span><button class=\"promotion-link\" type=\"button\" data-action=\"show-offer\">${escapeHtml(CONFIG.promotion.linkLabel)}</button></aside>`;\r\n  }\r\n\r\n  function offerModalHtml() {\r\n    const offer = CONFIG.promotion;\r\n    return `<div class=\"offer-layer\" data-offer-layer hidden><section class=\"offer-dialog\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"pp-offer-title\"><div class=\"offer-dialog-head\"><h2 id=\"pp-offer-title\">${escapeHtml(offer.modalTitle)}</h2><button class=\"offer-close\" type=\"button\" data-action=\"close-offer\" aria-label=\"Close offer details\">×</button></div><p>${escapeHtml(offer.modalIntro)}</p><div class=\"offer-table\"><div class=\"offer-row\"><span>${escapeHtml(offer.firstThirtyLabel)}</span><strong>${escapeHtml(offer.firstThirtyValue)}</strong></div><div class=\"offer-row\"><span>${escapeHtml(offer.additionalLabel)}</span><strong>${escapeHtml(offer.additionalValue)}</strong></div><div class=\"offer-row\"><span>${escapeHtml(offer.exampleLabel)}</span><strong>${escapeHtml(offer.exampleValue)}</strong></div><div class=\"offer-row savings\"><span>${escapeHtml(offer.customerLabel)}</span><strong>${escapeHtml(offer.customerValue)}</strong></div></div><p class=\"offer-disclaimer\">${escapeHtml(offer.disclaimer)}</p></section></div>`;\r\n  }\r\n\r\n  function stageHeader(eyebrow, title, description, badge) {\r\n    return `<header class=\"stage-header\"><div class=\"stage-header-row\"><div><span class=\"eyebrow\">${escapeHtml(eyebrow)}</span><h2 id=\"pp-stage-title\">${escapeHtml(title)}</h2></div>${badge ? `<span class=\"badge\">${escapeHtml(badge)}</span>` : \"\"}</div><p>${escapeHtml(description)}</p></header>`;\r\n  }\r\n\r\n  function renderProgress() {\r\n    if (!progressElement) return;\r\n    progressElement.style.display = state.step > 5 ? \"none\" : \"grid\";\r\n    progressElement.innerHTML = PROGRESS_LABELS.map(function (label, index) {\r\n      const number = index + 1;\r\n      const complete = state.step > number;\r\n      const current = state.step === number;\r\n      return `<div class=\"progress-step${complete ? \" complete\" : \"\"}${current ? \" current\" : \"\"}\"${current ? ' aria-current=\"step\"' : \"\"}><span class=\"progress-dot\">${complete ? \"✓\" : number}</span><span class=\"progress-label\">${label}</span></div>`;\r\n    }).join(\"\");\r\n  }\r\n\r\n  function renderArea() {\r\n    stageElement.innerHTML = `${stageHeader(\"60-SECOND PRICE CHECK\", \"First, are we in your neighborhood?\", \"Enter your ZIP to check coverage. Then build your plan and see your exact per-visit price.\", \"Fast availability check\")}\r\n      <div class=\"field\"><label for=\"pp-zip\">Service ZIP code</label><div class=\"zip-wrap\"><input class=\"input\" id=\"pp-zip\" inputmode=\"numeric\" autocomplete=\"postal-code\" maxlength=\"5\" placeholder=\"e.g. 46032\" value=\"${escapeHtml(state.zip)}\"><button class=\"btn blue\" type=\"button\" data-action=\"check-zip\">Check availability →</button></div><small>Central Indiana service area. No geolocation or account required.</small></div>\r\n      ${state.zipIneligible ? `<div class=\"notice orange\"><strong>We are not in ZIP ${escapeHtml(state.zip)} yet.</strong><br>We will not collect your contact information. If the address is near the edge of our routes, call <a href=\"${CONFIG.brand.phoneHref}\">${CONFIG.brand.phoneDisplay}</a>.</div>` : \"\"}\r\n      <div class=\"error\" role=\"alert\" tabindex=\"-1\"></div>\r\n      <div class=\"info-list\"><div class=\"info-item\"><span class=\"info-icon\">$</span><span><strong>Clear per-visit pricing.</strong> Build the plan that fits your yard and see your exact price for each visit.</span></div><div class=\"info-item\"><span class=\"info-icon\">✓</span><span><strong>Nothing charged today.</strong> Secure payment setup comes only after you approve the proposed service day.</span></div><div class=\"info-item\"><span class=\"info-icon\">↗</span><span><strong>A dependable neighborhood service day.</strong> Our team confirms the recurring day instead of promising a slot that may not work.</span></div></div>`;\r\n  }\r\n\r\n  function frequencyEligibility(id, definition) {\r\n    const dogs = Number(state.dogCount);\r\n    if (definition.custom) return { allowed: true, note: definition.sub };\r\n    if (state.yardSize === \"over\") return { allowed: false, note: \"Choose Custom booking for yards over 1 acre\" };\r\n    if (definition.anyDogs || !dogs) return { allowed: true, note: definition.sub };\r\n    if (definition.prices && definition.prices[dogs]) return { allowed: true, note: definition.sub };\r\n    return { allowed: false, note: \"Available for up to \" + definition.maxDogs + \" dogs\" };\r\n  }\r\n\r\n  function reconcileFrequencySelection() {\r\n    const definition = CONFIG.frequencies[state.frequency];\r\n    if (!definition) {\r\n      if (Number(state.dogCount) >= 10 || state.yardSize === \"over\") state.frequency = \"custom\";\r\n      return;\r\n    }\r\n    if (frequencyEligibility(state.frequency, definition).allowed) return;\r\n    state.frequency = Number(state.dogCount) >= 10 || state.yardSize === \"over\" ? \"custom\" : \"\";\r\n  }\r\n\r\n  function frequencyChoice(id, definition) {\r\n    const active = state.frequency === id;\r\n    const eligibility = frequencyEligibility(id, definition);\r\n    const selectionStatus = eligibility.allowed ? (active ? \"✓ Selected\" : \"\") : \"×\";\r\n    return `<button class=\"choice${definition.custom ? \" custom-choice\" : \"\"}\" type=\"button\" data-frequency=\"${id}\" aria-pressed=\"${active}\"${eligibility.allowed ? \"\" : ' disabled aria-disabled=\"true\"'}><span class=\"choice-check\" aria-hidden=\"true\">${selectionStatus}</span>${definition.popular ? '<span class=\"popular\">★ MOST POPULAR</span>' : \"\"}<strong>${escapeHtml(definition.label)}</strong><small>${escapeHtml(eligibility.note)}</small></button>`;\r\n  }\r\n\r\n  function areaChoice(id, label) {\r\n    const active = state.areas.indexOf(id) >= 0;\r\n    return `<button class=\"choice\" type=\"button\" data-area=\"${id}\" aria-pressed=\"${active}\"><span class=\"choice-check\" aria-hidden=\"true\">${active ? \"✓ Selected\" : \"\"}</span><strong>${escapeHtml(label)}</strong><small>${active ? \"Included in your plan\" : \"Select this area\"}</small></button>`;\r\n  }\r\n\r\n  function renderPlan() {\r\n    const quote = currentQuote();\r\n    const preview = quote.ok && !quote.custom ? money(quote.priceCents) + \" \" + priceUnit() : quote.ok && quote.custom ? \"Custom estimate\" : \"Complete the choices above\";\r\n    stageElement.innerHTML = `${stageHeader(\"BUILD YOUR PLAN\", \"Tell us about your yard.\", \"Every price-changing choice starts blank, so the estimate reflects what you actually select.\", \"ZIP \" + state.zip)}\r\n      ${state.frequency !== \"onetime\" ? promotionCardHtml() : \"\"}\r\n      <div class=\"field-row\"><div class=\"field\"><label for=\"pp-dogs\">How many dogs use the yard?</label><select class=\"select\" id=\"pp-dogs\" data-field=\"dogCount\"><option value=\"\">Choose dogs</option>${Array.from({ length: 9 }, function (_, index) { const dog = index + 1; return `<option value=\"${dog}\"${selected(String(dog) === String(state.dogCount))}>${dog} ${dog === 1 ? \"dog\" : \"dogs\"}</option>`; }).join(\"\")}<option value=\"10\"${selected(String(state.dogCount) === \"10\")}>10+ dogs · custom</option></select></div>\r\n      <div class=\"field\"><label for=\"pp-yard\">Total lawn area we will service</label><select class=\"select\" id=\"pp-yard\" data-field=\"yardSize\"><option value=\"\">Choose yard size</option>${Object.keys(CONFIG.yardSizes).map(function (id) { const yard = CONFIG.yardSizes[id]; return `<option value=\"${id}\"${selected(state.yardSize === id)}>${escapeHtml(yard.label)}${yard.custom ? \" · custom\" : \"\"}</option>`; }).join(\"\")}</select><small>Use serviced lawn area, not the full parcel size.</small></div></div>\r\n      <div class=\"field\"><span class=\"field-label\">How often should we scoop?</span><div class=\"choice-grid\">${Object.keys(CONFIG.frequencies).map(function (id) { return frequencyChoice(id, CONFIG.frequencies[id]); }).join(\"\")}</div></div>\r\n      <div class=\"field\"><span class=\"field-label\">Which areas should we cover?</span><div class=\"choice-grid\">${Object.keys(CONFIG.areaLabels).map(function (id) { return areaChoice(id, CONFIG.areaLabels[id]); }).join(\"\")}<button class=\"choice\" type=\"button\" data-area=\"all\" aria-pressed=\"${state.areas.length === 3}\"><span class=\"choice-check\" aria-hidden=\"true\">${state.areas.length === 3 ? \"✓ Selected\" : \"\"}</span><strong>Yard+ · all areas</strong><small>Back, front and side yard(s)</small></button></div></div>\r\n      <div class=\"field\"><label for=\"pp-last-cleaned\">When was the last full cleanup?</label><select class=\"select\" id=\"pp-last-cleaned\" data-field=\"lastCleaned\"><option value=\"\">Choose an answer</option>${[\"Within 1 week\", \"2–3 weeks\", \"About 1 month\", \"2–4 months\", \"5–6 months\", \"More than 6 months\"].map(function (value) { return `<option value=\"${escapeHtml(value)}\"${selected(state.lastCleaned === value)}>${escapeHtml(value)}</option>`; }).join(\"\")}</select><small>This helps us plan the first visit. It does not change the recurring maintenance quote.</small></div>\r\n      <div class=\"price-preview\" aria-live=\"polite\"><span>Your estimate</span><strong>${escapeHtml(preview)}</strong></div><div class=\"error\" role=\"alert\" tabindex=\"-1\"></div><div class=\"actions\"><button class=\"btn link\" type=\"button\" data-action=\"back\">← Back</button><button class=\"btn primary\" type=\"button\" data-action=\"show-price\">See my price →</button></div>`;\r\n  }\r\n\r\n  function reasonText(code) {\r\n    return ({ CUSTOM_BOOKING_SELECTED: \"custom booking selected\", DOG_COUNT_10_PLUS: \"10+ dogs\", YARD_OVER_ONE_ACRE: \"over one acre\" })[code] || \"manual review required\";\r\n  }\r\n\r\n  function renderPrice() {\r\n    const quote = currentQuote();\r\n    if (!quote.ok) return goTo(2);\r\n    if (quote.custom) {\r\n      stageElement.innerHTML = `${stageHeader(\"PERSONALIZED REVIEW\", \"This yard needs a hand-built estimate.\", \"We will review the details and give you a specific price instead of inventing a rate that may be wrong.\", \"Personal follow-up\")}\r\n        <div class=\"notice orange\"><strong>Why:</strong> ${quote.reasons.map(reasonText).join(\" · \")}</div><div class=\"info-list\"><div class=\"info-item\"><span class=\"info-icon\">1</span><span><strong>Send the yard details.</strong> It takes about one more minute.</span></div><div class=\"info-item\"><span class=\"info-icon\">2</span><span><strong>We review the scope and availability.</strong> Our team prepares the estimate.</span></div><div class=\"info-item\"><span class=\"info-icon\">3</span><span><strong>You decide.</strong> Nothing is charged or scheduled by this form.</span></div></div><div class=\"actions\"><button class=\"btn link\" type=\"button\" data-action=\"back\">← Change plan</button><button class=\"btn primary\" type=\"button\" data-action=\"choose-intent\" data-intent=\"service_request\">Request my estimate →</button></div>`;\r\n      return;\r\n    }\r\n    stageElement.innerHTML = `${stageHeader(\"YOUR PURGE PROS PLAN\", \"Your yard, handled.\", \"Review your selected plan, then request service, save the quote or ask us a question.\", \"Upfront price\")}\r\n      <div class=\"price-hero\"><div class=\"price-label\">${state.frequency === \"onetime\" ? \"One-time cleanup\" : CONFIG.frequencies[state.frequency].label + \" scoop service\"}</div><div class=\"price\">${money(quote.priceCents)} <small>${priceUnit()}</small></div><p>${escapeHtml(quote.disclaimer)}</p></div>\r\n      <div class=\"line-items\">${quote.lineItems.map(function (item) { return `<div class=\"line-item\"><span>${escapeHtml(item.label)}</span><strong>${money(item.cents)}</strong></div>`; }).join(\"\")}</div>\r\n      ${state.frequency !== \"onetime\" ? promotionCardHtml() : \"\"}\r\n      <div class=\"info-list\"><div class=\"info-item\"><span class=\"info-icon\">✓</span><span>Waste hauled away and equipment sanitized</span></div><div class=\"info-item\"><span class=\"info-icon\">✓</span><span>No contract · pay per visit</span></div><div class=\"info-item\"><span class=\"info-icon\">✓</span><span>Regular service day confirmed before secure payment setup</span></div></div>\r\n      <div class=\"actions\"><button class=\"btn link\" type=\"button\" data-action=\"back\">← Change plan</button><button class=\"btn\" type=\"button\" data-action=\"choose-intent\" data-intent=\"question\">Ask a question</button><button class=\"btn\" type=\"button\" data-action=\"choose-intent\" data-intent=\"quote_delivery\">Send me this quote</button><button class=\"btn primary\" type=\"button\" data-action=\"choose-intent\" data-intent=\"service_request\">Request service →</button></div>`;\r\n  }\r\n\r\n  function intentCopy() {\r\n    if (state.intent === \"quote_delivery\") return { eyebrow: \"SAVE YOUR QUOTE\", title: \"Where should we send it?\", body: \"Choose how you would like us to send your plan and price.\", badge: \"Save your quote\" };\r\n    if (state.intent === \"question\") return { eyebrow: \"ASK PURGE PROS\", title: \"What can we help with?\", body: \"Your plan travels with the question, so you do not have to repeat the yard details.\", badge: \"Personal response\" };\r\n    if (state.frequency === \"onetime\") return { eyebrow: \"REQUEST CLEANUP\", title: \"Tell us where the yard is.\", body: \"We will review the cleanup details and follow up with availability. Nothing is charged today.\", badge: \"About 1 minute\" };\r\n    return { eyebrow: \"REQUEST SERVICE\", title: \"Tell us where the yard is.\", body: \"We will confirm the best recurring service day for your area. Nothing is charged today.\", badge: \"About 1 minute\" };\r\n  }\r\n\r\n  function renderDetails() {\r\n    const copy = intentCopy();\r\n    const service = state.intent === \"service_request\";\r\n    const question = state.intent === \"question\";\r\n    const allowCall = state.intent !== \"quote_delivery\";\r\n    stageElement.innerHTML = `${stageHeader(copy.eyebrow, copy.title, copy.body, copy.badge)}\r\n      <div class=\"field-row\"><div class=\"field\"><label for=\"pp-first\">First name</label><input class=\"input\" id=\"pp-first\" data-field=\"firstName\" autocomplete=\"given-name\" maxlength=\"80\" value=\"${escapeHtml(state.firstName)}\"></div>${service ? `<div class=\"field\"><label for=\"pp-last\">Last name</label><input class=\"input\" id=\"pp-last\" data-field=\"lastName\" autocomplete=\"family-name\" maxlength=\"80\" value=\"${escapeHtml(state.lastName)}\"></div>` : \"\"}</div>\r\n      <div class=\"field-row\"><div class=\"field\"><label for=\"pp-phone\">Mobile number${state.preferredContact === \"email\" ? \" (optional)\" : \"\"}</label><input class=\"input\" id=\"pp-phone\" data-field=\"phone\" type=\"tel\" autocomplete=\"tel\" inputmode=\"numeric\" maxlength=\"14\" pattern=\"[0-9() -]*\" placeholder=\"(317) 555-0123\" value=\"${escapeHtml(state.phone)}\"><small>10-digit U.S. number. Letters and extra digits are removed.</small></div><div class=\"field\"><label for=\"pp-email\">Email${state.preferredContact === \"email\" ? \"\" : \" (optional)\"}</label><input class=\"input\" id=\"pp-email\" data-field=\"email\" type=\"email\" autocomplete=\"email\" maxlength=\"254\" placeholder=\"you@example.com\" value=\"${escapeHtml(state.email)}\"></div></div>\r\n      <div class=\"field\"><span class=\"field-label\">Best way to reply</span><div class=\"radio-grid\"><label class=\"radio-card\"><input type=\"radio\" name=\"pp-preferred\" value=\"text\"${checked(state.preferredContact === \"text\")}><span>Text message</span></label><label class=\"radio-card\"><input type=\"radio\" name=\"pp-preferred\" value=\"email\"${checked(state.preferredContact === \"email\")}><span>Email</span></label>${allowCall ? `<label class=\"radio-card\"><input type=\"radio\" name=\"pp-preferred\" value=\"call\"${checked(state.preferredContact === \"call\")}><span>Phone call</span></label>` : \"\"}</div></div>\r\n      ${state.preferredContact === \"text\" ? `<label class=\"check\" for=\"pp-sms-consent\"><input id=\"pp-sms-consent\" type=\"checkbox\"${checked(state.smsConsent)}><span><strong>Text me about my quote and service.</strong> I consent to receive non-marketing text messages from Purge Pros about my quote, availability, scheduling, service and account at the number provided. Message frequency varies. Message and data rates may apply. Text HELP for assistance; reply STOP to opt out.</span></label>` : \"\"}\r\n      <p class=\"help\">You may choose Email${allowCall ? \" or Phone Call\" : \"\"} instead of consenting to SMS. Review our <a href=\"${CONFIG.brand.privacyUrl}\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a> and <a href=\"${CONFIG.brand.termsUrl}\" target=\"_blank\" rel=\"noopener\">Terms &amp; Conditions</a>.</p>\r\n      ${service ? `<div class=\"field-row\"><div class=\"field\"><label for=\"pp-address\">Service street address</label><input class=\"input\" id=\"pp-address\" data-field=\"address\" autocomplete=\"address-line1\" maxlength=\"120\" value=\"${escapeHtml(state.address)}\"></div><div class=\"field\"><label for=\"pp-city\">City</label><input class=\"input\" id=\"pp-city\" data-field=\"city\" autocomplete=\"address-level2\" maxlength=\"80\" value=\"${escapeHtml(state.city)}\"></div></div><div class=\"field\"><label for=\"pp-start\">When would you like to start?</label><select class=\"select\" id=\"pp-start\" data-field=\"startTiming\"><option value=\"\">Choose timing</option>${[\"As soon as possible\", \"Within the next week\", \"In the next few weeks\", \"Just researching for now\"].map(function (value) { return `<option value=\"${escapeHtml(value)}\"${selected(state.startTiming === value)}>${escapeHtml(value)}</option>`; }).join(\"\")}</select></div>` : \"\"}\r\n      ${question ? `<div class=\"field\"><label for=\"pp-question\">Your question</label><textarea class=\"textarea\" id=\"pp-question\" data-field=\"question\" maxlength=\"1500\" placeholder=\"What would you like to know?\">${escapeHtml(state.question)}</textarea></div>` : \"\"}\r\n      <div class=\"error\" role=\"alert\" tabindex=\"-1\"></div><div class=\"actions\"><button class=\"btn link\" type=\"button\" data-action=\"back\">← Back</button><button class=\"btn primary\" type=\"button\" data-action=\"review\">Review request →</button></div>`;\r\n  }\r\n\r\n  function renderReview() {\r\n    const quote = currentQuote();\r\n    const service = state.intent === \"service_request\";\r\n    const oneTime = state.frequency === \"onetime\";\r\n    const title = service ? (quote.custom ? \"Review your estimate request.\" : \"Review your service request.\") : state.intent === \"quote_delivery\" ? \"Review your quote delivery.\" : \"Review your question.\";\r\n    stageElement.innerHTML = `${stageHeader(\"ONE LAST LOOK\", title, \"Confirm the details below. We will not schedule service or collect payment from this submission.\", \"Nothing charged\")}\r\n      <div class=\"summary\"><section class=\"summary-card\"><h3>Plan</h3><div class=\"summary-row\"><span>Frequency</span><strong>${escapeHtml(CONFIG.frequencies[state.frequency].label)}</strong></div><div class=\"summary-row\"><span>Dogs</span><strong>${Number(state.dogCount) >= 10 ? \"10+ dogs\" : escapeHtml(state.dogCount + (Number(state.dogCount) === 1 ? \" dog\" : \" dogs\"))}</strong></div><div class=\"summary-row\"><span>Service area</span><strong>${state.areas.map(function (id) { return escapeHtml(CONFIG.areaLabels[id]); }).join(\", \")}</strong></div><div class=\"summary-row\"><span>Yard size</span><strong>${escapeHtml(CONFIG.yardSizes[state.yardSize].label)}</strong></div><div class=\"summary-row\"><span>Scoop price</span><strong>${quote.custom ? \"Custom estimate\" : money(quote.priceCents) + \" \" + priceUnit()}</strong></div></section>\r\n      <section class=\"summary-card\"><h3>Contact</h3><div class=\"summary-row\"><span>Name</span><strong>${escapeHtml((state.firstName + \" \" + state.lastName).trim())}</strong></div><div class=\"summary-row\"><span>Reply by</span><strong>${escapeHtml(state.preferredContact === \"call\" ? \"Phone call\" : state.preferredContact)}</strong></div>${state.phone ? `<div class=\"summary-row\"><span>Phone</span><strong>${escapeHtml(state.phone)}</strong></div>` : \"\"}${state.email ? `<div class=\"summary-row\"><span>Email</span><strong>${escapeHtml(state.email)}</strong></div>` : \"\"}${service ? `<div class=\"summary-row\"><span>Service address</span><strong>${escapeHtml(state.address + \", \" + state.city + \", IN \" + state.zip)}</strong></div>` : \"\"}</section></div>\r\n      ${service ? `<label class=\"check\" for=\"pp-terms\"><input id=\"pp-terms\" type=\"checkbox\"${checked(state.termsAccepted)}><span>I agree to the <a href=\"${CONFIG.brand.termsUrl}\" target=\"_blank\" rel=\"noopener\">Terms of Service</a> and acknowledge the <a href=\"${CONFIG.brand.privacyUrl}\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>. I understand this is a request for ${oneTime ? \"cleanup availability\" : \"service-day review\"}, not a confirmed appointment.</span></label>` : `<p class=\"help\">By submitting, you acknowledge the <a href=\"${CONFIG.brand.privacyUrl}\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>.</p>`}\r\n      <div class=\"error\" role=\"alert\" tabindex=\"-1\"></div><div class=\"actions\"><button class=\"btn link\" type=\"button\" data-action=\"back\">← Edit details</button><button class=\"btn primary\" type=\"button\" data-action=\"submit\"${state.submitting ? \" disabled\" : \"\"}>${state.submitting ? '<span class=\"spinner\" aria-hidden=\"true\"></span>Sending…' : submitLabel(quote)}</button></div>`;\r\n  }\r\n\r\n  function submitLabel(quote) {\r\n    if (state.intent === \"quote_delivery\") return \"Send my quote →\";\r\n    if (state.intent === \"question\") return \"Send my question →\";\r\n    return quote.custom ? \"Request my estimate →\" : \"Request my service day →\";\r\n  }\r\n\r\n  function renderComplete() {\r\n    const service = state.intent === \"service_request\";\r\n    const quote = currentQuote();\r\n    const oneTime = state.frequency === \"onetime\";\r\n    const serviceBody = oneTime\r\n      ? \"Our team will review the cleanup details and reply with availability using your selected contact method. Nothing has been scheduled or charged.\"\r\n      : \"Our team will confirm the best recurring service day for your area and reply using your selected contact method. Your service is not scheduled until you approve the proposed day.\";\r\n    const nextSteps = oneTime\r\n      ? `<div class=\"info-list\"><div class=\"info-item\"><span class=\"info-icon\">1</span><span>We review the cleanup details and current availability.</span></div><div class=\"info-item\"><span class=\"info-icon\">2</span><span>We confirm the cleanup plan and timing with you.</span></div><div class=\"info-item\"><span class=\"info-icon\">3</span><span>Then we send the secure payment setup request.</span></div></div>`\r\n      : `<div class=\"info-list\"><div class=\"info-item\"><span class=\"info-icon\">1</span><span>We confirm the best recurring service day for your area.</span></div><div class=\"info-item\"><span class=\"info-icon\">2</span><span>You approve the proposed service day.</span></div><div class=\"info-item\"><span class=\"info-icon\">3</span><span>Then we send a secure payment setup request.</span></div></div>`;\r\n    stageElement.innerHTML = `<div class=\"complete\"><div class=\"success-mark\" aria-hidden=\"true\">✓</div>${stageHeader(\"RECEIVED\", service ? \"Your request is with Purge Pros.\" : state.intent === \"quote_delivery\" ? \"Your quote request is in.\" : \"Your question is in.\", service ? serviceBody : \"We will follow up using the reply method you selected.\", \"Successfully sent\")}\r\n      <div class=\"summary-card\"><h3>What happens next</h3>${service ? nextSteps : `<p class=\"help\">Keep an eye on ${state.preferredContact === \"email\" ? \"your inbox\" : state.preferredContact === \"call\" ? \"your phone\" : \"your text messages\"}. Questions? Call <a href=\"${CONFIG.brand.phoneHref}\">${CONFIG.brand.phoneDisplay}</a>.</p>`}<div class=\"summary-row\"><span>Your price</span><strong>${quote.custom ? \"Custom estimate\" : money(quote.priceCents) + \" \" + priceUnit()}</strong></div><p class=\"request-id\">Reference: ${escapeHtml(state.receipt && state.receipt.requestId || \"received\")}</p></div><div class=\"actions\"><button class=\"btn blue\" type=\"button\" data-action=\"close\">Done</button></div></div>`;\r\n  }\r\n\r\n  function render() {\r\n    if (!stageElement) return;\r\n    renderProgress();\r\n    if (state.step === 1) renderArea();\r\n    if (state.step === 2) renderPlan();\r\n    if (state.step === 3) renderPrice();\r\n    if (state.step === 4) renderDetails();\r\n    if (state.step === 5) renderReview();\r\n    if (state.step === 6) renderComplete();\r\n  }\r\n\r\n  function showOffer() {\r\n    const layer = shadow && shadow.querySelector(\"[data-offer-layer]\");\r\n    if (!layer) return;\r\n    offerPreviousFocus = shadow.activeElement;\r\n    layer.hidden = false;\r\n    const closeButton = layer.querySelector('[data-action=\"close-offer\"]');\r\n    if (closeButton) closeButton.focus();\r\n    track(\"promotion_details_viewed\", { promotion: CONFIG.promotion.title });\r\n  }\r\n\r\n  function closeOffer() {\r\n    const layer = shadow && shadow.querySelector(\"[data-offer-layer]\");\r\n    if (!layer || layer.hidden) return false;\r\n    layer.hidden = true;\r\n    if (offerPreviousFocus && typeof offerPreviousFocus.focus === \"function\") offerPreviousFocus.focus();\r\n    offerPreviousFocus = null;\r\n    return true;\r\n  }\r\n\r\n  function goTo(step) {\r\n    state.step = step;\r\n    render();\r\n    const quoteSide = shadow.querySelector(\".quote-side\");\r\n    if (quoteSide) quoteSide.scrollTop = 0;\r\n    queueMicrotask(function () { if (stageElement) stageElement.focus({ preventScroll: true }); });\r\n    track(\"funnel_step_viewed\", { step: step });\r\n  }\r\n\r\n  function showError(messages) {\r\n    const box = stageElement.querySelector(\".error\");\r\n    if (!box) return;\r\n    const list = Array.isArray(messages) ? messages : [messages];\r\n    box.innerHTML = list.length === 1 ? escapeHtml(list[0]) : `<strong>Please fix the following:</strong><ul>${list.map(function (message) { return `<li>${escapeHtml(message)}</li>`; }).join(\"\")}</ul>`;\r\n    box.classList.add(\"show\");\r\n    box.focus();\r\n  }\r\n\r\n  function validatePlan() {\r\n    const quote = currentQuote();\r\n    const errors = quote.errors ? quote.errors.slice() : [];\r\n    if (!state.lastCleaned) errors.push(\"Choose when the yard was last fully cleaned.\");\r\n    return errors;\r\n  }\r\n\r\n  function validateDetails() {\r\n    const errors = [];\r\n    const service = state.intent === \"service_request\";\r\n    if (!state.firstName.trim()) errors.push(\"Enter your first name.\");\r\n    if (service && !state.lastName.trim()) errors.push(\"Enter your last name.\");\r\n    if ((service || state.preferredContact !== \"email\") && !normalizePhone(state.phone)) errors.push(\"Enter a valid 10-digit phone number.\");\r\n    if (state.preferredContact === \"email\" && !validEmail(state.email)) errors.push(\"Enter a valid email address.\");\r\n    if (state.preferredContact === \"text\" && !state.smsConsent) errors.push(state.intent === \"quote_delivery\" ? \"To choose Text, select the service-text permission or choose Email.\" : \"To choose Text, select the service-text permission or choose Email/Phone call.\");\r\n    if (service && !state.address.trim()) errors.push(\"Enter the service street address.\");\r\n    if (service && !state.city.trim()) errors.push(\"Enter the service city.\");\r\n    if (service && !state.startTiming) errors.push(\"Choose when you would like to start.\");\r\n    if (state.intent === \"question\" && state.question.trim().length < 5) errors.push(\"Enter your question.\");\r\n    return errors;\r\n  }\r\n\r\n  function requestId() {\r\n    if (window.crypto && typeof window.crypto.randomUUID === \"function\") return window.crypto.randomUUID();\r\n    return \"pp-\" + Date.now() + \"-\" + Math.random().toString(36).slice(2, 10);\r\n  }\r\n\r\n  function buildPayload() {\r\n    const quote = currentQuote();\r\n    const phone = normalizePhone(state.phone);\r\n    const id = requestId();\r\n    let stage = \"service_requested\";\r\n    let question = state.question.trim();\r\n    if (state.intent === \"question\") stage = \"question_submitted\";\r\n    if (state.intent === \"quote_delivery\") {\r\n      stage = \"quote_requested\";\r\n      question = \"Quote delivery requested by \" + state.preferredContact + \".\";\r\n    }\r\n    if (state.intent === \"service_request\" && quote.custom) stage = \"estimate_requested\";\r\n    return {\r\n      schemaVersion: \"cloudflare-widget.v3\",\r\n      requestId: id,\r\n      eventId: id + \":\" + stage,\r\n      stage: stage,\r\n      intent: state.intent,\r\n      zip: state.zip,\r\n      dogs: String(state.dogCount),\r\n      frequency: CONFIG.frequencies[state.frequency].label,\r\n      frequencyId: state.frequency,\r\n      areas: state.areas.map(function (id) { return CONFIG.areaLabels[id]; }).join(\" & \"),\r\n      areaIds: state.areas,\r\n      yardSize: CONFIG.yardSizes[state.yardSize].label,\r\n      yardSizeId: state.yardSize,\r\n      lastCleaned: state.lastCleaned,\r\n      startTiming: state.startTiming,\r\n      perVisitPrice: quote.custom ? \"\" : (quote.priceCents / 100).toFixed(2),\r\n      clientPriceCents: quote.custom ? null : quote.priceCents,\r\n      pricingVersion: quote.pricingVersion,\r\n      customEstimate: Boolean(quote.custom),\r\n      customReasons: quote.reasons || [],\r\n      phone: phone ? phone.digits : \"\",\r\n      phoneE164: phone ? phone.e164 : \"\",\r\n      firstName: state.firstName.trim(),\r\n      lastName: state.lastName.trim(),\r\n      email: state.email.trim().toLowerCase(),\r\n      street: state.address.trim(),\r\n      city: state.city.trim(),\r\n      state: \"IN\",\r\n      preferredContact: state.preferredContact,\r\n      smsTransactionalConsent: state.smsConsent,\r\n      consent: state.smsConsent ? \"yes\" : \"no\",\r\n      consentVersion: state.smsConsent ? CONFIG.consentVersion : \"\",\r\n      smsConsentCapturedAt: state.smsConsent ? state.smsConsentCapturedAt || new Date().toISOString() : \"\",\r\n      termsAccepted: state.intent === \"service_request\" ? state.termsAccepted : false,\r\n      termsVersion: state.intent === \"service_request\" ? CONFIG.termsVersion : \"\",\r\n      termsAcceptedAt: state.intent === \"service_request\" && state.termsAccepted ? state.termsAcceptedAt || new Date().toISOString() : \"\",\r\n      question: question,\r\n      notes: state.intent === \"service_request\" ? \"Submitted through transparent-price Cloudflare widget.\" : \"\",\r\n      page: location.href.slice(0, 1000),\r\n      attribution: state.attribution,\r\n      gclid: state.attribution.gclid || \"\",\r\n      fbclid: state.attribution.fbclid || \"\",\r\n      fbp: cookieValue(\"_fbp\"),\r\n      fbc: cookieValue(\"_fbc\") || (state.attribution.fbclid ? \"fb.1.\" + Date.now() + \".\" + state.attribution.fbclid : \"\"),\r\n      submittedAt: new Date().toISOString(),\r\n      website: \"\"\r\n    };\r\n  }\r\n\r\n  async function submit() {\r\n    if (state.submitting) return;\r\n    if (state.intent === \"service_request\" && !state.termsAccepted) return showError(\"Agree to the Terms of Service and acknowledge the Privacy Policy before submitting.\");\r\n    const detailErrors = validateDetails();\r\n    if (detailErrors.length) return showError(detailErrors);\r\n    const payload = buildPayload();\r\n    state.submitting = true;\r\n    renderReview();\r\n    try {\r\n      let body = { accepted: true, requestId: payload.requestId };\r\n      if (CONFIG.leadEndpoint) {\r\n        const controller = new AbortController();\r\n        const timeout = window.setTimeout(function () { controller.abort(); }, 15000);\r\n        let response;\r\n        try {\r\n          response = await fetch(CONFIG.leadEndpoint, {\r\n            method: \"POST\",\r\n            headers: { \"Content-Type\": \"application/json\" },\r\n            body: JSON.stringify(payload),\r\n            credentials: \"omit\",\r\n            signal: controller.signal\r\n          });\r\n        } finally {\r\n          window.clearTimeout(timeout);\r\n        }\r\n        const text = await response.text();\r\n        if (text) {\r\n          try { body = JSON.parse(text); } catch (_) { body = { accepted: response.ok, requestId: payload.requestId }; }\r\n        }\r\n        if (!response.ok || body.accepted === false) throw new Error(body.message || \"We could not save your request. Please try again.\");\r\n      } else {\r\n        console.info(\"Purge Pros demo submission\", payload);\r\n      }\r\n      state.receipt = { requestId: body.requestId || payload.requestId };\r\n      trackSuccess(payload, state.receipt.requestId);\r\n      clearLowRiskProgress();\r\n      state.submitting = false;\r\n      goTo(6);\r\n    } catch (error) {\r\n      state.submitting = false;\r\n      renderReview();\r\n      const message = error && error.name === \"AbortError\"\r\n        ? \"This is taking longer than expected. Please try again or call \" + CONFIG.brand.phoneDisplay + \".\"\r\n        : error && error.message || \"We could not send this request. Please try again or call \" + CONFIG.brand.phoneDisplay + \".\";\r\n      showError(message);\r\n    }\r\n  }\r\n\r\n  function handleInput(event) {\r\n    const target = event.target;\r\n    if (target.id === \"pp-zip\") {\r\n      state.zip = normalizeZip(target.value);\r\n      target.value = state.zip;\r\n      state.zipIneligible = false;\r\n      return;\r\n    }\r\n    if (target.id === \"pp-phone\") {\r\n      const formatted = formatPhone(target.value);\r\n      target.value = formatted;\r\n      state.phone = formatted;\r\n      return;\r\n    }\r\n    const field = target.dataset && target.dataset.field;\r\n    if (field) state[field] = target.value;\r\n  }\r\n\r\n  function handleChange(event) {\r\n    const target = event.target;\r\n    const field = target.dataset && target.dataset.field;\r\n    if (field) state[field] = target.value;\r\n    if (target.name === \"pp-preferred\") {\r\n      state.preferredContact = target.value;\r\n      if (state.preferredContact !== \"text\") {\r\n        state.smsConsent = false;\r\n        state.smsConsentCapturedAt = \"\";\r\n      }\r\n      renderDetails();\r\n      return;\r\n    }\r\n    if (target.id === \"pp-sms-consent\") {\r\n      state.smsConsent = target.checked;\r\n      state.smsConsentCapturedAt = target.checked ? new Date().toISOString() : \"\";\r\n    }\r\n    if (target.id === \"pp-terms\") {\r\n      state.termsAccepted = target.checked;\r\n      state.termsAcceptedAt = target.checked ? new Date().toISOString() : \"\";\r\n    }\r\n    if (field && state.step === 2) {\r\n      if (field === \"dogCount\" || field === \"yardSize\") reconcileFrequencySelection();\r\n      saveLowRiskProgress();\r\n      renderPlan();\r\n    }\r\n  }\r\n\r\n  function handleClick(event) {\r\n    const frequencyButton = event.target.closest(\"[data-frequency]\");\r\n    if (frequencyButton) {\r\n      state.frequency = frequencyButton.dataset.frequency;\r\n      saveLowRiskProgress();\r\n      renderPlan();\r\n      return;\r\n    }\r\n    const areaButton = event.target.closest(\"[data-area]\");\r\n    if (areaButton) {\r\n      const id = areaButton.dataset.area;\r\n      if (id === \"all\") state.areas = state.areas.length === 3 ? [] : Object.keys(CONFIG.areaLabels);\r\n      else state.areas = state.areas.indexOf(id) >= 0 ? state.areas.filter(function (item) { return item !== id; }) : state.areas.concat(id);\r\n      saveLowRiskProgress();\r\n      renderPlan();\r\n      return;\r\n    }\r\n    const button = event.target.closest(\"[data-action]\");\r\n    if (!button) {\r\n      if (event.target.matches(\"[data-offer-layer]\")) return closeOffer();\r\n      if (event.target.matches(\"[data-backdrop]\")) close();\r\n      return;\r\n    }\r\n    const action = button.dataset.action;\r\n    if (action === \"show-offer\") return showOffer();\r\n    if (action === \"close-offer\") return closeOffer();\r\n    if (action === \"close\") return close();\r\n    if (action === \"check-zip\") {\r\n      state.zip = normalizeZip(stageElement.querySelector(\"#pp-zip\").value);\r\n      if (state.zip.length !== 5) return showError(\"Enter a valid 5-digit ZIP code.\");\r\n      if (CONFIG.serviceZips.indexOf(state.zip) < 0) {\r\n        state.zipIneligible = true;\r\n        track(\"service_area_ineligible\", { zip_prefix: state.zip.slice(0, 3) });\r\n        return renderArea();\r\n      }\r\n      state.zipIneligible = false;\r\n      saveLowRiskProgress();\r\n      track(\"service_area_eligible\", { zip_prefix: state.zip.slice(0, 3) });\r\n      return goTo(2);\r\n    }\r\n    if (action === \"show-price\") {\r\n      const errors = validatePlan();\r\n      if (errors.length) return showError(errors);\r\n      saveLowRiskProgress();\r\n      const quote = currentQuote();\r\n      track(\"price_viewed\", { frequency: state.frequency, custom: quote.custom, value: quote.custom ? undefined : quote.priceCents / 100 });\r\n      return goTo(3);\r\n    }\r\n    if (action === \"choose-intent\") {\r\n      state.intent = button.dataset.intent;\r\n      if (state.intent === \"quote_delivery\" && state.preferredContact === \"call\") state.preferredContact = \"text\";\r\n      state.termsAccepted = false;\r\n      state.termsAcceptedAt = \"\";\r\n      return goTo(4);\r\n    }\r\n    if (action === \"review\") {\r\n      const errors = validateDetails();\r\n      if (errors.length) return showError(errors);\r\n      return goTo(5);\r\n    }\r\n    if (action === \"submit\") return submit();\r\n    if (action === \"back\") return goTo(Math.max(1, state.step - 1));\r\n  }\r\n\r\n  function handleKeydown(event) {\r\n    if (event.key === \"Enter\" && event.target.id === \"pp-zip\") {\r\n      event.preventDefault();\r\n      const button = stageElement.querySelector('[data-action=\"check-zip\"]');\r\n      if (button) button.click();\r\n    }\r\n    if (event.key === \"Tab\" && shadow) {\r\n      const focusable = Array.from(shadow.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])'))\r\n        .filter(function (element) { return element.getClientRects().length > 0; });\r\n      if (focusable.length) {\r\n        const first = focusable[0];\r\n        const last = focusable[focusable.length - 1];\r\n        const active = shadow.activeElement;\r\n        if (event.shiftKey && (active === first || !active)) {\r\n          event.preventDefault();\r\n          last.focus();\r\n        } else if (!event.shiftKey && active === last) {\r\n          event.preventDefault();\r\n          first.focus();\r\n        }\r\n      }\r\n    }\r\n    if (event.key === \"Escape\") {\r\n      event.stopPropagation();\r\n      if (!closeOffer()) close();\r\n    }\r\n  }\r\n\r\n  function hydrateReviews() {\r\n    if (!CONFIG.reviewsEndpoint || !shadow) return;\r\n    fetch(CONFIG.reviewsEndpoint).then(function (response) {\r\n      if (!response.ok) throw new Error(\"reviews unavailable\");\r\n      return response.json();\r\n    }).then(function (data) {\r\n      const reviewChip = shadow.querySelector(\"[data-review-chip]\");\r\n      if (reviewChip && data.rating && data.count) reviewChip.textContent = CONFIG.brand.reviewChipTemplate.replace(\"{rating}\", data.rating).replace(\"{count}\", data.count);\r\n    }).catch(function () {});\r\n  }\r\n\r\n  function open() {\n    hideAutoOpenFeedback();\n    if (host) return;\n    previousFocus = document.activeElement;\r\n    previousOverflow = document.body.style.overflow;\r\n    if (!restored) { restoreLowRiskProgress(); restored = true; }\r\n    host = document.createElement(\"div\");\r\n    host.id = \"purge-pros-quote-widget\";\r\n    shadow = host.attachShadow({ mode: \"open\" });\r\n    shadow.innerHTML = shellHtml();\r\n    document.body.appendChild(host);\r\n    document.body.style.overflow = \"hidden\";\r\n    stageElement = shadow.querySelector(\".stage\");\r\n    progressElement = shadow.querySelector(\".progress\");\r\n    shadow.addEventListener(\"input\", handleInput);\r\n    shadow.addEventListener(\"change\", handleChange);\r\n    shadow.addEventListener(\"click\", handleClick);\r\n    shadow.addEventListener(\"keydown\", handleKeydown);\r\n    render();\r\n    hydrateReviews();\r\n    queueMicrotask(function () { if (stageElement) stageElement.focus(); });\r\n    track(\"funnel_viewed\", { presentation: \"cloudflare_widget\" });\r\n  }\r\n\r\n  function close() {\r\n    if (!host) return;\r\n    host.remove();\r\n    host = null;\r\n    shadow = null;\r\n    stageElement = null;\r\n    progressElement = null;\r\n    document.body.style.overflow = previousOverflow;\r\n    if (state.step === 6) {\r\n      state = freshState();\r\n      clearLowRiskProgress();\r\n    }\r\n    if (previousFocus && typeof previousFocus.focus === \"function\") previousFocus.focus();\r\n  }\r\n\r\n  document.addEventListener(\"click\", function (event) {\r\n    const trigger = event.target.closest && event.target.closest('[data-purge-quote], a[href=\"#quote\"], a[href=\"#get-quote\"]');\r\n    if (!trigger) return;\r\n    event.preventDefault();\r\n    open();\r\n  });\r\n  document.addEventListener(\"keydown\", function (event) { if (event.key === \"Escape\" && host) close(); });\r\n\r\n  window.PurgeProsQuote = { open: open, close: close, config: CONFIG };\n\n  if (consumeAutoOpenRequest()) {\n    openWhenBodyReady();\n  }\n})();\n";
-
 const DEMO_HTML = "<!doctype html>\r\n<html lang=\"en\">\r\n<head>\r\n  <meta charset=\"utf-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\r\n  <title>Purge Pros — Quote Widget Demo</title>\r\n  <style>\r\n    body { margin: 0; font-family: \"Segoe UI\", system-ui, sans-serif; background: #0d0f12; color: #fff;\r\n           min-height: 100vh; display: flex; align-items: center; justify-content: center; }\r\n    .hero { text-align: center; padding: 40px 20px; }\r\n    .hero h1 { font-size: 40px; margin: 0 0 8px; }\r\n    .hero h1 span { color: #38b6ff; }\r\n    .hero p { color: #b9c2cb; margin: 0 0 28px; }\r\n    .cta { display: inline-block; background: #38b6ff; color: #fff; font-weight: 800; font-size: 17px;\r\n           padding: 16px 34px; border-radius: 999px; text-decoration: none; }\r\n    .cta:hover { background: #1da4f5; }\r\n    .note { margin-top: 24px; font-size: 13px; color: #6c7680; }\r\n  </style>\r\n</head>\r\n<body>\r\n  <div class=\"hero\">\r\n    <h1>Purge <span>Pros</span></h1>\r\n    <p>Pet waste removal — pay per visit, no contracts, no monthly billing.</p>\r\n    <a class=\"cta\" href=\"#quote\">Get My Instant Quote</a>\r\n    <p class=\"note\">Leads log to the browser console until <code>leadEndpoint</code> is set in purge-quote.js.<br>\r\n       Try an in-area ZIP (46032) and an out-of-area one (85701).</p>\r\n  </div>\r\n  <script src=\"purge-quote.js\" defer></script>\r\n</body>\r\n</html>\r\n";
 
 function promotionOverride(env) {
@@ -59,33 +55,512 @@ function promotionOverride(env) {
   return override;
 }
 
-// Injects endpoint/tracking settings and optional promotion variables at serve time.
-function widgetScript(env) {
+function widgetScript(request, env) {
+  const origin = new URL(request.url).origin;
   const configured = WIDGET_JS
-    .replace('leadEndpoint: ""', "leadEndpoint: " + JSON.stringify(LEAD_ENDPOINT))
-    .replace('reviewsEndpoint: ""', "reviewsEndpoint: " + JSON.stringify(REVIEWS_ENDPOINT))
+    .replace('leadEndpoint: ""', "leadEndpoint: " + JSON.stringify(origin + "/submit"))
+    .replace('reviewsEndpoint: ""', "reviewsEndpoint: " + JSON.stringify(origin + "/reviews"))
     .replace('googleAdsSendTo: ""', "googleAdsSendTo: " + JSON.stringify(GOOGLE_ADS_SEND_TO))
     .replace('firePixelEvents: true', "firePixelEvents: " + JSON.stringify(FIRE_META_PIXEL_EVENTS));
   return configured + "\nObject.assign(window.PurgeProsQuote.config.promotion," + JSON.stringify(promotionOverride(env)) + ");";
 }
 
+/**
+ * Purge Pros lead relay — Cloudflare Worker.
+ *
+ * Routes:
+ *   POST /        validated widget submission -> GoHighLevel inbound webhook
+ *   GET /reviews  live Google rating + review count, edge-cached for six hours
+ *
+ * Required secret:
+ *   GHL_WEBHOOK_URL
+ *
+ * Recommended variable:
+ *   ALLOWED_ORIGINS="https://itspurgepros.com,https://www.itspurgepros.com"
+ *
+ * Optional review and Meta CAPI secrets:
+ *   GOOGLE_PLACES_API_KEY, GOOGLE_PLACE_ID, META_PIXEL_ID, META_CAPI_TOKEN
+ */
+
+const SCHEMA_VERSION = "cloudflare-widget.v3";
+const PRICING_VERSION = "2026-08-cloudflare-v1";
+const MAX_BODY_BYTES = 30000;
+const REVIEWS_TTL_SECONDS = 21600;
+const DEFAULT_ALLOWED_ORIGINS = [
+  "https://itspurgepros.com",
+  "https://www.itspurgepros.com",
+  "https://purge-quote.purgepros.workers.dev"
+];
+
+const SERVICE_ZIPS = new Set([
+  "46011", "46013", "46014", "46015", "46016", "46032", "46033", "46034", "46037",
+  "46038", "46040", "46048", "46051", "46055", "46056", "46060", "46061", "46062",
+  "46064", "46074", "46075", "46077", "46112", "46113", "46122", "46123", "46140",
+  "46142", "46143", "46158", "46163", "46167", "46168", "46214", "46216", "46217",
+  "46220", "46221", "46227", "46228", "46231", "46234", "46236", "46237", "46239",
+  "46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280"
+]);
+
+const FREQUENCIES = {
+  twice: { label: "Twice weekly", maxDogs: 9, prices: { 1: 1599, 2: 1749, 3: 1899, 4: 2049, 5: 2199, 6: 2349, 7: 2499, 8: 2649, 9: 2799 } },
+  weekly: { label: "Weekly", maxDogs: 5, prices: { 1: 1999, 2: 2249, 3: 2499, 4: 2749, 5: 2999 } },
+  biweekly: { label: "Every other week", maxDogs: 4, prices: { 1: 2999, 2: 3349, 3: 3699, 4: 4049 } },
+  onetime: { label: "One-time cleanup", anyDogs: true, flatPrice: 8999 },
+  custom: { label: "Custom booking", custom: true }
+};
+
+const AREA_LABELS = { back: "Back yard", front: "Front yard", side: "Side yard(s)" };
+const AREA_ADDERS = { 1: 0, 2: 250, 3: 500 };
+const YARD_SIZES = {
+  s: { label: "Up to ⅛ acre", add: 0 },
+  m: { label: "Up to ¼ acre", add: 400 },
+  l: { label: "Up to ½ acre", add: 800 },
+  xl: { label: "Up to 1 acre", add: 1200 },
+  over: { label: "Over 1 acre", custom: true }
+};
+const LAST_CLEANED = new Set(["Within 1 week", "2–3 weeks", "About 1 month", "2–4 months", "5–6 months", "More than 6 months"]);
+const START_TIMINGS = new Set(["As soon as possible", "Within the next week", "In the next few weeks", "Just researching for now"]);
+const PREFERRED_CONTACTS = new Set(["text", "email", "call"]);
+const LEGACY_STAGES = new Set(["phone_captured", "quote_updated", "question_submitted", "service_requested", "estimate_requested", "out_of_area"]);
+
+function corsHeaders(origin) {
+  return {
+    "Access-Control-Allow-Origin": origin || "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400",
+    "Vary": "Origin"
+  };
+}
+
+function jsonResponse(status, body, cors) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...cors, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
+  });
+}
+
+function originAllowed(origin, env, requestUrl) {
+  if (origin && requestUrl && origin === new URL(requestUrl).origin) return true;
+  if (!origin) return false;
+  const allowedOrigins = env.ALLOWED_ORIGINS
+    ? env.ALLOWED_ORIGINS.split(",").map(value => value.trim()).filter(Boolean)
+    : DEFAULT_ALLOWED_ORIGINS;
+  return allowedOrigins.includes(origin);
+}
+
+function cleanString(value, max = 500) {
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+function normalizePhone(value) {
+  let digits = String(value || "").replace(/\D/g, "");
+  if (digits.length === 11 && digits.startsWith("1")) digits = digits.slice(1);
+  return /^\d{10}$/.test(digits) ? digits : "";
+}
+
+function validEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254;
+}
+
+function calculateQuote(lead) {
+  const dogs = Number(lead.dogs);
+  const frequencyId = cleanString(lead.frequencyId, 20);
+  const frequency = FREQUENCIES[frequencyId];
+  const yardSizeId = cleanString(lead.yardSizeId, 20);
+  const yard = YARD_SIZES[yardSizeId];
+  const areaIds = Array.from(new Set(Array.isArray(lead.areaIds) ? lead.areaIds : []))
+    .filter(id => Object.prototype.hasOwnProperty.call(AREA_LABELS, id));
+  const errors = [];
+
+  if (!Number.isInteger(dogs) || dogs < 1 || dogs > 10) errors.push("dogs");
+  if (!frequency) errors.push("frequencyId");
+  if (!yard) errors.push("yardSizeId");
+  if (!areaIds.length || areaIds.length !== (Array.isArray(lead.areaIds) ? new Set(lead.areaIds).size : 0)) errors.push("areaIds");
+  if (frequency && yard && yard.custom && !frequency.custom) errors.push("frequencyId");
+  if (frequency && !frequency.custom && frequencyId !== "onetime" && !frequency.prices[dogs]) errors.push("frequencyId");
+  if (errors.length) return { ok: false, errors };
+
+  const reasons = [];
+  if (frequency.custom) reasons.push("CUSTOM_BOOKING_SELECTED");
+  if (dogs >= 10 && frequencyId !== "onetime") reasons.push("DOG_COUNT_10_PLUS");
+  if (yard.custom) reasons.push("YARD_OVER_ONE_ACRE");
+  if (reasons.length) {
+    return { ok: true, custom: true, reasons, dogs, frequencyId, frequency, yardSizeId, yard, areaIds };
+  }
+
+  const priceCents = frequencyId === "onetime"
+    ? frequency.flatPrice
+    : frequency.prices[dogs] + AREA_ADDERS[areaIds.length] + yard.add;
+  return { ok: true, custom: false, priceCents, dogs, frequencyId, frequency, yardSizeId, yard, areaIds };
+}
+
+function validateV3(lead) {
+  const errors = [];
+  const intent = cleanString(lead.intent, 40);
+  const preferredContact = cleanString(lead.preferredContact, 20);
+  const phone = normalizePhone(lead.phone);
+  const email = cleanString(lead.email, 254).toLowerCase();
+  const zip = cleanString(lead.zip, 5);
+  const quote = calculateQuote(lead);
+
+  if (!["service_request", "quote_delivery", "question"].includes(intent)) errors.push("intent");
+  if (!PREFERRED_CONTACTS.has(preferredContact)) errors.push("preferredContact");
+  if (!/^\d{5}$/.test(zip) || !SERVICE_ZIPS.has(zip)) errors.push("zip");
+  if (!quote.ok) errors.push(...quote.errors);
+  if (preferredContact === "text" || preferredContact === "call") {
+    if (!phone) errors.push("phone");
+  }
+  if (preferredContact === "email" && !validEmail(email)) errors.push("email");
+  if (lead.phone && !phone) errors.push("phone");
+  if (lead.email && !validEmail(email)) errors.push("email");
+  if (preferredContact === "text") {
+    if (lead.smsTransactionalConsent !== true) errors.push("smsTransactionalConsent");
+    if (!cleanString(lead.consentVersion, 80)) errors.push("consentVersion");
+  }
+  if (cleanString(lead.website, 100)) errors.push("website");
+
+  const expectedStage = intent === "question"
+    ? "question_submitted"
+    : intent === "quote_delivery"
+      ? "quote_requested"
+      : quote.ok && quote.custom
+        ? "estimate_requested"
+        : "service_requested";
+  if (cleanString(lead.stage, 40) !== expectedStage) errors.push("stage");
+
+  if (quote.ok) {
+    if (lead.pricingVersion !== PRICING_VERSION) errors.push("pricingVersion");
+    if (Boolean(lead.customEstimate) !== quote.custom) errors.push("customEstimate");
+    if (!quote.custom && Number(lead.clientPriceCents) !== quote.priceCents) errors.push("clientPriceCents");
+  }
+
+  const firstName = cleanString(lead.firstName, 80);
+  const lastName = cleanString(lead.lastName, 80);
+  const street = cleanString(lead.street, 120);
+  const city = cleanString(lead.city, 80);
+  const startTiming = cleanString(lead.startTiming, 80);
+  const lastCleaned = cleanString(lead.lastCleaned, 80);
+  const question = cleanString(lead.question, 1500);
+  if (!firstName) errors.push("firstName");
+  if (!LAST_CLEANED.has(lastCleaned)) errors.push("lastCleaned");
+
+  if (intent === "service_request") {
+    if (!lastName) errors.push("lastName");
+    if (!street) errors.push("street");
+    if (!city) errors.push("city");
+    if (!START_TIMINGS.has(startTiming)) errors.push("startTiming");
+    if (lead.termsAccepted !== true || !cleanString(lead.termsVersion, 80)) errors.push("termsAccepted");
+  }
+  if (intent === "question" && question.length < 5) errors.push("question");
+
+  return {
+    ok: errors.length === 0,
+    errors: Array.from(new Set(errors)),
+    values: { intent, preferredContact, phone, email, zip, quote, firstName, lastName, street, city, startTiming, lastCleaned, question, expectedStage }
+  };
+}
+
+function cleanAttribution(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const allowed = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "wbraid", "gbraid", "fbclid"];
+  return Object.fromEntries(allowed.map(key => [key, cleanString(value[key], 500)]).filter(([, item]) => item));
+}
+
+function buildV3Forward(lead, values, requestId, request) {
+  const quote = values.quote;
+  const acceptedAt = new Date().toISOString();
+  const attribution = cleanAttribution(lead.attribution);
+  const serviceAddress = values.intent === "service_request"
+    ? `${values.street}, ${values.city}, IN ${values.zip}`
+    : "";
+  const consentVersion = values.preferredContact === "text" ? cleanString(lead.consentVersion, 80) : "";
+  const consentAt = values.preferredContact === "text" ? cleanString(lead.smsConsentCapturedAt, 40) || acceptedAt : "";
+  const termsVersion = values.intent === "service_request" ? cleanString(lead.termsVersion, 80) : "";
+  const termsAt = values.intent === "service_request" ? cleanString(lead.termsAcceptedAt, 40) || acceptedAt : "";
+  const requestType = values.expectedStage === "service_requested"
+    ? "Service requested"
+    : values.expectedStage === "estimate_requested"
+      ? "Custom estimate requested"
+      : values.expectedStage === "quote_requested"
+        ? "Quote copy requested"
+        : "Customer question";
+  const quoteSummary = [
+    "Purge Pros website quote",
+    `Request: ${requestType}`,
+    `Service address: ${serviceAddress || "Not collected for this request type"}`,
+    `Plan: ${quote.frequency.label}`,
+    `Price: ${quote.custom ? "Custom estimate required" : `$${(quote.priceCents / 100).toFixed(2)} per visit`}`,
+    `Dogs: ${quote.dogs >= 10 ? "10+" : quote.dogs}`,
+    `Service areas: ${quote.areaIds.map(id => AREA_LABELS[id]).join(" & ")}`,
+    `Yard size: ${quote.yard.label}`,
+    `Last fully cleaned: ${values.lastCleaned}`,
+    `Desired start: ${values.intent === "service_request" ? values.startTiming : "Not requested"}`,
+    `Reply preference: ${values.preferredContact}`,
+    `Service SMS permission: ${values.preferredContact === "text" ? `Yes — ${consentVersion} at ${consentAt}` : "No"}`,
+    `Terms accepted: ${values.intent === "service_request" ? `Yes — ${termsVersion} at ${termsAt}` : "Not applicable"}`,
+    values.question ? `Customer message: ${values.question}` : "",
+    attribution.utm_source ? `Attribution: ${[attribution.utm_source, attribution.utm_medium, attribution.utm_campaign].filter(Boolean).join(" / ")}` : "",
+    `Request ID: ${requestId}`
+  ].filter(Boolean).join("\n");
+  return {
+    schemaVersion: SCHEMA_VERSION,
+    requestId,
+    eventId: cleanString(lead.eventId, 120) || requestId + ":" + values.expectedStage,
+    stage: values.expectedStage,
+    intent: values.intent,
+    zip: values.zip,
+    dogs: String(quote.dogs),
+    frequency: quote.frequency.label,
+    frequencyId: quote.frequencyId,
+    areas: quote.areaIds.map(id => AREA_LABELS[id]).join(" & "),
+    areaIds: quote.areaIds,
+    yardSize: quote.yard.label,
+    yardSizeId: quote.yardSizeId,
+    lastCleaned: values.lastCleaned,
+    startTiming: values.intent === "service_request" ? values.startTiming : "",
+    perVisitPrice: quote.custom ? "" : (quote.priceCents / 100).toFixed(2),
+    serverPriceCents: quote.custom ? null : quote.priceCents,
+    pricingVersion: PRICING_VERSION,
+    customEstimate: quote.custom,
+    customReasons: quote.reasons || [],
+    firstName: values.firstName,
+    lastName: values.intent === "service_request" ? values.lastName : "",
+    phone: values.phone,
+    phoneE164: values.phone ? "+1" + values.phone : "",
+    email: values.email,
+    street: values.intent === "service_request" ? values.street : "",
+    city: values.intent === "service_request" ? values.city : "",
+    state: "IN",
+    serviceAddress,
+    preferredContact: values.preferredContact,
+    smsTransactionalConsent: values.preferredContact === "text",
+    consent: values.preferredContact === "text" ? "yes" : "no",
+    consentVersion,
+    smsConsentCapturedAt: consentAt,
+    termsAccepted: values.intent === "service_request",
+    termsVersion,
+    termsAcceptedAt: termsAt,
+    question: values.question,
+    quoteSummary,
+    notes: cleanString(lead.notes, 500),
+    page: cleanString(lead.page, 1000),
+    attribution,
+    utmSource: attribution.utm_source || "",
+    utmMedium: attribution.utm_medium || "",
+    utmCampaign: attribution.utm_campaign || "",
+    gclid: cleanString(lead.gclid, 500),
+    fbclid: cleanString(lead.fbclid, 500),
+    fbp: cleanString(lead.fbp, 500),
+    fbc: cleanString(lead.fbc, 500),
+    submittedAt: cleanString(lead.submittedAt, 40),
+    receivedAt: acceptedAt,
+    consentUserAgent: cleanString(request.headers.get("User-Agent"), 500),
+    source: "purge-pros-cloudflare-widget"
+  };
+}
+
+async function handleReviews(request, env) {
+  const headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Access-Control-Allow-Origin": "*",
+    "Cache-Control": `public, max-age=${REVIEWS_TTL_SECONDS}`
+  };
+  if (!env.GOOGLE_PLACES_API_KEY || !env.GOOGLE_PLACE_ID) {
+    return new Response(JSON.stringify({ error: "reviews not configured" }), { status: 500, headers });
+  }
+
+  const cache = caches.default;
+  const cacheKey = new Request(new URL("/reviews", request.url));
+  const cached = await cache.match(cacheKey);
+  if (cached) return cached;
+  const upstream = await fetch(`https://places.googleapis.com/v1/places/${env.GOOGLE_PLACE_ID}`, {
+    headers: {
+      "X-Goog-Api-Key": env.GOOGLE_PLACES_API_KEY,
+      "X-Goog-FieldMask": "rating,userRatingCount"
+    }
+  });
+  if (!upstream.ok) return new Response(JSON.stringify({ error: "upstream" }), { status: 502, headers });
+  const place = await upstream.json();
+  const response = new Response(JSON.stringify({ rating: place.rating ?? null, count: place.userRatingCount ?? null }), { status: 200, headers });
+  await cache.put(cacheKey, response.clone());
+  return response;
+}
+
+async function sha256Hex(value) {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, "0")).join("");
+}
+
+async function sendMetaCapi(lead, request, env) {
+  if (!env.META_PIXEL_ID || !env.META_CAPI_TOKEN) return;
+  if (lead.stage !== "service_requested" && lead.stage !== "estimate_requested") return;
+  const requestOrigin = request.headers.get("Origin");
+  if (requestOrigin && !env.META_TEST_EVENT_CODE) {
+    try {
+      if (new URL(requestOrigin).hostname.endsWith(".workers.dev")) return;
+    } catch (_) {
+      return;
+    }
+  }
+
+  const userData = {
+    client_ip_address: request.headers.get("CF-Connecting-IP") || undefined,
+    client_user_agent: request.headers.get("User-Agent") || undefined
+  };
+  if (/^\d{10}$/.test(lead.phone || "")) userData.ph = [await sha256Hex("1" + lead.phone)];
+  if (lead.email) userData.em = [await sha256Hex(lead.email.trim().toLowerCase())];
+  if (lead.fbp) userData.fbp = lead.fbp;
+  if (lead.fbc) userData.fbc = lead.fbc;
+  else if (lead.fbclid) userData.fbc = "fb.1." + Date.now() + "." + lead.fbclid;
+
+  const body = {
+    data: [{
+      event_name: "Lead",
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: lead.eventId || undefined,
+      action_source: "website",
+      event_source_url: lead.page || undefined,
+      user_data: userData,
+      custom_data: {
+        currency: "USD",
+        value: typeof lead.serverPriceCents === "number" ? lead.serverPriceCents / 100 : 0
+      }
+    }]
+  };
+  if (env.META_TEST_EVENT_CODE) body.test_event_code = env.META_TEST_EVENT_CODE;
+  try {
+    await fetch(`https://graph.facebook.com/v21.0/${env.META_PIXEL_ID}/events?access_token=${env.META_CAPI_TOKEN}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+  } catch (_) {
+    // This is a conversion backup only. It must never make an accepted lead fail.
+  }
+}
+
+async function postToGhl(forward, env) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    return await fetch(env.GHL_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(forward),
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function handleLeadSubmission(request, env, ctx) {
+    const origin = request.headers.get("Origin");
+    const allowed = originAllowed(origin, env, request.url);
+    const cors = corsHeaders(allowed ? origin : "null");
+
+    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+    if (request.method === "GET" && new URL(request.url).pathname.endsWith("/reviews")) return handleReviews(request, env);
+    if (request.method !== "POST") return jsonResponse(405, { accepted: false, message: "Method not allowed" }, cors);
+    if (!allowed) return jsonResponse(403, { accepted: false, message: "Forbidden" }, cors);
+    if (!String(request.headers.get("Content-Type") || "").toLowerCase().includes("application/json")) {
+      return jsonResponse(415, { accepted: false, message: "JSON required" }, cors);
+    }
+
+    const raw = await request.text();
+    if (new TextEncoder().encode(raw).byteLength > MAX_BODY_BYTES) {
+      return jsonResponse(413, { accepted: false, message: "Payload too large" }, cors);
+    }
+
+    let lead;
+    try {
+      lead = JSON.parse(raw);
+    } catch (_) {
+      return jsonResponse(400, { accepted: false, message: "Bad JSON" }, cors);
+    }
+    if (!lead || typeof lead !== "object" || Array.isArray(lead)) {
+      return jsonResponse(400, { accepted: false, message: "Invalid request" }, cors);
+    }
+    if (!env.GHL_WEBHOOK_URL) return jsonResponse(500, { accepted: false, message: "Relay not configured" }, cors);
+
+    let requestId = cleanString(lead.requestId, 120) || crypto.randomUUID();
+    let forward;
+    if (lead.schemaVersion === SCHEMA_VERSION) {
+      const validation = validateV3(lead);
+      if (!validation.ok) {
+        return jsonResponse(400, { accepted: false, message: "Please check the highlighted form details.", fields: validation.errors }, cors);
+      }
+      forward = buildV3Forward(lead, validation.values, requestId, request);
+    } else {
+      if (env.ACCEPT_LEGACY_WIDGET === "false") {
+        return jsonResponse(400, { accepted: false, message: "Unsupported widget version" }, cors);
+      }
+      // Temporary compatibility for already-open copies of the previous widget.
+      // Remove after the host Worker cache has fully expired following launch.
+      const phone = normalizePhone(lead.phone);
+      const email = cleanString(lead.email, 254).toLowerCase();
+      if (!LEGACY_STAGES.has(lead.stage) || (!phone && !validEmail(email))) {
+        return jsonResponse(400, { accepted: false, message: "Invalid legacy lead" }, cors);
+      }
+      forward = {
+        ...lead,
+        phone,
+        email,
+        requestId,
+        receivedAt: new Date().toISOString(),
+        source: "purge-quote-widget-legacy"
+      };
+    }
+
+    let upstream;
+    try {
+      upstream = await postToGhl(forward, env);
+    } catch (_) {
+      return jsonResponse(502, { accepted: false, message: "We could not save your request. Please try again." }, cors);
+    }
+    if (!upstream.ok) {
+      return jsonResponse(502, { accepted: false, message: "We could not save your request. Please try again." }, cors);
+    }
+
+    ctx.waitUntil(sendMetaCapi(forward, request, env));
+    return jsonResponse(202, { accepted: true, requestId }, cors);
+}
+
+
 export default {
-  async fetch(request, env) {
-    const path = new URL(request.url).pathname;
-    if (path === "/purge-quote.js") {
-      return new Response(widgetScript(env), {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    if (request.method === "GET" && url.pathname === "/purge-quote.js") {
+      return new Response(widgetScript(request, env), {
         headers: {
           "Content-Type": "application/javascript; charset=utf-8",
-          // short cache so config edits go live within ~5 minutes
           "Cache-Control": "public, max-age=300",
-          "Access-Control-Allow-Origin": "*"
+          "Access-Control-Allow-Origin": "*",
+          "X-Content-Type-Options": "nosniff"
         }
       });
     }
-    if (path === "/" || path === "/demo" || path === "/demo.html") {
+    if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/demo" || url.pathname === "/demo.html")) {
       return new Response(DEMO_HTML, {
-        headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" }
+        headers: {
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": "no-store",
+          "X-Content-Type-Options": "nosniff",
+          "Referrer-Policy": "strict-origin-when-cross-origin"
+        }
       });
+    }
+    if (url.pathname === "/reviews" && request.method === "GET") return handleReviews(request, env);
+    if (url.pathname === "/submit" && (request.method === "POST" || request.method === "OPTIONS")) {
+      return handleLeadSubmission(request, {
+        ...env,
+        GHL_WEBHOOK_URL: env.GHL_WEBHOOK_URL_V3 || "",
+        ACCEPT_LEGACY_WIDGET: "false"
+      }, ctx);
+    }
+    if (url.pathname === "/" && (request.method === "POST" || request.method === "OPTIONS")) {
+      return handleLeadSubmission(request, { ...env, ACCEPT_LEGACY_WIDGET: "true" }, ctx);
     }
     return new Response("Not found", { status: 404 });
   }
