@@ -8,6 +8,7 @@ This repository contains the tested Purge Pros v3 quote/service-request widget a
 - Current-state project handoff: `docs/PROJECT-HANDOFF.md`
 - Owner implementation guide: `docs/OWNER-DASHBOARD-LAUNCH-GUIDE.md`
 - Complete Cloudflare copy/paste file: `dist/COPY-PASTE-INTO-purge-lead-relay.js`
+- Complete GHL quote-loader paste block: `dist/PASTE-INTO-GHL-QUOTE-LOADER.html`
 - Verified GHL email-domain and deliverability guide: `docs/email-deliverability.md`
 - Meta/Facebook launch guide: `docs/facebook-ads/META-ADS-LAUNCH-GUIDE.md`
 - SEO audit and roadmap: `docs/audits/SEO-AUDIT-2026-08-09.md`
@@ -81,6 +82,7 @@ The old phone-unlock Google label is intentionally absent because pricing is no 
 | `worker/worker.js` | Server validation, price recalculation, GHL forwarding, reviews, and Meta CAPI source |
 | `tools/build-dist.js` | Maintainer-only artifact generator |
 | `dist/COPY-PASTE-INTO-purge-lead-relay.js` | Exact owner paste file |
+| `dist/PASTE-INTO-GHL-QUOTE-LOADER.html` | Exact global GHL HEAD block that gives ad visitors immediate loading feedback before the external widget arrives |
 | `dist/purge-pros-quote-v3.worker.js` | Identical tested combined artifact |
 | `widget/demo-standalone.html` | Generated offline visual demo |
 | `docs/OWNER-DASHBOARD-LAUNCH-GUIDE.md` | Authoritative pipeline, workflow, Cloudflare, analytics, cutover, and rollback guide |

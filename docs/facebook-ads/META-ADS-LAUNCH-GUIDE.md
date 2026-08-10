@@ -75,9 +75,11 @@ The widget captures the UTM values and Meta click identifiers before consuming `
 
 ### Ad-landing startup behavior
 
-The production widget recognizes the ad instruction while the GHL page is still loading. If the script arrives before the page body exists, it displays **Opening your 60-second price check...** and opens the quote as soon as the body is available. It does not wait for the entire homepage, review widgets, or other GHL sections to finish parsing.
+The global GHL starter recognizes the ad instruction before the external Cloudflare widget has downloaded and displays **Opening your 60-second price check...** after a 120 ms anti-flicker delay. The production widget then opens the quote as soon as the page body exists. It does not wait for the entire homepage, review widgets, or other GHL sections to finish parsing.
 
 This behavior is intentionally limited to URLs containing `open_quote=1` or the supported quote hash. Ordinary homepage visits do not receive a loading overlay, and normal website quote buttons retain their instant click behavior. Attribution is captured before the one-time instruction is removed.
+
+The exact global GHL block is `dist/PASTE-INTO-GHL-QUOTE-LOADER.html`. It must replace the old single `purge-quote.js` tag in the same global HEAD/custom-code location. Do not add it page by page and do not change the live Meta destination.
 
 ## Why the starting budget is $50 per day
 

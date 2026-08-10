@@ -19,6 +19,7 @@ const root = path.join(__dirname, "..");
 const js = fs.readFileSync(path.join(root, "widget", "purge-quote.js"), "utf8");
 const demo = fs.readFileSync(path.join(root, "widget", "demo.html"), "utf8");
 const relay = fs.readFileSync(path.join(root, "worker", "worker.js"), "utf8");
+const ghlLoader = fs.readFileSync(path.join(root, "widget", "ghl-quote-loader.html"), "utf8");
 const inlineJs = js.replace(/<\/script/gi, "<\\/script");
 
 // --- standalone demo (widget inlined into one double-clickable file) ---
@@ -251,8 +252,10 @@ export default {
 
 fs.writeFileSync(path.join(root, "dist", "purge-pros-quote-v3.worker.js"), combinedWorker);
 fs.writeFileSync(path.join(root, "dist", "COPY-PASTE-INTO-purge-lead-relay.js"), combinedWorker);
+fs.writeFileSync(path.join(root, "dist", "PASTE-INTO-GHL-QUOTE-LOADER.html"), ghlLoader);
 
 console.log("built: widget/demo-standalone.html (%d KB)", Math.round(standalone.length / 1024));
 console.log("built: dist/purge-quote-host.worker.js (%d KB)", Math.round(worker.length / 1024));
 console.log("built: dist/purge-pros-quote-v3.worker.js (%d KB)", Math.round(combinedWorker.length / 1024));
 console.log("built: dist/COPY-PASTE-INTO-purge-lead-relay.js (%d KB)", Math.round(combinedWorker.length / 1024));
+console.log("built: dist/PASTE-INTO-GHL-QUOTE-LOADER.html (%d KB)", Math.round(ghlLoader.length / 1024));

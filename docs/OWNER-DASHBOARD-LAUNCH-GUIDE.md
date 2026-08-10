@@ -825,15 +825,11 @@ Do not repeatedly submit production service-conversion tests. Keep the request I
 
 Only after the v3 workflow and tests pass:
 
-1. Open the GHL website/funnel custom code area that currently loads the quote script.
-2. Find the existing `purge-quote.js` script tag.
-3. Change only its `src` to:
-
-```html
-<script src="https://purge-lead-relay.purgepros.workers.dev/purge-quote.js" defer></script>
-```
-
-4. Save and publish the website.
+1. Open the global GHL website custom-code area that currently loads the quote script in the page HEAD.
+2. Find and remove the existing single `purge-quote.js` script tag.
+3. Open `dist/PASTE-INTO-GHL-QUOTE-LOADER.html`.
+4. Copy the entire file and paste it in the same location. The block contains the immediate ad-loading starter followed by the external Worker script tag.
+5. Save and publish the website.
 5. Hard-refresh and confirm the website now loads the v3 experience. Allow at least five minutes for the old script cache/open pages to clear.
 6. Put **Workflow 1 — Quote Widget — Intake** in Draft/off. Keep Workflows 2–8/4b Published for their already-enrolled contacts.
 7. In HighLevel, keep **Allow Duplicate Contacts** off.
@@ -869,9 +865,9 @@ https://itspurgepros.com/?open_quote=1
 
 When that page loads, the website widget opens automatically. Desktop receives the overlay and mobile receives the responsive full-screen presentation. The widget removes the one-time `open_quote` instruction after opening so closing and refreshing does not immediately reopen it.
 
-The current build does not wait for the full GHL homepage to finish parsing. When an ad visit reaches the site before the page body is ready, the widget displays **Opening your 60-second price check...** and opens as soon as the body exists. This reduces the otherwise blank delay in Meta's in-app browser while leaving ordinary website visits and button clicks unchanged.
+The global GHL paste block displays **Opening your 60-second price check...** before the external Cloudflare script has downloaded. The current Worker then opens the quote as soon as the page body exists instead of waiting for the complete GHL homepage, review widgets, and remaining sections. The loader is automatically removed when the quote mounts and has a 12-second safety timeout if the external script fails.
 
-For this ad-startup optimization, do not edit the Meta ad, destination URL, URL parameters, GHL script tag, pipeline, workflow, or analytics. Replace only the `purge-lead-relay` Worker code with the complete current `dist/COPY-PASTE-INTO-purge-lead-relay.js` file and deploy it. Existing Cloudflare variables and secrets remain in the Worker settings.
+For this ad-startup optimization, do not edit the Meta ad, destination URL, URL parameters, pipeline, workflow, or analytics. A current body-ready Worker and the global GHL starter are both part of the complete setup. If the current Worker already contains `openWhenBodyReady`, leave Cloudflare alone and replace only the old single GHL script tag with `dist/PASTE-INTO-GHL-QUOTE-LOADER.html`. Install the GHL block once in the same global HEAD location; do not add it individually to every page.
 
 In Meta Ads Manager, keep the Website URL above in the ad's **Destination** field. Put this separate string in the ad's **URL parameters** / **Build a URL parameter** field:
 

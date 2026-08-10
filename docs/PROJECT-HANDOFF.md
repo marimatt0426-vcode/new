@@ -49,7 +49,7 @@ The production paid-ad destination is:
 https://itspurgepros.com/?open_quote=1
 ```
 
-The latest widget captures UTM and click-ID attribution, gives ad visitors immediate quote-opening feedback, opens as soon as the page body exists without waiting for the full GHL page, removes only the one-time `open_quote` instruction from the visible URL, and retains the attribution values for an accepted request. This behavior is covered by `tests/widget.test.mjs`.
+The global GHL starter displays immediate quote-opening feedback before the external Worker script downloads. The latest widget then captures UTM and click-ID attribution, opens as soon as the page body exists without waiting for the full GHL page, removes only the one-time `open_quote` instruction from the visible URL, and retains the attribution values for an accepted request. This behavior is covered by the build and widget tests.
 
 ## Conversion contract
 
@@ -87,6 +87,7 @@ No service conversion fires on widget open, ZIP check, price display, contact en
 | `worker/worker.js` | Server validation, price recalculation, GHL delivery, reviews, and Meta CAPI source |
 | `tools/build-dist.js` | Maintainer artifact generator |
 | `dist/COPY-PASTE-INTO-purge-lead-relay.js` | Complete owner copy/paste deployment file |
+| `dist/PASTE-INTO-GHL-QUOTE-LOADER.html` | Complete global GHL HEAD block for immediate paid-ad loading feedback and external widget loading |
 | `docs/OWNER-DASHBOARD-LAUNCH-GUIDE.md` | Detailed operational implementation guide |
 | `docs/ads-tracking-setup.md` | Exact analytics contract and identifiers |
 | `docs/facebook-ads/META-ADS-LAUNCH-GUIDE.md` | Current Meta launch structure, budget, and evaluation rules |
