@@ -1,0 +1,25 @@
+{
+  "name": "purge-lead-relay",
+  "main": "dist/worker.mjs",
+  "compatibility_date": "2026-06-12",
+  "vars": {
+    "ALLOWED_ORIGINS": "https://itspurgepros.com,https://www.itspurgepros.com,https://purge-quote.purgepros.workers.dev,https://blog.itspurgepros.com",
+    "GOOGLE_PLACE_ID": "ChIJwxBb4j_CQ2IRKXPCYz1Nk78"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "QUOTE_REQUESTS",
+        "class_name": "QuoteRequestLedger"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "quote-request-ledger-v1",
+      "new_classes": [
+        "QuoteRequestLedger"
+      ]
+    }
+  ]
+}

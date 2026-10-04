@@ -1,0 +1,683 @@
+{
+  "date": "2026-10-04",
+  "basis": "Approved deployed snapshots; no rejected October mockups",
+  "files": [
+    {
+      "path": "production/OPERATIONS.md",
+      "sha256": "bf66db4d036fd21b14d03e4a717fddd511e4126fe4921138a0c0ac3b5c35d3cb",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/quote/build.mjs",
+      "sha256": "eadb74bf6912b71ecc8a38b0ed981900019fa43469dbebdf1bc9f6cdeadcd301",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/quote/dist/worker.mjs",
+      "sha256": "5929f00761d489999ccea1f6ddefb2e55cc555045b0436dff5df216dca6f6af1",
+      "source": "releases/2026-09-21-quote-icon-installation/quote/prepared/worker.ICON-INSTALLATION-CANDIDATE.js"
+    },
+    {
+      "path": "production/quote/src/landing.html",
+      "sha256": "90ef6693a0399ea3a174ecb3d3e541651777bc558658d1ce7bf8f0bb4cad6789",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/quote/src/widget.js",
+      "sha256": "941fa264f664fc9386e8e18243b171a8e365170fb5f76866e674d3c36599e350",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/quote/src/worker.template.mjs",
+      "sha256": "1cf53521b1a6ca02eb3e7f30ec41ff180cb1c2d036fb5eef9c116fc5cce6d31c",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/quote/tests/fixtures/pre-icons-worker.mjs",
+      "sha256": "c875b7b545830d20357b6da66cf7e6ee2e6b055b7aff70dff0c1880335a387d0",
+      "source": "releases/2026-09-21-website-rollout/quote/prepared/worker.PRODUCTION-CANDIDATE.js"
+    },
+    {
+      "path": "production/quote/tests/regression.mjs",
+      "sha256": "305f9425a557ebd5b7bf94502ec09dd4a29d759a355da21b3a15c30c35709d1a",
+      "source": "releases/2026-09-21-quote-icon-installation/quote/regression-check.mjs"
+    },
+    {
+      "path": "production/quote/wrangler.json",
+      "sha256": "54ca17ca50495a6185ee60e5900df9eff57e301f964c78c39fa7418bcf3d8930",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/site-assets/public/_headers",
+      "sha256": "12315284a3e380da34cece3df0703b4182504e504a897ea05a19b436d8083e0b",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/_headers"
+    },
+    {
+      "path": "production/site-assets/public/assets/blog-r2-d5af1780ac0cca4a.css",
+      "sha256": "d5af1780ac0cca4ab8bde213300d2eb3f388ae57ecbacee8b12b6b82d6157253",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/blog-r2-d5af1780ac0cca4a.css"
+    },
+    {
+      "path": "production/site-assets/public/assets/blog-r2-ed911b97fb10aab3.js",
+      "sha256": "ed911b97fb10aab34c925d97462b1ce1bb3fc9b2e6b1eaa326bebe92ea6b0a0f",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/blog-r2-ed911b97fb10aab3.js"
+    },
+    {
+      "path": "production/site-assets/public/assets/core-d87a9788370ce8d2.js",
+      "sha256": "d87a9788370ce8d2dfa7f2e651952e560d148838d3a4c65940100a20eff497ea",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/core-d87a9788370ce8d2.js"
+    },
+    {
+      "path": "production/site-assets/public/assets/interaction-repair-8949a5a7422d26e7.js",
+      "sha256": "8949a5a7422d26e7bbe82f8f05ae8a98cf1a928312b96b65385320cc3203cea0",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/interaction-repair-8949a5a7422d26e7.js"
+    },
+    {
+      "path": "production/site-assets/public/assets/interaction-repair-dd0e4e4ce6b0d267.js",
+      "sha256": "dd0e4e4ce6b0d267c7f4f09f6482f5e91c0e6a60b434221d4c8252d9ca2b7772",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/interaction-repair-dd0e4e4ce6b0d267.js"
+    },
+    {
+      "path": "production/site-assets/public/assets/interaction-repair-e97ae6f24a2a57f7.js",
+      "sha256": "e97ae6f24a2a57f7c9558db46aff1cc25d6cdf4d285843d547a234800ef5d34b",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/interaction-repair-e97ae6f24a2a57f7.js"
+    },
+    {
+      "path": "production/site-assets/public/assets/navigation-repair-4c7d1c8846130bbf.css",
+      "sha256": "4c7d1c8846130bbf540c693eb8dec5013a54061a1dbf2574095bbf24dadf9d42",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/navigation-repair-4c7d1c8846130bbf.css"
+    },
+    {
+      "path": "production/site-assets/public/assets/navigation-repair-da5a1a7824b6951b.css",
+      "sha256": "da5a1a7824b6951be2778b735e6b207ff7720550c45b40ef6381ae52631b5f06",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/navigation-repair-da5a1a7824b6951b.css"
+    },
+    {
+      "path": "production/site-assets/public/assets/pp-next-60e07c26bc871ab7.js",
+      "sha256": "60e07c26bc871ab7102bebb9751f5d6224cbb6c96666fdd0fcd2d25d4fd41dd0",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/pp-next-60e07c26bc871ab7.js"
+    },
+    {
+      "path": "production/site-assets/public/assets/production-bootstrap-3168ae9355832820.js",
+      "sha256": "3168ae9355832820960c5195362c89ff07fb7438062cb8902a759181546f86b1",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/production-bootstrap-3168ae9355832820.js"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/area-all-1dd76e604febce38.webp",
+      "sha256": "1dd76e604febce38d621a227ab94ba2418cf260c5ca02ccbbec3709263b42e7e",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/area-all-1dd76e604febce38.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/area-back-bbe3069b44528c92.webp",
+      "sha256": "bbe3069b44528c92652c908b0cccc0b6c011b60c0327c200fb51a9b71f5c8bb2",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/area-back-bbe3069b44528c92.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/area-front-14e3b8436febc23b.webp",
+      "sha256": "14e3b8436febc23b711442d67cdcf33dcb14b68eebbc10b3db9889806a700f2e",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/area-front-14e3b8436febc23b.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/area-sides-e5e09e238daebab7.webp",
+      "sha256": "e5e09e238daebab7922d1cda278849bded1909acbddae6cad04caf6d25a51c7f",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/area-sides-e5e09e238daebab7.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-1-60f0fbcba79e6a9c.webp",
+      "sha256": "60f0fbcba79e6a9c9c37aecbd33dded943239f6bb5b9e8ffa820322e77b81635",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-1-60f0fbcba79e6a9c.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-10plus-8ba06412d09ba969.webp",
+      "sha256": "8ba06412d09ba969834102113a2ccaee75f3013e6abeca78f2dd2a3156186ef1",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-10plus-8ba06412d09ba969.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-2-e0e397af347ee3f9.webp",
+      "sha256": "e0e397af347ee3f9220ddf7f3d6728d6a07be3eb6abf6cd4f789264c83e864ba",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-2-e0e397af347ee3f9.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-3-822b6e9094776e97.webp",
+      "sha256": "822b6e9094776e970b570ba87758c0962424ed2ed4add499ea6c1849e6405d03",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-3-822b6e9094776e97.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-4-5fdebb0b04647f45.webp",
+      "sha256": "5fdebb0b04647f45460569113446355f7eb728f67055bb4e6351d91c5daadb22",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-4-5fdebb0b04647f45.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-5-23834884974cc56f.webp",
+      "sha256": "23834884974cc56f1b9fee7e285cb3f4f8774fe29087ce80d7cea2a0982b99dc",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-5-23834884974cc56f.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-6-227e16dc7c2b79e2.webp",
+      "sha256": "227e16dc7c2b79e2406779a61545fa4ee5643684eef55799cb02b1abc906c6d9",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-6-227e16dc7c2b79e2.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-7-8c7caea43d40fddb.webp",
+      "sha256": "8c7caea43d40fddb542e125a7fe4d5105fd8c8160f5d254f7dec4ee3acdf44a1",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-7-8c7caea43d40fddb.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-8-db0553778399db0b.webp",
+      "sha256": "db0553778399db0bc63d1bcc9fe6c4e163dbce28b4756f98729205f1c33ce717",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-8-db0553778399db0b.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/dog-9-1ccbf539edbd1dd3.webp",
+      "sha256": "1ccbf539edbd1dd3c57ebdaa33e6ea17046eee4cd4d6071c97a036799e75520c",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/dog-9-1ccbf539edbd1dd3.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/frequency-custom-dda9b32a1c5aa361.webp",
+      "sha256": "dda9b32a1c5aa36152b0093908113367ccdf43f8226d21d9603da40d0eeedf7f",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/frequency-custom-dda9b32a1c5aa361.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/frequency-every-other-week-3422d28d15710e49.webp",
+      "sha256": "3422d28d15710e49ac6df5d309bb59e37d14b1c404cf7854afabadf77da17fe6",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/frequency-every-other-week-3422d28d15710e49.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/frequency-one-time-b38038be6d617033.webp",
+      "sha256": "b38038be6d617033b10feb2d6bac062642025fa6e63b8f76117d0b5c65c67154",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/frequency-one-time-b38038be6d617033.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/frequency-twice-weekly-78c69397d2394de7.webp",
+      "sha256": "78c69397d2394de77d3f431fabb4a4a65e9612e17fa06657d40feec52cc7779f",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/frequency-twice-weekly-78c69397d2394de7.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/quote-icons/frequency-weekly-65b4093d534a415b.webp",
+      "sha256": "65b4093d534a415b19b42450265044197e475ab3639ccba7c567b984b7abf991",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/quote-icons/frequency-weekly-65b4093d534a415b.webp"
+    },
+    {
+      "path": "production/site-assets/public/assets/revision-2-theme-bff7357b4799b11f.css",
+      "sha256": "bff7357b4799b11fd12215d078223afc039fa7c7d167603c6e48033902b19bd7",
+      "source": "releases/2026-09-23-navigation-brand-repair/assets-worker/public/assets/revision-2-theme-bff7357b4799b11f.css"
+    },
+    {
+      "path": "production/site-assets/wrangler.json",
+      "sha256": "3a5bd3a0da7f21c501b3852b4180a5035cc32099cea1509788273de9cac8ed96",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/verify-manifest.mjs",
+      "sha256": "cdcc533cf467b52af06555d965fd8ad60f6329bf9362926db4056f92159f55dd",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/adding-second-dog-yard-cleanup-plan.html",
+      "sha256": "e848dd69c318090b904d118134a4c4c0d61937caaad70e4d396fc0fc60523195",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/artificial-turf-dog-waste-pickup-expectations.html",
+      "sha256": "229eb9cefb0e9483f39b81a12a62f628ab39e87183bf33d52b2e74db818e40b3",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/backyard-layout-dogs-play-cleanup.html",
+      "sha256": "9a1e16b4bf948d45cac09e90d745f8b65fdf192da6c9e70b52a2eb6f80007812",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/backyard-party-dog-poop-cleanup.html",
+      "sha256": "d1debb9369835afc256108278ba4461753ce0285724d39b69494c5d0badcca61",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/choose-pooper-scooper-service-indianapolis.html",
+      "sha256": "0f4ede68342e612b4d051884adbef8367fc18288499946f56f895741d88b7777",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/coordinate-lawn-care-dog-waste-pickup.html",
+      "sha256": "62bd39a0dfc5f1625ee3ea9d3664b3a02ea030999fd874f783cea74f9c5f7b77",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/custom-dog-waste-removal-estimate-checklist.html",
+      "sha256": "6e9a775a36293b82188d983a6a2f08274ef10af95c9d7d14db5592e6abc3b10d",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-poop-cleanup-after-rain.html",
+      "sha256": "928c46295ab0df1e68ae7b2cc8911b27efac452bc75285834e8947b6bd083e30",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-poop-cleanup-gravel-mulch-dog-runs.html",
+      "sha256": "df6fb1a077cfc98eca7b766cc6f43c4f03c24843db8852e9e09776faff5ab65f",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-poop-removal-cost-indianapolis.html",
+      "sha256": "5c4f45f019ce8541862554ec2e4c96975d02b753e3c4f44b7f1f7fd16f7b2482",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-sitters-yard-service-access-checklist.html",
+      "sha256": "9b2bcd271617ca34e467f7879e862f8e7a8518c134d2adb12169d5fde6726a5c",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-waste-bags-bins-disposal.html",
+      "sha256": "37743fd3f5b6ff055468e1c3cfe8cb8b77575a10c9dfedf03c4a6f1ef81fb422",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-waste-cleanup-busy-families.html",
+      "sha256": "5a384e48128ca5ece1496442fa0a8f33a1259e860c66a56554848462dafcde24",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-waste-cleanup-fence-repairs-landscaping.html",
+      "sha256": "c498a68371eb661acc592dcf4885d19ebe4d826c2cacf15f03d9d89b22da7167",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-waste-cleanup-rental-homes.html",
+      "sha256": "6e90da5c817bb2ade617b8e42f9d1dc9dfba22b8afc888bbe118e9395a42013d",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-waste-patios-pickup-expectations.html",
+      "sha256": "49455c4dc1528993e93f8c2d10f6d15c56c07204ff299553d5dd0c68646227bf",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-waste-removal-hoas-shared-green-spaces.html",
+      "sha256": "967b5b2c528a8fa50cd8ace760aa194044b7b3af5ae194d6f059bd2678da4fcd",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/dog-waste-stations-shared-green-spaces-planning.html",
+      "sha256": "5ad1e7b65f33e728ecb7fd314c794a97892dff0add369e18c17086b7e3e32ff0",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/fall-backyard-close-up-furniture-leaves-dog-waste.html",
+      "sha256": "49922ef6f24f4d7191112fdf5a3f970348861ffc2d47472c675dae732d9ad4ad",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/fall-dog-poop-cleanup-leaves.html",
+      "sha256": "94479a823ce7d608bd56097d35d203485ab78b882751e19ebe01591bc950dcba",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/gate-access-dog-waste-removal.html",
+      "sha256": "3f7c240f190a51f36475d9bede3af937376a85d01ec878d7c3d2868eefad7c53",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/invisible-fence-physical-yard-access.html",
+      "sha256": "3773380f71fdad97f00e78ef2700bd1fac65e5002b57bdaef6011f0bd977404a",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/less-bending-dog-poop-cleanup.html",
+      "sha256": "cabb4e97f6115bdfbc55d93a80099face61d2a1b7da9da3e18695b2147eec2cd",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/MANIFEST.json",
+      "sha256": "a8d8f67cb23c6777923b628f7e876ff0489355e91bf7280582df46350f388896",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/measure-scoopable-outdoor-area-rectangles.html",
+      "sha256": "a832b4d3d15e2d1e4b4141002ae1bc0d7c3a14a1eddad76faa91407eb9e82cf6",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/moving-with-dogs-yard-cleanup.html",
+      "sha256": "823b31caf6d11e87523b23490005f89ff5db963c7f57bcf00cc44829abea6434",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/need-to-be-home-dog-poop-cleanup.html",
+      "sha256": "09bd056608e14941c7ccef0c685f2f1516ece7825aba09191936e7a533d9364a",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/new-puppy-yard-cleanup-routine.html",
+      "sha256": "83bdff280415ac9f5b02c7f0e2b51e272aecbeacd7ed532eedc7b32589447281",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/pick-up-dog-poop-before-mowing.html",
+      "sha256": "973f6735d2e9db168695d8c2868615bf472bb6ef66a1ab8222536568b197647e",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/poop-scooping-multiple-dogs.html",
+      "sha256": "bb539b7419764fdc822f2cc69a3bc732a5bbe9298a2efc9865d397c020498087",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/prepare-first-pooper-scooper-visit.html",
+      "sha256": "13f58e6bef15caadead21a44580698f7a8ee24e7d70a3e152dbc83f47a230e12",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/price-check-to-confirmed-dog-waste-service.html",
+      "sha256": "43684ccab2fa5e1c003183b4e153ff4e317c1811654c5f562086cb3e04b51006",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/restarting-dog-poop-service.html",
+      "sha256": "3de4f92660160dfd92f927098152f453268953dabb96d11759a163f5cb144860",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/spring-yard-cleanup-after-snow.html",
+      "sha256": "2519cb000488e7a3ac6381243b200ee18851f611004338e24ea3795bb44e7888",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/two-gates-side-passage-access-map.html",
+      "sha256": "8ad73a0d44e20761e46756ad492701982ecb3ceaf1d9c2e1a34e3764459f06d7",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/understanding-gate-closure-photo-after-scoop-visit.html",
+      "sha256": "26d7a098a67d6d25e3c0a26fd745d2497d8c7f9d3ec265046a76113cd73c62c8",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/vacation-dog-waste-yard-service-questions.html",
+      "sha256": "48d77861359f8253a42de15333c0ddd049a873df69282f4d626cd1ff1fb94d3e",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/weekly-or-one-time-dog-poop-cleanup.html",
+      "sha256": "d42b34bf1dbff7a48fdf34bab623c4d3f2aca354504ef82abc4da845e6c9a84c",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/weekly-vs-twice-weekly-dog-poop-cleanup.html",
+      "sha256": "7c6cc419f44a51e18eda67fb754ec759f56643f2711b491dd72aaccd15525df4",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/weekly-yard-reset-toys-movable-obstacles.html",
+      "sha256": "e70a6848100f1c19f7004837ed095de4c837906c0c67b5b26044b1c658e50963",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/winter-dog-poop-cleanup-central-indiana.html",
+      "sha256": "c804e5c6f4faed2d66ffb1d6012cd33d9460133a365566c5176930f4e68383db",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/yard-full-of-dog-poop-cleanup.html",
+      "sha256": "ec743d6cdc7375aa5e8bd1daa0b2a4756cdf671e9ac1ce18fea3682a4b5823f9",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/yard-odor-poop-removal-vs-deodorizing.html",
+      "sha256": "5d87dc96472513459c3d00677e9012f951451185ceddc4ecc844a791b4408bad",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/yard-size-vs-lot-size-poop-scooping.html",
+      "sha256": "91cdcc5cebe58b235723d93503ad74ca5b9edf39b406668c3dbe780373f4c11c",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/yard-walk-through-cleanup-request-checklist.html",
+      "sha256": "19a6c28c12d2cf50a93907b8125c0116644e659336faf48060b85727ca2ee1a1",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/articles/zip-check-dog-waste-service-coverage.html",
+      "sha256": "a886c801b9cff5c3e6cda3474c090246b0e9ef46b347e09c213a786da1ebfddf",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/prepared/blog-body-tracking.html",
+      "sha256": "b414fc3ec8c70857e214f21a7d7a7c12e838f2344f047222ac5ba679caf6373f",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/blog-body-tracking.html"
+    },
+    {
+      "path": "production/website/blog/prepared/blog-head-tracking.html",
+      "sha256": "8414a236745cf1452035f597bc3935bae80bf32636b0434eab0caa6f464a38f9",
+      "source": "releases/2026-09-23-navigation-brand-repair/prepared/blog-head-after.html"
+    },
+    {
+      "path": "production/website/blog/prepared/blog-r2-d5af1780ac0cca4a.css",
+      "sha256": "d5af1780ac0cca4ab8bde213300d2eb3f388ae57ecbacee8b12b6b82d6157253",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/blog-r2-d5af1780ac0cca4a.css"
+    },
+    {
+      "path": "production/website/blog/prepared/blog-r2-ed911b97fb10aab3.js",
+      "sha256": "ed911b97fb10aab34c925d97462b1ce1bb3fc9b2e6b1eaa326bebe92ea6b0a0f",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/blog-r2-ed911b97fb10aab3.js"
+    },
+    {
+      "path": "production/website/blog/prepared/home-custom-css.css",
+      "sha256": "de20c77034632460f7dfbac51cd6633c9c25f1dd40853a7aa7c24a950f08cb51",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/home-custom-css.css"
+    },
+    {
+      "path": "production/website/blog/prepared/home-footer.html",
+      "sha256": "cbeeaffec9a4fe9d8166f2e61e2819bba735fb703ec46aa224dc45cc758643e5",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/home-footer.html"
+    },
+    {
+      "path": "production/website/blog/prepared/home-header-and-index.html",
+      "sha256": "8febb86e01cf4491c32add39d4962fcce9c80620170a4758ee17d1c1fddac54c",
+      "source": "releases/2026-09-30-content-check/INSTALLED-home-header-and-index.html"
+    },
+    {
+      "path": "production/website/blog/prepared/home-header.html",
+      "sha256": "91ad865fd0d57c0772982ce0088e32a90391330d7f31c401b640f23c21c2afd8",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/home-header.html"
+    },
+    {
+      "path": "production/website/blog/prepared/home-index.html",
+      "sha256": "1978021784762b8edccab01b9ca0946da4f1f819e87fd9f6091c3f4de8275605",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/home-index.html"
+    },
+    {
+      "path": "production/website/blog/prepared/post-after.html",
+      "sha256": "6836211fd48c286e186283b4e2bd465321943682453bdeb7edbd8a35e2c01431",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/post-after.html"
+    },
+    {
+      "path": "production/website/blog/prepared/post-before.html",
+      "sha256": "81ca579f63a75020070fa747e2212eae1bdf101018464a58bcf86162a94377a9",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/post-before.html"
+    },
+    {
+      "path": "production/website/blog/prepared/post-custom-css.css",
+      "sha256": "39ed2ea0d0272eee294ad0df26cdb692abbd6859906145a6f1db500e3d90af98",
+      "source": "releases/2026-09-21-website-rollout/blog/prepared/post-custom-css.css"
+    },
+    {
+      "path": "production/website/blog/published-cards.json",
+      "sha256": "0ccf441522440f3b322063ab092d4ef2ee2070056d8af96c60f5dff3cdaf31a2",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/blog/refresh-index.mjs",
+      "sha256": "7f6132c97f660f69896fe1d3763714fc43a4c38cad140a98172a8990890d08a0",
+      "source": "releases/2026-09-21-website-rollout/blog/refresh-index.mjs"
+    },
+    {
+      "path": "production/website/blog/validate-prep.mjs",
+      "sha256": "34e001a428f0f192a9111ab5d08d7f8a39e5e6389a4eeb9744dd4c808441250e",
+      "source": "releases/2026-09-21-website-rollout/blog/validate-prep.mjs"
+    },
+    {
+      "path": "production/website/pages/about.html",
+      "sha256": "24d6b941c177c8ad320adae5c2adbd10dfb52a3ac84dae77afa3ca1e24e6de62",
+      "source": "releases/2026-09-21-website-rollout/main/about.html"
+    },
+    {
+      "path": "production/website/pages/additional.html",
+      "sha256": "2ff06834a47c1b9280c14898cebee4d7aa9e1cf5ebb220e0f225b871a63685ca",
+      "source": "releases/2026-09-21-website-rollout/main/additional.html"
+    },
+    {
+      "path": "production/website/pages/anderson.html",
+      "sha256": "deb67c5ffb3358e4dd62eb39651bdcdc37664a30eba21f74e06ce605cbd66a01",
+      "source": "releases/2026-09-21-website-rollout/main/anderson.html"
+    },
+    {
+      "path": "production/website/pages/avon.html",
+      "sha256": "7672abfa38f3f7f98f07d6ad3387025d9a0c9d2803d67ebda5d419faa1c8baf1",
+      "source": "releases/2026-09-21-website-rollout/main/avon.html"
+    },
+    {
+      "path": "production/website/pages/brownsburg.html",
+      "sha256": "d028f449e06cbff3d0da34adc95672ad9eea0d13d6cc8ddc8c1215f4af4ce16f",
+      "source": "releases/2026-09-21-website-rollout/main/brownsburg.html"
+    },
+    {
+      "path": "production/website/pages/carmel.html",
+      "sha256": "e9f5e9636b04b6a8d00512a8b5792a10243b8b92823c3801329743f9d49c676c",
+      "source": "releases/2026-09-21-website-rollout/main/carmel.html"
+    },
+    {
+      "path": "production/website/pages/danville.html",
+      "sha256": "f985eb7d9e341ba92cec9a60869b59370c7cd70d80581d052bf24e4a61377a21",
+      "source": "releases/2026-09-21-website-rollout/main/danville.html"
+    },
+    {
+      "path": "production/website/pages/dog-waste-removal.html",
+      "sha256": "0dd7a7a1a7c3c0236ed04bb76421f35cad579bab393dca67081d3c0eada884f2",
+      "source": "releases/2026-09-21-website-rollout/main/dog-waste-removal.html"
+    },
+    {
+      "path": "production/website/pages/faq.html",
+      "sha256": "21030113640577e9605897867d378541faabceb13420bd10cd7b1c7e9c72e81c",
+      "source": "releases/2026-09-23-faq-indicator-fix/main-faq.html"
+    },
+    {
+      "path": "production/website/pages/fishers.html",
+      "sha256": "31c4dc89fec5ff2b975b3f21cd1f1bc6d734675e1ec1c4cd581f21594e8dbaf7",
+      "source": "releases/2026-09-21-website-rollout/main/fishers.html"
+    },
+    {
+      "path": "production/website/pages/fortville.html",
+      "sha256": "28ffa72dd927978098eb5291ee06f4dbe4205db6190fd3feb16865d7a549463f",
+      "source": "releases/2026-09-21-website-rollout/main/fortville.html"
+    },
+    {
+      "path": "production/website/pages/greenfield.html",
+      "sha256": "2fa691d13463497862c520883c3693d6926d33d49e806ece4fcbde1f2cb24ca8",
+      "source": "releases/2026-09-21-website-rollout/main/greenfield.html"
+    },
+    {
+      "path": "production/website/pages/greenwood.html",
+      "sha256": "a0626fe8edc63b933aaa94ab56a551d9a43684ef57199e8c1930dec9940773c0",
+      "source": "releases/2026-09-21-website-rollout/main/greenwood.html"
+    },
+    {
+      "path": "production/website/pages/home.html",
+      "sha256": "eddb8c208960fefd6ae0ef31f2681eed232082986f13b7a56d171c8d0cb10da5",
+      "source": "releases/2026-09-21-website-rollout/main/home.html"
+    },
+    {
+      "path": "production/website/pages/indianapolis.html",
+      "sha256": "f81341b4928decf6e95792ed64c184644618d0cc98645731199307414376d900",
+      "source": "releases/2026-09-21-website-rollout/main/indianapolis.html"
+    },
+    {
+      "path": "production/website/pages/ingalls.html",
+      "sha256": "5776bb7877b59465e4cd8ed452ba059a209677944fea6be1950d9dc5e8f2d282",
+      "source": "releases/2026-09-21-website-rollout/main/ingalls.html"
+    },
+    {
+      "path": "production/website/pages/lawrence.html",
+      "sha256": "1bdff73cd2e7945b3f0a2d349f885b6d2c06c0cc455e0ba97cfe08a02bbe6e44",
+      "source": "releases/2026-09-21-website-rollout/main/lawrence.html"
+    },
+    {
+      "path": "production/website/pages/mccordsville.html",
+      "sha256": "1ba9de4a062712f27d812fea49968d0731479e1f2cd35f78f4c3d7b21134571a",
+      "source": "releases/2026-09-21-website-rollout/main/mccordsville.html"
+    },
+    {
+      "path": "production/website/pages/metadata.json",
+      "sha256": "6e4cb81a3afd38fefaf2be29a86852da2ea7b642b1fae27d833490cb56af194d",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/website/pages/new-palestine.html",
+      "sha256": "e6b9279376190847df949a8d30b1b6b3fc23997fe02f1f4e19a30ea00b0777f3",
+      "source": "releases/2026-09-21-website-rollout/main/new-palestine.html"
+    },
+    {
+      "path": "production/website/pages/noblesville.html",
+      "sha256": "6770b19d979f5117eda93b22c5d51f242879e228a86e1603c690c04c7d379461",
+      "source": "releases/2026-09-21-website-rollout/main/noblesville.html"
+    },
+    {
+      "path": "production/website/pages/plainfield.html",
+      "sha256": "d488b7645d6c6de61b15dee62d32c1b8fc0073bfae41f528feb94785eacbf3be",
+      "source": "releases/2026-09-21-website-rollout/main/plainfield.html"
+    },
+    {
+      "path": "production/website/pages/privacy-policy.html",
+      "sha256": "a564e7364a93734b569ed7b33b553df77efd1f52c5617102e28f00492719f326",
+      "source": "releases/2026-09-21-website-rollout/main/privacy-policy.html"
+    },
+    {
+      "path": "production/website/pages/reviews.html",
+      "sha256": "ef805282cc4d22e058696f50c942038330e69fc1dde92adcf5ae3b7e2f995ace",
+      "source": "releases/2026-09-21-website-rollout/main/reviews.html"
+    },
+    {
+      "path": "production/website/pages/sanitizing-and-deodorizing.html",
+      "sha256": "6881f3ccef6a4c2aea351871399e8fd57d3ae7feff9ce46ef557f44ce3093b56",
+      "source": "releases/2026-09-21-website-rollout/main/sanitizing-and-deodorizing.html"
+    },
+    {
+      "path": "production/website/pages/terms-conditions.html",
+      "sha256": "8540c602c74bffe6ee0f42b221c0578dae24ab4576c45b5e262b9cb162f2c421",
+      "source": "releases/2026-09-21-website-rollout/main/terms-conditions.html"
+    },
+    {
+      "path": "production/website/pages/welcome.html",
+      "sha256": "6845a947603ba7c06ab68546d33492984102a822f1faa4c701f1184db2797208",
+      "source": "releases/2026-09-23-navigation-brand-repair/prepared/main-welcome.html"
+    },
+    {
+      "path": "production/website/pages/westfield.html",
+      "sha256": "53b96733c7e5b9b25dcb58b36c85bdcfd32af9f4e5f5744d51ea7129880d7a43",
+      "source": "releases/2026-09-21-website-rollout/main/westfield.html"
+    },
+    {
+      "path": "production/website/shared/body.html",
+      "sha256": "fc23691af53def47e2026e3cdc0f3ec386b3bf5467ff6ef751efe20e8468fa76",
+      "source": "releases/2026-09-21-website-rollout/prepared/website-body.html"
+    },
+    {
+      "path": "production/website/shared/footer.html",
+      "sha256": "41f6494a56801f35d7de33cd7c16cda1861f025d409e77633ee73f674e0a2af1",
+      "source": "releases/2026-09-21-website-rollout/prepared/footer.html"
+    },
+    {
+      "path": "production/website/shared/head.html",
+      "sha256": "979f0b3a22e4144ebf133471c0bb58df49783ed65441686b8191d407924f79e0",
+      "source": "releases/2026-09-23-navigation-brand-repair/prepared/main-head-after.html"
+    },
+    {
+      "path": "production/website/shared/header.html",
+      "sha256": "e84f7d04f99b9a8365f03cfcec1ffe569a58444cb600b8874026cddb1062aaba",
+      "source": "releases/2026-09-23-navigation-brand-repair/prepared/header.html"
+    }
+  ],
+  "quoteWorkerSha256": "5929f00761d489999ccea1f6ddefb2e55cc555045b0436dff5df216dca6f6af1",
+  "nativeAccessLimit": "GHL editor unavailable October 4; public 27-route main text, 45 article pages, 30 hosted assets and served quote hash checked."
+}

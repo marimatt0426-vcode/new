@@ -1,0 +1,636 @@
+{
+  "checkedAtUtc": "2026-10-04T22:49:48.758505+00:00",
+  "scope": "Public article body/metadata snapshots, not native scheduling or editor export",
+  "articles": [
+    {
+      "url": "https://blog.itspurgepros.com/post/two-gates-side-passage-access-map",
+      "status": 200,
+      "slug": "two-gates-side-passage-access-map",
+      "title": "Two Gates and a Side Passage: How to Make a Useful Access Map",
+      "canonical": "https://blog.itspurgepros.com/post/two-gates-side-passage-access-map",
+      "description": "Map two gates and a side passage so every agreed dog-use section has a physical route, clear instructions and fewer surprises on service day.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6ab16503625a2e25f964749a.png",
+        "alt": "Illustrated Purge Pros mascot holding a map with two gate routes and blue arrows through a side passage."
+      },
+      "bodyFile": "two-gates-side-passage-access-map.html",
+      "bodySha256": "8ad73a0d44e20761e46756ad492701982ecb3ceaf1d9c2e1a34e3764459f06d7"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/invisible-fence-physical-yard-access",
+      "status": 200,
+      "slug": "invisible-fence-physical-yard-access",
+      "title": "Invisible Fences and Dog Waste Service: Plan the Physical Access Too",
+      "canonical": "https://blog.itspurgepros.com/post/invisible-fence-physical-yard-access",
+      "description": "An invisible boundary can guide a dog, but a cleanup plan still needs a physical gate, route, pet arrangement and current access instructions.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6ab16503bdaa5e26a9756096.png",
+        "alt": "Illustrated Purge Pros mascot points from a physical gate toward a dog zone marked by a subtle blue boundary."
+      },
+      "bodyFile": "invisible-fence-physical-yard-access.html",
+      "bodySha256": "3773380f71fdad97f00e78ef2700bd1fac65e5002b57bdaef6011f0bd977404a"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/artificial-turf-dog-waste-pickup-expectations",
+      "status": 200,
+      "slug": "artificial-turf-dog-waste-pickup-expectations",
+      "title": "Artificial Turf Dog Waste Pickup: What It Covers and What It Does Not",
+      "canonical": "https://blog.itspurgepros.com/post/artificial-turf-dog-waste-pickup-expectations",
+      "description": "Set clear expectations for dog-waste pickup on artificial turf, including edges, seams, access and separate surface-care questions.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6ab165032e45fddc3849462c.png",
+        "alt": "Illustrated Purge Pros mascot inspecting artificial turf with a scoop, brush, seams and a drain detail."
+      },
+      "bodyFile": "artificial-turf-dog-waste-pickup-expectations.html",
+      "bodySha256": "229eb9cefb0e9483f39b81a12a62f628ab39e87183bf33d52b2e74db818e40b3"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/measure-scoopable-outdoor-area-rectangles",
+      "status": 200,
+      "slug": "measure-scoopable-outdoor-area-rectangles",
+      "title": "How to Measure a Scoopable Outdoor Area With Simple Rectangles",
+      "canonical": "https://blog.itspurgepros.com/post/measure-scoopable-outdoor-area-rectangles",
+      "description": "Use a few simple rectangles to estimate the outdoor sections that need dog-waste pickup, with a worked example and practical scope checks.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6ab16503c3c92dff4d1ac665.png",
+        "alt": "Illustrated Purge Pros mascot measuring three rectangular yard sections with blue arrows."
+      },
+      "bodyFile": "measure-scoopable-outdoor-area-rectangles.html",
+      "bodySha256": "a832b4d3d15e2d1e4b4141002ae1bc0d7c3a14a1eddad76faa91407eb9e82cf6"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/understanding-gate-closure-photo-after-scoop-visit",
+      "status": 200,
+      "slug": "understanding-gate-closure-photo-after-scoop-visit",
+      "title": "What a Gate-Closure Photo Can Tell You After a Scoop Visit",
+      "canonical": "https://blog.itspurgepros.com/post/understanding-gate-closure-photo-after-scoop-visit",
+      "description": "Learn how to read a gate-closure photo after dog poop cleanup, what it shows, and which access or service questions still need a message to the team.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6ab163c6625a2e25f964507b.png",
+        "alt": "Illustrated Purge Pros mascot points to a phone-shaped frame showing a closed wooden gate and a latch detail, beneath A Clearer Finish."
+      },
+      "bodyFile": "understanding-gate-closure-photo-after-scoop-visit.html",
+      "bodySha256": "26d7a098a67d6d25e3c0a26fd745d2497d8c7f9d3ec265046a76113cd73c62c8"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/weekly-or-one-time-dog-poop-cleanup",
+      "status": 200,
+      "slug": "weekly-or-one-time-dog-poop-cleanup",
+      "title": "Weekly or One-Time Dog Poop Cleanup: Which Fits Your Yard?",
+      "canonical": "https://blog.itspurgepros.com/post/weekly-or-one-time-dog-poop-cleanup",
+      "description": "Compare recurring and one-time dog poop cleanup for your Indianapolis-area yard. Understand service scope, starting prices, the first-cleanup offer and route review.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8cdc09f8b31b6ab180d58.jpg",
+        "alt": "Purge Pros mascot compares a recurring cleanup calendar with a one-time yard cleanup option."
+      },
+      "bodyFile": "weekly-or-one-time-dog-poop-cleanup.html",
+      "bodySha256": "d42b34bf1dbff7a48fdf34bab623c4d3f2aca354504ef82abc4da845e6c9a84c"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/weekly-vs-twice-weekly-dog-poop-cleanup",
+      "status": 200,
+      "slug": "weekly-vs-twice-weekly-dog-poop-cleanup",
+      "title": "Weekly vs. Twice-Weekly Dog Poop Cleanup: Which Fits Your Yard?",
+      "canonical": "https://blog.itspurgepros.com/post/weekly-vs-twice-weekly-dog-poop-cleanup",
+      "description": "Compare weekly and twice-weekly poop scooping by yard use, buildup between visits, and total weekly cost before choosing a recurring plan.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8c8f149f830e49b2fd210.jpg",
+        "alt": "Purge Pros mascot holding calendars for weekly and twice-weekly yard cleanup, with the words Two rhythms, one yard."
+      },
+      "bodyFile": "weekly-vs-twice-weekly-dog-poop-cleanup.html",
+      "bodySha256": "7c6cc419f44a51e18eda67fb754ec759f56643f2711b491dd72aaccd15525df4"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/zip-check-dog-waste-service-coverage",
+      "status": 200,
+      "slug": "zip-check-dog-waste-service-coverage",
+      "title": "Why a ZIP Check Is Only the First Step in Dog Waste Service Coverage",
+      "canonical": "https://blog.itspurgepros.com/post/zip-check-dog-waste-service-coverage",
+      "description": "Understand the difference between a supported ZIP, an address review and a confirmed service day when requesting dog waste removal.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8c8f19f8b31b6ab17af85.jpg",
+        "alt": "Purge Pros mascot beside an illustrated neighborhood map, ZIP pin, address review and service calendar."
+      },
+      "bodyFile": "zip-check-dog-waste-service-coverage.html",
+      "bodySha256": "a886c801b9cff5c3e6cda3474c090246b0e9ef46b347e09c213a786da1ebfddf"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/custom-dog-waste-removal-estimate-checklist",
+      "status": 200,
+      "slug": "custom-dog-waste-removal-estimate-checklist",
+      "title": "What to Include in a Custom Dog Waste Removal Estimate Request",
+      "canonical": "https://blog.itspurgepros.com/post/custom-dog-waste-removal-estimate-checklist",
+      "description": "Prepare a useful custom cleanup request with property sections, dog count, access, frequency and scope details that support an accurate estimate.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8c8f19f8b31b6ab17af7b.jpg",
+        "alt": "Purge Pros mascot beside a property-plan clipboard with yard areas, dogs, gate access and frequency icons."
+      },
+      "bodyFile": "custom-dog-waste-removal-estimate-checklist.html",
+      "bodySha256": "6e9a775a36293b82188d983a6a2f08274ef10af95c9d7d14db5592e6abc3b10d"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-sitters-yard-service-access-checklist",
+      "status": 200,
+      "slug": "dog-sitters-yard-service-access-checklist",
+      "title": "Dog Sitters and Yard Service: A Shared Access Checklist",
+      "canonical": "https://blog.itspurgepros.com/post/dog-sitters-yard-service-access-checklist",
+      "description": "Coordinate a dog sitter and yard cleanup team with one clear plan for entrances, pet arrangements and changes to service-day access.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8ca4849f830e49b2febed.jpg",
+        "alt": "Purge Pros mascot points toward a gate beside leash, access and pet-note icons in an illustrated sitter checklist."
+      },
+      "bodyFile": "dog-sitters-yard-service-access-checklist.html",
+      "bodySha256": "9b2bcd271617ca34e467f7879e862f8e7a8518c134d2adb12169d5fde6726a5c"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-waste-cleanup-fence-repairs-landscaping",
+      "status": 200,
+      "slug": "dog-waste-cleanup-fence-repairs-landscaping",
+      "title": "Yard Cleanup During Fence Repairs or Landscaping: What to Coordinate",
+      "canonical": "https://blog.itspurgepros.com/post/dog-waste-cleanup-fence-repairs-landscaping",
+      "description": "Plan around a fence repair or landscaping project by confirming access, restricted areas, pet arrangements and any changed cleanup scope.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8ca4835d5471056ce8386.jpg",
+        "alt": "Illustrated yard with a marked fence-repair zone, clear gate route and Purge Pros mascot holding a flag."
+      },
+      "bodyFile": "dog-waste-cleanup-fence-repairs-landscaping.html",
+      "bodySha256": "c498a68371eb661acc592dcf4885d19ebe4d826c2cacf15f03d9d89b22da7167"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/vacation-dog-waste-yard-service-questions",
+      "status": 200,
+      "slug": "vacation-dog-waste-yard-service-questions",
+      "title": "Going on Vacation? Questions to Settle About Yard Service",
+      "canonical": "https://blog.itspurgepros.com/post/vacation-dog-waste-yard-service-questions",
+      "description": "Before a trip, confirm whether dogs remain at home, how the yard is accessed and how any pause or service change will be handled.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8ca4849f830e49b2febee.jpg",
+        "alt": "Purge Pros mascot with a vacation checklist showing luggage, gate access, pet care and communication icons."
+      },
+      "bodyFile": "vacation-dog-waste-yard-service-questions.html",
+      "bodySha256": "48d77861359f8253a42de15333c0ddd049a873df69282f4d626cd1ff1fb94d3e"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-waste-stations-shared-green-spaces-planning",
+      "status": 200,
+      "slug": "dog-waste-stations-shared-green-spaces-planning",
+      "title": "Dog Waste Stations for Shared Green Spaces: Planning the Basics",
+      "canonical": "https://blog.itspurgepros.com/post/dog-waste-stations-shared-green-spaces-planning",
+      "description": "Plan a shared-space dog waste station around location, bag supplies, bin servicing and responsibility without confusing it with lawn cleanup.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8ca4803687f733ec4af5c.jpg",
+        "alt": "Illustrated waste-bag station beside a separate lawn pickup route, with the Purge Pros mascot and scoop."
+      },
+      "bodyFile": "dog-waste-stations-shared-green-spaces-planning.html",
+      "bodySha256": "5ad1e7b65f33e728ecb7fd314c794a97892dff0add369e18c17086b7e3e32ff0"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/coordinate-lawn-care-dog-waste-pickup",
+      "status": 200,
+      "slug": "coordinate-lawn-care-dog-waste-pickup",
+      "title": "Coordinating Lawn Care and Dog Waste Pickup Without Mixed Signals",
+      "canonical": "https://blog.itspurgepros.com/post/coordinate-lawn-care-dog-waste-pickup",
+      "description": "Coordinate mowing, yard access and dog waste pickup with clear responsibilities, realistic timing and updates when a lawn-care visit changes.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8ccd335d5471056ceb32e.jpg",
+        "alt": "Purge Pros mascot carrying a baton between illustrated cleanup and mowing timelines, with scooping shown before mowing."
+      },
+      "bodyFile": "coordinate-lawn-care-dog-waste-pickup.html",
+      "bodySha256": "62bd39a0dfc5f1625ee3ea9d3664b3a02ea030999fd874f783cea74f9c5f7b77"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/adding-second-dog-yard-cleanup-plan",
+      "status": 200,
+      "slug": "adding-second-dog-yard-cleanup-plan",
+      "title": "Adding a Second Dog? Recheck Your Yard Cleanup Plan",
+      "canonical": "https://blog.itspurgepros.com/post/adding-second-dog-yard-cleanup-plan",
+      "description": "Update dog count, cleanup sections and visit frequency when another dog joins the household so your service plan matches the yard's current use.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d2d89f8b31b6ab1880c1.jpg",
+        "alt": "Illustrated plan card expanding from one paw to two paw markers on a yard map, updated by a faithful brown Purge Pros character."
+      },
+      "bodyFile": "adding-second-dog-yard-cleanup-plan.html",
+      "bodySha256": "e848dd69c318090b904d118134a4c4c0d61937caaad70e4d396fc0fc60523195"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/yard-walk-through-cleanup-request-checklist",
+      "status": 200,
+      "slug": "yard-walk-through-cleanup-request-checklist",
+      "title": "A Yard Walk-Through Checklist for an Accurate Cleanup Request",
+      "canonical": "https://blog.itspurgepros.com/post/yard-walk-through-cleanup-request-checklist",
+      "description": "Walk your yard before requesting cleanup to identify service sections, entrances, surface types and details that a starting price cannot describe.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d2d803687f733ec562ef.jpg",
+        "alt": "Isometric illustrated yard walk-through with blue callouts for gate, side strip, surface, and patio; a faithful brown Purge Pros character carries marker flags."
+      },
+      "bodyFile": "yard-walk-through-cleanup-request-checklist.html",
+      "bodySha256": "19a6c28c12d2cf50a93907b8125c0116644e659336faf48060b85727ca2ee1a1"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/price-check-to-confirmed-dog-waste-service",
+      "status": 200,
+      "slug": "price-check-to-confirmed-dog-waste-service",
+      "title": "From Price Check to Confirmed Dog Waste Service: What Happens Next",
+      "canonical": "https://blog.itspurgepros.com/post/price-check-to-confirmed-dog-waste-service",
+      "description": "See how Purge Pros moves from ZIP and price checks to request review, service-day confirmation and approved payment setup without booking confusion.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d2d835d5471056cf2ff3.jpg",
+        "alt": "Purge Pros guide shows ZIP, yard plan, price, request and confirmation icons along a blue path, with two illustrated dogs."
+      },
+      "bodyFile": "price-check-to-confirmed-dog-waste-service.html",
+      "bodySha256": "43684ccab2fa5e1c003183b4e153ff4e317c1811654c5f562086cb3e04b51006"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-waste-patios-pickup-expectations",
+      "status": 200,
+      "slug": "dog-waste-patios-pickup-expectations",
+      "title": "Dog Waste on Patios: Set the Right Pickup Expectations",
+      "canonical": "https://blog.itspurgepros.com/post/dog-waste-patios-pickup-expectations",
+      "description": "Include patios and other hard surfaces in the requested pickup scope, while separating waste collection from washing, stain removal and treatment.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d2d835d5471056cf2fe9.jpg",
+        "alt": "Purge Pros illustration highlights dog-waste pickup areas across a patio and lawn, with a cartoon dog and crossed-out hose icon."
+      },
+      "bodyFile": "dog-waste-patios-pickup-expectations.html",
+      "bodySha256": "49455c4dc1528993e93f8c2d10f6d15c56c07204ff299553d5dd0c68646227bf"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/fall-backyard-close-up-furniture-leaves-dog-waste",
+      "status": 200,
+      "slug": "fall-backyard-close-up-furniture-leaves-dog-waste",
+      "title": "Fall Backyard Close-Up: Furniture, Leaves and Dog Waste",
+      "canonical": "https://blog.itspurgepros.com/post/fall-backyard-close-up-furniture-leaves-dog-waste",
+      "description": "Organize fall backyard tasks around waste pickup, furniture moves, leaf cover and usable access so the dog's outdoor space stays manageable.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d2d89f8b31b6ab1880cb.jpg",
+        "alt": "Seasonal close-up illustration of outdoor chairs, leaves, and gate corner with a blue search path, guided by a faithful brown Purge Pros character."
+      },
+      "bodyFile": "fall-backyard-close-up-furniture-leaves-dog-waste.html",
+      "bodySha256": "49922ef6f24f4d7191112fdf5a3f970348861ffc2d47472c675dae732d9ad4ad"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-poop-removal-cost-indianapolis",
+      "status": 200,
+      "slug": "dog-poop-removal-cost-indianapolis",
+      "title": "Dog Poop Removal Cost in Indianapolis: What Shapes Your Quote",
+      "canonical": "https://blog.itspurgepros.com/post/dog-poop-removal-cost-indianapolis",
+      "description": "See what changes dog poop removal pricing in Indianapolis, how per-visit plans work, and what to compare before requesting a cleanup.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8cdc0a4d512c32b699ec2.jpg",
+        "alt": "Purge Pros mascot connects dog count, yard areas and service frequency to a clear cleanup quote."
+      },
+      "bodyFile": "dog-poop-removal-cost-indianapolis.html",
+      "bodySha256": "5c4f45f019ce8541862554ec2e4c96975d02b753e3c4f44b7f1f7fd16f7b2482"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/yard-size-vs-lot-size-poop-scooping",
+      "status": 200,
+      "slug": "yard-size-vs-lot-size-poop-scooping",
+      "title": "Yard Size vs. Lot Size: What Counts for Poop Scooping?",
+      "canonical": "https://blog.itspurgepros.com/post/yard-size-vs-lot-size-poop-scooping",
+      "description": "Learn how to estimate the outdoor areas that need dog waste cleanup, including side yards, patios, and separate service sections.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8cdc049f830e49b30306d.jpg",
+        "alt": "Purge Pros mascot reviews a yard diagram distinguishing the cleanup areas from the whole property lot."
+      },
+      "bodyFile": "yard-size-vs-lot-size-poop-scooping.html",
+      "bodySha256": "91cdcc5cebe58b235723d93503ad74ca5b9edf39b406668c3dbe780373f4c11c"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/prepare-first-pooper-scooper-visit",
+      "status": 200,
+      "slug": "prepare-first-pooper-scooper-visit",
+      "title": "How to Prepare for Your First Pooper Scooper Visit",
+      "canonical": "https://blog.itspurgepros.com/post/prepare-first-pooper-scooper-visit",
+      "description": "A practical first-visit checklist covering yard access, dog arrangements, service areas, and what to confirm before cleanup day.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8cdc035d5471056cec3fa.jpg",
+        "alt": "Purge Pros mascot follows a first-visit checklist with a clear gate, yard access and pet instructions."
+      },
+      "bodyFile": "prepare-first-pooper-scooper-visit.html",
+      "bodySha256": "13f58e6bef15caadead21a44580698f7a8ee24e7d70a3e152dbc83f47a230e12"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/gate-access-dog-waste-removal",
+      "status": 200,
+      "slug": "gate-access-dog-waste-removal",
+      "title": "Gate Access for Dog Waste Removal: A Simple Checklist",
+      "canonical": "https://blog.itspurgepros.com/post/gate-access-dog-waste-removal",
+      "description": "Make yard access easier with clear gate instructions, pet arrangements, and closure checks before your dog waste removal visit.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d0599f8b31b6ab1842e7.jpg",
+        "alt": "Purge Pros job photo of a closed white gate latch and cleanup tools, with blue access callouts."
+      },
+      "bodyFile": "gate-access-dog-waste-removal.html",
+      "bodySha256": "3f7c240f190a51f36475d9bede3af937376a85d01ec878d7c3d2868eefad7c53"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/need-to-be-home-dog-poop-cleanup",
+      "status": 200,
+      "slug": "need-to-be-home-dog-poop-cleanup",
+      "title": "Do I Need to Be Home for Dog Poop Cleanup?",
+      "canonical": "https://blog.itspurgepros.com/post/need-to-be-home-dog-poop-cleanup",
+      "description": "Plan dog waste cleanup while you are away: agree on access, secure pets, confirm communication, and know what happens after the visit.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d05935d5471056cef651.jpg",
+        "alt": "Purge Pros mascot beside a yard plan and message reminder, looking toward a closed backyard gate."
+      },
+      "bodyFile": "need-to-be-home-dog-poop-cleanup.html",
+      "bodySha256": "09bd056608e14941c7ccef0c685f2f1516ece7825aba09191936e7a533d9364a"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/yard-full-of-dog-poop-cleanup",
+      "status": 200,
+      "slug": "yard-full-of-dog-poop-cleanup",
+      "title": "Behind on Scooping? How to Tackle a Yard Full of Dog Poop",
+      "canonical": "https://blog.itspurgepros.com/post/yard-full-of-dog-poop-cleanup",
+      "description": "A manageable plan for built-up dog waste: define the cleanup area, handle access, choose ongoing care, and understand first-visit pricing.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d05a35d5471056cef661.jpg",
+        "alt": "Purge Pros mascot with a scoop beside yard-buildup, gate-access and service-calendar icons."
+      },
+      "bodyFile": "yard-full-of-dog-poop-cleanup.html",
+      "bodySha256": "ec743d6cdc7375aa5e8bd1daa0b2a4756cdf671e9ac1ce18fea3682a4b5823f9"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/fall-dog-poop-cleanup-leaves",
+      "status": 200,
+      "slug": "fall-dog-poop-cleanup-leaves",
+      "title": "Fall Dog Poop Cleanup: Managing Waste Under Leaves",
+      "canonical": "https://blog.itspurgepros.com/post/fall-dog-poop-cleanup-leaves",
+      "description": "Keep fall yard cleanup manageable when leaves hide dog waste. Learn a practical order for scooping, leaf work, and regular service.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d05a03687f733ec52505.jpg",
+        "alt": "Purge Pros mascot searches a leaf-covered autumn lawn along an illustrated blue pickup route."
+      },
+      "bodyFile": "fall-dog-poop-cleanup-leaves.html",
+      "bodySha256": "94479a823ce7d608bd56097d35d203485ab78b882751e19ebe01591bc950dcba"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/winter-dog-poop-cleanup-central-indiana",
+      "status": 200,
+      "slug": "winter-dog-poop-cleanup-central-indiana",
+      "title": "Winter Dog Poop Cleanup in Central Indiana",
+      "canonical": "https://blog.itspurgepros.com/post/winter-dog-poop-cleanup-central-indiana",
+      "description": "Plan winter dog waste cleanup around visibility, gate access, snow, and changing yard conditions in Central Indiana.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d05a9f8b31b6ab184306.jpg",
+        "alt": "Purge Pros mascot looks over a snow-covered yard with blue callouts for gate access and cleanup visibility."
+      },
+      "bodyFile": "winter-dog-poop-cleanup-central-indiana.html",
+      "bodySha256": "c804e5c6f4faed2d66ffb1d6012cd33d9460133a365566c5176930f4e68383db"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/spring-yard-cleanup-after-snow",
+      "status": 200,
+      "slug": "spring-yard-cleanup-after-snow",
+      "title": "Spring Yard Cleanup After Snow: A Dog Owner’s Checklist",
+      "canonical": "https://blog.itspurgepros.com/post/spring-yard-cleanup-after-snow",
+      "description": "Work through a spring dog-owner checklist for exposed waste, soft ground, yard access, and restarting a manageable cleanup routine.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d05a49f830e49b3067db.jpg",
+        "alt": "Purge Pros mascot points through a spring-thaw sequence showing melting snow, wet soil and a yard cleanup check."
+      },
+      "bodyFile": "spring-yard-cleanup-after-snow.html",
+      "bodySha256": "2519cb000488e7a3ac6381243b200ee18851f611004338e24ea3795bb44e7888"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-poop-cleanup-after-rain",
+      "status": 200,
+      "slug": "dog-poop-cleanup-after-rain",
+      "title": "Dog Poop Cleanup After Rain: Mud, Access, and Timing",
+      "canonical": "https://blog.itspurgepros.com/post/dog-poop-cleanup-after-rain",
+      "description": "Rain changes yard conditions. Learn what to check before scooping, how to describe muddy access, and why rain does not replace pickup.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d06c03687f733ec52675.jpg",
+        "alt": "Purge Pros mascot under a blue umbrella compares a muddy gate entrance with a clear path after rain."
+      },
+      "bodyFile": "dog-poop-cleanup-after-rain.html",
+      "bodySha256": "928c46295ab0df1e68ae7b2cc8911b27efac452bc75285834e8947b6bd083e30"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/poop-scooping-multiple-dogs",
+      "status": 200,
+      "slug": "poop-scooping-multiple-dogs",
+      "title": "Poop Scooping for Multiple Dogs: Plan the Right Coverage",
+      "canonical": "https://blog.itspurgepros.com/post/poop-scooping-multiple-dogs",
+      "description": "Plan cleanup for a multi-dog household by mapping busy yard areas, reviewing visit frequency, and keeping your dog count up to date.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d66c35d5471056cf7403.jpg",
+        "alt": "Illustrated overhead yard map with multiple paw markers and blue coverage legend, updated by a faithful brown Purge Pros character."
+      },
+      "bodyFile": "poop-scooping-multiple-dogs.html",
+      "bodySha256": "bb539b7419764fdc822f2cc69a3bc732a5bbe9298a2efc9865d397c020498087"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/backyard-party-dog-poop-cleanup",
+      "status": 200,
+      "slug": "backyard-party-dog-poop-cleanup",
+      "title": "Dog-Friendly Backyard Party Prep: Start With the Lawn",
+      "canonical": "https://blog.itspurgepros.com/post/backyard-party-dog-poop-cleanup",
+      "description": "Prepare a dog-friendly yard for guests with a cleanup timeline, clear play areas, pet arrangements, and realistic service scheduling.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d7099f8b31b6ab18d0d5.jpg",
+        "alt": "Illustrated backyard party preparation scene with table, dog-use zone, blue cleanup flag, and faithful brown Purge Pros character."
+      },
+      "bodyFile": "backyard-party-dog-poop-cleanup.html",
+      "bodySha256": "d1debb9369835afc256108278ba4461753ce0285724d39b69494c5d0badcca61"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/moving-with-dogs-yard-cleanup",
+      "status": 200,
+      "slug": "moving-with-dogs-yard-cleanup",
+      "title": "Moving With Dogs? Add Yard Cleanup to Your Checklist",
+      "canonical": "https://blog.itspurgepros.com/post/moving-with-dogs-yard-cleanup",
+      "description": "Coordinate dog waste cleanup at your old and new home, with clear property details, service dates, and a practical move-out checklist.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d4df9f8b31b6ab18a78b.jpg",
+        "alt": "Purge Pros mascot carries a checklist along a blue route between two illustrated homes and their yards."
+      },
+      "bodyFile": "moving-with-dogs-yard-cleanup.html",
+      "bodySha256": "823b31caf6d11e87523b23490005f89ff5db963c7f57bcf00cc44829abea6434"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-waste-cleanup-rental-homes",
+      "status": 200,
+      "slug": "dog-waste-cleanup-rental-homes",
+      "title": "Dog Waste Cleanup for Rental Homes and Shared Yards",
+      "canonical": "https://blog.itspurgepros.com/post/dog-waste-cleanup-rental-homes",
+      "description": "Clarify yard boundaries, access, communication, and cleanup responsibility when arranging dog waste removal for a rental property.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d4df49f830e49b30cb13.jpg",
+        "alt": "Illustrated shared-yard diagram with two homes, fenced lawn sections, gates, blue boundary lines, and an orange location pin, with a faithful brown Purge Pros mascot pointing."
+      },
+      "bodyFile": "dog-waste-cleanup-rental-homes.html",
+      "bodySha256": "6e90da5c817bb2ade617b8e42f9d1dc9dfba22b8afc888bbe118e9395a42013d"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-poop-cleanup-gravel-mulch-dog-runs",
+      "status": 200,
+      "slug": "dog-poop-cleanup-gravel-mulch-dog-runs",
+      "title": "Dog Poop Cleanup on Gravel, Mulch, and Dog Runs",
+      "canonical": "https://blog.itspurgepros.com/post/dog-poop-cleanup-gravel-mulch-dog-runs",
+      "description": "Different yard surfaces need different cleanup expectations. Plan scooping for gravel, mulch, grass, and narrow dog runs.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d4df9f8b31b6ab18a78c.jpg",
+        "alt": "Illustrated surface comparison showing grass, mulch, and gravel swatches linked to a fenced dog run, with a faithful brown Purge Pros mascot pointing."
+      },
+      "bodyFile": "dog-poop-cleanup-gravel-mulch-dog-runs.html",
+      "bodySha256": "df6fb1a077cfc98eca7b766cc6f43c4f03c24843db8852e9e09776faff5ab65f"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/yard-odor-poop-removal-vs-deodorizing",
+      "status": 200,
+      "slug": "yard-odor-poop-removal-vs-deodorizing",
+      "title": "Yard Odor: Poop Removal vs. Deodorizing Explained",
+      "canonical": "https://blog.itspurgepros.com/post/yard-odor-poop-removal-vs-deodorizing",
+      "description": "Understand the difference between collecting dog waste and discussing odor treatment, including surface details and product questions.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d4dfa4d512c32b6a37a4.jpg",
+        "alt": "Illustrated split graphic showing a scoop and waste bag for pickup versus an odor-treatment question, with a faithful brown Purge Pros mascot between the two lanes."
+      },
+      "bodyFile": "yard-odor-poop-removal-vs-deodorizing.html",
+      "bodySha256": "5d87dc96472513459c3d00677e9012f951451185ceddc4ecc844a791b4408bad"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/choose-pooper-scooper-service-indianapolis",
+      "status": 200,
+      "slug": "choose-pooper-scooper-service-indianapolis",
+      "title": "How to Choose a Pooper Scooper Service in Indianapolis",
+      "canonical": "https://blog.itspurgepros.com/post/choose-pooper-scooper-service-indianapolis",
+      "description": "Compare dog waste services by scope, pricing, communication, gate procedures, and cancellation terms before choosing a provider.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d4dfa4d512c32b6a37a3.jpg",
+        "alt": "Illustrated service-comparison scorecard with paw, price, gate, communication, and document rows, marked by a faithful brown Purge Pros mascot holding a pencil."
+      },
+      "bodyFile": "choose-pooper-scooper-service-indianapolis.html",
+      "bodySha256": "0f4ede68342e612b4d051884adbef8367fc18288499946f56f895741d88b7777"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-waste-bags-bins-disposal",
+      "status": 200,
+      "slug": "dog-waste-bags-bins-disposal",
+      "title": "After You Scoop: Dog Waste Bags, Bins, and Disposal",
+      "canonical": "https://blog.itspurgepros.com/post/dog-waste-bags-bins-disposal",
+      "description": "Build a practical pickup and disposal routine with sealed bags, a suitable bin, local collection rules, and clear service expectations.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8da2a35d5471056cfc233.jpg",
+        "alt": "Illustrated circular workflow from scoop to sealed bag to outdoor bin to removal, guided by faithful brown Purge Pros character."
+      },
+      "bodyFile": "dog-waste-bags-bins-disposal.html",
+      "bodySha256": "37743fd3f5b6ff055468e1c3cfe8cb8b77575a10c9dfedf03c4a6f1ef81fb422"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/new-puppy-yard-cleanup-routine",
+      "status": 200,
+      "slug": "new-puppy-yard-cleanup-routine",
+      "title": "A Yard Cleanup Routine for a New Puppy",
+      "canonical": "https://blog.itspurgepros.com/post/new-puppy-yard-cleanup-routine",
+      "description": "Set up an easy yard cleanup routine for life with a puppy, including useful supplies, clear yard areas, and help between busy days.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d862a4d512c32b6a78f9.jpg",
+        "alt": "Illustrated puppy-routine path from door to yard station to cleanup card, with faithful brown Purge Pros character setting the first marker."
+      },
+      "bodyFile": "new-puppy-yard-cleanup-routine.html",
+      "bodySha256": "83bdff280415ac9f5b02c7f0e2b51e272aecbeacd7ed532eedc7b32589447281"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-waste-cleanup-busy-families",
+      "status": 200,
+      "slug": "dog-waste-cleanup-busy-families",
+      "title": "Dog Waste Cleanup for Busy Families: Share the Yard",
+      "canonical": "https://blog.itspurgepros.com/post/dog-waste-cleanup-busy-families",
+      "description": "Make a shared family yard easier to use with defined cleanup tasks, clear service areas, and a routine that fits busy weeks.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d86203687f733ec5ca9e.jpg",
+        "alt": "Illustrated blue task wheel dividing household yard tasks and provider support around a yard icon, with faithful brown Purge Pros character."
+      },
+      "bodyFile": "dog-waste-cleanup-busy-families.html",
+      "bodySha256": "5a384e48128ca5ece1496442fa0a8f33a1259e860c66a56554848462dafcde24"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/less-bending-dog-poop-cleanup",
+      "status": 200,
+      "slug": "less-bending-dog-poop-cleanup",
+      "title": "Want Less Bending and Scooping? Plan Easier Yard Upkeep",
+      "canonical": "https://blog.itspurgepros.com/post/less-bending-dog-poop-cleanup",
+      "description": "Reduce the hands-on work of yard cleanup with practical access choices, long-handled tools, and clearly defined professional service.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d86149f830e49b310c0f.jpg",
+        "alt": "Approved real cleanup tools beside a gate with restrained blue callout for the long handle and clear path."
+      },
+      "bodyFile": "less-bending-dog-poop-cleanup.html",
+      "bodySha256": "cabb4e97f6115bdfbc55d93a80099face61d2a1b7da9da3e18695b2147eec2cd"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/pick-up-dog-poop-before-mowing",
+      "status": 200,
+      "slug": "pick-up-dog-poop-before-mowing",
+      "title": "Should You Pick Up Dog Poop Before Mowing?",
+      "canonical": "https://blog.itspurgepros.com/post/pick-up-dog-poop-before-mowing",
+      "description": "Plan dog waste pickup before lawn mowing, coordinate separate providers, and keep cleanup tools and yard access organized.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8d86235d5471056cf984c.jpg",
+        "alt": "Illustrated blue three-step controller for scoop, check, mow, with faithful brown Purge Pros character moving the first marker."
+      },
+      "bodyFile": "pick-up-dog-poop-before-mowing.html",
+      "bodySha256": "973f6735d2e9db168695d8c2868615bf472bb6ef66a1ab8222536568b197647e"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/backyard-layout-dogs-play-cleanup",
+      "status": 200,
+      "slug": "backyard-layout-dogs-play-cleanup",
+      "title": "A Practical Backyard Layout for Dogs, Play, and Cleanup",
+      "canonical": "https://blog.itspurgepros.com/post/backyard-layout-dogs-play-cleanup",
+      "description": "Think through dog-use areas, play space, gates, and cleanup access without redesigning your entire yard or buying expensive equipment.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8dac2a4d512c32b6ab47b.jpg",
+        "alt": "Illustrated backyard zoning blueprint labeling play, pickup, gate, and excluded areas with blue line styles and faithful brown Purge Pros character."
+      },
+      "bodyFile": "backyard-layout-dogs-play-cleanup.html",
+      "bodySha256": "9a1e16b4bf948d45cac09e90d745f8b65fdf192da6c9e70b52a2eb6f80007812"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/dog-waste-removal-hoas-shared-green-spaces",
+      "status": 200,
+      "slug": "dog-waste-removal-hoas-shared-green-spaces",
+      "title": "Dog Waste Removal for HOAs and Shared Green Spaces",
+      "canonical": "https://blog.itspurgepros.com/post/dog-waste-removal-hoas-shared-green-spaces",
+      "description": "Build a useful cleanup scope for an HOA or shared property: map the areas, assign access, clarify responsibilities, and request a custom plan.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8db34250c9aec67062017.jpg",
+        "alt": "Illustrated overhead community green-space map with walkway, pet station, benches, and blue responsibility pins, guided by faithful brown Purge Pros character."
+      },
+      "bodyFile": "dog-waste-removal-hoas-shared-green-spaces.html",
+      "bodySha256": "967b5b2c528a8fa50cd8ace760aa194044b7b3af5ae194d6f059bd2678da4fcd"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/restarting-dog-poop-service",
+      "status": 200,
+      "slug": "restarting-dog-poop-service",
+      "title": "Restarting Dog Poop Service: What Returning Customers Need",
+      "canonical": "https://blog.itspurgepros.com/post/restarting-dog-poop-service",
+      "description": "Learn what to share when restarting cleanup, how yard condition affects the first visit, and how returning-customer pricing works.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8db9da4d512c32b6ac3a7.jpg",
+        "alt": "Illustrated refresh arrow linking an old plan card to a current yard-condition card, updated by faithful brown Purge Pros character."
+      },
+      "bodyFile": "restarting-dog-poop-service.html",
+      "bodySha256": "3de4f92660160dfd92f927098152f453268953dabb96d11759a163f5cb144860"
+    },
+    {
+      "url": "https://blog.itspurgepros.com/post/weekly-yard-reset-toys-movable-obstacles",
+      "status": 200,
+      "slug": "weekly-yard-reset-toys-movable-obstacles",
+      "title": "Outdoor Toys and Movable Obstacles: A Weekly Yard Reset Routine",
+      "canonical": "https://blog.itspurgepros.com/post/weekly-yard-reset-toys-movable-obstacles",
+      "description": "A repeatable weekly reset for toys, bowls, hoses and lightweight furniture that keeps dog-use areas easier to inspect and access.",
+      "cover": {
+        "src": "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6ab165032e45fddc38494620.png",
+        "alt": "Illustrated Purge Pros mascot holding a checklist beside a toy basket, coiled hose, bowl and clear yard path."
+      },
+      "bodyFile": "weekly-yard-reset-toys-movable-obstacles.html",
+      "bodySha256": "e70a6848100f1c19f7004837ed095de4c837906c0c67b5b26044b1c658e50963"
+    }
+  ]
+}
