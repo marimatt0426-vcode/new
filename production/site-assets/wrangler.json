@@ -1,0 +1,11 @@
+{
+  "name": "purge-pros-site-assets",
+  "compatibility_date": "2026-09-20",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "none",
+    "html_handling": "none"
+  }
+}

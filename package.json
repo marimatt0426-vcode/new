@@ -1,0 +1,11 @@
+{
+  "name": "purge-pros-production",
+  "private": true,
+  "version": "2026.10.4",
+  "scripts": {
+    "build": "node production/quote/build.mjs",
+    "check": "node --check production/quote/src/widget.js && node --check production/quote/dist/worker.mjs",
+    "test": "node production/quote/tests/regression.mjs && node production/website/blog/validate-prep.mjs production/website/blog/published-cards.json && node production/verify-manifest.mjs",
+    "build:blog": "node production/website/blog/refresh-index.mjs production/website/blog/published-cards.json"
+  }
+}
