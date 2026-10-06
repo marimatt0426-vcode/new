@@ -1,7 +1,25 @@
 {
-  "observedAt": "2026-09-30",
-  "state": "44-card installed index; October 2 Outdoor Toys missing pending native repair",
+  "observedAt": "2026-10-05",
+  "state": "46-card index prepared October 5; adds Outdoor Toys and Per-Visit or Monthly Quote",
   "posts": [
+    {
+      "title": "Per-Visit or Monthly Quote? How to Compare the Math Fairly",
+      "slug": "compare-per-visit-monthly-dog-waste-quotes",
+      "publicUrl": "https://blog.itspurgepros.com/post/compare-per-visit-monthly-dog-waste-quotes",
+      "description": "Normalize scope, visit counts and first-cleanup terms so a per-visit quote and a monthly-looking quote can be compared fairly.",
+      "category": "Service Guides",
+      "alt": "Illustrated Purge Pros mascot balancing per-visit receipts, a calendar and a calculator beside one shared yard scope.",
+      "coverUrl": "https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6ab16503bdaa5e26a97560a1.png"
+    },
+    {
+      "title": "Outdoor Toys and Movable Obstacles: A Weekly Yard Reset Routine",
+      "slug": "weekly-yard-reset-toys-movable-obstacles",
+      "publicUrl": "https://blog.itspurgepros.com/post/weekly-yard-reset-toys-movable-obstacles",
+      "description": "A repeatable weekly reset for toys, bowls, hoses and lightweight furniture that keeps dog-use areas easier to inspect and access.",
+      "category": "Yard Care",
+      "alt": "Illustrated Purge Pros mascot holding a checklist beside a toy basket, coiled hose, bowl and clear yard path.",
+      "coverUrl": "https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6ab165032e45fddc38494620.png"
+    },
     {
       "title": "Two Gates and a Side Passage: How to Make a Useful Access Map",
       "slug": "two-gates-side-passage-access-map",
