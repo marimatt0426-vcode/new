@@ -474,7 +474,7 @@
     },
     {
       "path": "production/website/blog/prepared/home-header-and-index.html",
-      "sha256": "8febb86e01cf4491c32add39d4962fcce9c80620170a4758ee17d1c1fddac54c",
+      "sha256": "514540dfa6eeb793383ad295480586c804127c811a60878c7f9bb4c59c002440",
       "source": "releases/2026-09-30-content-check/INSTALLED-home-header-and-index.html"
     },
     {
@@ -484,7 +484,7 @@
     },
     {
       "path": "production/website/blog/prepared/home-index.html",
-      "sha256": "1978021784762b8edccab01b9ca0946da4f1f819e87fd9f6091c3f4de8275605",
+      "sha256": "20054beb51c749149ad383cf623d860dd1993518bc122196da152a7c64130c07",
       "source": "releases/2026-09-21-website-rollout/blog/prepared/home-index.html"
     },
     {
@@ -504,7 +504,7 @@
     },
     {
       "path": "production/website/blog/published-cards.json",
-      "sha256": "0ccf441522440f3b322063ab092d4ef2ee2070056d8af96c60f5dff3cdaf31a2",
+      "sha256": "4438b6828caab6030a43efd18793840ac2e53d910d5d9950b7cdaa70d168e71d",
       "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
     },
     {
