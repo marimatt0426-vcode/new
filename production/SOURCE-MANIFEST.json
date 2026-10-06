@@ -1,11 +1,11 @@
 {
-  "date": "2026-10-04",
+  "date": "2026-10-05",
   "basis": "Approved deployed snapshots; no rejected October mockups",
   "files": [
     {
       "path": "production/OPERATIONS.md",
-      "sha256": "bf66db4d036fd21b14d03e4a717fddd511e4126fe4921138a0c0ac3b5c35d3cb",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+      "sha256": "f36bad012b2352497cdd058e76e98bd8ec46c7d04be76c1bcde06ecfa93398dc",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release"
     },
     {
       "path": "production/quote/build.mjs",
@@ -14,8 +14,8 @@
     },
     {
       "path": "production/quote/dist/worker.mjs",
-      "sha256": "5929f00761d489999ccea1f6ddefb2e55cc555045b0436dff5df216dca6f6af1",
-      "source": "releases/2026-09-21-quote-icon-installation/quote/prepared/worker.ICON-INSTALLATION-CANDIDATE.js"
+      "sha256": "113ce3beee7ac937605d7da6eb7453052bfe03ee95c92e520e623396bffea95c",
+      "source": "releases/2026-09-21-quote-icon-installation/quote/prepared/worker.ICON-INSTALLATION-CANDIDATE.js; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel"
     },
     {
       "path": "production/quote/src/landing.html",
@@ -24,8 +24,8 @@
     },
     {
       "path": "production/quote/src/widget.js",
-      "sha256": "941fa264f664fc9386e8e18243b171a8e365170fb5f76866e674d3c36599e350",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+      "sha256": "2ccceaf472acfd1c58e99efe2e0600eae040eb4efcced8c0d11ccc202055899e",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel"
     },
     {
       "path": "production/quote/src/worker.template.mjs",
@@ -39,8 +39,8 @@
     },
     {
       "path": "production/quote/tests/regression.mjs",
-      "sha256": "305f9425a557ebd5b7bf94502ec09dd4a29d759a355da21b3a15c30c35709d1a",
-      "source": "releases/2026-09-21-quote-icon-installation/quote/regression-check.mjs"
+      "sha256": "b712a75e29e874489e1165e91d573d54eba4b106b75fb3158bcb9e6977e69628",
+      "source": "releases/2026-09-21-quote-icon-installation/quote/regression-check.mjs; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel"
     },
     {
       "path": "production/quote/wrangler.json",
@@ -209,8 +209,8 @@
     },
     {
       "path": "production/verify-manifest.mjs",
-      "sha256": "cdcc533cf467b52af06555d965fd8ad60f6329bf9362926db4056f92159f55dd",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+      "sha256": "6e2b0de401d3962a386758521c165a9c0f53e4216671a763521e6b4e49ce2922",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release"
     },
     {
       "path": "production/website/blog/articles/adding-second-dog-yard-cleanup-plan.html",

@@ -77,13 +77,47 @@ const protectedBlocks = [
   ['tracking hooks', '  function track(name, params) {', '\n\n  function trackSuccess'],
   ['conversion hooks', '  function trackSuccess(payload, requestId) {', '\n\n  function shellHtml()']
 ];
+// Owner-approved October 5, 2026: quote-progress milestones are mirrored to the Meta pixel.
+// The tracking hook may differ from the fixture by exactly this one line.
+const APPROVED_TRACKING_ADDITION = '    if (CONFIG.tracking.firePixelEvents && typeof window.fbq === "function") trackPixelStep(name, safe);\n';
 const protectedEvidence = {};
 for (const [label, start, end] of protectedBlocks) {
   const before = block(sourceWidget, start, end);
   const after = block(candidateWidget, start, end);
-  assert.equal(after, before, `${label} changed`);
+  if (label === 'tracking hooks') {
+    assert.equal(after.split(APPROVED_TRACKING_ADDITION).length, 2, 'approved pixel step line missing or repeated');
+    assert.equal(after.replace(APPROVED_TRACKING_ADDITION, ''), before, `${label} changed beyond the approved pixel step line`);
+  } else assert.equal(after, before, `${label} changed`);
   protectedEvidence[label] = sha256(after);
 }
+
+const pixelStepSource = block(candidateWidget, '  const pixelStepsSent = {};', '\n\n  function track(name, params) {');
+const pixelCalls = [];
+const pixelContext = { window: { fbq: (...args) => pixelCalls.push(args) } };
+vm.createContext(pixelContext);
+vm.runInContext(`${pixelStepSource}; this.trackPixelStep = trackPixelStep;`, pixelContext);
+const pixelInputs = [
+  ['funnel_viewed', { ui_version: 'v' }],
+  ['service_area_ineligible', { ui_version: 'v', zip_prefix: '606' }],
+  ['service_area_eligible', { ui_version: 'v', zip_prefix: '460' }],
+  ['funnel_step_viewed', { ui_version: 'v', step: 2 }],
+  ['price_viewed', { ui_version: 'v', frequency: 'weekly', custom: false, value: 19.99 }],
+  ['funnel_step_viewed', { ui_version: 'v', step: 3 }],
+  ['funnel_step_viewed', { ui_version: 'v', step: 4 }],
+  ['funnel_step_viewed', { ui_version: 'v', step: 5 }],
+  ['funnel_step_viewed', { ui_version: 'v', step: 4 }],
+  ['price_viewed', { ui_version: 'v', frequency: 'weekly', custom: false, value: 19.99 }],
+  ['service_requested', { ui_version: 'v', event_id: 'x:service_requested' }],
+  ['funnel_step_viewed', { ui_version: 'v', step: 6 }]
+];
+for (const [name, safe] of pixelInputs) pixelContext.trackPixelStep(name, safe);
+assert.deepEqual(JSON.parse(JSON.stringify(pixelCalls)), [
+  ['trackCustom', 'QuoteZipOutOfArea', { ui_version: 'v' }],
+  ['trackCustom', 'QuoteZipAccepted', { ui_version: 'v' }],
+  ['trackCustom', 'QuotePriceViewed', { ui_version: 'v', frequency: 'weekly', value: 19.99, currency: 'USD' }],
+  ['trackCustom', 'QuoteDetailsViewed', { ui_version: 'v' }],
+  ['trackCustom', 'QuoteReviewViewed', { ui_version: 'v' }]
+], 'Pixel step events changed');
 
 function evaluator(widget) {
   const configBlock = block(widget, '  const CONFIG = {', '\n\n  const ATTRIBUTION_KEYS');
