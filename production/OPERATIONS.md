@@ -8,7 +8,7 @@ Before any future deployment, reconcile current native state and owner changes. 
 
 ## Quote build
 
-`quote/build.mjs` inserts the editable widget and landing page into the Worker template using JSON string literals. Initial output matches the exact September 21 icon release bundle. Regression compares 1,000 pricing cases and protected validation, payload, submission and tracking blocks against the immediately preceding approved production bundle. The fixture is historical test data, not an alternative deployment artifact.
+`quote/build.mjs` inserts the editable widget and landing page into the Worker template using JSON string literals. The bundle is the September 21 icon release plus the October 5 owner-approved pixel step events: the widget mirrors five quote-progress milestones to the Meta pixel as custom events (`QuoteZipAccepted`, `QuoteZipOutOfArea`, `QuotePriceViewed`, `QuoteDetailsViewed`, `QuoteReviewViewed`), each at most once per page load and without ZIP details. Lead and Google conversion events are unchanged. Regression compares 1,000 pricing cases and protected validation, payload, submission and tracking blocks against the September 21 fixture, allowing only the one approved pixel step line in the tracking hook. The fixture is historical test data, not an alternative deployment artifact.
 
 ## Blog index
 

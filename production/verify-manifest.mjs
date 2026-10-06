@@ -13,8 +13,8 @@ for (const file of manifest.files) {
   assert.equal(sha(fs.readFileSync(target)), file.sha256, `Source changed: ${file.path}; reconcile provenance before updating its hash`);
 }
 assert.equal(sha(fs.readFileSync(path.join(here, 'quote/dist/worker.mjs'))),
-  '5929f00761d489999ccea1f6ddefb2e55cc555045b0436dff5df216dca6f6af1',
-  'Quote rebuild differs from approved September 21 icon release');
+  '113ce3beee7ac937605d7da6eb7453052bfe03ee95c92e520e623396bffea95c',
+  'Quote rebuild differs from approved October 5 pixel step release');
 const metadata = JSON.parse(fs.readFileSync(path.join(here, 'website/pages/metadata.json')));
 assert.equal(metadata.routes.length, 27);
 for (const route of metadata.routes) assert.ok(fs.existsSync(path.join(here, 'website/pages', route.id + '.html')));

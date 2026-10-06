@@ -1119,6 +1119,29 @@
     try { sessionStorage.removeItem(LOW_RISK_STORAGE_KEY); } catch (_) {}
   }
 
+  // Quote-progress milestones mirrored to the Meta pixel, each at most once per page load.
+  // ZIP details stay out of the pixel payload.
+  const pixelStepsSent = {};
+
+  function pixelStepEvent(name, safe) {
+    if (name === "service_area_eligible") return "QuoteZipAccepted";
+    if (name === "service_area_ineligible") return "QuoteZipOutOfArea";
+    if (name === "price_viewed") return "QuotePriceViewed";
+    if (name === "funnel_step_viewed" && safe.step === 4) return "QuoteDetailsViewed";
+    if (name === "funnel_step_viewed" && safe.step === 5) return "QuoteReviewViewed";
+    return "";
+  }
+
+  function trackPixelStep(name, safe) {
+    const pixelEvent = pixelStepEvent(name, safe);
+    if (!pixelEvent || pixelStepsSent[pixelEvent]) return;
+    pixelStepsSent[pixelEvent] = true;
+    const params = { ui_version: safe.ui_version };
+    if (safe.frequency) params.frequency = safe.frequency;
+    if (typeof safe.value === "number") { params.value = safe.value; params.currency = "USD"; }
+    window.fbq("trackCustom", pixelEvent, params);
+  }
+
   function track(name, params) {
     const safe = Object.assign({ ui_version: CONFIG.uiVersion }, params || {});
     if (typeof window.gtag === "function") window.gtag("event", name, safe);
@@ -1126,6 +1149,7 @@
     if (CONFIG.tracking.firePixelEvents && name === "funnel_viewed" && typeof window.fbq === "function") {
       window.fbq("trackCustom", "QuoteFunnelViewed", safe);
     }
+    if (CONFIG.tracking.firePixelEvents && typeof window.fbq === "function") trackPixelStep(name, safe);
   }
 
   function trackSuccess(payload, requestId) {
