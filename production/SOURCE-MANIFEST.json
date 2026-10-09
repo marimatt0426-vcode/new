@@ -1,36 +1,36 @@
 {
-  "date": "2026-10-05",
-  "basis": "Approved deployed snapshots; no rejected October mockups",
+  "date": "2026-10-09",
+  "basis": "Approved deployed snapshots; no rejected October mockups. The quote Worker files are a prepared October 9, 2026 candidate, not deployed; the deployed October 5 release is production/quote/tests/fixtures/2026-10-05-live-worker.mjs",
   "files": [
     {
       "path": "production/OPERATIONS.md",
-      "sha256": "f36bad012b2352497cdd058e76e98bd8ec46c7d04be76c1bcde06ecfa93398dc",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release"
+      "sha256": "22883e4481536cd68919b45959f151805a7dc0d2308a48806447893156bf7fb1",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget"
     },
     {
       "path": "production/quote/build.mjs",
-      "sha256": "eadb74bf6912b71ecc8a38b0ed981900019fa43469dbebdf1bc9f6cdeadcd301",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+      "sha256": "b801759f1a9d268febdc7ba510827d6a80588984aff3fbc00e39205caf1eaad9",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget"
     },
     {
       "path": "production/quote/dist/worker.mjs",
-      "sha256": "113ce3beee7ac937605d7da6eb7453052bfe03ee95c92e520e623396bffea95c",
-      "source": "releases/2026-09-21-quote-icon-installation/quote/prepared/worker.ICON-INSTALLATION-CANDIDATE.js; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel"
+      "sha256": "665511331c1ee5c8b5d00ab7eb2ab762f02395bc70b60b4fbe25160fcc34126c",
+      "source": "releases/2026-09-21-quote-icon-installation/quote/prepared/worker.ICON-INSTALLATION-CANDIDATE.js; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget"
     },
     {
-      "path": "production/quote/src/landing.html",
-      "sha256": "90ef6693a0399ea3a174ecb3d3e541651777bc558658d1ce7bf8f0bb4cad6789",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
-    },
-    {
-      "path": "production/quote/src/widget.js",
-      "sha256": "2ccceaf472acfd1c58e99efe2e0600eae040eb4efcced8c0d11ccc202055899e",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel"
+      "path": "production/quote/src/launcher.js",
+      "sha256": "04d0132316647b1974bb24202b49edcdee57698aef4d47dd0754b12ae4e1cc9c",
+      "source": "New October 9, 2026: quote launcher served at /purge-quote.js in place of the retired widget (prepared, not deployed)"
     },
     {
       "path": "production/quote/src/worker.template.mjs",
-      "sha256": "1cf53521b1a6ca02eb3e7f30ec41ff180cb1c2d036fb5eef9c116fc5cce6d31c",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+      "sha256": "6f9354cdb3212f8306b474643568949ccb73df555bc94a31c01bee65e23e1387",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget"
+    },
+    {
+      "path": "production/quote/tests/fixtures/2026-10-05-live-worker.mjs",
+      "sha256": "113ce3beee7ac937605d7da6eb7453052bfe03ee95c92e520e623396bffea95c",
+      "source": "Byte copy of production/quote/dist/worker.mjs at commit aa9f81d, the October 5, 2026 live release; regression reference, not a deployment artifact"
     },
     {
       "path": "production/quote/tests/fixtures/pre-icons-worker.mjs",
@@ -39,13 +39,18 @@
     },
     {
       "path": "production/quote/tests/regression.mjs",
-      "sha256": "b712a75e29e874489e1165e91d573d54eba4b106b75fb3158bcb9e6977e69628",
-      "source": "releases/2026-09-21-quote-icon-installation/quote/regression-check.mjs; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel"
+      "sha256": "58b977061092c6a1321f5d731d55b8bd23d2aa90a6a45f1d10d7d83e9073aff1",
+      "source": "releases/2026-09-21-quote-icon-installation/quote/regression-check.mjs; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget"
     },
     {
       "path": "production/quote/wrangler.json",
       "sha256": "54ca17ca50495a6185ee60e5900df9eff57e301f964c78c39fa7418bcf3d8930",
       "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling"
+    },
+    {
+      "path": "production/quote/wrangler.staging.json",
+      "sha256": "56faf37f6495609a66bd75d56d1679ea67e0ac96d3043308b7fe5eb70660ccec",
+      "source": "New October 9, 2026: configuration for a separate staging copy with its own request ledger; a file only, nothing deployed"
     },
     {
       "path": "production/site-assets/public/_headers",
@@ -209,8 +214,8 @@
     },
     {
       "path": "production/verify-manifest.mjs",
-      "sha256": "6e2b0de401d3962a386758521c165a9c0f53e4216671a763521e6b4e49ce2922",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release"
+      "sha256": "fd1044a80bad1305a79d1c7d2bc6ae6246975852d2f76f37476a923d811b0373",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget"
     },
     {
       "path": "production/website/blog/articles/adding-second-dog-yard-cleanup-plan.html",
