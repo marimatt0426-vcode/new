@@ -226,10 +226,17 @@ function isStagingCopy(env) {
   return mark !== "" && mark !== "0" && mark !== "false";
 }
 __name(isStagingCopy, "isStagingCopy");
+function oneLine(value) {
+  return String(value).replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]+/g, " ").trim();
+}
+__name(oneLine, "oneLine");
+// Accept and flag (owner decision, October 9, 2026): no request is turned away for its Terms version. A service request that carries
+// another Terms version is accepted exactly as normal; the team note gains one line. Both versions
+// are put on that line as plain single-line text, so neither can add or split a line of the note.
 function termsVersionCheck(env, intent, acceptedVersion) {
   const current = cleanString(env && env.CURRENT_TERMS_VERSION, 80);
-  if (!current || intent !== "service_request" || acceptedVersion === current) return { outdated: false, refuse: false, current };
-  return { outdated: true, refuse: cleanString(env.TERMS_VERSION_MODE, 20).toLowerCase() === "refuse", current };
+  if (!current || intent !== "service_request" || acceptedVersion === current) return { outdated: false };
+  return { outdated: true, accepted: oneLine(acceptedVersion), current: oneLine(current) };
 }
 __name(termsVersionCheck, "termsVersionCheck");
 var SCHEMA_VERSION = "cloudflare-widget.v3";
@@ -836,7 +843,7 @@ function voiceQuoteResponse(result, context) {
   const isOneTime = result.frequencyId === "onetime";
   return voiceOutcome(
     "standard_price",
-    isOneTime ? `${price} covers the first 30 minutes of one-time cleanup labor. The base deposit is charged when the ETA text goes out. Additional labor after 30 minutes is billed after cleanup at $1 per minute. Service approval is still required.` : `The current recurring maintenance price is ${price} per visit. Route approval is still required before service is confirmed.`,
+    isOneTime ? `${price} covers the first 30 minutes of one-time cleanup labor. The ${price} base is charged when we text that we are on the way. Additional labor after 30 minutes is billed after cleanup at $1 per minute. Service approval is still required.` : `The current recurring maintenance price is ${price} per visit. Route approval is still required before service is confirmed.`,
     isOneTime ? "Tell the caller the returned price and terms exactly. If they accept, collect the remaining intake details and submit the appropriate service-request workflow. Do not call the service scheduled or confirmed until the team approves it." : "This is a recurring maintenance quote, not an approved first-cleanup price. Ask whether the household has used Purge Pros before. Returning, uncertain-history and new-occupant requests require Submit Team Follow-Up Request for review. New-household status also requires team verification of service history, once per household. New recurring households: first cleanup at the quoted rate with up to 120 minutes included; time beyond 120 minutes is $1 per minute, agreed before work starts. Returning or unclear-history households: restart at the quoted rate for 30 minutes plus $1 per extra minute, billed after cleanup; base at ETA. Ordinary maintenance stays at the agreed rate regardless of time. Never add a second maintenance charge. Never promise a free or unlimited first cleanup. Do not call service scheduled or confirmed until the team approves it.",
     {
       ...context,
@@ -998,7 +1005,7 @@ function buildV3Forward(lead, values, requestId, request, env) {
     `Reply preference: ${values.preferredContact}`,
     `Service SMS permission: ${values.preferredContact === "text" ? `Yes \u2014 ${consentVersion} at ${consentAt}` : "No"}`,
     `Terms accepted: ${values.intent === "service_request" ? `Yes \u2014 ${termsVersion} at ${termsAt}` : "Not applicable"}`,
-    termsCheck.outdated ? `Terms version check: the customer accepted Terms version ${termsVersion}; the current version is ${termsCheck.current}. Confirm the current Terms with the customer before approval.` : "",
+    termsCheck.outdated ? `Terms version check: the customer accepted Terms version ${termsCheck.accepted}; the current version is ${termsCheck.current}. Confirm the current Terms with the customer before approval.` : "",
     values.question ? `Customer message: ${values.question}` : "",
     attribution.utm_source ? `Attribution: ${[attribution.utm_source, attribution.utm_medium, attribution.utm_campaign].filter(Boolean).join(" / ")}` : "",
     `Request ID: ${requestId}`
@@ -1221,20 +1228,6 @@ async function handleLeadSubmission(request, env, ctx) {
     const validation = validateV3(lead);
     if (!validation.ok) {
       return jsonResponse(400, { accepted: false, message: "Please check the highlighted form details.", fields: validation.errors }, cors);
-    }
-    const termsCheck = termsVersionCheck(env, validation.values.intent, cleanString(lead.termsVersion, 80));
-    if (termsCheck.refuse) {
-      // Countable in the log; never the customer's details or the text they sent.
-      try {
-        console.log(JSON.stringify({ event: "terms_version_refused", requestId, stage: validation.values.expectedStage, currentTermsVersion: termsCheck.current }));
-      } catch (_) {
-      }
-      return jsonResponse(400, {
-        accepted: false,
-        code: "TERMS_VERSION_OUTDATED",
-        message: "Our Terms & Conditions have been updated. Please reload this page, review the current terms and send your request again. Nothing has been scheduled or charged by this form.",
-        fields: ["termsAccepted"]
-      }, cors);
     }
     forward = buildV3Forward(lead, validation.values, requestId, request, env);
   } else {

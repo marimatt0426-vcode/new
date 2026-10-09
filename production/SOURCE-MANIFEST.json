@@ -4,7 +4,7 @@
   "files": [
     {
       "path": "production/OPERATIONS.md",
-      "sha256": "fd86e0b406a814b94cd59a1c4f649af27a1201a1d2838d36e948906a28c9330f",
+      "sha256": "390f755fcdc1bb400b16f081ef2fd8a94c27fd0fb7949e9054f3f629bb827278",
       "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget; revised after independent review on October 9, 2026 (still prepared, not deployed)"
     },
     {
@@ -14,7 +14,7 @@
     },
     {
       "path": "production/quote/dist/worker.mjs",
-      "sha256": "29b8d2023760fbb33291576ba7c870c54b162c575be1592c1b43675d821e320b",
+      "sha256": "218d647a6a1db88b18dcceae723ddbca90aebeded2b2d65626641749fd46fc14",
       "source": "releases/2026-09-21-quote-icon-installation/quote/prepared/worker.ICON-INSTALLATION-CANDIDATE.js; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget; revised after independent review on October 9, 2026 (still prepared, not deployed)"
     },
     {
@@ -24,7 +24,7 @@
     },
     {
       "path": "production/quote/src/worker.template.mjs",
-      "sha256": "0fa11776fba6f316f5654149a6437198d7f7fdc8d508d68d546f2dae2a1caff5",
+      "sha256": "a673af69a95be7ee0eab891aee86e33b1920a4b752f5509ed61c556c1cd39cd5",
       "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget; revised after independent review on October 9, 2026 (still prepared, not deployed)"
     },
     {
@@ -39,7 +39,7 @@
     },
     {
       "path": "production/quote/tests/regression.mjs",
-      "sha256": "843e695b3f9a051cdaacaaeba18e2020c4a44fc679234a68734713beeaa7c41c",
+      "sha256": "e1e70b4a527a37e583d485c200923c327da451f1152d3a8f8d7935b734fa671a",
       "source": "releases/2026-09-21-quote-icon-installation/quote/regression-check.mjs; October 5, 2026 owner-approved change: quote-progress milestones mirrored to the Meta pixel; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget; revised after independent review on October 9, 2026 (still prepared, not deployed)"
     },
     {
@@ -214,7 +214,7 @@
     },
     {
       "path": "production/verify-manifest.mjs",
-      "sha256": "c0a9748588d02d37c1f91f3cb2903f91c69219a58dbd6bbfe3a670a8ad5faa56",
+      "sha256": "30c3203e90a78a0f2e0979fc9b71d86f92f49c0133786177722d7d0ea0009600",
       "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget; revised after independent review on October 9, 2026 (still prepared, not deployed)"
     },
     {

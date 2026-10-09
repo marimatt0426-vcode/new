@@ -18,7 +18,7 @@ assert.equal(sha(fs.readFileSync(path.join(here, 'quote/tests/fixtures/2026-10-0
   'Regression reference is not the October 5 pixel step release');
 // Prepared October 9, 2026 candidate: 120-minute first cleanup, widget retired. Not deployed.
 assert.equal(sha(fs.readFileSync(path.join(here, 'quote/dist/worker.mjs'))),
-  '29b8d2023760fbb33291576ba7c870c54b162c575be1592c1b43675d821e320b',
+  '218d647a6a1db88b18dcceae723ddbca90aebeded2b2d65626641749fd46fc14',
   'Quote rebuild differs from the prepared October 9 candidate; run npm run build, or reconcile before updating this hash');
 const metadata = JSON.parse(fs.readFileSync(path.join(here, 'website/pages/metadata.json')));
 assert.equal(metadata.routes.length, 27);

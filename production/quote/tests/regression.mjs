@@ -18,7 +18,7 @@
 //      protected code blocks (ledger, saved-plan store, validation and more) equal the
 //      reference.
 //   c. New behaviour: the forward to the quote page, the launcher script, the Meta
-//      guard, the Terms version modes and the saved-link base.
+//      guard, the Terms version flag (accept and flag, never refuse) and the saved-link base.
 //   d. A word sweep of the candidate bundle.
 // Nothing here deploys or contacts any service. Every address and value is made up.
 import fs from 'node:fs';
@@ -60,6 +60,10 @@ const NEW_FIRST_VISIT = {
   newHousehold: 'First visit: Team approval required; if household history is verified as new: quoted visit rate, up to 120 minutes included',
   returning: OLD_FIRST_VISIT.other
 };
+// The one-time Voice AI answer: one sentence takes the approved policy wording. Numbers and field names unchanged.
+const OLD_VOICE_ONE_TIME_SENTENCE = 'The base deposit is charged when the ETA text goes out.';
+const NEW_VOICE_ONE_TIME_SENTENCE = 'The $89.99 base is charged when we text that we are on the way.';
+const NEW_VOICE_ONE_TIME_MESSAGE = '$89.99 covers the first 30 minutes of one-time cleanup labor. The $89.99 base is charged when we text that we are on the way. Additional labor after 30 minutes is billed after cleanup at $1 per minute. Service approval is still required.';
 const DEFAULT_QUOTE_PAGE = 'https://itspurgepros.com/quote';
 // Saved-plan links are NOT an approved difference: by default they keep the October 5 form,
 // which is the only form the quote builder accepts when it creates a link (its SAVE_LINK_PATTERN).
@@ -78,6 +82,7 @@ const APPROVED = [
   ['forward.quoteSummary team note', 'the one first-cleanup sentence is replaced by the approved 120-minute team note'],
   ['forward.quoteSummary first-visit line', 'names the case for a new household, a one-time cleanup and a custom request; unchanged for a returning or unsure household; every other line identical'],
   ['voice-quote nextStep (recurring price)', 'the instruction describes the 120-minute rule and the 30-minute restart; every other field identical'],
+  ['voice-quote message (one-time price)', 'one sentence: "The base deposit is charged when the ETA text goes out." becomes "The $89.99 base is charged when we text that we are on the way."; every other word and field identical'],
   ['GET /purge-quote.js', 'the retired widget is replaced by the launcher script; same headers'],
   ['GET quote and demo pages', `GET ${FORWARD_PATHS.join(', ')} answer 302 to the quote page with the query string kept`],
   ['Meta result log line', 'one structured console line per Meta copy sent (status, count received, trace id)']
@@ -308,10 +313,13 @@ function protectWithApprovedLines(label, before, after, approvedLines) {
   protect(label, before, restored);
 }
 const text = value => JSON.stringify(value.slice('First visit: '.length));
-protectWithApprovedLines('Voice AI price answer (apart from the one approved instruction)',
+protectWithApprovedLines('Voice AI price answer (apart from the approved instruction and the approved one-time sentence)',
   slice(referenceSource, 'function voiceQuoteResponse(', 'function privateJsonResponse(', 'voice answer'),
   slice(candidateSource, 'function voiceQuoteResponse(', 'function privateJsonResponse(', 'voice answer'),
-  [[JSON.stringify(NEW_VOICE_STEP), JSON.stringify(OLD_VOICE_STEP)]]);
+  [
+    [JSON.stringify(NEW_VOICE_STEP), JSON.stringify(OLD_VOICE_STEP)],
+    ['The ${price} base is charged when we text that we are on the way.', OLD_VOICE_ONE_TIME_SENTENCE]
+  ]);
 protectWithApprovedLines('forward builder: consent, attribution, contact and every forwarded key (apart from the approved lines)',
   slice(referenceSource, 'function buildV3Forward(', 'async function handleReviews(', 'forward builder'),
   slice(candidateSource, 'function buildV3Forward(', 'async function handleReviews(', 'forward builder'),
@@ -322,30 +330,15 @@ protectWithApprovedLines('forward builder: consent, attribution, contact and eve
     [`  const firstVisit = quote.custom ? ${text(NEW_FIRST_VISIT.custom)} : quote.frequencyId === "onetime" ? ${text(NEW_FIRST_VISIT.onetime)} : newHousehold ? ${text(NEW_FIRST_VISIT.newHousehold)} : ${text(NEW_FIRST_VISIT.returning)};\n`, ''],
     ['    `First visit: ${firstVisit}`,', `    \`First visit: \${quote.frequencyId === "onetime" ? ${text(OLD_FIRST_VISIT.onetime)} : ${text(OLD_FIRST_VISIT.other)}}\`,`],
     ['    ' + JSON.stringify(NEW_TEAM_NOTE) + ',', '    ' + JSON.stringify(OLD_TEAM_NOTE) + ','],
-    ['    termsCheck.outdated ? `Terms version check: the customer accepted Terms version ${termsVersion}; the current version is ${termsCheck.current}. Confirm the current Terms with the customer before approval.` : "",\n', ''],
+    ['    termsCheck.outdated ? `Terms version check: the customer accepted Terms version ${termsCheck.accepted}; the current version is ${termsCheck.current}. Confirm the current Terms with the customer before approval.` : "",\n', ''],
     [`    offerVersion: "${NEW_VERSION}",`, `    offerVersion: "${OLD_VERSION}",`],
     [`    cleanupPolicyVersion: "${NEW_VERSION}",`, `    cleanupPolicyVersion: "${OLD_VERSION}",`],
     ['    promotionalAdditionalMinuteCents: null,\n    newCustomerCleanupIncludedMinutes: newHousehold ? 120 : null,\n    newCustomerExtraTimeRequiresAgreement: newHousehold ? true : null,', '    promotionalAdditionalMinuteCents: quote.custom || quote.frequencyId === "onetime" ? null : 0,']
   ]);
-protectWithApprovedLines('request intake: origin, size, JSON, validation order and dispatch (apart from the Terms version check)',
+protectWithApprovedLines('request intake: origin, size, JSON, validation order and dispatch (apart from handing the settings to the forward builder)',
   slice(referenceSource, 'async function handleLeadSubmission(', '// Isolated plan-only save links.', 'intake'),
   slice(candidateSource, 'async function handleLeadSubmission(', '// Isolated plan-only save links.', 'intake'),
   [
-    [`    const termsCheck = termsVersionCheck(env, validation.values.intent, cleanString(lead.termsVersion, 80));
-    if (termsCheck.refuse) {
-      // Countable in the log; never the customer's details or the text they sent.
-      try {
-        console.log(JSON.stringify({ event: "terms_version_refused", requestId, stage: validation.values.expectedStage, currentTermsVersion: termsCheck.current }));
-      } catch (_) {
-      }
-      return jsonResponse(400, {
-        accepted: false,
-        code: "TERMS_VERSION_OUTDATED",
-        message: "Our Terms & Conditions have been updated. Please reload this page, review the current terms and send your request again. Nothing has been scheduled or charged by this form.",
-        fields: ["termsAccepted"]
-      }, cors);
-    }
-`, ''],
     ['    forward = buildV3Forward(lead, validation.values, requestId, request, env);', '    forward = buildV3Forward(lead, validation.values, requestId, request);']
   ]);
 {
@@ -363,6 +356,61 @@ protectWithApprovedLines('request intake: origin, size, JSON, validation order a
   protectWithApprovedLines('router: saved-plan, voice and script addresses',
     beforeHead.slice(0, beforeHead.indexOf(PAGES_START)), after.slice(0, after.indexOf(ROUTER_TAIL)),
     [['launcherScript(env)', 'widgetScript(request, env)'], [FORWARD_LINE, '']]);
+}
+
+// The forward to the quote page is new code, so there is no October 5 text to compare it with.
+// It is pinned to the reviewed text instead: the default target, the forwarded addresses, the
+// check of a configured address and the forward itself. The target comes from configuration only.
+// Any edit here (for example letting a visitor's ?to= value choose the target) fails until this
+// text is deliberately updated with it.
+const REVIEWED_FORWARD_BLOCK = String.raw`var DEFAULT_QUOTE_PAGE_URL = "https://itspurgepros.com/quote";
+// Saved-plan links keep the October 5 form by default: it is the only form the quote builder
+// accepts when it creates a link, and the quote host forwards it to the quote page.
+var DEFAULT_SAVED_LINK_BASE = "https://quote.itspurgepros.com/";
+var QUOTE_FORWARD_PATHS = /* @__PURE__ */ new Set(["/", "/quote", "/quote/", "/demo", "/demo.html"]);
+function configuredHttpsUrl(value, fallback) {
+  const text = typeof value === "string" ? value.trim() : "";
+  if (text) {
+    try {
+      const parsed = new URL(text);
+      if (parsed.protocol === "https:" && !parsed.username && !parsed.password) {
+        parsed.hash = "";
+        return parsed;
+      }
+    } catch (_) {
+    }
+  }
+  return new URL(fallback);
+}
+__name(configuredHttpsUrl, "configuredHttpsUrl");
+function quotePageUrl(env) {
+  return configuredHttpsUrl(env && env.QUOTE_PAGE_URL, DEFAULT_QUOTE_PAGE_URL);
+}
+__name(quotePageUrl, "quotePageUrl");
+function savedLinkBase(env) {
+  const base = configuredHttpsUrl(env && env.SAVED_LINK_BASE, DEFAULT_SAVED_LINK_BASE);
+  base.search = "";
+  return base.href;
+}
+__name(savedLinkBase, "savedLinkBase");
+function quotePageRedirect(request, env) {
+  const url = new URL(request.url);
+  let target = quotePageUrl(env);
+  // The target comes from configuration only. A target on this Worker's own host would loop.
+  if (target.host === url.host) target = new URL(DEFAULT_QUOTE_PAGE_URL);
+  if (target.host === url.host) return new Response("Not found", { status: 404 });
+  if (url.search.length > 1) target.search = target.search ? target.search + "&" + url.search.slice(1) : url.search;
+  return new Response(null, {
+    status: 302,
+    headers: { "Location": target.href, "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" }
+  });
+}
+__name(quotePageRedirect, "quotePageRedirect");
+`;
+protect('forward to the quote page: target from configuration only (reviewed text)',
+  REVIEWED_FORWARD_BLOCK, slice(candidateSource, 'var DEFAULT_QUOTE_PAGE_URL = ', 'function launcherScript(', 'forward helper'));
+for (const gone of ['TERMS_VERSION_MODE', 'TERMS_VERSION_OUTDATED', 'terms_version_refused', 'refuse']) {
+  assert.ok(!candidateSource.includes(gone), `The refuse mode was removed (accept and flag, never refuse): ${gone}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -567,6 +615,14 @@ function expectedFromReference(spec, ref) {
       body.nextStep = NEW_VOICE_STEP;
       expected.text = JSON.stringify(body);
       count('voice-quote nextStep (recurring price)');
+    }
+    if (body.result === 'standard_price' && body.pricingScope === 'one_time_cleanup') {
+      assert.equal(body.price, '$89.99');
+      assert.equal(body.message.split(OLD_VOICE_ONE_TIME_SENTENCE).length, 2, 'reference one-time answer lacks the old sentence');
+      body.message = body.message.replace(OLD_VOICE_ONE_TIME_SENTENCE, () => NEW_VOICE_ONE_TIME_SENTENCE);
+      assert.equal(body.message, NEW_VOICE_ONE_TIME_MESSAGE);
+      expected.text = JSON.stringify(body);
+      count('voice-quote message (one-time price)');
     }
   }
   if (url.pathname === '/quote-resume' && ref.status === 201) {
@@ -871,6 +927,15 @@ await differential(BARE, 20261005, 200, ORIGINS.slice(0, 2));
     const answer = JSON.parse(cand.text);
     assert.deepEqual([cand.status, answer.result, answer.frequencyId, answer.pricingScope, answer.nextStep], [200, 'standard_price', frequencyId, 'recurring_maintenance', NEW_VOICE_STEP], 'voice price: ' + said);
   }
+  { // Voice AI one-time price: the approved sentence, and every returned field name and number as on October 5.
+    const { ref, cand } = await compare(mainWorlds, 'voice price request, fixed', voiceSpec({ zip: serviceZips[0], serviceType: 'one-time', propertyType: 'residential', dogs: 2, areas: ['back'], yardSize: 's', frequency: 'not_applicable' }, 'made-up-voice-token', { seed: 5 }));
+    const answer = JSON.parse(cand.text);
+    const before = JSON.parse(ref.text);
+    assert.deepEqual([cand.status, answer.result, answer.pricingScope, answer.price, answer.priceCents, answer.priceDescription, answer.message], [200, 'standard_price', 'one_time_cleanup', '$89.99', 8999, '$89.99 for the first 30 minutes', NEW_VOICE_ONE_TIME_MESSAGE]);
+    assert.deepEqual(Object.keys(answer), Object.keys(before), 'one-time voice answer: field names and order');
+    assert.deepEqual({ ...answer, message: null }, { ...before, message: null }, 'one-time voice answer: only the message differs');
+    for (const retired of ['base deposit', 'ETA text']) assert.ok(!cand.text.includes(retired), 'one-time voice answer still says: ' + retired);
+  }
 }
 // The current-format intake address never falls back to the legacy webhook address.
 for (const vars of [{ ...PRODUCTION_LIKE, GHL_WEBHOOK_URL_V3: '' }, { GHL_WEBHOOK_URL: HOOK_LEGACY, VOICE_AI_QUOTE_TOKEN: 'made-up-voice-token' }]) {
@@ -942,9 +1007,30 @@ const get = (url, vars = PRODUCTION_LIKE) => once(vars, { method: 'GET', url, he
   for (const pathname of ['//evil.example/quote', '/quote/https://evil.example', '/%2F%2Fevil.example', '/quote%2f..%2f', '/QUOTE', '/quote.html']) {
     assert.equal((await get(QUOTE_HOST + pathname)).status, 404, `${pathname} must not forward`);
   }
+  // A target-shaped value a visitor supplies never chooses the target. It only rides along in the query string.
+  const riders = ['to', 'url', 'next', 'redirect', 'redirect_uri', 'return', 'returnTo', 'target', 'dest', 'destination', 'goto', 'continue', 'u', 'r', 'QUOTE_PAGE_URL', 'quotePageUrl'];
+  const values = ['https://evil.example', 'https://evil.example/quote', '//evil.example', 'https%3A%2F%2Fevil.example', 'evil.example', 'https://itspurgepros.com.evil.example/quote'];
+  let riderCases = 0;
+  for (const [vars, page] of [[PRODUCTION_LIKE, DEFAULT_QUOTE_PAGE], [{ ...PRODUCTION_LIKE, QUOTE_PAGE_URL: 'https://staging.example.test/quote-test' }, 'https://staging.example.test/quote-test']]) {
+    for (const pathname of FORWARD_PATHS) for (const name of riders) for (const value of values) {
+      const search = `?${name}=${value}&gclid=abc`;
+      const result = await get(QUOTE_HOST + pathname + search, vars);
+      assert.equal(result.status, 302, pathname + search);
+      assert.equal(result.headers.location, page + search, `${pathname}${search}: the target is the configured page and the value only rides along`);
+      const location = new URL(result.headers.location);
+      assert.equal(location.origin + location.pathname, page, pathname + search);
+      assert.equal(location.searchParams.get(name), decodeURIComponent(value), pathname + search);
+      riderCases += 1;
+    }
+  }
+  // The same value sent twice, and as the only thing in the query.
+  assert.equal((await get(QUOTE_HOST + '/quote?to=https://evil.example&to=//evil.example')).headers.location, DEFAULT_QUOTE_PAGE + '?to=https://evil.example&to=//evil.example');
+  assert.equal((await get(QUOTE_HOST + '/?url=https://evil.example')).headers.location, DEFAULT_QUOTE_PAGE + '?url=https://evil.example');
+  // A configured page that has its own query keeps it first; the visitor's value is appended, never the target.
+  assert.equal((await get(QUOTE_HOST + '/quote?to=https://evil.example', { ...PRODUCTION_LIKE, QUOTE_PAGE_URL: 'https://staging.example.test/page?preview=1' })).headers.location, 'https://staging.example.test/page?preview=1&to=https://evil.example');
   const spoofed = await once(PRODUCTION_LIKE, { method: 'GET', url: 'https://evil.example/quote?x=1', headers: { 'X-Forwarded-Host': 'evil.example', 'Referer': 'https://evil.example/' } });
   assert.equal(spoofed.headers.location, DEFAULT_QUOTE_PAGE + '?x=1');
-  newBehaviour.forward = `GET ${FORWARD_PATHS.join(', ')} answer 302 with the whole query kept; default and overridden target; ${attempts.length} open-redirect attempts all stay on the configured page`;
+  newBehaviour.forward = `GET ${FORWARD_PATHS.join(', ')} answer 302 with the whole query kept; default and overridden target; ${attempts.length} open-redirect attempts all stay on the configured page; ${riderCases} visitor-supplied target values (?to=, ?url= and ${riders.length - 2} more names) only ride along in the query string; the helper is pinned to its reviewed text`;
 }
 
 function runLauncher(script, { href, existing, stored }) {
@@ -1100,74 +1186,100 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
   newBehaviour.meta = 'production unset: sent as before and answer logged; staging (any mark except 0 or false) without a test code, or with a blank one: nothing sent; staging with a test code: sent with test_event_code; refusal and network failure logged; no personal data or secret in the log line';
 }
 
-{ // 4. Terms version: unset, flag and refuse.
+{ // 4. Terms version: accept and flag, never refuse.
   const CURRENT = '2026-10-15-example-terms';
   const termsRun = (vars, lead) => once({ ...PRODUCTION_LIKE, ...vars }, submitSpec(lead));
   const noteLine = `Terms version check: the customer accepted Terms version ${OLD_VERSION}; the current version is ${CURRENT}. Confirm the current Terms with the customer before approval.`;
+  const withoutFlag = summary => summary.split('\n').filter(line => !line.startsWith('Terms version check')).join('\n');
   // Unset: today's behaviour, any version is recorded as sent.
-  let result = await termsRun({}, serviceLead());
+  const plain = await termsRun({}, serviceLead());
+  assert.equal(plain.status, 202);
+  assert.ok(!plain.outgoing[0].body.quoteSummary.includes('Terms version check'));
+  // Current version sent: accepted, no extra line.
+  let result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT }, serviceLead({ termsVersion: CURRENT }));
   assert.equal(result.status, 202);
+  assert.equal(result.outgoing[0].body.termsVersion, CURRENT);
   assert.ok(!result.outgoing[0].body.quoteSummary.includes('Terms version check'));
-  // Current version sent: accepted, no extra line, in both modes.
-  for (const mode of [undefined, 'flag', 'refuse']) {
-    result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT, TERMS_VERSION_MODE: mode }, serviceLead({ termsVersion: CURRENT }));
-    assert.equal(result.status, 202);
-    assert.equal(result.outgoing[0].body.termsVersion, CURRENT);
-    assert.ok(!result.outgoing[0].body.quoteSummary.includes('Terms version check'));
-  }
-  // Flag (the default once a current version is set): accepted, and the team note says which version was accepted.
-  for (const mode of [undefined, 'flag', 'FLAG', 'anything-else', '']) {
-    result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT, TERMS_VERSION_MODE: mode }, serviceLead());
-    assert.equal(result.status, 202, `flag mode (${mode})`);
+  // Another version sent: accepted exactly as normal. The answer, the log, every outgoing call and every
+  // forwarded key equal the run with nothing configured; the only difference is one line of the team note.
+  // The retired setting is not read: no value of it changes anything.
+  for (const retiredSetting of [undefined, 'flag', 'refuse', 'REFUSE', ' refuse ']) {
+    result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT, TERMS_VERSION_MODE: retiredSetting }, serviceLead());
+    assert.deepEqual([result.status, result.headers, result.text, result.logs], [plain.status, plain.headers, plain.text, plain.logs], `an older Terms version is never refused (${retiredSetting})`);
+    assert.equal(result.outgoing.length, plain.outgoing.length);
     const forwarded = result.outgoing[0].body;
     assert.equal(forwarded.termsVersion, OLD_VERSION, 'the version the customer accepted is recorded as sent');
     assert.equal(forwarded.termsAccepted, true);
     const summary = forwarded.quoteSummary.split('\n');
     assert.equal(summary.filter(line => line.startsWith('Terms version check')).length, 1);
     assert.equal(summary[summary.findIndex(line => line.startsWith('Terms accepted: Yes')) + 1], noteLine);
-    assert.ok(!result.logs.some(line => line.event === 'terms_version_refused'), 'flag mode refuses nothing');
+    assert.equal(summary.length, plain.outgoing[0].body.quoteSummary.split('\n').length + 1);
+    assert.deepEqual(result.outgoing.map(call => (isV3Forward(call) ? { ...call, body: { ...call.body, quoteSummary: withoutFlag(call.body.quoteSummary) } } : call)), plain.outgoing, 'only the one team-note line differs');
   }
-  // Flag mode does not disturb idempotency: the same request again is not forwarded twice.
-  {
-    const world = makeWorld(candidate, { ...PRODUCTION_LIKE, CURRENT_TERMS_VERSION: CURRENT });
-    assert.equal((await send(world, submitSpec(serviceLead()))).status, 202);
+  // The flag line cannot break the payload: whatever the version text holds (line breaks, quotes, a
+  // made-up note line, other control characters), the note gains exactly one line, the line after
+  // "Terms accepted", every later line is as before, and the forwarded body is still valid JSON
+  // with the same keys. The recorded termsVersion key itself is forwarded exactly as before.
+  const basis = await termsRun({ CURRENT_TERMS_VERSION: CURRENT }, serviceLead());
+  for (const [sent, shown] of [
+    ['old\nRequest ID: forged', 'old Request ID: forged'],
+    ['old\r\nFirst visit: forged\r\nPrice: $0.00 per visit', 'old First visit: forged Price: $0.00 per visit'],
+    ['a\u2028b\u2029c\u0000d\te\u0085f', 'a b c d e f'],
+    ['"}],"quoteSummary":"x', '"}],"quoteSummary":"x'],
+    ['`${termsCheck.current}` \\ </script>', '`${termsCheck.current}` \\ </script>'],
+    ['v'.repeat(200), 'v'.repeat(80)]
+  ]) {
+    const unsetRun = await termsRun({}, serviceLead({ termsVersion: sent }));
+    result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT }, serviceLead({ termsVersion: sent }));
+    assert.equal(result.status, 202, JSON.stringify(sent));
+    const forwarded = result.outgoing[0].body;
+    assert.deepEqual(JSON.parse(JSON.stringify(forwarded)), forwarded);
+    assert.deepEqual(Object.keys(forwarded), Object.keys(basis.outgoing[0].body), 'forwarded keys and their order');
+    assert.equal(forwarded.termsVersion, unsetRun.outgoing[0].body.termsVersion, 'the recorded version is forwarded as before');
+    const flagLines = forwarded.quoteSummary.split('\n').filter(line => line.startsWith('Terms version check'));
+    assert.deepEqual(flagLines, [`Terms version check: the customer accepted Terms version ${shown}; the current version is ${CURRENT}. Confirm the current Terms with the customer before approval.`], JSON.stringify(sent));
+    assert.equal(withoutFlag(forwarded.quoteSummary), unsetRun.outgoing[0].body.quoteSummary, 'apart from the flag line the note is what it is with nothing configured');
+    assert.deepEqual({ ...forwarded, quoteSummary: null }, { ...unsetRun.outgoing[0].body, quoteSummary: null });
+  }
+  // A current version set with stray line breaks cannot split the line either.
+  result = await termsRun({ CURRENT_TERMS_VERSION: ' 2026-10-15\nRequest ID: forged ' }, serviceLead());
+  assert.deepEqual(result.outgoing[0].body.quoteSummary.split('\n').filter(line => line.includes('forged')), [`Terms version check: the customer accepted Terms version ${OLD_VERSION}; the current version is 2026-10-15 Request ID: forged. Confirm the current Terms with the customer before approval.`]);
+  // A retried, already accepted request behaves exactly as with nothing configured: answered from the
+  // ledger, never forwarded twice, never refused. That holds when the current version is set or changed
+  // between the first send and the retry, in either direction, because nothing is checked before the ledger.
+  const replayed = async (firstVars, retryVars) => {
+    const world = makeWorld(candidate, { ...PRODUCTION_LIKE, ...firstVars });
+    const first = await send(world, submitSpec(serviceLead()));
+    Object.keys(firstVars).forEach(key => delete world.env[key]);
+    Object.assign(world.env, retryVars);
     const again = await send(world, submitSpec(serviceLead()));
-    assert.deepEqual([again.status, again.outgoing.length], [202, 0]);
+    assert.deepEqual([first.status, first.outgoing.filter(isV3Forward).length], [202, 1]);
+    return { status: again.status, headers: again.headers, text: again.text, outgoing: again.outgoing, logs: again.logs };
+  };
+  const normalRetry = await replayed({}, {});
+  assert.deepEqual([normalRetry.status, normalRetry.outgoing.length], [202, 0]);
+  for (const [firstVars, retryVars] of [
+    [{ CURRENT_TERMS_VERSION: CURRENT }, { CURRENT_TERMS_VERSION: CURRENT }],
+    [{}, { CURRENT_TERMS_VERSION: CURRENT }],
+    [{ CURRENT_TERMS_VERSION: CURRENT }, {}],
+    [{ CURRENT_TERMS_VERSION: CURRENT }, { CURRENT_TERMS_VERSION: '2026-11-01-later-example' }],
+    [{}, { CURRENT_TERMS_VERSION: CURRENT, TERMS_VERSION_MODE: 'refuse' }]
+  ]) assert.deepEqual(await replayed(firstVars, retryVars), normalRetry, `retry of an accepted request: ${JSON.stringify([firstVars, retryVars])}`);
+  // Requests that accept no Terms get no line; a custom estimate request and the legacy intake address follow the same rule.
+  for (const lead of [makeLead(generator(8), 'recurring', 'quote_delivery', { preferredContact: 'email' }), makeLead(generator(9), 'recurring', 'question', { preferredContact: 'email' })]) {
+    result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT }, lead);
+    assert.equal(result.status, 202);
+    assert.ok(!result.outgoing[0].body.quoteSummary.includes('Terms version check'));
   }
-  // Refuse: a clear answer the builder can show against the terms box, and nothing is forwarded or stored.
-  for (const mode of ['refuse', 'REFUSE', ' refuse ']) {
-    const world = makeWorld(candidate, { ...PRODUCTION_LIKE, CURRENT_TERMS_VERSION: CURRENT, TERMS_VERSION_MODE: mode });
-    result = await send(world, submitSpec(serviceLead()));
-    assert.equal(result.status, 400);
-    assert.deepEqual(JSON.parse(result.text), {
-      accepted: false,
-      code: 'TERMS_VERSION_OUTDATED',
-      message: 'Our Terms & Conditions have been updated. Please reload this page, review the current terms and send your request again. Nothing has been scheduled or charged by this form.',
-      fields: ['termsAccepted']
-    });
-    assert.equal(result.outgoing.length, 0, 'refuse mode forwards nothing');
-    assert.equal(world.objects.size, 0, 'refuse mode stores nothing');
-    // A refusal is countable in the log: one line, four fields, nothing about the customer.
-    assert.deepEqual(result.logs, [{ event: 'terms_version_refused', requestId: 'req-new-behaviour', stage: 'service_requested', currentTermsVersion: CURRENT }]);
-    assert.deepEqual(Object.keys(result.logs[0]), ['event', 'requestId', 'stage', 'currentTermsVersion']);
-    const refusedLead = serviceLead();
-    for (const personal of [refusedLead.firstName, refusedLead.lastName, refusedLead.email, refusedLead.street, refusedLead.phone.replace(/\D/g, '').slice(-10), OLD_VERSION]) assert.ok(!JSON.stringify(result.logs).includes(personal), `refusal log line leaks ${personal}`);
-    // Requests that accept no Terms are not affected.
-    const copy = await send(world, submitSpec(makeLead(generator(8), 'recurring', 'quote_delivery', { preferredContact: 'email' })));
-    const question = await send(world, submitSpec(makeLead(generator(9), 'recurring', 'question', { preferredContact: 'email' })));
-    assert.deepEqual([copy.status, question.status], [202, 202]);
-    assert.deepEqual([copy.logs.length, question.logs.length], [0, 0]);
-    // Ordinary validation still answers first.
-    const invalid = await send(world, submitSpec(serviceLead({ firstName: '' })));
-    assert.deepEqual(JSON.parse(invalid.text).fields, ['firstName']);
-  }
-  // A custom estimate request also accepts the Terms, so it is covered too.
-  result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT, TERMS_VERSION_MODE: 'refuse' }, makeLead(generator(12), 'custom', 'service_request'));
-  assert.equal(result.status, 400);
-  // The legacy intake address follows the same rule for a current-format request.
-  result = await once({ ...PRODUCTION_LIKE, CURRENT_TERMS_VERSION: CURRENT, TERMS_VERSION_MODE: 'refuse' }, { ...submitSpec(serviceLead()), url: WORKER + '/' });
-  assert.deepEqual([result.status, result.outgoing.length], [400, 0]);
-  newBehaviour.terms = 'unset: any version recorded as before; flag (default): accepted and one line added to the team note; refuse: 400 TERMS_VERSION_OUTDATED with fields ["termsAccepted"], nothing forwarded or stored, one log line without personal data';
+  result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT }, makeLead(generator(12), 'custom', 'service_request'));
+  assert.deepEqual([result.status, result.outgoing[0].body.quoteSummary.split('\n').filter(line => line.startsWith('Terms version check')).length], [202, 1]);
+  result = await once({ ...PRODUCTION_LIKE, CURRENT_TERMS_VERSION: CURRENT }, { ...submitSpec(serviceLead()), url: WORKER + '/' });
+  assert.deepEqual([result.status, result.outgoing.filter(isV3Forward).length], [202, 1]);
+  assert.ok(result.outgoing.find(isV3Forward).body.quoteSummary.includes(noteLine));
+  // Ordinary validation is unchanged: Terms not accepted, or no version at all, is still answered 400.
+  result = await termsRun({ CURRENT_TERMS_VERSION: CURRENT }, serviceLead({ termsVersion: '' }));
+  assert.deepEqual([result.status, JSON.parse(result.text).fields, result.outgoing.length], [400, ['termsAccepted'], 0]);
+  newBehaviour.terms = 'accept and flag, never refuse. CURRENT_TERMS_VERSION unset: any version recorded as before. Set: a service request with another version is accepted exactly as normal (same answer, same forwarded keys) and the team note gains one line naming the version accepted and the current one; the line stays one line whatever the version text holds; a retried, already accepted request is answered from the ledger as before; no refusal answer, log line or setting remains';
 }
 
 { // 5. Saved-link base.
