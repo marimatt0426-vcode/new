@@ -1,0 +1,29 @@
+{
+  "name": "purge-lead-relay-v5-staging",
+  "main": "dist/worker.mjs",
+  "compatibility_date": "2026-06-12",
+  "workers_dev": true,
+  "preview_urls": false,
+  "vars": {
+    "STAGING": "1",
+    "QUOTE_PAGE_URL": "https://replace-with-the-staging-quote-page.invalid/quote",
+    "SAVED_LINK_BASE": "https://replace-with-the-staging-quote-page.invalid/quote",
+    "ALLOWED_ORIGINS": "https://replace-with-the-staging-page-origin.invalid"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "QUOTE_REQUESTS",
+        "class_name": "QuoteRequestLedger"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v5-staging-quote-request-ledger-v1",
+      "new_sqlite_classes": [
+        "QuoteRequestLedger"
+      ]
+    }
+  ]
+}
