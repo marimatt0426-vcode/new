@@ -52,9 +52,18 @@ const OLD_TEAM_NOTE = 'Initial/restart: quoted recurring rate includes 30 minute
 const NEW_TEAM_NOTE = 'First cleanup: NEW recurring household = quoted visit rate, up to 120 minutes included; time beyond 120 minutes only at $1/min agreed with the customer BEFORE work starts. RETURNING or unclear history = restart: quoted rate includes 30 minutes, then $1/min, billed after. Base charged at ETA text. Ordinary visits are never billed by the minute. Verify household history and existing promises before approval; never add a second maintenance charge.';
 const OLD_VOICE_STEP = 'This is a recurring maintenance quote, not an approved first-cleanup price. Ask whether the household has used Purge Pros before. Returning, uncertain-history and new-occupant requests require Submit Team Follow-Up Request for review. New-customer promotion eligibility also requires team verification: approved promotional first cleanups have NO additional-time charge. Standard initial/restart cleanup uses the quoted recurring rate for 30 minutes plus $1 per extra minute, billed after cleanup; base at ETA. Ordinary maintenance stays at the agreed rate regardless of time. Never add a second maintenance charge. Do not call service scheduled or confirmed until the team approves it.';
 const NEW_VOICE_STEP = 'This is a recurring maintenance quote, not an approved first-cleanup price. Ask whether the household has used Purge Pros before. Returning, uncertain-history and new-occupant requests require Submit Team Follow-Up Request for review. New-household status also requires team verification of service history, once per household. New recurring households: first cleanup at the quoted rate with up to 120 minutes included; time beyond 120 minutes is $1 per minute, agreed before work starts. Returning or unclear-history households: restart at the quoted rate for 30 minutes plus $1 per extra minute, billed after cleanup; base at ETA. Ordinary maintenance stays at the agreed rate regardless of time. Never add a second maintenance charge. Never promise a free or unlimited first cleanup. Do not call service scheduled or confirmed until the team approves it.';
-const OLD_LINK_PREFIX = 'https://quote.itspurgepros.com/#resume=';
+const OLD_FIRST_VISIT = { onetime: 'First visit: One-time base price plus approved extra time', other: 'First visit: Team approval required; maintenance quote is not a confirmed restart charge' };
+// The first-visit line now says which case the request is. A returning or unsure household keeps the October 5 text.
+const NEW_FIRST_VISIT = {
+  custom: 'First visit: Team approval required; price and first-cleanup terms are set by the custom review',
+  onetime: 'First visit: One-time cleanup: base price covers the first 30 minutes, then $1/min, billed after the cleanup',
+  newHousehold: 'First visit: Team approval required; if household history is verified as new: quoted visit rate, up to 120 minutes included',
+  returning: OLD_FIRST_VISIT.other
+};
 const DEFAULT_QUOTE_PAGE = 'https://itspurgepros.com/quote';
-const NEW_LINK_PREFIX = DEFAULT_QUOTE_PAGE + '#resume=';
+// Saved-plan links are NOT an approved difference: by default they keep the October 5 form,
+// which is the only form the quote builder accepts when it creates a link (its SAVE_LINK_PATTERN).
+const BUILDER_SAVE_LINK_PATTERN = /^https:\/\/quote\.itspurgepros\.com\/#resume=[A-Za-z0-9_-]{43}$/;
 const FORWARD_PATHS = ['/', '/quote', '/quote/', '/demo', '/demo.html'];
 const NEW_FORWARD_KEYS = ['newCustomerCleanupIncludedMinutes', 'newCustomerExtraTimeRequiresAgreement'];
 // Key names that stay as they are so nothing mapped downstream breaks.
@@ -64,11 +73,11 @@ const APPROVED = [
   ['forward.offerVersion', `"${OLD_VERSION}" becomes "${NEW_VERSION}"`],
   ['forward.cleanupPolicyVersion', `"${OLD_VERSION}" becomes "${NEW_VERSION}"`],
   ['forward.promotionalAdditionalMinuteCents', 'key kept; 0 becomes null for a recurring non-custom request (already null otherwise)'],
-  ['forward.newCustomerCleanupIncludedMinutes', 'new key: 120 for a recurring non-custom request, null otherwise'],
-  ['forward.newCustomerExtraTimeRequiresAgreement', 'new key: true for a recurring non-custom request, null otherwise'],
-  ['forward.quoteSummary team note', 'the one first-cleanup sentence is replaced by the approved 120-minute team note; every other line identical'],
+  ['forward.newCustomerCleanupIncludedMinutes', 'new key: 120 only for a recurring non-custom request from a household that said it is new; null for returning, unsure, one-time and custom'],
+  ['forward.newCustomerExtraTimeRequiresAgreement', 'new key: true only for a recurring non-custom request from a household that said it is new; null otherwise'],
+  ['forward.quoteSummary team note', 'the one first-cleanup sentence is replaced by the approved 120-minute team note'],
+  ['forward.quoteSummary first-visit line', 'names the case for a new household, a one-time cleanup and a custom request; unchanged for a returning or unsure household; every other line identical'],
   ['voice-quote nextStep (recurring price)', 'the instruction describes the 120-minute rule and the 30-minute restart; every other field identical'],
-  ['quote-resume url', `link base "${OLD_LINK_PREFIX}" becomes "${NEW_LINK_PREFIX}" (same token)`],
   ['GET /purge-quote.js', 'the retired widget is replaced by the launcher script; same headers'],
   ['GET quote and demo pages', `GET ${FORWARD_PATHS.join(', ')} answer 302 to the quote page with the query string kept`],
   ['Meta result log line', 'one structured console line per Meta copy sent (status, count received, trace id)']
@@ -152,7 +161,8 @@ globalThis.caches = { default: {
 } };
 const realConsoleLog = console.log;
 console.log = (...args) => {
-  if (active && active.running && typeof args[0] === 'string' && args[0].startsWith('{"event":"meta_capi_result"')) active.logs.push(JSON.parse(args[0]));
+  if (active && active.running && typeof args[0] === 'string' && args[0].startsWith('{"event":"')) active.logs.push(JSON.parse(args[0]));
+  else if (active && active.running) throw new Error('Unexpected console output from the Worker: ' + String(args[0]).slice(0, 80));
   else realConsoleLog(...args);
 };
 
@@ -284,6 +294,75 @@ protect('legacy intake dispatch',
   assert.equal(before.split(SAVED_LINK_OLD_LINE).length, 2);
   assert.equal(after.split(SAVED_LINK_NEW_LINE).length, 2, 'approved saved-link line missing or repeated');
   protect('saved-plan store (apart from the one approved link-base line)', before, after.replace(SAVED_LINK_NEW_LINE, SAVED_LINK_OLD_LINE));
+}
+
+// The four blocks that carry approved edits are protected too: every approved line is put back
+// (each must be present exactly once) and the rest must be byte-equal to the October 5 release.
+// A later edit anywhere in these blocks fails here until it is listed as an approved line.
+function protectWithApprovedLines(label, before, after, approvedLines) {
+  let restored = after;
+  for (const [candidateText, referenceText] of approvedLines) {
+    assert.equal(restored.split(candidateText).length, 2, `${label}: approved line missing or repeated: ${candidateText.slice(0, 70)}`);
+    restored = restored.replace(candidateText, () => referenceText);
+  }
+  protect(label, before, restored);
+}
+const text = value => JSON.stringify(value.slice('First visit: '.length));
+protectWithApprovedLines('Voice AI price answer (apart from the one approved instruction)',
+  slice(referenceSource, 'function voiceQuoteResponse(', 'function privateJsonResponse(', 'voice answer'),
+  slice(candidateSource, 'function voiceQuoteResponse(', 'function privateJsonResponse(', 'voice answer'),
+  [[JSON.stringify(NEW_VOICE_STEP), JSON.stringify(OLD_VOICE_STEP)]]);
+protectWithApprovedLines('forward builder: consent, attribution, contact and every forwarded key (apart from the approved lines)',
+  slice(referenceSource, 'function buildV3Forward(', 'async function handleReviews(', 'forward builder'),
+  slice(candidateSource, 'function buildV3Forward(', 'async function handleReviews(', 'forward builder'),
+  [
+    ['function buildV3Forward(lead, values, requestId, request, env) {', 'function buildV3Forward(lead, values, requestId, request) {'],
+    ['  const termsCheck = termsVersionCheck(env, values.intent, termsVersion);\n', ''],
+    ['  const newHousehold = !quote.custom && quote.frequencyId !== "onetime" && values.customerStatus === "new";\n', ''],
+    [`  const firstVisit = quote.custom ? ${text(NEW_FIRST_VISIT.custom)} : quote.frequencyId === "onetime" ? ${text(NEW_FIRST_VISIT.onetime)} : newHousehold ? ${text(NEW_FIRST_VISIT.newHousehold)} : ${text(NEW_FIRST_VISIT.returning)};\n`, ''],
+    ['    `First visit: ${firstVisit}`,', `    \`First visit: \${quote.frequencyId === "onetime" ? ${text(OLD_FIRST_VISIT.onetime)} : ${text(OLD_FIRST_VISIT.other)}}\`,`],
+    ['    ' + JSON.stringify(NEW_TEAM_NOTE) + ',', '    ' + JSON.stringify(OLD_TEAM_NOTE) + ','],
+    ['    termsCheck.outdated ? `Terms version check: the customer accepted Terms version ${termsVersion}; the current version is ${termsCheck.current}. Confirm the current Terms with the customer before approval.` : "",\n', ''],
+    [`    offerVersion: "${NEW_VERSION}",`, `    offerVersion: "${OLD_VERSION}",`],
+    [`    cleanupPolicyVersion: "${NEW_VERSION}",`, `    cleanupPolicyVersion: "${OLD_VERSION}",`],
+    ['    promotionalAdditionalMinuteCents: null,\n    newCustomerCleanupIncludedMinutes: newHousehold ? 120 : null,\n    newCustomerExtraTimeRequiresAgreement: newHousehold ? true : null,', '    promotionalAdditionalMinuteCents: quote.custom || quote.frequencyId === "onetime" ? null : 0,']
+  ]);
+protectWithApprovedLines('request intake: origin, size, JSON, validation order and dispatch (apart from the Terms version check)',
+  slice(referenceSource, 'async function handleLeadSubmission(', '// Isolated plan-only save links.', 'intake'),
+  slice(candidateSource, 'async function handleLeadSubmission(', '// Isolated plan-only save links.', 'intake'),
+  [
+    [`    const termsCheck = termsVersionCheck(env, validation.values.intent, cleanString(lead.termsVersion, 80));
+    if (termsCheck.refuse) {
+      // Countable in the log; never the customer's details or the text they sent.
+      try {
+        console.log(JSON.stringify({ event: "terms_version_refused", requestId, stage: validation.values.expectedStage, currentTermsVersion: termsCheck.current }));
+      } catch (_) {
+      }
+      return jsonResponse(400, {
+        accepted: false,
+        code: "TERMS_VERSION_OUTDATED",
+        message: "Our Terms & Conditions have been updated. Please reload this page, review the current terms and send your request again. Nothing has been scheduled or charged by this form.",
+        fields: ["termsAccepted"]
+      }, cors);
+    }
+`, ''],
+    ['    forward = buildV3Forward(lead, validation.values, requestId, request, env);', '    forward = buildV3Forward(lead, validation.values, requestId, request);']
+  ]);
+{
+  // Router: everything from the reviews address on (intake addresses and their settings) is byte-equal;
+  // before it, the candidate has the launcher in place of the widget and one forward line in place of the two pages.
+  const ROUTER_TAIL = '    if (url.pathname === "/reviews" && request.method === "GET") return handleReviews(request, env);';
+  const before = referenceSource.slice(referenceSource.indexOf('var worker_default = {'));
+  const after = candidateSource.slice(candidateSource.indexOf('var worker_default = {'));
+  assert.ok(before.includes(ROUTER_TAIL) && after.includes(ROUTER_TAIL), 'router tail not found');
+  protect('router: reviews, both intake addresses and their settings', before.slice(before.indexOf(ROUTER_TAIL)), after.slice(after.indexOf(ROUTER_TAIL)));
+  const FORWARD_LINE = '    if (request.method === "GET" && QUOTE_FORWARD_PATHS.has(url.pathname)) return quotePageRedirect(request, env);\n';
+  const PAGES_START = '    const directQuoteHost = url.hostname.toLowerCase() === "quote.itspurgepros.com";\n';
+  const beforeHead = before.slice(0, before.indexOf(ROUTER_TAIL));
+  assert.equal(beforeHead.split(PAGES_START).length, 2);
+  protectWithApprovedLines('router: saved-plan, voice and script addresses',
+    beforeHead.slice(0, beforeHead.indexOf(PAGES_START)), after.slice(0, after.indexOf(ROUTER_TAIL)),
+    [['launcherScript(env)', 'widgetScript(request, env)'], [FORWARD_LINE, '']]);
 }
 
 // ---------------------------------------------------------------------------
@@ -462,10 +541,21 @@ function expectedFromReference(spec, ref) {
     assert.equal(body.promotionalAdditionalMinuteCents, recurringStandard ? 0 : null);
     if (recurringStandard) count('forward.promotionalAdditionalMinuteCents');
     body.promotionalAdditionalMinuteCents = null;
-    body.newCustomerCleanupIncludedMinutes = recurringStandard ? 120 : null; count('forward.newCustomerCleanupIncludedMinutes');
-    body.newCustomerExtraTimeRequiresAgreement = recurringStandard ? true : null; count('forward.newCustomerExtraTimeRequiresAgreement');
+    // The 120-minute allowance belongs to a household new to Purge Pros. A returning or unsure
+    // household gets a restart (30 minutes, then $1 per minute), so it must never carry 120.
+    assert.ok(['new', 'returning', 'not_sure'].includes(body.customerStatus));
+    const newHousehold = recurringStandard && body.customerStatus === 'new';
+    assert.equal(body.offerEligibility === 'new_customer_review', newHousehold, 'the reference marks exactly these requests as a new household');
+    body.newCustomerCleanupIncludedMinutes = newHousehold ? 120 : null; count('forward.newCustomerCleanupIncludedMinutes');
+    body.newCustomerExtraTimeRequiresAgreement = newHousehold ? true : null; count('forward.newCustomerExtraTimeRequiresAgreement');
     assert.equal(body.quoteSummary.split(OLD_TEAM_NOTE).length, 2, 'reference summary lacks the old team note');
     body.quoteSummary = body.quoteSummary.replace(OLD_TEAM_NOTE, () => NEW_TEAM_NOTE); count('forward.quoteSummary team note');
+    const summaryLines = body.quoteSummary.split('\n');
+    assert.equal(summaryLines[10], body.frequencyId === 'onetime' ? OLD_FIRST_VISIT.onetime : OLD_FIRST_VISIT.other, 'reference first-visit line');
+    assert.equal(summaryLines[11], NEW_TEAM_NOTE);
+    summaryLines[10] = body.customEstimate ? NEW_FIRST_VISIT.custom : body.frequencyId === 'onetime' ? NEW_FIRST_VISIT.onetime : newHousehold ? NEW_FIRST_VISIT.newHousehold : NEW_FIRST_VISIT.returning;
+    if (summaryLines[10] !== OLD_FIRST_VISIT.other) count('forward.quoteSummary first-visit line');
+    body.quoteSummary = summaryLines.join('\n');
     // Unchanged on purpose: the 30-minute restart and one-time standard, and the $1 per minute rate.
     assert.equal(body.standardCleanupIncludedMinutes, body.customEstimate ? null : 30);
     assert.equal(body.standardAdditionalMinuteCents, body.customEstimate ? null : 100);
@@ -481,10 +571,8 @@ function expectedFromReference(spec, ref) {
   }
   if (url.pathname === '/quote-resume' && ref.status === 201) {
     const body = JSON.parse(ref.text);
-    assert.match(body.url, /^https:\/\/quote\.itspurgepros\.com\/#resume=[A-Za-z0-9_-]{43}$/);
-    body.url = NEW_LINK_PREFIX + body.url.slice(OLD_LINK_PREFIX.length);
-    expected.text = JSON.stringify(body);
-    count('quote-resume url');
+    // No approved difference: the candidate must answer the same link, byte for byte.
+    assert.match(body.url, BUILDER_SAVE_LINK_PATTERN);
   }
   if (spec.method === 'GET' && url.pathname === '/purge-quote.js') {
     assert.equal(ref.status, 200);
@@ -612,6 +700,7 @@ async function differential(vars, seed, target, origins = ORIGINS) {
     } else if (roll < 0.86) {
       const saved = await compare(worlds, 'save plan', resumeSpec('/quote-resume', planBody(g), ip, base));
       assert.equal(saved.cand.status, 201);
+      assert.match(JSON.parse(saved.cand.text).url, BUILDER_SAVE_LINK_PATTERN, 'the quote builder refuses any other link form');
       tally.plansSaved += 1;
       const token = JSON.parse(saved.cand.text).url.split('#resume=')[1];
       assert.equal(JSON.parse(saved.ref.text).url.split('#resume=')[1], token);
@@ -708,6 +797,89 @@ await differential(BARE, 20261005, 200, ORIGINS.slice(0, 2));
   await compare(mainWorlds, 'save plan refused', { ...resumeSpec('/quote-resume', planBody(g), '198.51.100.9', { seed: 971 }), headers: { 'Content-Type': 'application/json', 'Origin': 'https://not-allowed.example', 'CF-Connecting-IP': '198.51.100.9' } });
 }
 
+// Fixed cases for the blocks that carry approved edits. Each is compared with the reference as above,
+// and the value that must hold is also stated here, so the case cannot pass by both bundles being wrong.
+{
+  const g = generator(909);
+  const browser = { 'Content-Type': 'application/json', 'Origin': 'https://itspurgepros.com', 'User-Agent': 'RegressionBrowser/fixed', 'CF-Connecting-IP': '203.0.113.77' };
+  const fixed = async (kind, lead, extra = {}) => (await compare(mainWorlds, kind, submitSpec(lead, { seed: 880000 + tally.requests, headers: browser, ...extra }))).cand;
+  // Consent is recorded from the reply preference, never from the box alone: a request that prefers
+  // email or a call records no text consent even when it carries the box, a version and a time.
+  for (const intent of ['service_request', 'quote_delivery', 'question']) for (const preferredContact of ['email', 'call']) {
+    const lead = makeLead(g, 'recurring', intent, { preferredContact, customerStatus: 'new' });
+    Object.assign(lead, { email: 'person@example.com', smsTransactionalConsent: true, consentVersion: '2026-08-transactional-v1', smsConsentCapturedAt: '2026-10-09T11:59:00.000Z' });
+    const cand = await fixed(`consent: ${preferredContact} preference carrying the text-consent box (${intent})`, lead);
+    assert.equal(cand.status, 202);
+    const body = cand.outgoing[0].body;
+    assert.deepEqual([body.preferredContact, body.smsTransactionalConsent, body.consent, body.consentVersion, body.smsConsentCapturedAt], [preferredContact, false, 'no', '', ''], 'no text consent may be recorded for an email or call preference');
+    assert.ok(body.quoteSummary.includes('\nService SMS permission: No\n'));
+  }
+  for (const intent of ['service_request', 'quote_delivery']) {
+    const lead = makeLead(g, 'recurring', intent, { preferredContact: 'text', customerStatus: 'new' });
+    Object.assign(lead, { smsTransactionalConsent: true, consentVersion: '2026-08-transactional-v1', smsConsentCapturedAt: '2026-10-09T11:59:00.000Z' });
+    const body = (await fixed(`consent: text preference (${intent})`, lead)).outgoing[0].body;
+    assert.deepEqual([body.smsTransactionalConsent, body.consent, body.consentVersion, body.smsConsentCapturedAt, body.consentUserAgent], [true, 'yes', '2026-08-transactional-v1', '2026-10-09T11:59:00.000Z', 'RegressionBrowser/fixed']);
+  }
+  // Cleaning of forwarded values.
+  {
+    const lead = makeLead(g, 'recurring', 'service_request', { preferredContact: 'email', customerStatus: 'returning' });
+    Object.assign(lead, { email: '  Person.Mixed@Example.COM ', notes: 'n'.repeat(900), requestId: 'r'.repeat(300) });
+    const body = (await fixed('cleaning: mixed-case email, long notes, long request id', lead)).outgoing[0].body;
+    assert.equal(body.email, 'person.mixed@example.com');
+    assert.equal(body.notes, 'n'.repeat(500));
+    assert.equal(body.requestId, 'r'.repeat(120));
+  }
+  // The first-cleanup fields, one request of each case, stated outright.
+  const minuteFields = body => [body.offerEligibility, body.standardCleanupIncludedMinutes, body.standardAdditionalMinuteCents, body.promotionalAdditionalMinuteCents, body.newCustomerCleanupIncludedMinutes, body.newCustomerExtraTimeRequiresAgreement, body.quoteSummary.split('\n')[10]];
+  const CASES = [
+    ['recurring', 'new', ['new_customer_review', 30, 100, null, 120, true, NEW_FIRST_VISIT.newHousehold]],
+    ['recurring', 'returning', ['returning_customer_review', 30, 100, null, null, null, NEW_FIRST_VISIT.returning]],
+    ['recurring', 'not_sure', ['returning_customer_review', 30, 100, null, null, null, NEW_FIRST_VISIT.returning]],
+    ['onetime', 'new', ['not_applicable', 30, 100, null, null, null, NEW_FIRST_VISIT.onetime]],
+    ['onetime', 'returning', ['not_applicable', 30, 100, null, null, null, NEW_FIRST_VISIT.onetime]],
+    ['custom', 'new', [null, null, null, null, null, null, NEW_FIRST_VISIT.custom]]
+  ];
+  for (const intent of ['service_request', 'quote_delivery', 'question']) for (const [plan, customerStatus, want] of CASES) {
+    const lead = makeLead(g, plan, intent, { preferredContact: 'email', customerStatus });
+    lead.email = 'person@example.com';
+    const body = (await fixed(`first-cleanup fields: ${plan}, ${customerStatus} (${intent})`, lead)).outgoing[0].body;
+    const got = minuteFields(body);
+    if (plan === 'custom') { assert.ok(['custom_review', 'not_applicable'].includes(got[0])); got[0] = null; }
+    assert.deepEqual(got, want, `first-cleanup fields: ${plan}, ${customerStatus}, ${intent}`);
+    assert.equal(body.newCustomerCleanupIncludedMinutes === 120, body.offerEligibility === 'new_customer_review', 'the 120-minute allowance is forwarded for a new household only');
+  }
+  // Pre-flight, from an allowed origin and from another one.
+  const preflight = await compare(mainWorlds, 'pre-flight (OPTIONS /submit)', { method: 'OPTIONS', url: WORKER + '/submit', headers: { 'Origin': 'https://itspurgepros.com' }, seed: 5 });
+  assert.equal(preflight.cand.status, 204);
+  assert.equal(preflight.cand.headers['access-control-allow-origin'], 'https://itspurgepros.com');
+  const refused = await compare(mainWorlds, 'pre-flight (OPTIONS /submit)', { method: 'OPTIONS', url: WORKER + '/submit', headers: { 'Origin': 'https://not-allowed.example' }, seed: 5 });
+  // Existing behaviour, kept: the pre-flight itself answers 204, but names no usable origin, so the browser blocks the request.
+  assert.deepEqual([refused.cand.status, refused.cand.headers['access-control-allow-origin']], [204, 'null']);
+  // The legacy intake address: unknown stage refused; a failing or unreachable team system is never reported as accepted.
+  const legacy = (stage, extra = {}) => compare(mainWorlds, 'legacy intake address (POST /), fixed', { ...submitSpec({ schemaVersion: 'purge-quote-widget.v2', stage, phone: '3175550142', zip: '46032', requestId: 'legacy-fixed-' + stage + (extra.upstream || '') }, { seed: 5, headers: browser, ...extra }), url: WORKER + '/' });
+  assert.equal((await legacy('not_a_stage')).cand.status, 400);
+  const legacyOk = await legacy('phone_captured');
+  assert.deepEqual([legacyOk.cand.status, legacyOk.cand.outgoing.length, legacyOk.cand.outgoing[0].url], [202, 1, HOOK_LEGACY]);
+  for (const upstream of ['fail', 'throw']) {
+    const failed = await legacy('phone_captured', { upstream });
+    assert.equal(failed.cand.status, 502, 'legacy intake with the team system ' + upstream);
+    assert.equal(JSON.parse(failed.cand.text).accepted, false);
+  }
+  // Voice AI prices for each named frequency (the caller's words, and the id the agent's script reads).
+  for (const [said, frequencyId, dogs] of [['weekly', 'weekly', 2], ['every other week', 'every_other_week', 2], ['twice weekly', 'twice_weekly', 3]]) {
+    const { cand } = await compare(mainWorlds, 'voice price request, fixed', voiceSpec({ zip: serviceZips[0], serviceType: 'recurring', propertyType: 'residential', dogs, areas: ['back'], yardSize: 's', frequency: said }, 'made-up-voice-token', { seed: 5 }));
+    const answer = JSON.parse(cand.text);
+    assert.deepEqual([cand.status, answer.result, answer.frequencyId, answer.pricingScope, answer.nextStep], [200, 'standard_price', frequencyId, 'recurring_maintenance', NEW_VOICE_STEP], 'voice price: ' + said);
+  }
+}
+// The current-format intake address never falls back to the legacy webhook address.
+for (const vars of [{ ...PRODUCTION_LIKE, GHL_WEBHOOK_URL_V3: '' }, { GHL_WEBHOOK_URL: HOOK_LEGACY, VOICE_AI_QUOTE_TOKEN: 'made-up-voice-token' }]) {
+  const worlds = [makeWorld(reference, vars), makeWorld(candidate, vars)];
+  const lead = makeLead(generator(606), 'recurring', 'service_request', { preferredContact: 'text', customerStatus: 'new' });
+  const { cand } = await compare(worlds, 'current-format intake with no webhook address of its own', submitSpec(lead, { seed: 6 }));
+  assert.deepEqual([cand.status, JSON.parse(cand.text).message, cand.outgoing.length], [500, 'Relay not configured', 0]);
+}
+
 // Idempotency: the same request sent twice at the same moment is forwarded once, on both bundles.
 for (const [label, module] of [['reference', reference], ['candidate', candidate]]) {
   const world = makeWorld(module, PRODUCTION_LIKE);
@@ -722,7 +894,7 @@ for (const [label, module] of [['reference', reference], ['candidate', candidate
   assert.equal(world.outgoing.filter(call => call.url === HOOK_V3).length, 1, `${label}: a double submit must be forwarded once`);
 }
 
-const REQUIRED_KINDS = ['service request, new household', 'service request, returning or unsure household', 'service request, one-time cleanup', 'custom estimate request', 'texted quote', 'emailed quote', 'question', 'save plan', 'open plan', 'repeated submission (same request)', 'repeated request id with changed details', 'team system unavailable', 'voice price request', 'legacy intake address (POST /)', 'page and script addresses (GET)', 'transport-level refusal or pre-flight'];
+const REQUIRED_KINDS = ['service request, new household', 'service request, returning or unsure household', 'service request, one-time cleanup', 'custom estimate request', 'texted quote', 'emailed quote', 'question', 'save plan', 'open plan', 'repeated submission (same request)', 'repeated request id with changed details', 'team system unavailable', 'voice price request', 'legacy intake address (POST /)', 'page and script addresses (GET)', 'transport-level refusal or pre-flight', 'pre-flight (OPTIONS /submit)', 'legacy intake address (POST /), fixed', 'voice price request, fixed', 'current-format intake with no webhook address of its own', 'cleaning: mixed-case email, long notes, long request id'];
 for (const kind of REQUIRED_KINDS) assert.ok(tally.byKind[kind] > 0, `No request of kind: ${kind}`);
 for (const [label] of MUTATIONS) assert.ok(tally.byKind['invalid input: ' + label] > 0, `No invalid-input case: ${label}`);
 assert.ok(tally.requests >= 1000, 'fewer than 1,000 differential requests');
@@ -839,6 +1011,15 @@ function runLauncher(script, { href, existing, stored }) {
   assert.deepEqual(page.calls, [['assign', DEFAULT_QUOTE_PAGE + '?utm_source=facebook&fbclid=f1&open_quote=1']]);
   page = runLauncher(served.text, { href: 'https://blog.itspurgepros.com/post/first?utm_source=facebook&fbclid=f1' });
   assert.equal(page.session.get('pp_launcher_arrival_query'), '?utm_source=facebook&fbclid=f1');
+  // Only campaign and click-id values are remembered for the tab; anything else in the arrival address is not.
+  page = runLauncher(served.text, { href: 'https://itspurgepros.com/pricing?utm_source=google&email=someone%40example.com&gclid=G1&name=Alex&token=abc' });
+  assert.equal(page.session.get('pp_launcher_arrival_query'), '?utm_source=google&gclid=G1');
+  page = runLauncher(served.text, { href: 'https://itspurgepros.com/pricing?email=someone%40example.com' });
+  assert.equal(page.session.has('pp_launcher_arrival_query'), false);
+  // A stored value from an older copy of the script, or one tampered with, is filtered the same way when used.
+  page = runLauncher(served.text, { href: 'https://itspurgepros.com/carmel', stored: [['pp_launcher_arrival_query', '?utm_source=google&email=someone%40example.com&gclid=G1']] });
+  page.click(true);
+  assert.deepEqual(page.calls, [['assign', DEFAULT_QUOTE_PAGE + '?utm_source=google&gclid=G1&open_quote=1']]);
   // On the quote page itself, or where a builder already owns the launchers, it does nothing.
   for (const href of [DEFAULT_QUOTE_PAGE + '?open_quote=1', DEFAULT_QUOTE_PAGE + '/?open_quote=1#resume=' + 'A'.repeat(43)]) {
     page = runLauncher(served.text, { href });
@@ -850,7 +1031,7 @@ function runLauncher(script, { href, existing, stored }) {
   page = runLauncher(served.text, { href: 'https://itspurgepros.com/?open_quote=1', existing: owner });
   assert.equal(page.window.PurgeProsQuote, owner);
   assert.deepEqual(page.calls, []);
-  newBehaviour.launcher = `${lines} lines, ${served.text.length} bytes, five-minute cache; no price, policy wording or tracking call; launchers, the global open function and auto-open addresses all go to the quote page`;
+  newBehaviour.launcher = `${lines} lines, ${served.text.length} bytes, five-minute cache; no price, policy wording or tracking call; only campaign values remembered for the tab; launchers, the global open function and auto-open addresses all go to the quote page`;
 }
 
 const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurring', 'service_request', { customerStatus: 'new', preferredContact: 'text' }), requestId: 'req-new-behaviour', email: 'person@example.com', fbp: 'fb.1.1700000000000.1', ...overrides });
@@ -882,9 +1063,21 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
   assert.equal(run.calls.length, 1);
   assert.equal(run.calls[0].body.test_event_code, 'TEST12345');
   assert.equal(run.logs[0].testEvent, true);
-  // Only the exact value "1" marks staging.
-  run = await metaRun({ ...PRODUCTION_LIKE, STAGING: '0' });
-  assert.equal(run.calls.length, 1);
+  // Any staging mark stops a real event, however it was typed; a blank test code does not count as a code.
+  for (const mark of ['1', 'true', 'TRUE', ' 1', 'yes', 'staging', 1, true]) {
+    run = await metaRun({ ...PRODUCTION_LIKE, STAGING: mark });
+    assert.deepEqual([run.calls.length, run.logs.length], [0, 0], `STAGING ${JSON.stringify(mark)} without a test code must send nothing to Meta`);
+    run = await metaRun({ ...PRODUCTION_LIKE, STAGING: mark, META_TEST_EVENT_CODE: '   ' });
+    assert.equal(run.calls.length, 0, `STAGING ${JSON.stringify(mark)} with a blank test code must send nothing to Meta`);
+    run = await metaRun({ ...PRODUCTION_LIKE, STAGING: mark, META_TEST_EVENT_CODE: 'TEST12345' });
+    assert.equal(run.calls[0].body.test_event_code, 'TEST12345');
+  }
+  // Explicitly off, or absent: production behaviour.
+  for (const mark of ['0', 'false', 'FALSE', '', ' ', null, undefined, 0, false]) {
+    run = await metaRun({ ...PRODUCTION_LIKE, STAGING: mark });
+    assert.equal(run.calls.length, 1, `STAGING ${JSON.stringify(mark)} is not a staging mark`);
+    assert.ok(!('test_event_code' in run.calls[0].body));
+  }
   // No Meta values: nothing sent, nothing logged.
   run = await metaRun(BARE);
   assert.deepEqual([run.calls.length, run.logs.length], [0, 0]);
@@ -904,7 +1097,7 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
   const lead = serviceLead();
   const text = JSON.stringify(run.logs) + JSON.stringify((await metaRun({ ...PRODUCTION_LIKE, META_TEST_EVENT_CODE: 'TEST12345' })).logs);
   for (const secret of ['made-up-meta-token', '100000000000001', 'TEST12345', lead.firstName, lead.lastName, lead.email, lead.street, lead.phone.replace(/\D/g, '').slice(-10), 'fb.1.']) assert.ok(!text.includes(secret), `log line leaks ${secret}`);
-  newBehaviour.meta = 'production unset: sent as before and answer logged; staging without a test code: nothing sent; staging with a test code: sent with test_event_code; refusal and network failure logged; no personal data or secret in the log line';
+  newBehaviour.meta = 'production unset: sent as before and answer logged; staging (any mark except 0 or false) without a test code, or with a blank one: nothing sent; staging with a test code: sent with test_event_code; refusal and network failure logged; no personal data or secret in the log line';
 }
 
 { // 4. Terms version: unset, flag and refuse.
@@ -932,6 +1125,7 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
     const summary = forwarded.quoteSummary.split('\n');
     assert.equal(summary.filter(line => line.startsWith('Terms version check')).length, 1);
     assert.equal(summary[summary.findIndex(line => line.startsWith('Terms accepted: Yes')) + 1], noteLine);
+    assert.ok(!result.logs.some(line => line.event === 'terms_version_refused'), 'flag mode refuses nothing');
   }
   // Flag mode does not disturb idempotency: the same request again is not forwarded twice.
   {
@@ -953,10 +1147,16 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
     });
     assert.equal(result.outgoing.length, 0, 'refuse mode forwards nothing');
     assert.equal(world.objects.size, 0, 'refuse mode stores nothing');
+    // A refusal is countable in the log: one line, four fields, nothing about the customer.
+    assert.deepEqual(result.logs, [{ event: 'terms_version_refused', requestId: 'req-new-behaviour', stage: 'service_requested', currentTermsVersion: CURRENT }]);
+    assert.deepEqual(Object.keys(result.logs[0]), ['event', 'requestId', 'stage', 'currentTermsVersion']);
+    const refusedLead = serviceLead();
+    for (const personal of [refusedLead.firstName, refusedLead.lastName, refusedLead.email, refusedLead.street, refusedLead.phone.replace(/\D/g, '').slice(-10), OLD_VERSION]) assert.ok(!JSON.stringify(result.logs).includes(personal), `refusal log line leaks ${personal}`);
     // Requests that accept no Terms are not affected.
     const copy = await send(world, submitSpec(makeLead(generator(8), 'recurring', 'quote_delivery', { preferredContact: 'email' })));
     const question = await send(world, submitSpec(makeLead(generator(9), 'recurring', 'question', { preferredContact: 'email' })));
     assert.deepEqual([copy.status, question.status], [202, 202]);
+    assert.deepEqual([copy.logs.length, question.logs.length], [0, 0]);
     // Ordinary validation still answers first.
     const invalid = await send(world, submitSpec(serviceLead({ firstName: '' })));
     assert.deepEqual(JSON.parse(invalid.text).fields, ['firstName']);
@@ -967,7 +1167,7 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
   // The legacy intake address follows the same rule for a current-format request.
   result = await once({ ...PRODUCTION_LIKE, CURRENT_TERMS_VERSION: CURRENT, TERMS_VERSION_MODE: 'refuse' }, { ...submitSpec(serviceLead()), url: WORKER + '/' });
   assert.deepEqual([result.status, result.outgoing.length], [400, 0]);
-  newBehaviour.terms = 'unset: any version recorded as before; flag (default): accepted and one line added to the team note; refuse: 400 TERMS_VERSION_OUTDATED with fields ["termsAccepted"], nothing forwarded or stored';
+  newBehaviour.terms = 'unset: any version recorded as before; flag (default): accepted and one line added to the team note; refuse: 400 TERMS_VERSION_OUTDATED with fields ["termsAccepted"], nothing forwarded or stored, one log line without personal data';
 }
 
 { // 5. Saved-link base.
@@ -981,16 +1181,23 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
     return url;
   };
   const TOKEN = '[A-Za-z0-9_-]{43}';
-  assert.match(await saveRun({}), new RegExp(`^https://itspurgepros\\.com/quote#resume=${TOKEN}$`));
-  // The exact link form of the October 5 release can be kept by setting the variable.
-  assert.match(await saveRun({ SAVED_LINK_BASE: 'https://quote.itspurgepros.com/' }), new RegExp(`^https://quote\\.itspurgepros\\.com/#resume=${TOKEN}$`));
+  // With nothing set, the link is the October 5 form: the only form the quote builder accepts.
+  assert.match(await saveRun({}), BUILDER_SAVE_LINK_PATTERN);
+  assert.match(await saveRun(BARE), BUILDER_SAVE_LINK_PATTERN);
+  // Another form is opt-in, by variable, for when the quote builder accepts it.
+  assert.match(await saveRun({ SAVED_LINK_BASE: DEFAULT_QUOTE_PAGE }), new RegExp(`^https://itspurgepros\\.com/quote#resume=${TOKEN}$`));
+  assert.match(await saveRun({ SAVED_LINK_BASE: 'https://quote.itspurgepros.com/' }), BUILDER_SAVE_LINK_PATTERN);
   assert.match(await saveRun({ SAVED_LINK_BASE: 'https://staging.example.test/quote-test?x=1#y' }), new RegExp(`^https://staging\\.example\\.test/quote-test#resume=${TOKEN}$`));
-  for (const bad of ['http://itspurgepros.com/quote', 'javascript:alert(1)', 'nonsense', '']) {
-    assert.match(await saveRun({ SAVED_LINK_BASE: bad }), new RegExp(`^https://itspurgepros\\.com/quote#resume=${TOKEN}$`));
+  // A value that is not a plain https address falls back to the form the builder accepts.
+  for (const bad of ['http://itspurgepros.com/quote', 'javascript:alert(1)', 'nonsense', '', '   ', 'https://user:pass@evil.example/', 42, null]) {
+    assert.match(await saveRun({ SAVED_LINK_BASE: bad }), BUILDER_SAVE_LINK_PATTERN, `bad link base ${bad}`);
   }
-  // The link base and the forward target are separate settings.
-  assert.match(await saveRun({ QUOTE_PAGE_URL: 'https://staging.example.test/quote-test' }), new RegExp(`^https://itspurgepros\\.com/quote#resume=${TOKEN}$`));
-  newBehaviour.savedLink = 'default https://itspurgepros.com/quote#resume=<token>; SAVED_LINK_BASE overrides it (https only); the saved plan opens either way';
+  // The link base and the forward target are separate settings: moving the quote page does not change the link.
+  assert.match(await saveRun({ QUOTE_PAGE_URL: 'https://staging.example.test/quote-test' }), BUILDER_SAVE_LINK_PATTERN);
+  // The default link's host is one this Worker forwards to the quote page without a fragment, so the browser keeps #resume=.
+  const viaQuoteHost = await get(QUOTE_HOST + '/');
+  assert.deepEqual([viaQuoteHost.status, viaQuoteHost.headers.location], [302, DEFAULT_QUOTE_PAGE]);
+  newBehaviour.savedLink = 'default https://quote.itspurgepros.com/#resume=<token>, unchanged from October 5 and the only form the quote builder accepts; SAVED_LINK_BASE can set another https base; a bad value falls back to the default; the saved plan opens either way';
 }
 
 { // Allowed origins: the built-in list is unchanged, and a staging copy gets its origin through ALLOWED_ORIGINS.
@@ -1004,11 +1211,21 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
 // ---------------------------------------------------------------------------
 // d. Word sweep of the candidate bundle (whole text: strings, comments and code)
 // ---------------------------------------------------------------------------
-const RETIRED_WORDS = [/promotion/i, /promotional/i, /promo\b/i, /waive/i, /initial scoop/i, /surcharge/i, /new-customer offer/i, /first-cleanup offer/i, /introductory offer/i];
+const RETIRED_WORDS = [/promotion/i, /promotional/i, /promo\b/i, /waive/i, /waiving/i, /initial scoop/i, /surcharge/i, /new-customer offer/i, /first-cleanup offer/i, /introductory offer/i, /\boffers?\b/i, /\bfree\b/i, /unlimited/i, /no extra-time charge/i];
+// The only places these words may stand: two kept key names, the instruction that forbids the promise,
+// and the plain verb in one Voice AI instruction. Each must be present exactly once or twice as stated.
+const ALLOWED_PHRASES = [
+  ['Never promise a free or unlimited first cleanup.', 1],
+  ['Offer only the available frequency choices.', 1]
+];
 let swept = candidateSource;
 for (const key of KEPT_KEY_NAMES) {
   assert.ok(swept.includes(key), `kept key name missing: ${key}`);
   swept = swept.split(key).join('');
+}
+for (const [phrase, times] of ALLOWED_PHRASES) {
+  assert.equal(swept.split(phrase).length - 1, times, `allowed phrase expected ${times} time(s): ${phrase}`);
+  swept = swept.split(phrase).join('');
 }
 for (const word of RETIRED_WORDS) {
   const hit = word.exec(swept);
@@ -1053,8 +1270,8 @@ console.log = realConsoleLog;
 console.log(`Differential: ${tally.requests} requests answered by the October 5 reference and the candidate (statuses ${JSON.stringify(tally.byStatus)}); ${tally.forwardsV3} forwards to the team, ${tally.metaCalls} Meta copies, ${tally.plansSaved} plans saved and ${tally.plansOpened} opened.`);
 console.log('Identical except for these approved differences (times seen):');
 for (const [name, description] of APPROVED) console.log(`  - ${name}: ${description} (${approvedCounts[name]})`);
-console.log(`Frozen: ${pricingCases} price combinations and 6 fixed prices; ${serviceZips.length} ZIP codes; ${Object.keys(protectedBlocks).length} code blocks byte-exact (ledger, saved-plan store, validation and more).`);
+console.log(`Frozen: ${pricingCases} price combinations and 6 fixed prices; ${serviceZips.length} ZIP codes; ${Object.keys(protectedBlocks).length} code blocks byte-exact (ledger, saved-plan store, validation and more; the forward builder, request intake, Voice AI answer and router with only their approved lines put back). Saved-plan links identical to the reference.`);
 console.log('New behaviour:');
 for (const [name, description] of Object.entries(newBehaviour)) console.log(`  - ${name}: ${description}`);
-console.log(`Word sweep: none of ${RETIRED_WORDS.length} retired terms in the candidate bundle (kept key names: ${KEPT_KEY_NAMES.join(', ')}).`);
+console.log(`Word sweep: none of ${RETIRED_WORDS.length} retired terms in the candidate bundle (kept key names: ${KEPT_KEY_NAMES.join(', ')}; allowed phrases: ${ALLOWED_PHRASES.map(([phrase]) => JSON.stringify(phrase)).join(', ')}).`);
 console.log(`PASS: quote Worker regression. Candidate ${sha256(candidateSource).slice(0, 12)} against reference ${REFERENCE_SHA256.slice(0, 12)}. Not deployed.`);

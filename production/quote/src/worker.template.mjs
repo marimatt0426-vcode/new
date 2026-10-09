@@ -175,8 +175,11 @@ var QuoteRequestLedger = class extends DurableObject {
 };
 var LAUNCHER_JS = __PP_BUNDLE_LAUNCHER_JS__;
 var DEFAULT_QUOTE_PAGE_URL = "https://itspurgepros.com/quote";
+// Saved-plan links keep the October 5 form by default: it is the only form the quote builder
+// accepts when it creates a link, and the quote host forwards it to the quote page.
+var DEFAULT_SAVED_LINK_BASE = "https://quote.itspurgepros.com/";
 var QUOTE_FORWARD_PATHS = /* @__PURE__ */ new Set(["/", "/quote", "/quote/", "/demo", "/demo.html"]);
-function configuredHttpsUrl(value) {
+function configuredHttpsUrl(value, fallback) {
   const text = typeof value === "string" ? value.trim() : "";
   if (text) {
     try {
@@ -188,15 +191,15 @@ function configuredHttpsUrl(value) {
     } catch (_) {
     }
   }
-  return new URL(DEFAULT_QUOTE_PAGE_URL);
+  return new URL(fallback);
 }
 __name(configuredHttpsUrl, "configuredHttpsUrl");
 function quotePageUrl(env) {
-  return configuredHttpsUrl(env && env.QUOTE_PAGE_URL);
+  return configuredHttpsUrl(env && env.QUOTE_PAGE_URL, DEFAULT_QUOTE_PAGE_URL);
 }
 __name(quotePageUrl, "quotePageUrl");
 function savedLinkBase(env) {
-  const base = configuredHttpsUrl(env && env.SAVED_LINK_BASE);
+  const base = configuredHttpsUrl(env && env.SAVED_LINK_BASE, DEFAULT_SAVED_LINK_BASE);
   base.search = "";
   return base.href;
 }
@@ -218,6 +221,11 @@ function launcherScript(env) {
   return LAUNCHER_JS.replace('var QUOTE_PAGE = "";', () => "var QUOTE_PAGE = " + JSON.stringify(quotePageUrl(env).href) + ";");
 }
 __name(launcherScript, "launcherScript");
+function isStagingCopy(env) {
+  const mark = String(env && env.STAGING !== void 0 && env.STAGING !== null ? env.STAGING : "").trim().toLowerCase();
+  return mark !== "" && mark !== "0" && mark !== "false";
+}
+__name(isStagingCopy, "isStagingCopy");
 function termsVersionCheck(env, intent, acceptedVersion) {
   const current = cleanString(env && env.CURRENT_TERMS_VERSION, 80);
   if (!current || intent !== "service_request" || acceptedVersion === current) return { outdated: false, refuse: false, current };
@@ -970,6 +978,8 @@ function buildV3Forward(lead, values, requestId, request, env) {
   const termsVersion = values.intent === "service_request" ? cleanString(lead.termsVersion, 80) : "";
   const termsAt = values.intent === "service_request" ? cleanString(lead.termsAcceptedAt, 40) || acceptedAt : "";
   const termsCheck = termsVersionCheck(env, values.intent, termsVersion);
+  const newHousehold = !quote.custom && quote.frequencyId !== "onetime" && values.customerStatus === "new";
+  const firstVisit = quote.custom ? "Team approval required; price and first-cleanup terms are set by the custom review" : quote.frequencyId === "onetime" ? "One-time cleanup: base price covers the first 30 minutes, then $1/min, billed after the cleanup" : newHousehold ? "Team approval required; if household history is verified as new: quoted visit rate, up to 120 minutes included" : "Team approval required; maintenance quote is not a confirmed restart charge";
   const requestType = values.expectedStage === "service_requested" ? "Service requested" : values.expectedStage === "estimate_requested" ? "Custom estimate requested" : values.expectedStage === "quote_requested" ? "Quote copy requested" : "Customer question";
   const quoteSummary = [
     "Purge Pros website quote",
@@ -982,7 +992,7 @@ function buildV3Forward(lead, values, requestId, request, env) {
     `Yard size: ${quote.yard.label}`,
     `Last fully cleaned: ${values.lastCleaned}`,
     `Customer history (self-reported): ${values.customerStatus}`,
-    `First visit: ${quote.frequencyId === "onetime" ? "One-time base price plus approved extra time" : "Team approval required; maintenance quote is not a confirmed restart charge"}`,
+    `First visit: ${firstVisit}`,
     "First cleanup: NEW recurring household = quoted visit rate, up to 120 minutes included; time beyond 120 minutes only at $1/min agreed with the customer BEFORE work starts. RETURNING or unclear history = restart: quoted rate includes 30 minutes, then $1/min, billed after. Base charged at ETA text. Ordinary visits are never billed by the minute. Verify household history and existing promises before approval; never add a second maintenance charge.",
     `Desired start: ${values.intent === "service_request" ? values.startTiming : "Not requested"}`,
     `Reply preference: ${values.preferredContact}`,
@@ -1016,8 +1026,8 @@ function buildV3Forward(lead, values, requestId, request, env) {
     standardCleanupIncludedMinutes: quote.custom ? null : 30,
     standardAdditionalMinuteCents: quote.custom ? null : 100,
     promotionalAdditionalMinuteCents: null,
-    newCustomerCleanupIncludedMinutes: quote.custom || quote.frequencyId === "onetime" ? null : 120,
-    newCustomerExtraTimeRequiresAgreement: quote.custom || quote.frequencyId === "onetime" ? null : true,
+    newCustomerCleanupIncludedMinutes: newHousehold ? 120 : null,
+    newCustomerExtraTimeRequiresAgreement: newHousehold ? true : null,
     cleanupBaseChargeTrigger: "eta_sent",
     cleanupBalanceChargeTrigger: "cleanup_completed",
     finalCleanupTotalCents: null,
@@ -1101,7 +1111,7 @@ async function sendMetaCapi(lead, request, env) {
   if (!env.META_PIXEL_ID || !env.META_CAPI_TOKEN) return;
   if (lead.stage !== "service_requested" && lead.stage !== "estimate_requested") return;
   // A staging copy may only ever send a labelled test event.
-  if (env.STAGING === "1" && !env.META_TEST_EVENT_CODE) return;
+  if (isStagingCopy(env) && !String(env.META_TEST_EVENT_CODE || "").trim()) return;
   const requestOrigin = request.headers.get("Origin");
   if (requestOrigin && !env.META_TEST_EVENT_CODE) {
     try {
@@ -1212,7 +1222,13 @@ async function handleLeadSubmission(request, env, ctx) {
     if (!validation.ok) {
       return jsonResponse(400, { accepted: false, message: "Please check the highlighted form details.", fields: validation.errors }, cors);
     }
-    if (termsVersionCheck(env, validation.values.intent, cleanString(lead.termsVersion, 80)).refuse) {
+    const termsCheck = termsVersionCheck(env, validation.values.intent, cleanString(lead.termsVersion, 80));
+    if (termsCheck.refuse) {
+      // Countable in the log; never the customer's details or the text they sent.
+      try {
+        console.log(JSON.stringify({ event: "terms_version_refused", requestId, stage: validation.values.expectedStage, currentTermsVersion: termsCheck.current }));
+      } catch (_) {
+      }
       return jsonResponse(400, {
         accepted: false,
         code: "TERMS_VERSION_OUTDATED",

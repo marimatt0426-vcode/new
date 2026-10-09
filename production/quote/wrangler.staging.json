@@ -7,7 +7,6 @@
   "vars": {
     "STAGING": "1",
     "QUOTE_PAGE_URL": "https://replace-with-the-staging-quote-page.invalid/quote",
-    "SAVED_LINK_BASE": "https://replace-with-the-staging-quote-page.invalid/quote",
     "ALLOWED_ORIGINS": "https://replace-with-the-staging-page-origin.invalid"
   },
   "durable_objects": {

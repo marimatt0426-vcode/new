@@ -13,15 +13,17 @@
   // On the quote page itself the page's own builder handles every launcher.
   if (path(target) === path(here)) return;
 
-  function hasSource(params) {
-    var found = false;
-    params.forEach(function (_, key) { if (KEEP.test(key)) found = true; });
-    return found;
+  // Only the campaign and click-id values of an address; nothing else is ever remembered.
+  function sourceOnly(params) {
+    var out = new URLSearchParams();
+    params.forEach(function (value, key) { if (KEEP.test(key)) out.append(key, value); });
+    return out;
   }
+  function hasSource(params) { return sourceOnly(params).toString() !== ""; }
   // Remember how the visitor arrived, for this tab only, so the ad or campaign
   // source still reaches the quote page after they browse to another page.
   try {
-    if (hasSource(here.searchParams)) sessionStorage.setItem(STORE, here.search);
+    if (hasSource(here.searchParams)) sessionStorage.setItem(STORE, "?" + sourceOnly(here.searchParams));
   } catch (_) {}
 
   function quoteAddress(options) {
@@ -29,7 +31,7 @@
     var current = new URL(location.href).searchParams;
     var kept = "";
     try { kept = sessionStorage.getItem(STORE) || ""; } catch (_) {}
-    var source = hasSource(current) || !kept ? current : new URLSearchParams(kept);
+    var source = hasSource(current) || !kept ? current : sourceOnly(new URLSearchParams(kept));
     source.forEach(function (value, key) {
       if (key !== "open_quote" && key !== "zip") next.searchParams.append(key, value);
     });
