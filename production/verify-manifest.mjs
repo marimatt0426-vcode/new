@@ -12,9 +12,14 @@ for (const file of manifest.files) {
   assert.ok(target.startsWith(here + path.sep), 'Manifest path escapes production');
   assert.equal(sha(fs.readFileSync(target)), file.sha256, `Source changed: ${file.path}; reconcile provenance before updating its hash`);
 }
-assert.equal(sha(fs.readFileSync(path.join(here, 'quote/dist/worker.mjs'))),
+// The October 5 release, live until a deployment is approved, stays in the tree as the regression reference.
+assert.equal(sha(fs.readFileSync(path.join(here, 'quote/tests/fixtures/2026-10-05-live-worker.mjs'))),
   '113ce3beee7ac937605d7da6eb7453052bfe03ee95c92e520e623396bffea95c',
-  'Quote rebuild differs from approved October 5 pixel step release');
+  'Regression reference is not the October 5 pixel step release');
+// Prepared October 9, 2026 candidate: 120-minute first cleanup, widget retired. Not deployed.
+assert.equal(sha(fs.readFileSync(path.join(here, 'quote/dist/worker.mjs'))),
+  '218d647a6a1db88b18dcceae723ddbca90aebeded2b2d65626641749fd46fc14',
+  'Quote rebuild differs from the prepared October 9 candidate; run npm run build, or reconcile before updating this hash');
 const metadata = JSON.parse(fs.readFileSync(path.join(here, 'website/pages/metadata.json')));
 assert.equal(metadata.routes.length, 27);
 for (const route of metadata.routes) assert.ok(fs.existsSync(path.join(here, 'website/pages', route.id + '.html')));
@@ -26,4 +31,4 @@ for (const article of articles.articles) {
   assert.equal(sha(fs.readFileSync(path.join(here, 'website/blog/articles', article.bodyFile))), article.bodySha256);
   assert.ok(article.cover?.src && article.cover?.alt, 'Missing cover source/alt');
 }
-console.log(`PASS: ${manifest.files.length} source hashes; exact production Worker rebuild; 27 pages; 45 public article snapshots.`);
+console.log(`PASS: ${manifest.files.length} source hashes; exact quote Worker candidate rebuild; 27 pages; 45 public article snapshots.`);

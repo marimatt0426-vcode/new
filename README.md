@@ -10,8 +10,8 @@ This October 4, 2026 reconciliation brings the approved September website rollou
 - `production/website/shared/`: current global header, footer, Head and Body snippets.
 - `production/website/blog/`: native template fragments, public card inventory and index tools.
 - `production/site-assets/`: existing hosted static styles, scripts and quote artwork.
-- `production/quote/src/`: editable widget JavaScript, standalone landing HTML and Worker template.
-- `production/quote/dist/worker.mjs`: deterministically rebuilt approved Worker bundle.
+- `production/quote/src/`: the Worker template and the small quote launcher script. The widget and landing page bundled until October 2026 are history in `legacy/2026-10-quote-widget/`.
+- `production/quote/dist/worker.mjs`: deterministically rebuilt Worker bundle. As of October 9, 2026 it is a prepared candidate, not the deployed release; see `production/OPERATIONS.md`.
 - `production/SOURCE-MANIFEST.json`: source provenance and exact hashes.
 - `production/OPERATIONS.md`: maintenance, deployment boundaries and known gaps.
 
