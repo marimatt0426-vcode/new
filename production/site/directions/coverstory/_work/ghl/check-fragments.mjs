@@ -40,12 +40,23 @@
 //      a page with a schema file names it and where it goes; FIELDS.md holds the paste rule for plain text boxes.
 //   19 PAGE DATA BY SETTING. Every page named in "pageDataInOwnFile" of the settings file has its page data in a file of
 //      its own (<slug>.schema.html) and none in its body block, in this profile as in every other, whatever the length.
+//   20 THE BRIDGE SITE CODE of the switch evening (SWITCH-RUNBOOK 1.2 step 8; the check itself is checkBridge in bridge.mjs).
+//      Where shared/bridge-site-head.html, bridge-site-body.html and BRIDGE.json are in the folder: every line of
+//      site-head.html and of site-body.html is present and unchanged, whole and first; each old line is byte for byte a
+//      line of the copy of the live head code it was cut from (cut again now); each old stylesheet line stands once; each
+//      old script address stands exactly once, inside a guard, and nowhere as a plain script tag; the guard, run against a
+//      made-up page, adds each old script once on an old page and sets no order on it (async stays as the browser
+//      makes it; a guard holding "s.async=false" fails), and adds nothing where window.PP5Loaded is set;
+//      production: the Google tag and the Meta Pixel once each and none of noindex, staging, v5s, leadconnectorhq;
+//      staging: no tracking tag; nothing of the new build is loaded by the bridge part. A folder without the three files
+//      is reported and is a failure only with --require-bridge.
 // Exit code 0 only when every check passes for every profile.
 import fs from "node:fs";
 import path from "node:path";
 import { HERE, ROOT, RELEASE, OUT, posix, read, sha256, loadConfig, placeholders, tokens, attrsOf, openTagOfRaw, visibleText, balance,
   topLevel, hasClass, decode, discoverPages, siteSettings, settingsProblems, trustedFromScripts, TOKEN_GUARD, pageAddress, PREVIEW_BASE, linksProblems } from "./lib.mjs";
 import { createRequire } from "node:module";
+import { BRIDGE, checkBridge } from "./bridge.mjs";
 
 const args = process.argv.slice(2);
 const opt = (name) => { const i = args.indexOf("--" + name); return i < 0 ? null : args[i + 1]; };
@@ -204,7 +215,8 @@ function checkProfile(dir, profile) {
   const walk = (d, rel = "") => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { if (e.isDirectory()) walk(path.join(d, e.name), rel + e.name + "/"); else allFiles.push(rel + e.name); } };
   walk(dir);
   const htmlFiles = allFiles.filter((f) => f.endsWith(".html"));
-  for (const f of htmlFiles) if (!blockFiles.includes(f)) fail(`${f}: an .html file in the profile folder that MANIFEST.json does not list`);
+  const bridgeFiles = [BRIDGE.head, BRIDGE.body];      // the switch evening's site code: listed in BRIDGE.json, checked by check 20
+  for (const f of htmlFiles) if (!blockFiles.includes(f) && !bridgeFiles.includes(f)) fail(`${f}: an .html file in the profile folder that MANIFEST.json does not list`);
   let largest = [];
   for (const b of manifest.blocks) {
     if (!has(b.file)) { fail(`${b.file}: listed in MANIFEST.json but not on disk`); continue; }
@@ -343,6 +355,9 @@ function checkProfile(dir, profile) {
     ownFileBySetting.push(slug);
   }
 
+  // ---- 20 the bridge site code of the switch evening (bridge.mjs) ----------------------------------------------------------
+  const bridgeLine = checkBridge({ cfg, profile, dir, fail, trackingPattern: TRACKING, required: args.includes("--require-bridge") });
+
   // ---- 7 tracking and robots ---------------------------------------------------------------------------------------------
   const heads = ["shared/site-head.html", "blog/site-head.html"].filter(has);
   if (!heads.includes("shared/site-head.html")) fail("shared/site-head.html is missing");
@@ -358,7 +373,7 @@ function checkProfile(dir, profile) {
     // the ONE thing outside the head code that names a tracking id: the conversion label inside window.PPSite, wherever
     // the loader stands (the site body code, or with scriptsPlacement footer each footer block), exactly once per block
     const label = profile.googleAdsSendTo ? `"googleAdsSendTo":${JSON.stringify(profile.googleAdsSendTo)}` : null;
-    for (const f of allFiles.filter((x) => /\.(html|txt)$/.test(x) && !heads.includes(x))) {
+    for (const f of allFiles.filter((x) => /\.(html|txt)$/.test(x) && !heads.includes(x) && x !== BRIDGE.head)) {   // the bridge head code starts with site-head.html whole: its tags are counted by check 20
       let t = get(f);
       if (label && loaderCarriers.includes(f)) { if (t.split(label).length !== 2) fail(`${f}: expected the Google Ads conversion label exactly once, inside window.PPSite`); t = t.split(label).join('"googleAdsSendTo":""'); }
       if (TRACKING.test(t)) fail(`${f}: holds a tracking tag; in production they belong in the site head code only (the conversion label inside window.PPSite, where the loader stands, is the one exception)`);
@@ -468,6 +483,7 @@ function checkProfile(dir, profile) {
   console.log(`  typed fields: "Type these" and "Paste these" for ${pages.length} pages · robots typed as the page's own tag on ${typedOut.join(", ") || "none"} · schema file placed for ${fields.filter((f) => f.typeThese && f.typeThese.schemaFile).map((f) => f.slug).join(", ") || "none"} · paste rule for plain text boxes present`);
   console.log(`  page data in its own file by setting ("pageDataInOwnFile": every profile, whatever the length): ${(cfg.pageDataInOwnFile || []).join(", ") || "no page named"}${ownFileBySetting.length === (cfg.pageDataInOwnFile || []).length ? "" : " · NOT so in this folder (see FAIL)"}`);
   console.log(`  review-build line: in no block (pages on disk: ${reviewOnDisk ? "review build, read in their rollout form" : "rollout build"}) · loader stopgaps: none`);
+  console.log(`  ${bridgeLine}`);
   const ph = placeholders(cfg, profile);
   if (ph.length) console.log(`  still a placeholder (not a failure): ${ph.join("; ")}`);
   for (const w of manifest.warnings || []) console.log(`  builder note: ${w}`);

@@ -21,6 +21,21 @@
 //                                                    share image, the robots custom meta tag where the page must stay out
 //                                                    of search, where its schema file goes) and a "paste these" table
 //           MANIFEST.json                            every block with size and SHA-256; every file to upload to the assets host
+//           shared/bridge-site-head.html, bridge-site-body.html, BRIDGE.json
+//                                                    the website's site code for the switch evening only (SWITCH-RUNBOOK 1.2
+//                                                    step 8): site-head.html / site-body.html whole, then the old site's own
+//                                                    lines cut from a copy of the LIVE head code, then one guard that adds the
+//                                                    old scripts only on a page that is still old. Made by _work/ghl/bridge.mjs
+//                                                    (the rule, the source and what a box copy may differ in are explained
+//                                                    there). They are not blocks: MANIFEST.json does not list them, BRIDGE.json does.
+//   node _work/ghl/build-fragments.mjs --bridge-source=<the backup's site-head-live.html, or its folder>
+//                                                    the copy of the live head code to cut from, for this run (default:
+//                                                    "bridge".source in fragments.config.json; if that is not on disk, the
+//                                                    source of the last cut, so a plain run never drops the bridge files)
+//   node _work/ghl/build-fragments.mjs --bridge-only [--bridge-source=...] [profile]
+//                                                    writes ONLY the two bridge files and BRIDGE.json; no block is rewritten
+//   node _work/ghl/build-fragments.mjs --bridge-compare [--bridge-source=...] [profile]
+//                                                    writes nothing; says line by line whether the bridge files would change
 // Nothing is listed by hand: pages, the three header versions, the body settings, the shared stylesheets and scripts
 // are found by parsing the built pages, so the tool can be run again after any rebuild.
 // Wording, prices, link text and pictures are never changed; check-fragments.mjs proves it block by block.
@@ -29,6 +44,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { HERE, ROOT, RELEASE, OUT, posix, read, sha256, sha1, bytes, write, loadConfig, placeholders, tokens, attrsOf, mapAttrs,
   openTagOfRaw, topLevel, hasClass, discoverPages, fileInfo, listFiles, siteSettings, settingsProblems, TOKEN_GUARD, pageAddress, PREVIEW_BASE } from "./lib.mjs";
+import { BRIDGE, addBridge, bridgeRun } from "./bridge.mjs";
 
 const ASSET_EXT = /\.(?:webp|png|jpe?g|gif|svg|avif|ico|css|js|mjs|json|woff2?|ttf|otf|mp4|webm|pdf|txt|xml)$/i;
 const isRelative = (v) => v !== "" && !/^(?:[a-z][a-z0-9+.-]*:|\/|#|\?)/i.test(v);
@@ -580,6 +596,7 @@ export function writeProfile(result, dir = path.join(OUT, result.profile.name)) 
     uploadList: { note: "Every file the blocks, the stylesheets and the scripts ask for, by its path under assetsBase (the same folder tree as the release folder). Upload these before any page names them (Cloudflare audit 3.2).",
       count: result.fileList.length, bytes: result.fileList.reduce((n, f) => n + (f.bytes || 0), 0), missing, files: result.fileList } };
   write(path.join(dir, "MANIFEST.json"), JSON.stringify(manifest, null, 2) + "\n");
+  if (result.bridge) write(path.join(dir, BRIDGE.record), JSON.stringify(result.bridge, null, 2) + "\n");   // the two bridge files themselves are in result.files (bridge.mjs addBridge)
   return manifest;
 }
 
@@ -589,11 +606,20 @@ export function writeProfile(result, dir = path.join(OUT, result.profile.name)) 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const cfg = loadConfig(), want = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   const names = want.length ? want : Object.keys(cfg.profiles);
+  // the bridge site code (bridge.mjs). --bridge-only and --bridge-compare read and write no block at all.
+  const flags = process.argv.slice(2).filter((a) => a.startsWith("--")), strange = flags.filter((a) => /^--(?:no-)?bridge/.test(a) && !/^--(?:bridge-only|bridge-compare|no-bridge|bridge-source=.+|bridge-body=.+)$/.test(a));
+  if (strange.length) throw new Error(`unknown bridge option ${strange.join(", ")} (there: --bridge-source=<file or folder>, --bridge-body=<file>, --bridge-only, --bridge-compare, --no-bridge; a value is joined with "=")`);
+  if (flags.includes("--bridge-only") || flags.includes("--bridge-compare")) {
+    let code = 1;
+    try { code = bridgeRun(cfg, names, flags, want.length > 0); } catch (e) { console.error("\nSTOPPED: " + e.message); }   // a refusal is a sentence, not a stack trace
+    process.exit(code);
+  }
   const pages = discoverPages();
   const plan = planFor(cfg, pages);
   for (const name of names) {
     if (!cfg.profiles[name]) throw new Error(`no profile "${name}" in fragments.config.json (there: ${Object.keys(cfg.profiles).join(", ")})`);
-    const result = buildProfile(cfg, cfg.profiles[name], pages, plan), manifest = writeProfile(result);
+    // addBridge runs before writeProfile empties the folder: with no source on disk it reads the last cut from the BRIDGE.json that is there
+    const result = addBridge(buildProfile(cfg, cfg.profiles[name], pages, plan), flags, undefined, want.length > 0), manifest = writeProfile(result);
     const body = result.blocks.filter((b) => !["site-head", "site-body"].includes(b.role));
     console.log(`\n${name}: ${result.files.size} files written to rollout/ghl-fragments/${name}/  (${pages.length} built pages read; limit ${cfg.blockLimit} characters a block)`);
     console.log("  largest blocks: " + [...body].sort((a, b) => b.chars - a.chars).slice(0, 5).map((b) => `${b.file} ${b.chars}${b.charsWhenDated !== b.chars ? " (" + b.charsWhenDated + " dated)" : ""}`).join(" · "));
@@ -604,6 +630,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     console.log(`  upload list: ${manifest.uploadList.count} files, ${(manifest.uploadList.bytes / 1048576).toFixed(1)} MB${manifest.uploadList.missing.length ? "; MISSING on disk: " + manifest.uploadList.missing.join(", ") : "; none missing"}`);
     if (result.placeholders.length) console.log("  placeholders still in use: " + result.placeholders.join("; "));
     console.log("  window.PPSite: " + JSON.stringify(Object.fromEntries(Object.entries(result.settings).filter(([k]) => !["assetsBase", "assets", "build"].includes(k)))));
+    console.log("  " + result.bridgeLine);
     for (const w of result.warnings) console.log("  note: " + w);
     for (const n of result.notes.filter((x) => /REVIEW build|ROLLOUT build/.test(x))) console.log("  " + n);
   }

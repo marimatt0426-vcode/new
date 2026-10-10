@@ -23,9 +23,13 @@ State of everything in this section on October 10, 2026: **prepared and locally 
 
 The blocks are the **production profile**: live mode, the live quote Worker's addresses, the Google and Meta tags in the site head code only.
 
-### The `v5-DATE` placeholder
+### The hosted files' folder and the switch day
 
-Every hosted address in the blocks reads `https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/...`. `v5-DATE` is a placeholder for the folder the files will be uploaded to; it is not a real address, and **a block that still says `v5-DATE` must not be pasted**. Two more things wait for the same day: the Terms version label a service request records (`site/shared/terms-version.json` still holds the live label, `switchDay` null) and the publication date line of the Terms and the Privacy Policy. The day is set in the owner's private workspace, where the picture masters and the legal-text tools are; the result is then copied here again, the manifest updated and the tests run. `npm test` prints the placeholder while it is still in use.
+Every hosted address in the blocks reads `https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-20261011/...`. The folder name carries the switch day, October 11, 2026. The day was set on the evening of October 10, 2026 in the owner's private workspace, where the picture masters and the legal-text tools are, together with the two other things that wait for it: the Terms version label a service request records (`site/shared/terms-version.json`: `2026-10-11-no-start-up-fee`, `switchDay` `2026-10-11`) and the publication date line of the Terms and the Privacy Policy. The result was copied here again, the manifest updated and the tests run.
+
+Before the day was set the folder read `v5-DATE`, a placeholder and not a real address. **A block that says `v5-DATE` must not be pasted**; `npm test` prints the placeholder whenever one is in use. A folder that is on the file host is never overwritten: a corrected set of hosted files gets a new name, with a letter after the day.
+
+`website/shared/bridge-site-head.html` and `bridge-site-body.html` are the website's site code for the switch evening only: the new site code first and whole, then the September lines the old pages still need, behind a guard that keeps them from running on a new page. `site-head.html` and `site-body.html` are the site code once every page is new. `site/directions/coverstory/_work/ghl/bridge.mjs` makes and checks the bridge files.
 
 ### Tests
 

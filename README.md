@@ -6,10 +6,10 @@ This October 4, 2026 reconciliation brings the approved September website rollou
 
 ## Source map
 
-The rebuilt website (v5) was brought in on October 10, 2026: **prepared and locally tested, not installed**. Until the owner approves the switch, the live website is the September one, now in `legacy/2026-09-website/`. The v5 blocks still carry the placeholder `v5-DATE` in every hosted address and must not be pasted while they do; see `production/OPERATIONS.md`.
+The rebuilt website (v5) was brought in on October 10, 2026 and frozen that evening for the switch day, October 11, 2026: **prepared and locally tested, not installed**. Until the owner approves the switch, the live website is the September one, now in `legacy/2026-09-website/`. Every hosted address in the v5 blocks names the folder `v5-20261011`; see `production/OPERATIONS.md`.
 
 - `production/website/pages/`: the body blocks of the 38 rebuilt website pages (GHL Custom Code blocks).
-- `production/website/shared/`: the rebuilt header and footer sections, the Welcome page's own, the site head and body code; `head.html` and `body.html` are the September site code the tracking tags are copied from.
+- `production/website/shared/`: the rebuilt header and footer sections, the Welcome page's own, the site head and body code; `bridge-site-head.html` and `bridge-site-body.html` are the site code of the switch evening only; `head.html` and `body.html` are the September site code the tracking tags are copied from.
 - `production/website/FIELDS.md`, `fields.json`, `BLOCKS-MANIFEST.json`: what is typed and pasted per page; every block and hosted file with its hash.
 - `production/website/blog/`: `blocks/` holds the rebuilt blog template blocks; the rest is the September index (templates, card inventory, tools) and the public article snapshots.
 - `production/site/`: the source of the rebuilt site: the price engine with its tests and checkers, the built pages, page sources, partials, styles, scripts, the page builder, the packaging tool, and the pictures and icons the pages use.
