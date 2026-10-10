@@ -1,0 +1,1657 @@
+{
+  "profile": "production",
+  "generated": "2026-10-10T16:42:26.550Z",
+  "pages": [
+    {
+      "slug": "about",
+      "typeThese": {
+        "path": "/about",
+        "title": "About Purge Pros | Local Indianapolis Pet Waste Removal",
+        "description": "Meet the local family behind Purge Pros. Learn about our Indianapolis roots, pet-care standards, service communication and pay-per-visit dog waste removal.",
+        "canonical": "https://itspurgepros.com/about",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/about.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/about.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/about",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/about",
+      "publicUrl": "https://itspurgepros.com/about",
+      "title": "About Purge Pros | Local Indianapolis Pet Waste Removal",
+      "description": "Meet the local family behind Purge Pros. Learn about our Indianapolis roots, pet-care standards, service communication and pay-per-visit dog waste removal.",
+      "canonical": "https://itspurgepros.com/about",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/about.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/about.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "ef57d7ae6c6d7e78ff9db723a0b2c9790a301c5edb29016412f7161d24db420d"
+    },
+    {
+      "slug": "additional",
+      "typeThese": {
+        "path": "/additional",
+        "title": "Central Indiana Dog Waste Removal Service Areas | Purge Pros",
+        "description": "Explore Purge Pros dog waste removal areas around Indianapolis. Find your city, check the service ZIP, and request an exact-address route review.",
+        "canonical": "https://itspurgepros.com/additional",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/additional.jpg",
+        "customMetaTags": [],
+        "schemaFile": "pages/additional.schema.html",
+        "schemaGoes": "\"SEO & AI search optimization\" > \"Schema markup\" > \"Add schema\"; if that form refuses or changes the text: a small Custom Code element of its own at the foot of the body section, under the last body block"
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/additional.1.html",
+        "pages/additional.2.html"
+      ],
+      "splitInTwo": true,
+      "linksToThisPageGoTo": "/additional",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/additional",
+      "publicUrl": "https://itspurgepros.com/additional",
+      "title": "Central Indiana Dog Waste Removal Service Areas | Purge Pros",
+      "description": "Explore Purge Pros dog waste removal areas around Indianapolis. Find your city, check the service ZIP, and request an exact-address route review.",
+      "canonical": "https://itspurgepros.com/additional",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/additional.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/additional.1.html",
+        "pages/additional.2.html",
+        "pages/additional.schema.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "403b8b45fdf061a09e19f1cd769e447f814e759cbf3b12d65b936318a4a7d7b1"
+    },
+    {
+      "slug": "anderson",
+      "typeThese": {
+        "path": "/anderson",
+        "title": "Dog Waste Removal in Anderson, IN | Purge Pros",
+        "description": "Get an Anderson dog waste removal price or custom estimate path online. Check your ZIP, describe the yard, and request local route review.",
+        "canonical": "https://itspurgepros.com/anderson",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/anderson.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/anderson.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/anderson",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/anderson",
+      "publicUrl": "https://itspurgepros.com/anderson",
+      "title": "Dog Waste Removal in Anderson, IN | Purge Pros",
+      "description": "Get an Anderson dog waste removal price or custom estimate path online. Check your ZIP, describe the yard, and request local route review.",
+      "canonical": "https://itspurgepros.com/anderson",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/anderson.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/anderson.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "00ae484c0ac96f933c8a50b86f606cf39dc1bb258863a278b3253f398bb2f404"
+    },
+    {
+      "slug": "avon",
+      "typeThese": {
+        "path": "/avon",
+        "title": "Dog Waste Removal in Avon, IN | Purge Pros",
+        "description": "Price Avon dog waste removal online for recurring or one-time cleanup. Include every yard area, review the rate, and request route confirmation.",
+        "canonical": "https://itspurgepros.com/avon",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/avon.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/avon.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/avon",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/avon",
+      "publicUrl": "https://itspurgepros.com/avon",
+      "title": "Dog Waste Removal in Avon, IN | Purge Pros",
+      "description": "Price Avon dog waste removal online for recurring or one-time cleanup. Include every yard area, review the rate, and request route confirmation.",
+      "canonical": "https://itspurgepros.com/avon",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/avon.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/avon.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "a16c784660181b61d63594eb196e079eedbc2cb62693655c3a36f9265ad5e363"
+    },
+    {
+      "slug": "brownsburg",
+      "typeThese": {
+        "path": "/brownsburg",
+        "title": "Dog Waste Removal in Brownsburg, IN | Purge Pros",
+        "description": "Get Brownsburg dog waste removal pricing for recurring or one-time service. Check the ZIP, choose the plan, and request local route review online.",
+        "canonical": "https://itspurgepros.com/brownsburg",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/brownsburg.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/brownsburg.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/brownsburg",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/brownsburg",
+      "publicUrl": "https://itspurgepros.com/brownsburg",
+      "title": "Dog Waste Removal in Brownsburg, IN | Purge Pros",
+      "description": "Get Brownsburg dog waste removal pricing for recurring or one-time service. Check the ZIP, choose the plan, and request local route review online.",
+      "canonical": "https://itspurgepros.com/brownsburg",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/brownsburg.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/brownsburg.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "cd58c7f900366e40589a74a253607b07eaa0e64b3656c916e7219b645227775d"
+    },
+    {
+      "slug": "camby",
+      "typeThese": {
+        "path": "/camby",
+        "title": "Dog Waste Removal in Camby, IN | Purge Pros",
+        "description": "Price Camby dog waste removal online for recurring or one-time cleanup. Pick the yard areas, see the rate, and request an exact-address route review.",
+        "canonical": "https://itspurgepros.com/camby",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/camby.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/camby.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/camby",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/camby",
+      "publicUrl": "https://itspurgepros.com/camby",
+      "title": "Dog Waste Removal in Camby, IN | Purge Pros",
+      "description": "Price Camby dog waste removal online for recurring or one-time cleanup. Pick the yard areas, see the rate, and request an exact-address route review.",
+      "canonical": "https://itspurgepros.com/camby",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/camby.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/camby.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "b87dc30eed3e4ceb031365b17aae2068146ed0e6a53abef1beec33085a2b78af"
+    },
+    {
+      "slug": "carmel",
+      "typeThese": {
+        "path": "/carmel",
+        "title": "Dog Waste Removal in Carmel, IN | Purge Pros",
+        "description": "Check Carmel dog waste removal pricing for recurring or one-time cleanup. Select every yard area, see the available rate, and request route review.",
+        "canonical": "https://itspurgepros.com/carmel",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/carmel.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/carmel.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/carmel",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/carmel",
+      "publicUrl": "https://itspurgepros.com/carmel",
+      "title": "Dog Waste Removal in Carmel, IN | Purge Pros",
+      "description": "Check Carmel dog waste removal pricing for recurring or one-time cleanup. Select every yard area, see the available rate, and request route review.",
+      "canonical": "https://itspurgepros.com/carmel",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/carmel.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/carmel.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "363f750f9faeab44f9ec7ce610ccc1424824ded2599b065649a2c529184f3939"
+    },
+    {
+      "slug": "cicero",
+      "typeThese": {
+        "path": "/cicero",
+        "title": "Dog Waste Removal in Cicero, IN | Purge Pros",
+        "description": "Check Cicero dog waste removal pricing online, lake lot or in town. Choose recurring or one-time cleanup and request an address-level route review.",
+        "canonical": "https://itspurgepros.com/cicero",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/cicero.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/cicero.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/cicero",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/cicero",
+      "publicUrl": "https://itspurgepros.com/cicero",
+      "title": "Dog Waste Removal in Cicero, IN | Purge Pros",
+      "description": "Check Cicero dog waste removal pricing online, lake lot or in town. Choose recurring or one-time cleanup and request an address-level route review.",
+      "canonical": "https://itspurgepros.com/cicero",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/cicero.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/cicero.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "28a748ce785d3e54c26f8c699dfd03ae23aad325ad1adf0044ad7d1e311e00c0"
+    },
+    {
+      "slug": "danville",
+      "typeThese": {
+        "path": "/danville",
+        "title": "Dog Waste Removal in Danville, IN | Purge Pros",
+        "description": "Check Danville dog waste removal pricing and route availability. Describe the yard, compare recurring or one-time service, and request review.",
+        "canonical": "https://itspurgepros.com/danville",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/danville.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/danville.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/danville",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/danville",
+      "publicUrl": "https://itspurgepros.com/danville",
+      "title": "Dog Waste Removal in Danville, IN | Purge Pros",
+      "description": "Check Danville dog waste removal pricing and route availability. Describe the yard, compare recurring or one-time service, and request review.",
+      "canonical": "https://itspurgepros.com/danville",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/danville.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/danville.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "91604cb745244a0c398457198f5c0458c77f9fed65c546c16441e0c2ab9ea8d1"
+    },
+    {
+      "slug": "dog-waste-removal",
+      "typeThese": {
+        "path": "/dog-waste-removal",
+        "title": "Dog Poop Removal Services in Indianapolis | Purge Pros",
+        "description": "Weekly, twice-weekly and one-time dog poop removal in Indianapolis and nearby communities. Check your ZIP and see your price before sharing contact details.",
+        "canonical": "https://itspurgepros.com/dog-waste-removal",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/dog-waste-removal.jpg",
+        "customMetaTags": [],
+        "schemaFile": "pages/dog-waste-removal.schema.html",
+        "schemaGoes": "\"SEO & AI search optimization\" > \"Schema markup\" > \"Add schema\"; if that form refuses or changes the text: a small Custom Code element of its own at the foot of the body section, under the last body block"
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/dog-waste-removal.1.html",
+        "pages/dog-waste-removal.2.html"
+      ],
+      "splitInTwo": true,
+      "linksToThisPageGoTo": "/dog-waste-removal",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/dog-waste-removal",
+      "publicUrl": "https://itspurgepros.com/dog-waste-removal",
+      "title": "Dog Poop Removal Services in Indianapolis | Purge Pros",
+      "description": "Weekly, twice-weekly and one-time dog poop removal in Indianapolis and nearby communities. Check your ZIP and see your price before sharing contact details.",
+      "canonical": "https://itspurgepros.com/dog-waste-removal",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/dog-waste-removal.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/dog-waste-removal.1.html",
+        "pages/dog-waste-removal.2.html",
+        "pages/dog-waste-removal.schema.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "5e15faf13762e9eabbdca57285df20cc405f3b9df459144edc6037540b2de40d"
+    },
+    {
+      "slug": "faq",
+      "typeThese": {
+        "path": "/faq",
+        "title": "Dog Waste Removal FAQs | Pricing & Service | Purge Pros",
+        "description": "Get answers about Purge Pros pricing, first cleanups, billing, pets, gates and weather. Learn how recurring dog waste removal works before requesting service.",
+        "canonical": "https://itspurgepros.com/faq",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/faq.jpg",
+        "customMetaTags": [],
+        "schemaFile": "pages/faq.schema.html",
+        "schemaGoes": "\"SEO & AI search optimization\" > \"Schema markup\" > \"Add schema\"; if that form refuses or changes the text: a small Custom Code element of its own at the foot of the body section, under the last body block"
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/faq.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/faq",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/faq",
+      "publicUrl": "https://itspurgepros.com/faq",
+      "title": "Dog Waste Removal FAQs | Pricing & Service | Purge Pros",
+      "description": "Get answers about Purge Pros pricing, first cleanups, billing, pets, gates and weather. Learn how recurring dog waste removal works before requesting service.",
+      "canonical": "https://itspurgepros.com/faq",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/faq.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/faq.html",
+        "pages/faq.schema.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "ad76c294732fa54a2799ad761067d840f5e35636463495921676eec040145841"
+    },
+    {
+      "slug": "fishers",
+      "typeThese": {
+        "path": "/fishers",
+        "title": "Dog Waste Removal in Fishers, IN | Purge Pros",
+        "description": "See Fishers dog waste removal pricing for recurring or one-time service. Check your ZIP, build the yard plan, and request an address-level route review.",
+        "canonical": "https://itspurgepros.com/fishers",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/fishers.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/fishers.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/fishers",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/fishers",
+      "publicUrl": "https://itspurgepros.com/fishers",
+      "title": "Dog Waste Removal in Fishers, IN | Purge Pros",
+      "description": "See Fishers dog waste removal pricing for recurring or one-time service. Check your ZIP, build the yard plan, and request an address-level route review.",
+      "canonical": "https://itspurgepros.com/fishers",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/fishers.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/fishers.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "87c8309bdea937ecb8f627a475f7becdc706c0495569148e56af80c355c744e2"
+    },
+    {
+      "slug": "fortville",
+      "typeThese": {
+        "path": "/fortville",
+        "title": "Dog Waste Removal in Fortville, IN | Purge Pros",
+        "description": "See Fortville dog waste removal pricing for recurring or one-time cleanup. Build the yard plan and request address-level route confirmation.",
+        "canonical": "https://itspurgepros.com/fortville",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/fortville.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/fortville.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/fortville",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/fortville",
+      "publicUrl": "https://itspurgepros.com/fortville",
+      "title": "Dog Waste Removal in Fortville, IN | Purge Pros",
+      "description": "See Fortville dog waste removal pricing for recurring or one-time cleanup. Build the yard plan and request address-level route confirmation.",
+      "canonical": "https://itspurgepros.com/fortville",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/fortville.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/fortville.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "f69c6c3aff6e9202c7380b84e2d7cf052588294729f7e6b825f80d369ca02158"
+    },
+    {
+      "slug": "greenfield",
+      "typeThese": {
+        "path": "/greenfield",
+        "title": "Dog Waste Removal in Greenfield, IN | Purge Pros",
+        "description": "See Greenfield dog waste removal pricing online. Describe the dogs, lot size, and cleanup areas, then request recurring or one-time service review.",
+        "canonical": "https://itspurgepros.com/greenfield",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/greenfield.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/greenfield.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/greenfield",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/greenfield",
+      "publicUrl": "https://itspurgepros.com/greenfield",
+      "title": "Dog Waste Removal in Greenfield, IN | Purge Pros",
+      "description": "See Greenfield dog waste removal pricing online. Describe the dogs, lot size, and cleanup areas, then request recurring or one-time service review.",
+      "canonical": "https://itspurgepros.com/greenfield",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/greenfield.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/greenfield.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "feb1d0bd2c2c76daa3dddff1237791a1cacac8bf089bdd60f21bc5d11c73e677"
+    },
+    {
+      "slug": "greenwood",
+      "typeThese": {
+        "path": "/greenwood",
+        "title": "Dog Waste Removal in Greenwood, IN | Purge Pros",
+        "description": "See Greenwood dog waste removal pricing for recurring or one-time cleanup. Match frequency to your dogs and request a locally reviewed service route.",
+        "canonical": "https://itspurgepros.com/greenwood",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/greenwood.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/greenwood.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/greenwood",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/greenwood",
+      "publicUrl": "https://itspurgepros.com/greenwood",
+      "title": "Dog Waste Removal in Greenwood, IN | Purge Pros",
+      "description": "See Greenwood dog waste removal pricing for recurring or one-time cleanup. Match frequency to your dogs and request a locally reviewed service route.",
+      "canonical": "https://itspurgepros.com/greenwood",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/greenwood.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/greenwood.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "063953e81de3581a29728552c3049018e614ef72cf907af99268e8890645c971"
+    },
+    {
+      "slug": "index",
+      "typeThese": {
+        "path": "/",
+        "title": "Dog Waste Removal Indianapolis | Purge Pros",
+        "description": "See your Purge Pros pet waste removal price in about 60 seconds. Recurring and one-time dog waste cleanup across Indianapolis and surrounding communities.",
+        "canonical": "https://itspurgepros.com/",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/index.jpg",
+        "customMetaTags": [],
+        "schemaFile": "pages/index.schema.html",
+        "schemaGoes": "\"SEO & AI search optimization\" > \"Schema markup\" > \"Add schema\"; if that form refuses or changes the text: a small Custom Code element of its own at the foot of the body section, under the last body block"
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/index.1.html",
+        "pages/index.2.html"
+      ],
+      "splitInTwo": true,
+      "linksToThisPageGoTo": "/",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/",
+      "publicUrl": "https://itspurgepros.com/",
+      "title": "Dog Waste Removal Indianapolis | Purge Pros",
+      "description": "See your Purge Pros pet waste removal price in about 60 seconds. Recurring and one-time dog waste cleanup across Indianapolis and surrounding communities.",
+      "canonical": "https://itspurgepros.com/",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/index.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/index.1.html",
+        "pages/index.2.html",
+        "pages/index.schema.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "46c6027e626f25cf9459a9e21f352bd2d1ff3f382c44d9609fa19672eb083fff"
+    },
+    {
+      "slug": "indianapolis",
+      "typeThese": {
+        "path": "/indianapolis",
+        "title": "Dog Waste Removal in Indianapolis, IN | Purge Pros",
+        "description": "Get an Indianapolis dog waste removal price online. Choose recurring or one-time cleanup, check the service ZIP, and request a locally reviewed route.",
+        "canonical": "https://itspurgepros.com/indianapolis",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/indianapolis.jpg",
+        "customMetaTags": [],
+        "schemaFile": "pages/indianapolis.schema.html",
+        "schemaGoes": "\"SEO & AI search optimization\" > \"Schema markup\" > \"Add schema\"; if that form refuses or changes the text: a small Custom Code element of its own at the foot of the body section, under the last body block"
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/indianapolis.1.html",
+        "pages/indianapolis.2.html"
+      ],
+      "splitInTwo": true,
+      "linksToThisPageGoTo": "/indianapolis",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/indianapolis",
+      "publicUrl": "https://itspurgepros.com/indianapolis",
+      "title": "Dog Waste Removal in Indianapolis, IN | Purge Pros",
+      "description": "Get an Indianapolis dog waste removal price online. Choose recurring or one-time cleanup, check the service ZIP, and request a locally reviewed route.",
+      "canonical": "https://itspurgepros.com/indianapolis",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/indianapolis.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/indianapolis.1.html",
+        "pages/indianapolis.2.html",
+        "pages/indianapolis.schema.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "8da1f3f9e9a63fa04a389208a4e3cfc2be6b23dbe68d7e0d5c6a4df8a9d29a55"
+    },
+    {
+      "slug": "ingalls",
+      "typeThese": {
+        "path": "/ingalls",
+        "title": "Dog Waste Removal in Ingalls, IN | Purge Pros",
+        "description": "Check Ingalls dog waste removal route availability and pricing. Describe the exact property, choose service, and request a locally reviewed route day.",
+        "canonical": "https://itspurgepros.com/ingalls",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/ingalls.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/ingalls.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/ingalls",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/ingalls",
+      "publicUrl": "https://itspurgepros.com/ingalls",
+      "title": "Dog Waste Removal in Ingalls, IN | Purge Pros",
+      "description": "Check Ingalls dog waste removal route availability and pricing. Describe the exact property, choose service, and request a locally reviewed route day.",
+      "canonical": "https://itspurgepros.com/ingalls",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/ingalls.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/ingalls.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "fc18b759f0651b39d076d1894ac25fe939cf6498458ed0967cadc86218755472"
+    },
+    {
+      "slug": "lapel",
+      "typeThese": {
+        "path": "/lapel",
+        "title": "Dog Waste Removal in Lapel, IN | Purge Pros",
+        "description": "See Lapel dog waste removal pricing and route availability. Describe the yard, choose recurring or one-time cleanup, and request an address review.",
+        "canonical": "https://itspurgepros.com/lapel",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/lapel.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/lapel.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/lapel",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/lapel",
+      "publicUrl": "https://itspurgepros.com/lapel",
+      "title": "Dog Waste Removal in Lapel, IN | Purge Pros",
+      "description": "See Lapel dog waste removal pricing and route availability. Describe the yard, choose recurring or one-time cleanup, and request an address review.",
+      "canonical": "https://itspurgepros.com/lapel",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/lapel.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/lapel.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "4f58ca869f1a06316167ef0a1a29a35dfc081688739becf003e0dcd9781b2edd"
+    },
+    {
+      "slug": "lawrence",
+      "typeThese": {
+        "path": "/lawrence",
+        "title": "Dog Waste Removal in Lawrence, IN | Purge Pros",
+        "description": "Check Lawrence dog waste removal pricing for recurring or one-time cleanup. Build the yard plan online and request a route after address review.",
+        "canonical": "https://itspurgepros.com/lawrence",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/lawrence.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/lawrence.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/lawrence",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/lawrence",
+      "publicUrl": "https://itspurgepros.com/lawrence",
+      "title": "Dog Waste Removal in Lawrence, IN | Purge Pros",
+      "description": "Check Lawrence dog waste removal pricing for recurring or one-time cleanup. Build the yard plan online and request a route after address review.",
+      "canonical": "https://itspurgepros.com/lawrence",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/lawrence.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/lawrence.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "9f94f871ee4117c92628da18e277d216a040c1026a29b063fdcbe494fa7b7477"
+    },
+    {
+      "slug": "markleville",
+      "typeThese": {
+        "path": "/markleville",
+        "title": "Dog Waste Removal in Markleville, IN | Purge Pros",
+        "description": "Check Markleville dog waste removal availability and pricing. Size the area the dogs use, choose recurring or one-time cleanup, and request review.",
+        "canonical": "https://itspurgepros.com/markleville",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/markleville.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/markleville.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/markleville",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/markleville",
+      "publicUrl": "https://itspurgepros.com/markleville",
+      "title": "Dog Waste Removal in Markleville, IN | Purge Pros",
+      "description": "Check Markleville dog waste removal availability and pricing. Size the area the dogs use, choose recurring or one-time cleanup, and request review.",
+      "canonical": "https://itspurgepros.com/markleville",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/markleville.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/markleville.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "246af6a19a020fcacdd67fbe7731fde132d679653617df67d80941d08fbf692c"
+    },
+    {
+      "slug": "mccordsville",
+      "typeThese": {
+        "path": "/mccordsville",
+        "title": "Dog Waste Removal in McCordsville, IN | Purge Pros",
+        "description": "Check McCordsville dog waste removal pricing online. Build a recurring or one-time yard plan and request route confirmation for the exact address.",
+        "canonical": "https://itspurgepros.com/mccordsville",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/mccordsville.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/mccordsville.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/mccordsville",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/mccordsville",
+      "publicUrl": "https://itspurgepros.com/mccordsville",
+      "title": "Dog Waste Removal in McCordsville, IN | Purge Pros",
+      "description": "Check McCordsville dog waste removal pricing online. Build a recurring or one-time yard plan and request route confirmation for the exact address.",
+      "canonical": "https://itspurgepros.com/mccordsville",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/mccordsville.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/mccordsville.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "dbc24be8592371fd5b2a094b6ebd5a0c8bafc282726a2f1bb4698f1787335817"
+    },
+    {
+      "slug": "mooresville",
+      "typeThese": {
+        "path": "/mooresville",
+        "title": "Dog Waste Removal in Mooresville, IN | Purge Pros",
+        "description": "See Mooresville dog waste removal pricing for recurring or one-time cleanup. Count the dogs, size the yard, and request a route day after review.",
+        "canonical": "https://itspurgepros.com/mooresville",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/mooresville.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/mooresville.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/mooresville",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/mooresville",
+      "publicUrl": "https://itspurgepros.com/mooresville",
+      "title": "Dog Waste Removal in Mooresville, IN | Purge Pros",
+      "description": "See Mooresville dog waste removal pricing for recurring or one-time cleanup. Count the dogs, size the yard, and request a route day after review.",
+      "canonical": "https://itspurgepros.com/mooresville",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/mooresville.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/mooresville.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "b52dcba8d9cec6f45d2dbe9d6e5e0eee12d5c9afc141f266c5b093fceb8def82"
+    },
+    {
+      "slug": "new-palestine",
+      "typeThese": {
+        "path": "/new-palestine",
+        "title": "Dog Waste Removal in New Palestine, IN | Purge Pros",
+        "description": "Price New Palestine dog waste removal for recurring or one-time cleanup. Enter the true lot size and service areas, then request route review.",
+        "canonical": "https://itspurgepros.com/new-palestine",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/new-palestine.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/new-palestine.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/new-palestine",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/new-palestine",
+      "publicUrl": "https://itspurgepros.com/new-palestine",
+      "title": "Dog Waste Removal in New Palestine, IN | Purge Pros",
+      "description": "Price New Palestine dog waste removal for recurring or one-time cleanup. Enter the true lot size and service areas, then request route review.",
+      "canonical": "https://itspurgepros.com/new-palestine",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/new-palestine.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/new-palestine.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "31427ebeebb36e995db262a60c153140a0931a22f2ff5c5bf2c2c3a6124dadac"
+    },
+    {
+      "slug": "noblesville",
+      "typeThese": {
+        "path": "/noblesville",
+        "title": "Dog Waste Removal in Noblesville, IN | Purge Pros",
+        "description": "Price dog waste removal in Noblesville online. Compare recurring and one-time cleanup, describe the yard, and request a route day after local review.",
+        "canonical": "https://itspurgepros.com/noblesville",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/noblesville.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/noblesville.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/noblesville",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/noblesville",
+      "publicUrl": "https://itspurgepros.com/noblesville",
+      "title": "Dog Waste Removal in Noblesville, IN | Purge Pros",
+      "description": "Price dog waste removal in Noblesville online. Compare recurring and one-time cleanup, describe the yard, and request a route day after local review.",
+      "canonical": "https://itspurgepros.com/noblesville",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/noblesville.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/noblesville.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "529a2d79447500f8a1efd712e6866b0f4709b66d15bdce37fa809705a67621c6"
+    },
+    {
+      "slug": "page-not-found",
+      "typeThese": {
+        "path": "/page-not-found",
+        "title": "Page Not Found | Purge Pros",
+        "description": "Sorry, that page is not here. Head to the Purge Pros home page, dog waste removal, our service areas, questions and answers or the Yard Guide.",
+        "canonical": null,
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/page-not-found.jpg",
+        "customMetaTags": [
+          {
+            "name": "robots",
+            "content": "noindex, follow"
+          }
+        ],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": true,
+      "robotsFromBuild": "noindex, follow",
+      "pasteBodyBlocks": [
+        "pages/page-not-found.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/page-not-found",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/page-not-found",
+      "publicUrl": "https://itspurgepros.com/page-not-found",
+      "title": "Page Not Found | Purge Pros",
+      "description": "Sorry, that page is not here. Head to the Purge Pros home page, dog waste removal, our service areas, questions and answers or the Yard Guide.",
+      "canonical": "",
+      "robots": "noindex, follow",
+      "robotsCustomMetaTag": "noindex, follow",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/page-not-found.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": false,
+      "sitemapNote": "kept out of search",
+      "bodyBlocks": [
+        "pages/page-not-found.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "507fddd77058737672bbbe9cb035098319cd381c390002d482718525305efafb"
+    },
+    {
+      "slug": "pendleton",
+      "typeThese": {
+        "path": "/pendleton",
+        "title": "Dog Waste Removal in Pendleton, IN | Purge Pros",
+        "description": "Check Pendleton dog waste removal pricing for recurring or one-time cleanup. Describe the yard, old lot or new, and request an exact-address review.",
+        "canonical": "https://itspurgepros.com/pendleton",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/pendleton.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/pendleton.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/pendleton",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/pendleton",
+      "publicUrl": "https://itspurgepros.com/pendleton",
+      "title": "Dog Waste Removal in Pendleton, IN | Purge Pros",
+      "description": "Check Pendleton dog waste removal pricing for recurring or one-time cleanup. Describe the yard, old lot or new, and request an exact-address review.",
+      "canonical": "https://itspurgepros.com/pendleton",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/pendleton.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/pendleton.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "d09518b3b4e1a9096ad475fc31663df4a4507bdc55e6c98aa7be23e53f7d92a2"
+    },
+    {
+      "slug": "pittsboro",
+      "typeThese": {
+        "path": "/pittsboro",
+        "title": "Dog Waste Removal in Pittsboro, IN | Purge Pros",
+        "description": "Get Pittsboro dog waste removal pricing for recurring or one-time cleanup. Build the yard plan online and request a route day after address review.",
+        "canonical": "https://itspurgepros.com/pittsboro",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/pittsboro.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/pittsboro.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/pittsboro",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/pittsboro",
+      "publicUrl": "https://itspurgepros.com/pittsboro",
+      "title": "Dog Waste Removal in Pittsboro, IN | Purge Pros",
+      "description": "Get Pittsboro dog waste removal pricing for recurring or one-time cleanup. Build the yard plan online and request a route day after address review.",
+      "canonical": "https://itspurgepros.com/pittsboro",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/pittsboro.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/pittsboro.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "7ba60b09b8932be45788f8d77fb10ed3d599afea25e176d29dd0c7254c10f9a4"
+    },
+    {
+      "slug": "plainfield",
+      "typeThese": {
+        "path": "/plainfield",
+        "title": "Dog Waste Removal in Plainfield, IN | Purge Pros",
+        "description": "See Plainfield dog waste removal pricing online. Choose recurring or one-time cleanup, define the yard, and request an address-level route review.",
+        "canonical": "https://itspurgepros.com/plainfield",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/plainfield.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/plainfield.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/plainfield",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/plainfield",
+      "publicUrl": "https://itspurgepros.com/plainfield",
+      "title": "Dog Waste Removal in Plainfield, IN | Purge Pros",
+      "description": "See Plainfield dog waste removal pricing online. Choose recurring or one-time cleanup, define the yard, and request an address-level route review.",
+      "canonical": "https://itspurgepros.com/plainfield",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/plainfield.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/plainfield.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "cd49678ebb7ede27f7ad56be7967fcf61f2607813df2004ac00a10dcd7d51088"
+    },
+    {
+      "slug": "privacy-policy",
+      "typeThese": {
+        "path": "/privacy-policy",
+        "title": "Privacy Policy | Purge Pros",
+        "description": "Read how Purge Pros handles information from quote requests, service communications and website use, including contact preferences and privacy questions.",
+        "canonical": "https://itspurgepros.com/privacy-policy",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/privacy-policy.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/privacy-policy.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/privacy-policy",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/privacy-policy",
+      "publicUrl": "https://itspurgepros.com/privacy-policy",
+      "title": "Privacy Policy | Purge Pros",
+      "description": "Read how Purge Pros handles information from quote requests, service communications and website use, including contact preferences and privacy questions.",
+      "canonical": "https://itspurgepros.com/privacy-policy",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/privacy-policy.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/privacy-policy.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "a6101d40d4408cd086783842676e679909126171ad4b781d6f4a9c17665f7f97"
+    },
+    {
+      "slug": "quote",
+      "typeThese": {
+        "path": "/quote",
+        "title": "Build Your Dog Waste Removal Price | Purge Pros",
+        "description": "See your per-visit dog waste removal price for Indianapolis and Central Indiana in five quick questions, before sharing contact details. No payment today.",
+        "canonical": null,
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/quote.jpg",
+        "customMetaTags": [
+          {
+            "name": "robots",
+            "content": "noindex, follow"
+          }
+        ],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": true,
+      "robotsFromBuild": "noindex, follow",
+      "pasteBodyBlocks": [
+        "pages/quote.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/quote",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/quote",
+      "publicUrl": "https://itspurgepros.com/quote",
+      "title": "Build Your Dog Waste Removal Price | Purge Pros",
+      "description": "See your per-visit dog waste removal price for Indianapolis and Central Indiana in five quick questions, before sharing contact details. No payment today.",
+      "canonical": "",
+      "robots": "noindex, follow",
+      "robotsCustomMetaTag": "noindex, follow",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/quote.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": false,
+      "sitemapNote": "kept out of search",
+      "bodyBlocks": [
+        "pages/quote.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "7ab1510ba8b1e8f169bd832933bb1aff186e8fb8d42c6d7e8dff53c057fdc04c"
+    },
+    {
+      "slug": "reviews",
+      "typeThese": {
+        "path": "/reviews",
+        "title": "Purge Pros Reviews | Indianapolis Dog Waste Removal",
+        "description": "Read customer feedback on Purge Pros dog waste removal in Indianapolis and nearby communities. See how our local team cares for yards, gates and pets.",
+        "canonical": "https://itspurgepros.com/reviews",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/reviews.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/reviews.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/reviews",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/reviews",
+      "publicUrl": "https://itspurgepros.com/reviews",
+      "title": "Purge Pros Reviews | Indianapolis Dog Waste Removal",
+      "description": "Read customer feedback on Purge Pros dog waste removal in Indianapolis and nearby communities. See how our local team cares for yards, gates and pets.",
+      "canonical": "https://itspurgepros.com/reviews",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/reviews.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/reviews.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "bc8040dd72706d0e5052353e5852a6e302369e38625b7dee7e2ee8a27049a115"
+    },
+    {
+      "slug": "sanitizing-and-deodorizing",
+      "typeThese": {
+        "path": "/sanitizing-and-deodorizing",
+        "title": "Yard Sanitizing & Deodorizing in Indianapolis | Purge Pros",
+        "description": "Ask about optional yard sanitizing and deodorizing in Indianapolis and nearby communities. We review your address, surfaces and treatment needs before quoting.",
+        "canonical": "https://itspurgepros.com/sanitizing-and-deodorizing",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/sanitizing-and-deodorizing.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/sanitizing-and-deodorizing.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/sanitizing-and-deodorizing",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/sanitizing-and-deodorizing",
+      "publicUrl": "https://itspurgepros.com/sanitizing-and-deodorizing",
+      "title": "Yard Sanitizing & Deodorizing in Indianapolis | Purge Pros",
+      "description": "Ask about optional yard sanitizing and deodorizing in Indianapolis and nearby communities. We review your address, surfaces and treatment needs before quoting.",
+      "canonical": "https://itspurgepros.com/sanitizing-and-deodorizing",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/sanitizing-and-deodorizing.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/sanitizing-and-deodorizing.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "d3f4b4b6e2bba8afedef2c0a84f19a64eb7b82e17f197c9f9abc2c286f2c46cd"
+    },
+    {
+      "slug": "terms-conditions",
+      "typeThese": {
+        "path": "/terms-conditions",
+        "title": "Terms & Conditions | Purge Pros Dog Waste Removal",
+        "description": "Review Purge Pros service terms, recurring billing, first-cleanup and one-time pricing, access requirements, weather policies and cancellation terms.",
+        "canonical": "https://itspurgepros.com/terms-conditions",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/terms-conditions.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/terms-conditions.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/terms-conditions",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/terms-conditions",
+      "publicUrl": "https://itspurgepros.com/terms-conditions",
+      "title": "Terms & Conditions | Purge Pros Dog Waste Removal",
+      "description": "Review Purge Pros service terms, recurring billing, first-cleanup and one-time pricing, access requirements, weather policies and cancellation terms.",
+      "canonical": "https://itspurgepros.com/terms-conditions",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/terms-conditions.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/terms-conditions.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "5d9bd2ec51997a145f50a7b9d0ffa650b3a2ae5ecab6b0048e2107aefe6fc34d"
+    },
+    {
+      "slug": "welcome",
+      "typeThese": {
+        "path": "/welcome",
+        "title": "New Customer Welcome | Purge Pros",
+        "description": "What new Purge Pros customers can expect before, during, and after pet waste removal service.",
+        "canonical": null,
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/welcome.jpg",
+        "customMetaTags": [
+          {
+            "name": "robots",
+            "content": "noindex,follow"
+          }
+        ],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": true,
+      "robotsFromBuild": "noindex",
+      "pasteBodyBlocks": [
+        "pages/welcome.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/welcome",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/welcome",
+      "publicUrl": "https://itspurgepros.com/welcome",
+      "title": "New Customer Welcome | Purge Pros",
+      "description": "What new Purge Pros customers can expect before, during, and after pet waste removal service.",
+      "canonical": "",
+      "robots": "noindex,follow",
+      "robotsCustomMetaTag": "noindex,follow",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/welcome.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": false,
+      "sitemapNote": "kept out of search",
+      "bodyBlocks": [
+        "pages/welcome.html"
+      ],
+      "ownHeaderAndFooter": true,
+      "bodySettings": {
+        "data-no-price-bar": true,
+        "data-mascot": "gloved",
+        "data-audience": "customer"
+      },
+      "sourceSha256": "275a23a923ce262454bf5175095d465c8ae66149bd9f100b8345cfb0839ed9d6"
+    },
+    {
+      "slug": "westfield",
+      "typeThese": {
+        "path": "/westfield",
+        "title": "Dog Waste Removal in Westfield, IN | Purge Pros",
+        "description": "Get a Westfield dog waste removal price for recurring or one-time cleanup. Match service to the dogs and yard, then request a reviewed route day.",
+        "canonical": "https://itspurgepros.com/westfield",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/westfield.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/westfield.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/westfield",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/westfield",
+      "publicUrl": "https://itspurgepros.com/westfield",
+      "title": "Dog Waste Removal in Westfield, IN | Purge Pros",
+      "description": "Get a Westfield dog waste removal price for recurring or one-time cleanup. Match service to the dogs and yard, then request a reviewed route day.",
+      "canonical": "https://itspurgepros.com/westfield",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/westfield.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/westfield.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "aaf0f0790d74de785903679d870c44d3ac9b11c2a82c34a2bf5719cb9afcc365"
+    },
+    {
+      "slug": "whitestown",
+      "typeThese": {
+        "path": "/whitestown",
+        "title": "Dog Waste Removal in Whitestown, IN | Purge Pros",
+        "description": "Get a Whitestown dog waste removal price online. Pick recurring or one-time cleanup, add current gate notes, and request an exact-address route review.",
+        "canonical": "https://itspurgepros.com/whitestown",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/whitestown.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/whitestown.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/whitestown",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/whitestown",
+      "publicUrl": "https://itspurgepros.com/whitestown",
+      "title": "Dog Waste Removal in Whitestown, IN | Purge Pros",
+      "description": "Get a Whitestown dog waste removal price online. Pick recurring or one-time cleanup, add current gate notes, and request an exact-address route review.",
+      "canonical": "https://itspurgepros.com/whitestown",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/whitestown.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/whitestown.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "63fd78f8f8ef6c29acfe067e33fc05462983abaf180dda1045b001d394ad51e1"
+    },
+    {
+      "slug": "yard-guide-article",
+      "typeThese": {
+        "path": "https://blog.itspurgepros.com/post/dog-poop-removal-cost-indianapolis",
+        "title": "Dog Poop Removal Cost in Indianapolis: What Shapes Your Quote",
+        "description": "See what changes dog poop removal pricing in Indianapolis, how per-visit plans work, and what to compare before requesting a cleanup.",
+        "canonical": "https://blog.itspurgepros.com/post/dog-poop-removal-cost-indianapolis",
+        "shareImage": "https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8cdc0a4d512c32b699ec2.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "blog/post-1-header.html",
+        "blog/post-3-footer.html"
+      ],
+      "splitInTwo": true,
+      "linksToThisPageGoTo": "https://blog.itspurgepros.com/post/dog-poop-removal-cost-indianapolis",
+      "previewAddress": null,
+      "where": "blog template: Blog Post (fields belong to each post's own record)",
+      "path": "https://blog.itspurgepros.com/post/dog-poop-removal-cost-indianapolis",
+      "publicUrl": "https://blog.itspurgepros.com/post/dog-poop-removal-cost-indianapolis",
+      "title": "Dog Poop Removal Cost in Indianapolis: What Shapes Your Quote",
+      "description": "See what changes dog poop removal pricing in Indianapolis, how per-visit plans work, and what to compare before requesting a cleanup.",
+      "canonical": "https://blog.itspurgepros.com/post/dog-poop-removal-cost-indianapolis",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://assets.cdn.filesafe.space/YzqccfNpAoMTt4EZO92d/media/6aa8cdc0a4d512c32b699ec2.jpg",
+      "shareImageFrom": "the page names it",
+      "inSitemap": false,
+      "sitemapNote": "the blog has its own sitemap",
+      "bodyBlocks": [
+        "blog/post-1-header.html",
+        "blog/post-3-footer.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "a79e263f72c68fb5631f76fdb56ef956e94854fbc6e31596c3966523a1bb7574"
+    },
+    {
+      "slug": "yard-guide",
+      "typeThese": {
+        "path": "https://blog.itspurgepros.com/",
+        "title": "Dog-Friendly Yard Care & Cleanup Guides | Purge Pros",
+        "description": "Practical dog waste removal and yard-care guides for Indianapolis-area homeowners. Compare service schedules and learn what to expect from Purge Pros.",
+        "canonical": "https://blog.itspurgepros.com/",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/yard-guide.jpg",
+        "customMetaTags": [],
+        "schemaFile": "blog/home-1-header-and-index.schema.html",
+        "schemaGoes": "\"SEO & AI search optimization\" > \"Schema markup\" > \"Add schema\"; if that form refuses or changes the text: a small Custom Code element of its own at the foot of the body section, under the last body block"
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "blog/home-1-header-and-index.1.html",
+        "blog/home-1-header-and-index.2.html"
+      ],
+      "splitInTwo": true,
+      "linksToThisPageGoTo": "https://blog.itspurgepros.com/",
+      "previewAddress": null,
+      "where": "blog template: Blog Home (fields belong to the blog's settings)",
+      "path": "https://blog.itspurgepros.com/",
+      "publicUrl": "https://blog.itspurgepros.com/",
+      "title": "Dog-Friendly Yard Care & Cleanup Guides | Purge Pros",
+      "description": "Practical dog waste removal and yard-care guides for Indianapolis-area homeowners. Compare service schedules and learn what to expect from Purge Pros.",
+      "canonical": "https://blog.itspurgepros.com/",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/yard-guide.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": false,
+      "sitemapNote": "the blog has its own sitemap",
+      "bodyBlocks": [
+        "blog/home-1-header-and-index.1.html",
+        "blog/home-1-header-and-index.2.html",
+        "blog/home-1-header-and-index.schema.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {},
+      "sourceSha256": "783638244f9a204118c1038c63fd968f579971d95bb749c4ba06d183387ec719"
+    },
+    {
+      "slug": "zionsville",
+      "typeThese": {
+        "path": "/zionsville",
+        "title": "Dog Waste Removal in Zionsville, IN | Purge Pros",
+        "description": "Price Zionsville dog waste removal online, village lot or acreage. Pick recurring or one-time cleanup, size the area to scoop, and request route review.",
+        "canonical": "https://itspurgepros.com/zionsville",
+        "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/zionsville.jpg",
+        "customMetaTags": [],
+        "schemaFile": null,
+        "schemaGoes": null
+      },
+      "keepOutOfSearch": false,
+      "robotsFromBuild": "none",
+      "pasteBodyBlocks": [
+        "pages/zionsville.html"
+      ],
+      "splitInTwo": false,
+      "linksToThisPageGoTo": "/zionsville",
+      "previewAddress": null,
+      "where": "website page",
+      "path": "/zionsville",
+      "publicUrl": "https://itspurgepros.com/zionsville",
+      "title": "Dog Waste Removal in Zionsville, IN | Purge Pros",
+      "description": "Price Zionsville dog waste removal online, village lot or acreage. Pick recurring or one-time cleanup, size the area to scoop, and request route review.",
+      "canonical": "https://itspurgepros.com/zionsville",
+      "robots": "index (no robots tag)",
+      "robotsCustomMetaTag": "",
+      "shareImage": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/assets/derived/share/zionsville.jpg",
+      "shareImageFrom": "the page's own link-preview picture, 1200 x 630",
+      "inSitemap": true,
+      "sitemapNote": "",
+      "bodyBlocks": [
+        "pages/zionsville.html"
+      ],
+      "ownHeaderAndFooter": false,
+      "bodySettings": {
+        "data-mascot": "gloved"
+      },
+      "sourceSha256": "d3738611fbf080595100a2eb1e7f8c4b01f9f5fb0014bcf5bb24c2310e7a7096"
+    }
+  ]
+}

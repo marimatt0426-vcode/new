@@ -1,0 +1,3 @@
+HERE, between the two Custom Code blocks, stands GoHighLevel's own "Blog Content" element (today blog-content-SNKZYT25pP, in a section of its own).
+Do not paste anything here. Keep the element and keep its custom class: pp-blog-native-post
+Every article is shown by this element from its own record; no article is edited. It is dressed by css/blog-native.css, which the first block links.
