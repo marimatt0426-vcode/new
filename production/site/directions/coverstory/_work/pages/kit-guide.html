@@ -1,0 +1,271 @@
+<!--
+{
+  "title": "Family kit: guide | Cover Story page platform",
+  "description": "The components the Yard Guide index and the custom code around a native blog post add to the Cover Story system, with their class names, and a native post as the blog stylesheet dresses it.",
+  "css": [
+    "css/family-guide.css"
+  ],
+  "scripts": ["js/family-guide.js"],
+  "hero": {
+    "recipe": "kit",
+    "title": "Family kit: guide",
+    "lead": "Fourteen components from css/family-guide.css, used on yard-guide.html and around the native post on yard-guide-article.html, and one demo of a native GoHighLevel post as css/blog-native.css dresses it. Same tokens, radii, shadows and type sizes as the shared kit. The index, the library demo and the rows of three guides are generated from assets/covers/covers.json by the script printed in FAMILY-NOTES-guide.md."
+  }
+}
+-->
+
+  <!-- G1 to G3, G5 -->
+  <section class="kit" id="kit-guide-lib">
+    <div class="kit__label"><b>G1 Library · G2 Topic chip · G3 Cover card · G5 Closing card · G13 Search box · G15 Count line</b><code>.guide-lib · div.guide-search[hidden] · fieldset.guide-filter · label.guide-chip &gt; input[data-one] · p.guide-says · .guide-grid · a.guide-card[data-topic][data-lead] · .guide-close</code><span>Every article as a cover card, with a topic filter that needs no script: the chips are radio buttons and the stylesheet reads the chosen one. As written no radio is checked, so a link to a topic (<code>yard-guide.html#service-guides</code>) opens that view with the script off as well; the script checks the matching radio on load. The first three cards of a view are large: three across on a desktop, the first on its side on a tablet. Where three large cards would leave one card (or two at four columns) beside a stretched closing card, the view shows ONE large card at that width, the first, on its side across the row (<code>data-one="3 4"</code> on the view&rsquo;s radio). So the closing card is always one card wide beside a full set of cards, or a band under full rows, for any topic at any width, and no row is ever short. Cards of one row share their row lines: every sentence and every &ldquo;Read the guide&rdquo; of a row sits on one line whatever the titles do. The ribbon is a tab under the cover, never on the artwork. The generator writes the counts, which cards lead each view, where a view shows one large card and how wide the closing card is; never type cards by hand. The search box is written hidden and shown by js/family-guide.js; while a search is on, the script applies the same rule to the matches. The topic chips run three and two until 1180px, where the one row fits the container. The demo is the newest three posts of each topic. Each topic needs at least three posts.</span></div>
+    <div class="kit__tint">
+<!-- LIBRARY DEMO START (written by the generator; do not edit between these two lines) -->
+    <div class="guide-lib" style="--guide-0-2:1;--guide-0-3:3;--guide-0-4:1;--guide-1-2:2;--guide-1-3:3;--guide-1-4:4;--guide-2-2:2;--guide-2-3:3;--guide-2-4:4;--guide-3-2:2;--guide-3-3:3;--guide-3-4:4;--guide-4-2:2;--guide-4-3:3;--guide-4-4:4">
+      <div class="guide-search" hidden>
+        <label class="vh" for="guide-q-demo">Search the Yard Guide</label>
+        <img class="guide-search__ico" src="../../assets/brand-icons/pp-search.webp" width="28" height="28" loading="lazy" alt="">
+        <input class="field__input guide-search__input" id="guide-q-demo" type="search" placeholder="Search the Yard Guide" autocomplete="off" enterkeyhint="search">
+      </div>
+      <fieldset class="guide-filter">
+        <legend class="vh">Filter Yard Guide articles</legend>
+        <label class="guide-chip"><input class="vh" type="radio" name="guide-topic-demo" value="all" data-one="4"><img class="stk stk--thin stk--0" src="../../assets/brand-icons/pp-yard-guide.webp" width="28" height="28" loading="lazy" alt=""><span>All articles</span><span class="guide-chip__n">12</span></label>
+        <label class="guide-chip"><input class="vh" type="radio" name="guide-topic-demo" value="c1" data-rest="none"><img class="stk stk--thin stk--0" src="../../assets/brand-icons/pp-yard.webp" width="28" height="28" loading="lazy" alt=""><span>Yard Care</span><span class="guide-chip__n">3</span></label>
+        <label class="guide-chip"><input class="vh" type="radio" name="guide-topic-demo" value="c2" data-rest="none"><img class="stk stk--thin stk--0" src="../../assets/brand-icons/pp-property-notes.webp" width="28" height="28" loading="lazy" alt=""><span>Property Guides</span><span class="guide-chip__n">3</span></label>
+        <label class="guide-chip"><input class="vh" type="radio" name="guide-topic-demo" value="c3" data-rest="none"><img class="stk stk--thin stk--0" src="../../assets/brand-icons/pp-scoop.webp" width="28" height="28" loading="lazy" alt=""><span>Service Guides</span><span class="guide-chip__n">3</span></label>
+        <label class="guide-chip"><input class="vh" type="radio" name="guide-topic-demo" value="c4" data-rest="none"><img class="stk stk--thin stk--0" src="../../assets/brand-icons/pp-service-calendar.webp" width="28" height="28" loading="lazy" alt=""><span>Seasonal Yard Care</span><span class="guide-chip__n">3</span></label>
+      </fieldset>
+      <p class="guide-says"><span><span class="guide-says__line" data-view="all"><b>12 guides, newest up top.</b> Helpful answers for real yards.</span><span class="guide-says__line" data-view="c1"><b>3 on yard care.</b> Toys, turf, gates and mowing day.</span><span class="guide-says__line" data-view="c2"><b>3 for trickier properties.</b> Two gates? A shared lawn? Start here.</span><span class="guide-says__line" data-view="c3"><b>3 on how service works.</b> Prices, schedules and first visits.</span><span class="guide-says__line" data-view="c4"><b>3 for Indiana weather.</b> Leaves, snow, thaw and mud.</span></span></p>
+      <div class="guide-grid">
+        <p class="guide-grid__rest">The rest of the shelf</p>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/compare-per-visit-monthly-dog-waste-quotes" data-topic="c3" data-lead="all all1 topic topic1">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/compare-per-visit-monthly-dog-waste-quotes.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot balancing per-visit receipts, a calendar and a calculator beside one shared yard scope."></span><span class="guide-ribbon guide-ribbon--c3">Service guides</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title"><span class="guide-nb">Per-Visit</span> or Monthly Quote? How to Compare the Math Fairly</h3><p class="guide-card__text">Normalize scope, visit counts and first-cleanup terms so a per-visit quote and a monthly-looking quote can be compared fairly.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/weekly-yard-reset-toys-movable-obstacles" data-topic="c1" data-lead="all topic topic1">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/weekly-yard-reset-toys-movable-obstacles.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot holding a checklist beside a toy basket, coiled hose, bowl and clear yard path."></span><span class="guide-ribbon guide-ribbon--c1">Yard care</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Outdoor Toys and Movable Obstacles: A Weekly Yard Reset Routine</h3><p class="guide-card__text">A repeatable weekly reset for toys, bowls, hoses and lightweight furniture that keeps dog-use areas easier to inspect and access.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/two-gates-side-passage-access-map" data-topic="c2" data-lead="all topic topic1">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/two-gates-side-passage-access-map.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot holding a map with two gate routes and blue arrows through a side passage."></span><span class="guide-ribbon guide-ribbon--c2">Property guides</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Two Gates and a Side Passage: How to Make a Useful Access Map</h3><p class="guide-card__text">Map two gates and a side passage so every agreed dog-use section has a physical route, clear instructions and fewer surprises on service day.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/invisible-fence-physical-yard-access" data-topic="c1" data-lead="topic">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/invisible-fence-physical-yard-access.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot points from a physical gate toward a dog zone marked by a subtle blue boundary."></span><span class="guide-ribbon guide-ribbon--c1">Yard care</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Invisible Fences and Dog Waste Service: Plan the Physical Access Too</h3><p class="guide-card__text">An invisible boundary can guide a dog, but a cleanup plan still needs a physical gate, route, pet arrangement and current access instructions.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/artificial-turf-dog-waste-pickup-expectations" data-topic="c1" data-lead="topic">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/artificial-turf-dog-waste-pickup-expectations.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot inspecting artificial turf with a scoop, brush, seams and a drain detail."></span><span class="guide-ribbon guide-ribbon--c1">Yard care</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Artificial Turf Dog Waste Pickup: What It Covers and What It Does Not</h3><p class="guide-card__text">Set clear expectations for dog-waste pickup on artificial turf, including edges, seams, access and separate surface-care questions.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/measure-scoopable-outdoor-area-rectangles" data-topic="c2" data-lead="topic">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/measure-scoopable-outdoor-area-rectangles.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot measuring three rectangular yard sections with blue arrows."></span><span class="guide-ribbon guide-ribbon--c2">Property guides</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">How to Measure a Scoopable Outdoor Area With Simple Rectangles</h3><p class="guide-card__text">Use a few simple rectangles to estimate the outdoor sections that need dog-waste pickup, with a worked example and practical scope checks.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/understanding-gate-closure-photo-after-scoop-visit" data-topic="c3" data-lead="topic">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/understanding-gate-closure-photo-after-scoop-visit.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot points to a phone-shaped frame showing a closed wooden gate and a latch detail, beneath A Clearer Finish."></span><span class="guide-ribbon guide-ribbon--c3">Service guides</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">What a <span class="guide-nb">Gate-Closure</span> Photo Can Tell You After a Scoop Visit</h3><p class="guide-card__text">Learn how to read a gate-closure photo after dog poop cleanup, what it shows, and which access or service questions still need a message to the team.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/weekly-or-one-time-dog-poop-cleanup" data-topic="c3" data-lead="topic">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/weekly-or-one-time-dog-poop-cleanup.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Purge Pros mascot compares a recurring cleanup calendar with a one-time yard cleanup option."></span><span class="guide-ribbon guide-ribbon--c3">Service guides</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Weekly or <span class="guide-nb">One-Time</span> Dog Poop Cleanup: Which Fits Your Yard?</h3><p class="guide-card__text">Compare recurring and one-time dog poop cleanup for your Indianapolis-area yard: service scope, starting prices and route review.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/custom-dog-waste-removal-estimate-checklist" data-topic="c2" data-lead="topic">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/custom-dog-waste-removal-estimate-checklist.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Purge Pros mascot beside a property-plan clipboard with yard areas, dogs, gate access and frequency icons."></span><span class="guide-ribbon guide-ribbon--c2">Property guides</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">What to Include in a Custom Dog Waste Removal Estimate Request</h3><p class="guide-card__text">Prepare a useful custom cleanup request with property sections, dog count, access, frequency and scope details that support an accurate estimate.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/fall-backyard-close-up-furniture-leaves-dog-waste" data-topic="c4" data-lead="topic topic1">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/fall-backyard-close-up-furniture-leaves-dog-waste.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Seasonal close-up illustration of outdoor chairs, leaves, and gate corner with a blue search path, guided by a faithful brown Purge Pros character."></span><span class="guide-ribbon guide-ribbon--c4">Seasonal yard care</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Fall Backyard <span class="guide-nb">Close-Up</span>: Furniture, Leaves and Dog Waste</h3><p class="guide-card__text">Organize fall backyard tasks around waste pickup, furniture moves, leaf cover and usable access so the dog's outdoor space stays manageable.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/fall-dog-poop-cleanup-leaves" data-topic="c4" data-lead="topic">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/fall-dog-poop-cleanup-leaves.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Purge Pros mascot searches a leaf-covered autumn lawn along an illustrated blue pickup route."></span><span class="guide-ribbon guide-ribbon--c4">Seasonal yard care</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Fall Dog Poop Cleanup: Managing Waste Under Leaves</h3><p class="guide-card__text">Keep fall yard cleanup manageable when leaves hide dog waste. Learn a practical order for scooping, leaf work, and regular service.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/winter-dog-poop-cleanup-central-indiana" data-topic="c4" data-lead="topic">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/winter-dog-poop-cleanup-central-indiana.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Purge Pros mascot looks over a snow-covered yard with blue callouts for gate access and cleanup visibility."></span><span class="guide-ribbon guide-ribbon--c4">Seasonal yard care</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Winter Dog Poop Cleanup in Central Indiana</h3><p class="guide-card__text">Plan winter dog waste cleanup around visibility, gate access, snow, and changing yard conditions in Central Indiana.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <div class="guide-close">
+          <div class="guide-close__in">
+            <span class="puck puck--lg"><img src="../../assets/step-icons/chat.webp" width="256" height="256" loading="lazy" alt=""></span>
+            <div>
+              <p class="guide-close__title">Did not find your answer?</p>
+              <p class="guide-close__text">Ask us: <a href="sms:+13179615865">text (317) 961-5865</a> or <a href="tel:+13179615865">call</a>. Or look through the questions we hear most.</p>
+            </div>
+            <div class="guide-close__acts">
+              <a class="btn btn--primary btn--sm" href="sms:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" loading="lazy" alt="">Text us</a>
+              <a class="btn btn--ghost-dark btn--sm" href="faq.html">Popular questions</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- LIBRARY DEMO END -->
+    </div>
+  </section>
+
+  <!-- G4 -->
+  <section class="kit" id="kit-guide-ribbon">
+    <div class="kit__label"><b>G4 Category ribbon</b><code>span.guide-ribbon.guide-ribbon--c1 … --c4</code><span>The shared swallow-tailed ribbon in four topic colours, in the order of the filter, so a colour always means the same topic. One per card. It never sits on a cover&rsquo;s artwork: covers carry lettering, logos and badges in every corner. On a card it hangs as a tab under the cover&rsquo;s bottom edge, its top tucked behind the picture (<code>--guide-rib-tuck</code>), and reads as the label above the title; on a phone ticket it stands beside the cover.</span></div>
+    <div class="kit__row">
+      <span class="guide-ribbon guide-ribbon--c1">Yard care</span>
+      <span class="guide-ribbon guide-ribbon--c2">Property guides</span>
+      <span class="guide-ribbon guide-ribbon--c3">Service guides</span>
+      <span class="guide-ribbon guide-ribbon--c4">Seasonal yard care</span>
+    </div>
+  </section>
+
+  <!-- G5 -->
+  <section class="kit" id="kit-guide-close">
+    <div class="kit__label"><b>G5 Closing card, by its own width</b><code>.guide-close > .guide-close__in > .puck + div (.guide-close__title, __text) + .guide-close__acts</code><span>The last item of the grid: one card wide beside a full set of cards, or a band across the row under full rows, never a wide slab beside a lone card. It lays itself out from the width it is given: upright with full-width buttons at one card wide, a band from 520px, one line from 780px. Upright, the ring sits in the top right corner; as a band the disc sweeps in from the left end with the icon on it, so no line runs behind words or buttons. A glossy icon on a puck, never a mascot pose: it sits among covers that show the flat character. One per library.</span></div>
+    <div class="kit__row" style="align-items:stretch">
+      <div style="width:min(100%, 280px);display:grid">
+<!-- CLOSER DEMO START -->
+        <div class="guide-close">
+          <div class="guide-close__in">
+            <span class="puck puck--lg"><img src="../../assets/step-icons/chat.webp" width="256" height="256" loading="lazy" alt=""></span>
+            <div>
+              <p class="guide-close__title">Did not find your answer?</p>
+              <p class="guide-close__text">Ask us: <a href="sms:+13179615865">text (317) 961-5865</a> or <a href="tel:+13179615865">call</a>. Or look through the questions we hear most.</p>
+            </div>
+            <div class="guide-close__acts">
+              <a class="btn btn--primary btn--sm" href="sms:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" loading="lazy" alt="">Text us</a>
+              <a class="btn btn--ghost-dark btn--sm" href="faq.html">Popular questions</a>
+            </div>
+          </div>
+        </div>
+<!-- CLOSER DEMO END -->
+      </div>
+      <div style="flex:1 1 520px;min-width:0;display:grid;align-content:start">
+<!-- CLOSER DEMO START -->
+        <div class="guide-close">
+          <div class="guide-close__in">
+            <span class="puck puck--lg"><img src="../../assets/step-icons/chat.webp" width="256" height="256" loading="lazy" alt=""></span>
+            <div>
+              <p class="guide-close__title">Did not find your answer?</p>
+              <p class="guide-close__text">Ask us: <a href="sms:+13179615865">text (317) 961-5865</a> or <a href="tel:+13179615865">call</a>. Or look through the questions we hear most.</p>
+            </div>
+            <div class="guide-close__acts">
+              <a class="btn btn--primary btn--sm" href="sms:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" loading="lazy" alt="">Text us</a>
+              <a class="btn btn--ghost-dark btn--sm" href="faq.html">Popular questions</a>
+            </div>
+          </div>
+        </div>
+<!-- CLOSER DEMO END -->
+      </div>
+    </div>
+  </section>
+
+  <!-- G16 -->
+  <section class="kit" id="kit-guide-open">
+    <div class="kit__label"><b>G16 The band that opens an article</b><code>div.guide-open &gt; .wrap.guide-open__in &gt; nav.guide-open__trail[aria-label="Breadcrumb"] (ol of links) + p.guide-open__tag</code><span>A slim navy band directly under the header: the way back (Home, Yard Guide) on the container&rsquo;s left edge and, from 520px, the Yard Guide&rsquo;s line beside its book. The white page rises into it on a shallow arc with the cyan keyline. It is custom code in the header code of the blog-post template and is the same on every post, so it names no article: the post&rsquo;s own title is the heading under its cover. Compact on purpose, so the cover and the title are on the first screen.</span></div>
+    <div class="guide-open">
+      <div class="wrap guide-open__in">
+        <nav class="guide-open__trail" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="yard-guide.html">Yard Guide</a></li>
+          </ol>
+        </nav>
+        <p class="guide-open__tag"><img class="stk stk--thin" src="../../assets/brand-icons/pp-yard-guide.webp" width="36" height="36" loading="lazy" alt=""><span>Good yards. Good reads.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- G17 and css/blog-native.css -->
+  <section class="kit" id="kit-guide-native">
+    <div class="kit__label"><b>G17 A native post, as css/blog-native.css dresses it</b><code>div.guide-native[data-guide-css="css/blog-native.css"] &gt; GoHighLevel&rsquo;s markup: .blog-cover-image-container · .header-title.blog-content-title · .meta-section-1 (.blog-category &gt; a; .blog-date, .blog-info-dot, .blog-read-time) · #blogPostContent.blog-html · .blog-tags · .blog-author-details · .back-to-top · .blog-back-button</code><span>Articles stay native GoHighLevel posts. GoHighLevel writes the markup below, in this order, and no class is added to it; <code>css/blog-native.css</code> is the one stylesheet that dresses it, and nothing in <code>family-guide.css</code> reaches inside the frame. The sample holds every element the stylesheet covers, including the ones no post uses yet (a third-level heading, a numbered list, a quote, a table, a picture with a caption, a rule). The four ribbons are the four topics; a real post has one. The portrait, &ldquo;Back to Top&rdquo; and &ldquo;Back to Blog&rdquo; are in the markup and are not shown. On the review pages the script adds the stylesheet; on the blog it is a link in the template&rsquo;s header code.</span></div>
+    <div class="guide-native" data-guide-css="css/blog-native.css">
+<div id="section-ls7ncrU9WS"><div class="inner"><div class="c-row"><div class="c-column"><div id="blog-content-SNKZYT25pP"><div class="pp-blog-native-post">
+<div class="blog-cover-image-container"><picture class="hl-image-picture" style="display:block;"><img alt="Purge Pros job photo of a closed white gate latch and cleanup tools, with blue access callouts." class="header-image blog-content-blog-image hl-optimized mw-100" data-animation-class="" fetchpriority="auto" loading="lazy" src="../../assets/covers/by-slug/gate-access-dog-waste-removal.jpg" width="1536" height="1024" style="object-fit:unset;"/></picture></div><p class="header-title blog-content-title">A sample post: every element the stylesheet dresses</p><div class="meta-section-1"><span class="blog-category"><a aria-label="Yard Care" href="https://blog.itspurgepros.com/yard-guide/category/yard-care">Yard Care</a></span><span class="blog-category"><a aria-label="Property Guides" href="https://blog.itspurgepros.com/yard-guide/category/property-guides">Property Guides</a></span><span class="blog-category"><a aria-label="Service Guides" href="https://blog.itspurgepros.com/yard-guide/category/service-guides">Service Guides</a></span><span class="blog-category"><a aria-label="Seasonal Yard Care" href="https://blog.itspurgepros.com/yard-guide/category/seasonal-yard-care">Seasonal Yard Care</a></span></div><div class="meta-section-1"><span class="blog-date">October 9, 2026</span><span class="blog-info-dot">•</span><span class="blog-read-time">2 min read</span></div><div class="blog-html" id="blogPostContent"><p>The first paragraph of a post is set a step larger than the rest, as a standfirst. Nothing marks it in the post: the stylesheet takes whichever paragraph comes first.</p>
+<p>Every paragraph after it is reading text: 18px on a desktop and 17px on a phone, about 72 characters to a line. A <a href="yard-guide.html">link in the text</a> is blue with the cyan underline, and <strong>bold text</strong> is navy.</p>
+<h2>A section heading, the second level</h2>
+<p>Each section of a post opens with the short cyan bar. The live posts have four to six sections and no deeper heading.</p>
+<h3>A third-level heading, if a post ever needs one</h3>
+<p>A bulleted list:</p>
+<ul>
+<li>Each item starts with a cyan dot.</li>
+<li><strong>A bold lead-in.</strong> Then the sentence it introduces.</li>
+<li>A long item wraps under its own first word and never under the dot, however many lines it runs to on a narrow phone.</li>
+</ul>
+<p>A numbered list:</p>
+<ol>
+<li>The number sits on a gold disc.</li>
+<li>The steps keep their order.</li>
+<li>The third step.</li>
+</ol>
+<blockquote><p>A quote stands on a cream note with a cyan edge. It is for a sentence worth repeating, never for a customer review.</p></blockquote>
+<table>
+<thead><tr><th>Element</th><th>In the post</th><th>On the page</th></tr></thead>
+<tbody>
+<tr><td>Heading</td><td>h2, h3</td><td>The display face, navy</td></tr>
+<tr><td>List</td><td>ul, ol</td><td>Cyan dots, gold numbers</td></tr>
+<tr><td>Table</td><td>table</td><td>A navy head, dotted rows</td></tr>
+</tbody>
+</table>
+<figure><img alt="Illustrated blue three-step controller for scoop, check, mow, with faithful brown Purge Pros character moving the first marker." src="../../assets/covers/thumbs/pick-up-dog-poop-before-mowing.jpg" width="720" height="480" loading="lazy"/><figcaption>A picture inside a post keeps its shape and takes the photo corners; a caption sits under it.</figcaption></figure>
+<hr/>
+<p>The last paragraph. Under it GoHighLevel writes the author, and the stylesheet adds the small label above the name.</p>
+</div><div class="blog-tags"></div><div class="blog-author-details"><div class="blog-author-container"><div style="display:flex;flex-direction:column;gap:8px;"><a class="blog-author" href="https://blog.itspurgepros.com/yard-guide/author/6aa5e0dfcd5b03630ef1ea62"><div style="display:flex;align-items:center;gap:8px;"><div><img alt="blog author avatar" class="blog-author-image-post" height="36" src="../../assets/brand-icons/pp-mascot-silhouette.webp" width="36" loading="lazy"/></div><div class="flex flex-col"><p class="blog-author-name">Purge Pros</p></div></div></a><div class="author-icons-container"></div></div></div></div><div class="hl-blog-content-back-to-top-container"><button class="back-to-top">Back to Top</button></div><a aria-label="Back to Blog" class="blog-back-button" href="yard-guide.html"><i class="blog-left-arrow"></i><span>Back to Blog</span></a>
+</div></div></div></div></div></div>
+    </div>
+  </section>
+
+  <!-- G8, G10 -->
+  <section class="kit" id="kit-guide-quote">
+    <div class="kit__label"><b>G8 Card column · G10 Price prompt under an article</b><code>.guide-col &gt; .guide-quote &gt; span.puck + p.guide-quote__title + p.guide-quote__text + p.guide-quote__go &gt; a.btn.btn--primary[data-purge-quote]</code><span>The band that follows every post: a compact navy card in a 720px column on the sky ground. The glossy price tag, a short title, one plain line and one gold button that opens &ldquo;Build your price&rdquo; in place. The blog-post template places it (footer code), so it is the same under every post and no post&rsquo;s text has to carry it. Under 700px it is upright like the closing card (icon, title, line, full-width button, the ring in the top right corner); from 700px it is one row with the disc sweeping in from the left end. One per page.</span></div>
+    <div class="kit__tint">
+      <div class="guide-col">
+        <div class="guide-quote">
+          <span class="puck puck--lg"><img src="../../assets/step-icons/price-tag.webp" width="256" height="256" loading="lazy" alt=""></span>
+          <p class="guide-quote__title">What would your yard cost?</p>
+          <p class="guide-quote__text">See your price before sharing contact details.</p>
+          <p class="guide-quote__go"><a class="btn btn--primary" href="#quote" data-purge-quote>See my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- G18 -->
+  <section class="kit" id="kit-guide-row">
+    <div class="kit__label"><b>G18 Row of three guides under an article</b><code>div.guide-lib.guide-lib--row &gt; .guide-grid &gt; a.guide-card[data-lead="all all1"] + a.guide-card[data-lead="all"] × 2</code><span>The library with its three large cards and nothing else: no search, no filter, no count line, no closing card. Three across from 1100px; below that the first lies on its side across the row and the other two share the next one; full-width covers on a phone. Index and article show one and the same card, so a ribbon colour means the same topic on both. It is footer code of the blog-post template, the same under every post: the three newest guides, written by the generator.</span></div>
+<!-- MORE GUIDES START (written by the generator; do not edit between these two lines) -->
+    <div class="guide-lib guide-lib--row">
+      <div class="guide-grid">
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/compare-per-visit-monthly-dog-waste-quotes" data-topic="c3" data-lead="all all1">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/compare-per-visit-monthly-dog-waste-quotes.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot balancing per-visit receipts, a calendar and a calculator beside one shared yard scope."></span><span class="guide-ribbon guide-ribbon--c3">Service guides</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title"><span class="guide-nb">Per-Visit</span> or Monthly Quote? How to Compare the Math Fairly</h3><p class="guide-card__text">Normalize scope, visit counts and first-cleanup terms so a per-visit quote and a monthly-looking quote can be compared fairly.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/weekly-yard-reset-toys-movable-obstacles" data-topic="c1" data-lead="all">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/weekly-yard-reset-toys-movable-obstacles.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot holding a checklist beside a toy basket, coiled hose, bowl and clear yard path."></span><span class="guide-ribbon guide-ribbon--c1">Yard care</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Outdoor Toys and Movable Obstacles: A Weekly Yard Reset Routine</h3><p class="guide-card__text">A repeatable weekly reset for toys, bowls, hoses and lightweight furniture that keeps dog-use areas easier to inspect and access.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+        <a class="guide-card" href="https://blog.itspurgepros.com/post/two-gates-side-passage-access-map" data-topic="c2" data-lead="all">
+          <span class="guide-card__pic"><span class="guide-card__cover"><img src="../../assets/covers/thumbs/two-gates-side-passage-access-map.jpg" width="720" height="480" loading="lazy" decoding="async" alt="Illustrated Purge Pros mascot holding a map with two gate routes and blue arrows through a side passage."></span><span class="guide-ribbon guide-ribbon--c2">Property guides</span></span>
+          <div class="guide-card__body"><h3 class="guide-card__title">Two Gates and a Side Passage: How to Make a Useful Access Map</h3><p class="guide-card__text">Map two gates and a side passage so every agreed dog-use section has a physical route, clear instructions and fewer surprises on service day.</p><p class="guide-card__more"><span>Read the guide <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></p></div>
+        </a>
+      </div>
+    </div>
+<!-- MORE GUIDES END -->
+  </section>
+
+  <!-- G19 -->
+  <section class="kit" id="kit-guide-after">
+    <div class="kit__label"><b>G19 Wrapper of the footer code</b><code>div.guide-after &gt; section.sec (the price prompt) + section.sec (the row of guides)</code><span>Nothing to see: a wrapper with three jobs. On the blog the footer code of the blog-post template is a block of its own, with GoHighLevel&rsquo;s wrappers between it and the post and no <code>main</code> around it. A section of the site normally sweeps up over the one before it by a negative margin; that margin would have to reach across two of GoHighLevel&rsquo;s sections. So the wrapper keeps the white room above its first section itself (the curve is drawn on that white), makes its last section end on a level line for the closing scene, and keeps anything drawn outside the page from scrolling it sideways. The article page uses the same wrapper, so its markup is the footer code&rsquo;s own; <code>shots/round3-guide/proof/_template-mock.html</code> is the page assembled the blog&rsquo;s way.</span></div>
+  </section>
+
+  <!-- G14 -->
+  <section class="kit" id="kit-guide-acts">
+    <div class="kit__label"><b>G14 Closing row</b><code>div.guide-acts &gt; p.says, or a.btn + a.btn</code><span>The row that closes a block which the shared rules of a split do not reach: the mascot&rsquo;s one line under &ldquo;Where to next&rdquo; on the index, or two buttons. Side by side from 620px; a button in it is as wide as the block on a phone, like every closing button of the system.</span></div>
+    <div class="kit__row">
+      <div class="guide-acts"><p class="says"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt="">Homework optional. I already read them all.</p></div>
+    </div>
+  </section>
+
+  <!-- G15 -->
+  <section class="kit" id="kit-guide-says">
+    <div class="kit__label"><b>G15 Line beside covers</b><code>p.guide-says &gt; b + words</code><span>One light line next to a row of covers: the count line of the library (one <code>span.guide-says__line[data-view]</code> per view; the search writes its own) and the line under the row of guides that follows an article. Text only, the first words bold. The covers show the flat character, and the glossy mascot is never drawn beside him at a similar size, so this line carries no avatar; away from covers use the shared <code>p.says</code>.</span></div>
+    <div class="kit__tint" style="display:grid;gap:14px">
+      <p class="guide-says"><b>46 guides, newest up top.</b> Helpful answers for real yards.</p>
+      <p class="guide-says"><b>Three more reads</b> and you are the yard expert on the block.</p>
+    </div>
+  </section>

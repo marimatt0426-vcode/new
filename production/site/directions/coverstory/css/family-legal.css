@@ -1,0 +1,354 @@
+/* ==========================================================================
+   Purge Pros — "Cover Story" direction
+   family-legal.css : what the legal pages (terms-conditions, privacy-policy) add to the system.
+   Same tokens, radii, shadows and type sizes as css/site.css; every class starts with .legal-.
+   Each component is shown on kit-legal.html (source _work/pages/kit-legal.html).
+
+   Contents
+     L1  .legal-doc      the document layout: the "On this page" list beside the sheet
+     L2  .legal-toc      the "On this page" list: a pinned card on desktop, a pinned bar that opens on phones
+     L3  .legal-sheet    the sheet of paper the document is set on, and its opening statement
+     L4  .legal-clause   one numbered clause: icon disc, number chip, heading, body in a reading measure
+     L5  .legal-points   the lists of the document: a bold label and its sentence, with a quiet marker (never a tick)
+     L6  .legal-glance   a summary card that is a link to its clause (on a shared a.fcard)
+     L7  .legal-ask      the closing ask: Text, Call and Email (text first), the mascot's line, then two quiet links
+     L8  print           the page prints as the document: no header, picture, list of links or footer
+     L9  .legal-updated  the document's date line in full, under the heading of the document section
+     L10 .legal-reach    the contact row of a clause: the text-first pair, then the document's mail link
+   Add new components at the end, numbered on, with a line here and an entry on the kit page.
+   ========================================================================== */
+
+/* L1. DOCUMENT LAYOUT -------------------------------------------------------
+   One column on phones (the list, then the sheet). From 900px the list sits in a narrow left column and stays
+   in view while the sheet scrolls. Both start on the container edges. */
+.legal-doc { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+@media (min-width: 900px) {
+  .legal-doc { grid-template-columns: 264px minmax(0, 1fr); gap: 24px; align-items: start; }
+}
+@media (min-width: 1100px) {
+  .legal-doc { grid-template-columns: 312px minmax(0, 1fr); gap: 40px; }
+}
+
+/* L2. "ON THIS PAGE" ---------------------------------------------------------
+   A numbered list of jump links, one per clause, in the words of the document. The numbers are drawn by a
+   counter, so the link text is the heading and nothing else. Every row is a 44px target.
+   Without the script it is a plain card of links at every width. With js/family-legal.js the link of the clause
+   being read is marked, "Print this page" appears in the label row (from 900px), and under 900px the card becomes
+   a slim bar pinned under the header that opens the list.
+   The tint of a row (hover, the clause being read) and its keyboard ring are drawn by a::after, so they can be
+   shorter than the link's box in a short window. */
+.legal-toc { position: relative; background: var(--paper); border-radius: var(--r-card); box-shadow: var(--sh-1); padding: 16px 10px 12px; }
+.legal-toc__label {
+  display: flex; align-items: center; gap: 10px; padding: 0 8px 12px; border-bottom: 2px dotted var(--line);
+  font: 700 15px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700);
+}
+.legal-toc__label img { width: 28px; height: 28px; flex: none; }
+.legal-toc__list { counter-reset: legal-toc; margin-top: 8px; }
+.legal-toc__list a {
+  position: relative; z-index: 0;
+  counter-increment: legal-toc; display: grid; grid-template-columns: 26px minmax(0, 1fr); align-items: center; gap: 8px;
+  min-height: 44px; padding: 6px 10px 6px 8px; border-radius: 12px;
+  font: 600 15px/1.25 var(--f-text); color: var(--ink-700); text-decoration: none;
+  transition: color .18s;
+}
+.legal-toc__list a::before { content: counter(legal-toc, decimal-leading-zero); font: 800 17px/1 var(--f-display); letter-spacing: .02em; color: var(--blue-700); }
+.legal-toc__list a::after {
+  content: ""; position: absolute; z-index: -1; inset: 0 0 var(--legal-row-lap, 0px); border-radius: 12px;
+  transition: background-color .18s, box-shadow .18s;
+}
+@media (hover: hover) { .legal-toc__list a:hover { color: var(--navy); } }
+@media (hover: hover) { .legal-toc__list a:hover::after { background: var(--sky-050); box-shadow: inset 4px 0 0 var(--cyan); } }
+.legal-toc__list a[aria-current] { color: var(--navy); }
+.legal-toc__list a[aria-current]::after { background: var(--gold-050); box-shadow: inset 4px 0 0 var(--gold); }
+.legal-toc__list a[aria-current]::before { color: var(--navy); }
+/* the keyboard ring is drawn inside the row: the list scrolls, and a ring outside the row would be cut at its sides */
+.legal-toc__list a:focus-visible { outline: 0; }
+.legal-toc__list a:focus-visible::after { outline: 3px solid var(--focus); outline-offset: -3px; }
+.legal-toc__print { display: none; }
+.legal-toc__bar { display: none; }
+@media (min-width: 900px) {
+  /* pinned beside the sheet: the label row (with "Print this page" at its right), then the list */
+  .legal-toc {
+    position: sticky; top: calc(var(--hdr-h-stuck) + 16px);
+    display: flex; flex-direction: column; max-height: calc(100vh - var(--hdr-h-stuck) - 32px);
+  }
+  .legal-toc__label { flex: none; }
+  .legal-toc__body { display: flex; flex-direction: column; min-height: 0; }
+  .legal-toc__list {
+    flex: 0 1 auto; min-height: 0; margin-top: 0; padding-top: 8px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
+    scroll-snap-type: y proximity; scroll-padding-top: 8px;
+    /* only in a window too short for the whole list: it scrolls here, and a soft shadow says more is hidden */
+    background:
+      linear-gradient(var(--paper) 30%, rgba(255, 255, 255, 0)) top / 100% 30px no-repeat local,
+      linear-gradient(rgba(255, 255, 255, 0), var(--paper) 70%) bottom / 100% 30px no-repeat local,
+      radial-gradient(farthest-side at 50% 0, rgba(6, 38, 68, .22), rgba(6, 38, 68, 0)) top / 100% 10px no-repeat scroll,
+      radial-gradient(farthest-side at 50% 100%, rgba(6, 38, 68, .22), rgba(6, 38, 68, 0)) bottom / 100% 10px no-repeat scroll;
+  }
+  .legal-toc__list li { scroll-snap-align: start; }
+  /* the button follows the list in the document, as on the live page; it is placed in the label row */
+  .legal-toc__print:not([hidden]) {
+    position: absolute; top: 8px; right: 8px; display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px;
+    border: 0; border-radius: 12px; background: none; cursor: pointer;
+    font: 700 16px/1 var(--f-display); letter-spacing: .02em; color: var(--blue-700);
+    text-decoration: underline; text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 4px;
+    transition: background-color .18s, color .18s;
+  }
+  @media (hover: hover) { .legal-toc__print:hover { background: var(--sky-050); color: var(--navy); } }
+}
+@media (min-width: 900px) and (max-width: 1099.98px) {
+  .legal-toc__label img { display: none; }          /* the narrow card: the label and the button share one row */
+  .legal-toc__label { min-height: 40px; }
+}
+/* A short desktop window with a mouse (1366 by 768, 1280 by 720, 1024 by 768): the rows close up to a 36px pitch so
+   all fourteen fit without scrolling. Each link keeps its 44px box, but the next row lies over its last 8px, and
+   the tint and the words sit in the 36px that is left, so what is seen and what the pointer hits are the same
+   36px row. Touch screens and taller windows keep the full 44px rows. */
+@media (min-width: 900px) and (max-height: 839.98px) and (hover: hover) and (pointer: fine) {
+  .legal-toc { padding-top: 12px; padding-bottom: 8px; }
+  .legal-toc__print:not([hidden]) { top: 4px; }
+  .legal-toc__list { --legal-row-lap: 8px; padding-top: 4px; scroll-padding-top: 4px; }
+  .legal-toc__list li + li { margin-top: calc(-1 * var(--legal-row-lap)); }
+  .legal-toc__list a { padding-block: 4px 12px; line-height: 1.2; }
+}
+@media (max-width: 899.98px) {
+  /* the pinned bar (the script adds .legal-toc--js and the button .legal-toc__bar). A band in the ground colour of
+     the section lies behind it, from the header's edge to 8px under the bar and across the whole screen, so no
+     line of the document can be read above, beside or under the bar */
+  .legal-toc--js { position: sticky; top: calc(var(--hdr-h-stuck) + 8px); z-index: 5; padding: 0; background: none; box-shadow: none; border-radius: 0; }
+  .legal-toc--js::before {
+    content: ""; position: absolute; z-index: -1; top: -9px; bottom: -8px; left: calc(-1 * var(--g)); right: calc(-1 * var(--g));
+    background: var(--legal-ground, var(--sec-bg));
+  }
+  /* under the band the page fades in over 12px, so a line of text slides under a soft edge and is never sliced */
+  .legal-toc--js::after {
+    content: ""; position: absolute; z-index: -1; top: calc(100% + 8px); height: 12px; left: calc(-1 * var(--g)); right: calc(-1 * var(--g));
+    background: linear-gradient(var(--legal-ground, var(--sec-bg)), transparent); pointer-events: none;
+  }
+  .legal-toc--js .legal-toc__label { display: none; }
+  .legal-toc--js .legal-toc__bar {
+    display: grid; grid-template-columns: 34px minmax(0, 1fr) 24px; align-items: center; gap: 10px;
+    width: 100%; min-height: 56px; padding: 7px 16px 7px 12px; border: 0; border-radius: var(--r-card);
+    background: var(--paper); box-shadow: var(--sh-2); text-align: left; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .legal-toc__bar-ico { width: 34px; height: 34px; }
+  .legal-toc__bar-text { display: grid; gap: 2px; min-width: 0; }
+  .legal-toc__bar-label { font: 700 13px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700); }
+  .legal-toc__bar-now {
+    font: 700 15.5px/1.25 var(--f-text); color: var(--navy); text-wrap: balance; text-wrap: pretty;   /* pretty where it exists: no one-word last line */
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; line-clamp: 1; overflow: hidden;
+  }
+  /* while a clause is being read its name has both lines of the bar, so it is never cut short; the label stays for
+     screen readers */
+  .legal-toc__bar--reading .legal-toc__bar-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .legal-toc__bar--reading .legal-toc__bar-now { font-size: 15px; line-height: 1.2; -webkit-line-clamp: 2; line-clamp: 2; }
+  .legal-toc__bar-chev { width: 22px; height: 22px; transition: transform .2s var(--ease); }
+  .legal-toc__bar[aria-expanded="true"] .legal-toc__bar-chev { transform: rotate(180deg); }
+  .legal-toc--js .legal-toc__body {
+    position: absolute; left: 0; right: 0; top: calc(100% + 8px);
+    border-radius: var(--r-tile); box-shadow: var(--sh-3); padding: 8px;
+    max-height: calc(100vh - var(--hdr-h-stuck) - 96px); max-height: calc(100dvh - var(--hdr-h-stuck) - 96px); overflow-y: auto; overscroll-behavior: contain;
+    scroll-snap-type: y proximity; scroll-padding-top: 8px;
+    /* the script sets max-height to the room under the bar (above the pinned price bar when there is one), ending
+       on a whole row; the soft edges show where more of the list is hidden */
+    background:
+      linear-gradient(var(--paper) 30%, rgba(255, 255, 255, 0)) top / 100% 30px no-repeat local,
+      linear-gradient(rgba(255, 255, 255, 0), var(--paper) 70%) bottom / 100% 30px no-repeat local,
+      radial-gradient(farthest-side at 50% 0, rgba(6, 38, 68, .22), rgba(6, 38, 68, 0)) top / 100% 10px no-repeat scroll,
+      radial-gradient(farthest-side at 50% 100%, rgba(6, 38, 68, .22), rgba(6, 38, 68, 0)) bottom / 100% 10px no-repeat scroll,
+      var(--paper);
+  }
+  .legal-toc--js .legal-toc__list { margin-top: 0; }
+  .legal-toc--js .legal-toc__list li { scroll-snap-align: start; }
+  /* a jump link (or a link from another page straight to a clause) lands the heading under the header and the
+     pinned bar; set whether or not the script has run yet, so a first load is right too */
+  .legal-clause { scroll-margin-top: calc(var(--hdr-h-stuck) + 84px); }
+}
+@media (max-width: 379.98px) {
+  /* a narrow phone: the longest name (Terms section 04, "No Start-Up Fee: First Cleanup for New Recurring Customers")
+     needs three lines beside the icon. The bar is that tall for EVERY clause at this width, so it never changes
+     height while the page is read, and a jump lands the heading under it. */
+  .legal-toc--js .legal-toc__bar { min-height: 68px; }
+  .legal-toc__bar--reading .legal-toc__bar-now { font-size: 14.5px; -webkit-line-clamp: 3; line-clamp: 3; }
+  .legal-clause { scroll-margin-top: calc(var(--hdr-h-stuck) + 96px); }
+}
+
+/* L3. THE SHEET --------------------------------------------------------------
+   The document itself: white paper on the tint of the section, one column of text. The opening statement (what
+   agreeing means, or what the policy covers) is set apart on cream, as plain words with no icon. */
+.legal-sheet { --legal-rail: 0px; background: var(--paper); border-radius: var(--r-card); box-shadow: var(--sh-1); padding: 20px 18px 28px; min-width: 0; }
+.legal-sheet__intro {
+  max-width: 560px; margin-left: var(--legal-rail); padding: 16px 18px; border-radius: var(--r-tile);
+  background: var(--cream); box-shadow: inset 0 0 0 2px var(--gold-300);
+  font-size: 17px; line-height: 1.55; font-weight: 500; color: var(--navy); text-wrap: pretty;
+}
+@media (min-width: 700px) {
+  .legal-sheet { padding: 32px 32px 40px; }
+  .legal-sheet__intro { padding: 20px 24px; font-size: 18px; }
+}
+@media (min-width: 1100px) {
+  .legal-sheet { padding: 44px 56px 52px; }
+}
+/* the rail: wherever the sheet is wide enough, the icon discs stand in an 88px margin and every line of text
+   (the opening statement, headings, paragraphs, lists) starts on one edge, 560px wide, centred on the sheet */
+@media (min-width: 700px) and (max-width: 899.98px), (min-width: 1100px) {
+  .legal-sheet { --legal-rail: 88px; }
+}
+
+/* L4. A CLAUSE ---------------------------------------------------------------
+   Icon disc with the clause number pinned to it, then the heading; the body follows in a reading measure of
+   about 70 characters. From 1100px the body hangs under the heading, so the discs form a rail down the sheet.
+   The icon must depict the clause; the number is the section number of the document, never decoration. */
+.legal-clause { margin-top: 28px; padding-top: 28px; border-top: 2px dotted var(--line); }
+.legal-clause__head { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; }
+.legal-clause__ico {
+  position: relative; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  background: var(--sky-050); box-shadow: inset 0 0 0 2px var(--sky-200);
+}
+.legal-clause__ico img { width: 34px; height: 34px; }
+.legal-clause__num {
+  position: absolute; left: -7px; top: -7px; min-width: 27px; padding: 4px 5px 3px; border-radius: 9px;
+  background: var(--navy); color: var(--on-navy); box-shadow: 0 0 0 2px var(--paper);
+  font: 800 14px/1 var(--f-display); letter-spacing: .04em; text-align: center;
+}
+.legal-clause__title { text-wrap: balance; }
+.legal-clause__body { margin-top: 16px; margin-left: var(--legal-rail); max-width: 560px; color: var(--ink-700); }
+.legal-clause__body > * + * { margin-top: 14px; }
+.legal-clause__body .actions { margin-top: 18px; }
+@media (min-width: 700px) {
+  .legal-clause { margin-top: 34px; padding-top: 34px; }
+  .legal-clause__head { grid-template-columns: 64px minmax(0, 1fr); gap: 24px; }
+  .legal-clause__ico { width: 64px; height: 64px; }
+  .legal-clause__ico img { width: 42px; height: 42px; }
+  .legal-clause__num { left: -5px; top: -5px; }
+  .legal-clause__body { margin-top: 12px; }
+}
+
+/* L5. THE LISTS OF THE DOCUMENT ---------------------------------------------
+   A legal list states duties and fees as well as benefits, so its marker is a quiet dot, never the tick that
+   .prose and .ilist--checks use. Each item is the bold label of the document and its sentence, run in as written. */
+.legal-points { display: grid; gap: 12px; }
+.legal-points li { position: relative; padding-left: 24px; }
+.legal-points li::before {
+  content: ""; position: absolute; left: 3px; top: .56em; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--cyan); box-shadow: 0 0 0 4px var(--cyan-050);
+}
+
+/* L6. A SUMMARY CARD THAT IS A LINK ------------------------------------------
+   The short version: each of the three highlights is a shared feature card (a.fcard) whose whole surface jumps
+   to its clause. This class only keeps the card's words from being underlined; the pointer is the tag in its foot
+   ("Section 05" and an arrow), which takes the underline on hover and focus. */
+.legal-glance { text-decoration: none; }
+.legal-glance:focus-visible .tag { text-decoration: underline; text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+@media (hover: hover) { .legal-glance:hover .tag { text-decoration: underline; text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 3px; } }
+.legal-glance .tag img { width: 16px; height: 16px; }
+
+/* L7. THE CLOSING ASK --------------------------------------------------------
+   The words column of the last split. TEXT FIRST (owner decision, October 8): the row of contact buttons is the
+   shared text-first pair ({{REACH}}: Text with the number, navy; then Call) and, third, the mail link of the live
+   contact box as an outline button. Under it the mascot's one line, then the two page links of the live foot line
+   as quiet links under a dotted rule, side by side where they fit and one above the other where they do not.
+   Left with the heading on desktop; centred with it under 900px; on a phone the pair fills the row (Text takes the
+   width) and the mail button is as wide as the block. The mailing address of the live foot line is kept for the
+   printed page only: on screen the footer, directly below, carries the same line. */
+.legal-ask { display: grid; gap: 14px; justify-items: start; }
+.legal-ask__lead { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; }
+.legal-ask__links {
+  display: flex; flex-wrap: wrap; gap: 2px 28px;
+  width: 100%; margin-top: 8px; padding-top: 12px; border-top: 2px dotted var(--line);
+}
+.legal-ask__addr { display: none; color: var(--ink-500); }
+@media (max-width: 899.98px) {
+  .legal-ask { justify-items: center; text-align: center; }
+  .legal-ask__lead, .legal-ask__links { justify-content: center; }
+}
+@media (max-width: 619.98px) {
+  .legal-ask { justify-items: stretch; }
+  .legal-ask__links { flex-direction: column; align-items: center; }
+  .legal-ask__lead { flex-direction: column; align-items: stretch; }
+  .legal-ask__mail { display: flex; width: 100%; }
+  .legal-ask__says { justify-self: center; }
+}
+
+/* L9. THE DATE LINE OF THE DOCUMENT -------------------------------------------
+   The short date line is in the hero (hero.date, a shared piece: first screen at every size). This is the
+   document's own line, in full, as the last line of the heading block of the document section: while the approved
+   text is not published it reads "Updated terms approved October 8, 2026. They take effect when published.", which
+   the hero's pill cannot hold (60 characters). It is outside the sheet, which holds the document and nothing else.
+   Once the page carries a publication date ("Last updated: …" in the hero) this line is not written at all. */
+.legal-updated {
+  margin-top: 6px; padding: 7px 16px; border-radius: var(--r-pill); background: var(--paper); box-shadow: inset 0 0 0 2px var(--sky-200);
+  font: 600 15.5px/1.3 var(--f-text); color: var(--navy);
+}
+.legal-updated__s { display: inline-block; }                    /* a sentence stays whole: the line breaks between the two, never inside one */
+@media (max-width: 619.98px) {
+  .legal-updated { padding: 8px 12px; border-radius: var(--r-photo); font-size: 14.5px; }      /* two lines on a phone: a rounded slip, not a stretched pill */
+}
+
+/* L10. THE CONTACT ROW OF A CLAUSE ---------------------------------------------
+   Where the document gives its contact details (the last clause of each page): the shared text-first pair, then
+   the document's mail link with its own words. On a phone the pair fills the row and the mail button the next. */
+@media (max-width: 619.98px) {
+  .legal-reach__mail { flex: 1 1 100%; }
+}
+
+/* L8. PRINT ------------------------------------------------------------------
+   "Print this page" gives the document: title, date, summary, every clause and the contact details, in ink on
+   white. The header, the picture, the facts strip, the list of links, the closing scene and the footer stay on the
+   screen. The hero's date line prints under the title as a plain line, and the document's full date line under
+   the heading of the document. Text flows from page to page (a clause is not held whole on one page), in a measure
+   of six inches. (Print only: these rules hide shared pieces on pages that hold a .legal-doc; nothing is restyled
+   on screen.) */
+@media print {
+  :root:has(.legal-doc) .hdr, :root:has(.legal-doc) .mnav, :root:has(.legal-doc) .foot,
+  :root:has(.legal-doc) .ppb-bar, :root:has(.legal-doc) dialog, :root:has(.legal-doc) .cover__scene, :root:has(.legal-doc) .cover > svg,
+  :root:has(.legal-doc) .split__art, :root:has(.legal-doc) .sh__emblem, :root:has(.legal-doc) .says,
+  .legal-toc, .legal-ask__lead, .legal-ask__links { display: none !important; }
+  :root:has(.legal-doc) .cover { min-height: 0 !important; height: auto !important; padding: 0 0 6pt !important; background: none !important; display: block !important; }
+  :root:has(.legal-doc) .cover__head, :root:has(.legal-doc) .cover__note { position: static !important; width: auto !important; max-width: 6in !important; margin: 0 !important; padding: 0 !important; background: none !important; transform: none !important; }
+  :root:has(.legal-doc) .cover__kw, :root:has(.legal-doc) .cover__title, :root:has(.legal-doc) .cover__line, :root:has(.legal-doc) .cover__lead { color: #000 !important; text-shadow: none !important; }
+  :root:has(.legal-doc) .cover__title { font-size: 28pt !important; margin: 4pt 0 6pt !important; }
+  :root:has(.legal-doc) .sec { padding: 0 0 14pt !important; margin: 0 !important; background: none !important; }
+  :root:has(.legal-doc) .sec::before, :root:has(.legal-doc) .sec::after { display: none !important; }
+  :root:has(.legal-doc) .wrap { padding-inline: 0 !important; }
+  /* the facts strip does not print; the hero's date line does, as a plain line under the title */
+  :root:has(.legal-doc) .facts { display: none !important; }
+  :root:has(.legal-doc) .cover__date { display: block !important; width: auto !important; margin: 4pt 0 0 !important; padding: 0 !important; background: none !important; box-shadow: none !important; font-size: 11pt !important; font-weight: 700 !important; color: #000 !important; }
+  :root:has(.legal-doc) .cover__date img { display: none !important; }
+  .legal-updated { margin: 4pt 0 0; padding: 0; border-radius: 0; background: none; box-shadow: none; color: #000; }
+  :root:has(.legal-doc) .sh { margin: 0 0 8pt !important; justify-items: start !important; text-align: left !important; max-width: none !important; }
+  :root:has(.legal-doc) .sh__title { font-size: 18pt !important; }
+  :root:has(.legal-doc) .sh__intro { margin-inline: 0 !important; max-width: 6in !important; }
+  :root:has(.legal-doc) .swash { background: none !important; }
+  :root:has(.legal-doc) .fcard { box-shadow: none !important; border: 1pt solid #000; break-inside: avoid; }
+  :root:has(.legal-doc) .fcard__plate { display: none !important; }
+  :root:has(.legal-doc) .fcard__ico { display: none !important; }
+  :root:has(.legal-doc) .fcard__title { margin-top: 10pt !important; }
+  :root:has(.legal-doc) .split { display: block !important; }
+  .legal-doc { display: block; }
+  .legal-sheet { --legal-rail: 0px; padding: 0; box-shadow: none; border-radius: 0; }
+  .legal-sheet__intro { max-width: 6in; box-shadow: none; border: 1pt solid #000; background: none; color: #000; }
+  .legal-ask { justify-items: start; text-align: left; }
+  .legal-ask__addr { display: block; color: #000; }
+  /* The contact row of a clause prints as plain words, in the order it has on screen: "Text (317) 961-5865", then
+     "Call (317) 961-5865" (the number a screen shows only on the Text button is printed here too), then the mail
+     address. A filled button would lose its ground on paper, and its white words with it. */
+  .legal-reach { display: block; }
+  .legal-reach > span { display: inline; }
+  .legal-reach a {
+    display: inline; min-height: 0; margin: 0 14pt 0 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+    font: 700 11pt/1.5 var(--f-text); letter-spacing: 0; color: #000; text-decoration: none; text-shadow: none; white-space: nowrap; vertical-align: baseline;
+  }
+  .legal-reach a::before, .legal-reach a::after { content: none; }
+  .legal-reach a img { display: none; }
+  .legal-reach a span { all: unset; position: static !important; }
+  .legal-clause { margin-top: 14pt; padding-top: 12pt; border-top: 1pt solid #000; }
+  .legal-clause__head { break-after: avoid; break-inside: avoid; }
+  .legal-clause__ico { width: auto; height: auto; background: none; box-shadow: none; }
+  .legal-clause__ico img { display: none; }
+  .legal-clause__num { position: static; background: none; color: #000; box-shadow: none; font-size: 16pt; padding: 0; }
+  .legal-clause__body { margin-left: 0; max-width: 6in; color: #000; }
+  .legal-clause__body p, .legal-points li { orphans: 3; widows: 3; }
+  .legal-points li { break-inside: avoid; }
+  .legal-points li::before { background: #000; box-shadow: none; }
+}

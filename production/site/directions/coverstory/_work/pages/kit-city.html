@@ -1,0 +1,391 @@
+<!--
+{
+  "title": "Family kit: city pages | Cover Story",
+  "description": "What the 17 city pages add to the Cover Story kit: locator map, ZIP ticket, starting prices, nearby pages, prices and proof, compact steps, Yard Guide rows and the town's own picture.",
+  "css": ["css/family-city.css"],
+  "hero": {
+    "recipe": "kit",
+    "title": "Family kit: city pages",
+    "lead": "Eight components the 17 city pages add in css/family-city.css, each with its class names, as kit.html shows the shared ones. Everything else on a city page is a shared kit component. The recipe for a page is CITY-PAGES.md; westfield.html and indianapolis.html are the two worked pages. C5 to C7 change with the width of the window: look at them at 390, 768 and 1440."
+  },
+  "guideCards": {
+    "dog-waste-cleanup-busy-families": { "more": "Share the yard" },
+    "poop-scooping-multiple-dogs": { "more": "Plan for the pack" },
+    "dog-waste-cleanup-fence-repairs-landscaping": { "more": "Coordinate the work" }
+  }
+}
+-->
+
+  <!-- C1 -->
+  <section class="kit" id="kit-city-map">
+    <div class="kit__label"><b>C1 Locator map</b><code>.map.city-map · .city-map__here · .city-map__flag · .city-map__note · .city-map__key · .city-map__dot</code><span>The shared service-area plate (kit 20) with ONE community lit: a small gold seal under a larger pin, the name on a navy flag. Only that community, Indianapolis and the page&rsquo;s nearby communities are named, so it reads as a locator. The note sits UNDER the drawing at every width and carries the key (paw pin: a town with its own page; dot: also on our routes); a city with ZIP codes we do not cover says so in the note. Never typed: <code>node _work/city-map.mjs &lt;slug&gt; --write</code> draws both drawings (wide from 520px, tall on phones) between the two CITY MAP markers of the page source. It is the picture of the first split, so no pose or scene sits in the first two screens (the glove rule). One map per page: a city page never also uses the full map token.</span></div>
+    <div class="kit__row" style="align-items:flex-start">
+      <div style="flex:1 1 520px;max-width:588px">
+        <!-- CITY MAP START: westfield (written by node _work/city-map.mjs westfield --write; do not edit by hand) -->
+        <div class="map city-map">
+        <svg class="map__wide" viewBox="0 0 640 470" role="img" aria-labelledby="citymap-w-title citymap-w-desc">
+        <title id="citymap-w-title">Westfield on the Purge Pros service-area map</title>
+        <desc id="citymap-w-desc">An illustrative map of the Purge Pros service area around the I-465 ring with Westfield lit. Nearby: Carmel, Noblesville, Fishers, Indianapolis, Zionsville, Whitestown, Cicero. Coverage is decided by ZIP code, not by this map.</desc>
+        <path d="M52 300c-18-52 6-122 62-150 44-22 82-66 150-92 70-27 150-16 226 8 62 20 110 62 116 124 6 60-34 100-92 132-48 26-70 78-126 104-62 29-140 26-204 0-58-24-110-62-132-126Z" fill="#c9ecab"/>
+        <path d="M52 300c-18-52 6-122 62-150 44-22 82-66 150-92 70-27 150-16 226 8 62 20 110 62 116 124 6 60-34 100-92 132-48 26-70 78-126 104-62 29-140 26-204 0-58-24-110-62-132-126Z" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="1 12" stroke-linecap="round" opacity=".9"/>
+        <circle class="map__ring" cx="271.4" cy="298" r="89.7" fill="#dff5c8" stroke="#fff" stroke-width="9"/>
+        <circle cx="271.4" cy="298" r="89.7" fill="none" stroke="#0877b9" stroke-width="2" stroke-dasharray="7 6"/>
+        <text class="map__ring-label" x="271.4" y="199.3" text-anchor="middle">I-465</text>
+        <g class="city-map__here"><circle cx="288" cy="99.6" r="22" fill="#ffc12f" stroke="#ffc12f" stroke-width="7" stroke-linecap="round" stroke-dasharray="0.1 8.5"/><circle cx="288" cy="99.6" r="19" fill="none" stroke="#fff" stroke-width="2"/></g>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="251.4" y="269" width="40" height="40"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="279.2" y="131.2" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="336.1" y="146.4" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="338.7" y="83.5" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="517.2" y="41.3" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="126.1" y="283.9" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="127.1" y="226.8" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="57.2" y="285.4" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="426" y="163.8" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="468.7" y="268" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="285.4" y="389.5" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="449.4" y="146.3" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="344.6" y="217.1" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="385.3" y="181" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="403.6" y="312.8" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="126.2" y="325.4" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="336.1" y="39.3" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="425.8" y="78.6" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="552.8" y="142.8" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="484.1" y="128.9" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="155.4" y="129" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="201" y="161.8" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="171.4" y="366.1" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="139.9" y="401.3" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="89.5" y="223.4" width="28" height="28"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="269" y="78.6" width="38" height="38"/>
+        <text class="map__big" x="271.4" y="328" text-anchor="middle">Indianapolis</text>
+        <g class="city-map__flag"><rect x="153.6" y="74.1" width="106.4" height="30" rx="15" fill="#062644" stroke="#fff" stroke-width="2.5"/><text x="206.8" y="95.6" text-anchor="middle">Westfield</text></g>
+        <text x="278.2" y="154.2" text-anchor="end">Carmel</text>
+        <text x="338.7" y="125.5" text-anchor="start">Noblesville</text>
+        <text x="365.1" y="169.4" text-anchor="start">Fishers</text>
+        <text x="200" y="184.8" text-anchor="end">Zionsville</text>
+        <text x="169.4" y="124" text-anchor="middle">Whitestown</text>
+        <text x="365.1" y="62.3" text-anchor="start">Cicero</text>
+        </svg>
+        <svg class="map__tall" viewBox="0 0 400 500" role="img" aria-labelledby="citymap-t-title citymap-t-desc">
+        <title id="citymap-t-title">Westfield on the Purge Pros service-area map</title>
+        <desc id="citymap-t-desc">An illustrative map of the Purge Pros service area around the I-465 ring with Westfield lit. Nearby: Carmel, Noblesville, Fishers, Indianapolis, Zionsville, Whitestown, Cicero. Coverage is decided by ZIP code, not by this map.</desc>
+        <path d="M8 318C10 292.7 13 263 22 232C31 201 43.7 160.3 62 132C80.3 103.7 104.7 80.7 132 62C159.3 43.3 193 27.7 226 20C259 12.3 303 6.3 330 16C357 25.7 377.3 49 388 78C398.7 107 395.3 153.7 394 190C392.7 226.3 389 263.7 380 296C371 328.3 357.3 359.3 340 384C322.7 408.7 299.3 427 276 444C252.7 461 227.3 478.7 200 486C172.7 493.3 138 495.7 112 488C86 480.3 61 457.3 44 440C27 422.7 16 404.3 10 384C4 363.7 6 343.3 8 318Z" fill="#c9ecab"/>
+        <path d="M8 318C10 292.7 13 263 22 232C31 201 43.7 160.3 62 132C80.3 103.7 104.7 80.7 132 62C159.3 43.3 193 27.7 226 20C259 12.3 303 6.3 330 16C357 25.7 377.3 49 388 78C398.7 107 395.3 153.7 394 190C392.7 226.3 389 263.7 380 296C371 328.3 357.3 359.3 340 384C322.7 408.7 299.3 427 276 444C252.7 461 227.3 478.7 200 486C172.7 493.3 138 495.7 112 488C86 480.3 61 457.3 44 440C27 422.7 16 404.3 10 384C4 363.7 6 343.3 8 318Z" fill="none" stroke="#fff" stroke-width="5" stroke-dasharray="1 12" stroke-linecap="round" opacity=".9"/>
+        <circle class="map__ring" cx="160" cy="318" r="68" fill="#dff5c8" stroke="#fff" stroke-width="9"/>
+        <circle cx="160" cy="318" r="68" fill="none" stroke="#0877b9" stroke-width="2" stroke-dasharray="7 6"/>
+        <text class="map__ring-label" x="160" y="241" text-anchor="middle">I-465</text>
+        <g class="city-map__here"><circle cx="150" cy="94" r="21" fill="#ffc12f" stroke="#ffc12f" stroke-width="7" stroke-linecap="round" stroke-dasharray="0.1 8.1"/><circle cx="150" cy="94" r="18" fill="none" stroke="#fff" stroke-width="2"/></g>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="141" y="290.5" width="38" height="38"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="143" y="139" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="211" y="147" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="217" y="75" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="325" y="41" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="51" y="305" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="59" y="237" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="13" y="325" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="287" y="185" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="309" y="287" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="173" y="423" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="305" y="139" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="209" y="251" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="245" y="215" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="255" y="345" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="57" y="379" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="215" y="33" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="287" y="101" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="359" y="173" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="331" y="111" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="65" y="127" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="105" y="177" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="115" y="403" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="91" y="445" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="17" y="253" width="26" height="26"/>
+        <image href="../../assets/brand-icons/pp-local-area.webp" x="131" y="73" width="38" height="38"/>
+        <text class="map__big" x="160" y="346" text-anchor="middle">Indianapolis</text>
+        <g class="city-map__flag"><rect x="25.1" y="80" width="97.9" height="28" rx="14" fill="#062644" stroke="#fff" stroke-width="2.5"/><text x="74" y="99.8" text-anchor="middle">Westfield</text></g>
+        <text x="142" y="161" text-anchor="end">Carmel</text>
+        <text x="244" y="97" text-anchor="start">Noblesville</text>
+        <text x="238" y="169" text-anchor="start">Fishers</text>
+        <text x="132" y="199" text-anchor="start">Zionsville</text>
+        <text x="78" y="122" text-anchor="middle">Whitestown</text>
+        <text x="214" y="55" text-anchor="end">Cicero</text>
+        </svg>
+        <p class="map__note city-map__note"><span>Illustrative map.</span><span class="city-map__key"><img src="../../assets/brand-icons/pp-local-area.webp" width="18" height="18" loading="lazy" alt="">A town with its own page</span></p>
+        </div>
+        <!-- CITY MAP END -->
+      </div>
+      <p class="small" style="flex:1 1 260px;max-width:380px">Shown: Westfield. The flag finds its own clear spot beside the seal; a neighbour&rsquo;s name moves, or is left off, if the flag needs its place (the script says so when it happens). A town on the very edge of the area can have its flag placed by hand (<code>FLAG_AT</code> in the script: Anderson). <code>node _work/city-map.mjs --sheet</code> writes all 17 to shots/city/maps.html.</p>
+    </div>
+  </section>
+
+  <!-- C2 -->
+  <section class="kit" id="kit-city-zips">
+    <div class="kit__label"><b>C2 ZIP ticket</b><code>.city-zips · .city-zips--many · .city-zips__ico · __title · __text · __list · __list--many · form.city-zip · .city-zip__btn · __cta</code><span>&ldquo;The ZIP codes we cover here&rdquo;, as real text. The cut of the one-time ticket, in white, so it sits on the navy route section. EVERY STAMP IS A BUTTON: a one-field form with <code>data-pp-zip-form</code>, which the price builder opens with that ZIP already answered (without scripts it goes to quote.html with the ZIP). So what looks like a one-tap chip is one. One gold button ends the ticket and always says &ldquo;See my {City} price&rdquo;. One to three ZIPs sit in the ticket&rsquo;s row (three get a smaller size so five digits fit a phone); more take <code>--many</code>, a board whose columns follow the ticket&rsquo;s own width (a container query): three large stamps a row where six 44px taps would not fit (a 320px phone, or this padded box on a phone), six small ones in a ticket on a 360px phone and up (the size the price builder shows the same ZIPs at), six large from a 620px window and nine from a 1000px one. Use 18, so every row is full. A ZIP the owner has said to print on a second page (46280 on Carmel) is one more stamp, with one true sentence about it.</span></div>
+    <p class="kit__sub">One accepted ZIP (the price builder already has it)</p>
+    <div class="kit__dark">
+      <div class="city-zips">
+        <img class="city-zips__ico" src="../../assets/step-icons/pin.webp" width="72" height="72" loading="lazy" alt="">
+        <h3 class="city-zips__title">The ZIP code we cover in Avon</h3>
+        <p class="city-zips__text">Tap it and your price starts with the dogs. On a different ZIP? Change it on the price card: coverage is decided by ZIP code.</p>
+        <ul class="city-zips__list" aria-label="ZIP code we cover in Avon">
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46123"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46123">46123</button></form></li>
+        </ul>
+        <p class="city-zips__cta"><a class="btn btn--primary" href="#quote" data-purge-quote>See my Avon price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+    <p class="kit__sub">Two accepted ZIPs</p>
+    <div class="kit__dark">
+      <div class="city-zips">
+        <img class="city-zips__ico" src="../../assets/step-icons/pin.webp" width="72" height="72" loading="lazy" alt="">
+        <h3 class="city-zips__title">The ZIP codes we cover in Fishers</h3>
+        <p class="city-zips__text">Tap yours and your price starts with that ZIP answered. On a different ZIP? Type it on the price card: coverage is decided by ZIP code.</p>
+        <ul class="city-zips__list" aria-label="ZIP codes we cover in Fishers">
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46037"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46037">46037</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46038"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46038">46038</button></form></li>
+        </ul>
+        <p class="city-zips__cta"><a class="btn btn--primary" href="#quote" data-purge-quote>See my Fishers price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+    <p class="kit__sub">Three accepted ZIPs, and some of the city is not covered (Anderson)</p>
+    <div class="kit__dark">
+      <div class="city-zips">
+        <img class="city-zips__ico" src="../../assets/step-icons/pin.webp" width="72" height="72" loading="lazy" alt="">
+        <h3 class="city-zips__title">The ZIP codes we cover in Anderson</h3>
+        <p class="city-zips__text">Being inside Anderson does not guarantee service: Anderson has other ZIP codes that are not on our routes. Tap yours and your price starts with that ZIP answered.</p>
+        <ul class="city-zips__list" aria-label="ZIP codes we cover in Anderson">
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46011"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46011">46011</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46013"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46013">46013</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46016"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46016">46016</button></form></li>
+        </ul>
+        <p class="city-zips__cta"><a class="btn btn--primary" href="#quote" data-purge-quote>See my Anderson price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+    <p class="kit__sub">Two accepted ZIPs and one printed from a neighbouring list (Carmel: 46280 is an Indianapolis ZIP that covers its south edge)</p>
+    <div class="kit__dark">
+      <div class="city-zips">
+        <img class="city-zips__ico" src="../../assets/step-icons/pin.webp" width="72" height="72" loading="lazy" alt="">
+        <h3 class="city-zips__title">The ZIP codes we cover in Carmel</h3>
+        <p class="city-zips__text">Tap yours and your price starts with that ZIP answered. 46280 covers Carmel&rsquo;s south edge and carries an Indianapolis mailing address.</p>
+        <ul class="city-zips__list" aria-label="ZIP codes we cover in Carmel">
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46032"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46032">46032</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46033"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46033">46033</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46280"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46280, the south edge of Carmel">46280</button></form></li>
+        </ul>
+        <p class="city-zips__cta"><a class="btn btn--primary" href="#quote" data-purge-quote>See my Carmel price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+    <p class="kit__sub">Many ZIPs (Indianapolis): all 18. On the page a phone shows six small stamps a row; in this narrower box it shows three</p>
+    <div class="kit__dark">
+      <div class="city-zips city-zips--many">
+        <img class="city-zips__ico" src="../../assets/step-icons/pin.webp" width="72" height="72" loading="lazy" alt="">
+        <h3 class="city-zips__title">The 18 Indianapolis ZIP codes we cover</h3>
+        <p class="city-zips__text">Being inside Indianapolis does not guarantee service: the city has other ZIP codes that are not on our routes. Tap yours and your price starts with that ZIP answered.</p>
+        <ul class="city-zips__list city-zips__list--many" aria-label="Indianapolis ZIP codes we cover">
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46214"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46214">46214</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46217"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46217">46217</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46220"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46220">46220</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46221"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46221">46221</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46227"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46227">46227</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46228"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46228">46228</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46231"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46231">46231</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46234"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46234">46234</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46237"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46237">46237</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46239"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46239">46239</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46240"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46240">46240</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46250"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46250">46250</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46256"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46256">46256</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46259"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46259">46259</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46260"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46260">46260</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46268"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46268">46268</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46278"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46278">46278</button></form></li>
+          <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46280"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46280">46280</button></form></li>
+        </ul>
+        <p class="city-zips__cta"><a class="btn btn--primary" href="#quote" data-purge-quote>See my Indianapolis price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- C3 -->
+  <section class="kit" id="kit-city-rates">
+    <div class="kit__label"><b>C3 Starting prices</b><code>.city-rates · .city-rate · --star · --once · .city-rate__name · __lead · __amt · .city-rates__note · .city-rates__more</code><span>The three &ldquo;from&rdquo; prices and the one-time price as one compact list, in the prices-and-proof block (C5), above the explainer. Identical on every city page. Every figure is a <code>.price</code> with <code>data-price</code>, so <code>check-site</code> compares it with the engine. The popular plan is the gold-tint row; the one-time price is the gold row. The full list is one link away, on the service page.</span></div>
+    <div class="kit__tint" style="background:var(--gold-050)">
+      <div style="max-width:486px">
+        <div class="city-rates">
+          <ul>
+            <li class="city-rate"><img class="stk stk--thin" src="../../assets/quote-icons/frequency-twice-weekly.webp" width="46" height="46" loading="lazy" alt=""><span class="city-rate__name">Twice a week<small>Busier yards, bigger packs</small></span><span class="city-rate__lead"></span><span class="city-rate__amt"><small>From</small><span class="price" data-price="twice:1"><span class="price__cur">$</span><span class="price__int">15</span><span class="price__cents">.99</span></span></span></li>
+            <li class="city-rate city-rate--star"><img class="stk stk--thin stk--r" src="../../assets/quote-icons/frequency-weekly.webp" width="46" height="46" loading="lazy" alt=""><span class="city-rate__name">Weekly<small>Most popular: the everyday routine</small></span><span class="city-rate__lead"></span><span class="city-rate__amt"><small>From</small><span class="price" data-price="weekly:1"><span class="price__cur">$</span><span class="price__int">19</span><span class="price__cents">.99</span></span></span></li>
+            <li class="city-rate"><img class="stk stk--thin" src="../../assets/quote-icons/frequency-every-other-week.webp" width="46" height="46" loading="lazy" alt=""><span class="city-rate__name">Every other week<small>Lighter-use yards</small></span><span class="city-rate__lead"></span><span class="city-rate__amt"><small>From</small><span class="price" data-price="biweekly:1"><span class="price__cur">$</span><span class="price__int">29</span><span class="price__cents">.99</span></span></span></li>
+            <li class="city-rate city-rate--once"><img class="stk stk--thin stk--r" src="../../assets/quote-icons/frequency-one-time.webp" width="46" height="46" loading="lazy" alt=""><span class="city-rate__name">One-time cleanup<small>Then $1 per minute</small></span><span class="city-rate__lead"></span><span class="city-rate__amt"><small>First 30 minutes</small><span class="price" data-price="onetime"><span class="price__cur">$</span><span class="price__int">89</span><span class="price__cents">.99</span></span></span></li>
+          </ul>
+          <p class="city-rates__note">Recurring prices are per visit, for one dog, one service area and a yard up to ⅛ acre.</p>
+          <a class="city-rates__more" href="dog-waste-removal.html#prices">See the full price list</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C4 -->
+  <section class="kit" id="kit-city-chips">
+    <div class="kit__label"><b>C4 Nearby pages, in the map block</b><code>.city-near · .chips.chips--pair.city-chips · .city-also · .city-near--hub · details.city-more · .city-more__sum · .city-more__chev · .city-chip--here · .split.city-hub</code><span>The neighbours the map names, as links, in the words column beside the locator map (under the introduction on a phone): the label &ldquo;Closest service areas&rdquo; (true of every list; never &ldquo;Next door&rdquo;), the geographic neighbours with a page, then &ldquo;All service areas&rdquo; as the last chip. With an odd number of chips the last one takes the whole row, so no count strands a chip. Communities without a page are one plain sentence, never chips that go nowhere. Never the word &ldquo;Additional&rdquo;. The hub (Indianapolis) takes <code>.city-near--hub</code>, in the words column like every other page: its 16 neighbours are a board of 18 (a gold &ldquo;You are here&rdquo; that is not a link, the 16, &ldquo;All service areas&rdquo;; 3 across) inside <code>details.city-more</code>, closed until asked for. The map beside it already names all 16, and the open board cost the page 270px on a phone. The summary is one pill with the count. The hub&rsquo;s split takes <code>.city-hub</code>, so the map stays where it is when the board opens.</span></div>
+    <div class="kit__row" style="align-items:flex-start">
+      <div style="flex:1 1 300px;max-width:486px">
+        <div class="city-near">
+          <p class="chips__label">Closest service areas</p>
+          <ul class="chips chips--pair city-chips">
+            <li><a class="chip" href="carmel.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Carmel</u></a></li>
+            <li><a class="chip" href="noblesville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Noblesville</u></a></li>
+            <li><a class="chip" href="fishers.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Fishers</u></a></li>
+            <li><a class="chip" href="indianapolis.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Indianapolis</u></a></li>
+            <li><a class="chip" href="zionsville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Zionsville</u></a></li>
+            <li><a class="chip" href="whitestown.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Whitestown</u></a></li>
+            <li><a class="chip" href="cicero.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Cicero</u></a></li>
+            <li><a class="chip chip--all" href="additional.html"><u>All service areas</u></a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="flex:1 1 300px;max-width:486px">
+        <div class="city-near">
+          <p class="chips__label">Closest service areas</p>
+          <ul class="chips chips--pair city-chips">
+            <li><a class="chip" href="fishers.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Fishers</u></a></li>
+            <li><a class="chip" href="westfield.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Westfield</u></a></li>
+            <li><a class="chip" href="carmel.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Carmel</u></a></li>
+            <li><a class="chip" href="fortville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Fortville</u></a></li>
+            <li><a class="chip" href="anderson.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Anderson</u></a></li>
+            <li><a class="chip chip--all" href="additional.html"><u>All service areas</u></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="kit__sub">The hub board (Indianapolis): closed until asked for. Open it.</p>
+    <div class="kit__row" style="align-items:flex-start">
+      <div style="flex:1 1 320px;max-width:500px">
+        <div class="city-near city-near--hub">
+          <details class="city-more">
+            <summary class="city-more__sum"><img src="../../assets/brand-icons/pp-local-area.webp" width="30" height="30" loading="lazy" alt=""><span><b>20 towns around Indianapolis</b> have their own page</span><img class="city-more__chev" src="../../assets/brand-icons/pp-chevron.webp" width="22" height="22" loading="lazy" alt=""></summary>
+            <p class="chips__label">Around Indianapolis, clockwise from the north</p>
+            <ul class="chips chips--pair city-chips">
+              <li><span class="chip city-chip--here"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt="">You are here</span></li>
+              <li><a class="chip" href="carmel.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Carmel</u></a></li>
+              <li><a class="chip" href="westfield.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Westfield</u></a></li>
+              <li><a class="chip" href="noblesville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Noblesville</u></a></li>
+              <li><a class="chip" href="fishers.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Fishers</u></a></li>
+              <li><a class="chip" href="lawrence.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Lawrence</u></a></li>
+              <li><a class="chip" href="mccordsville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>McCordsville</u></a></li>
+              <li><a class="chip" href="fortville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Fortville</u></a></li>
+              <li><a class="chip" href="ingalls.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Ingalls</u></a></li>
+              <li><a class="chip" href="anderson.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Anderson</u></a></li>
+              <li><a class="chip" href="greenfield.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Greenfield</u></a></li>
+              <li><a class="chip" href="new-palestine.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>New Palestine</u></a></li>
+              <li><a class="chip" href="greenwood.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Greenwood</u></a></li>
+              <li><a class="chip" href="mooresville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Mooresville</u></a></li>
+              <li><a class="chip" href="camby.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Camby</u></a></li>
+              <li><a class="chip" href="plainfield.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Plainfield</u></a></li>
+              <li><a class="chip" href="avon.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Avon</u></a></li>
+              <li><a class="chip" href="danville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Danville</u></a></li>
+              <li><a class="chip" href="brownsburg.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Brownsburg</u></a></li>
+              <li><a class="chip" href="whitestown.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Whitestown</u></a></li>
+              <li><a class="chip" href="zionsville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Zionsville</u></a></li>
+              <li><a class="chip chip--all" href="additional.html"><u>All service areas</u></a></li>
+            </ul>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C5 -->
+  <section class="kit" id="kit-city-deal">
+    <div class="kit__label"><b>C5 Prices and proof</b><code>.city-deal · .city-deal__head · __seal · __emblem · __art · __rates · __cta · __proof · __proofhead · __more</code><span>The one section for &ldquo;what a visit includes and what it costs&rdquo; (gold ground, <code>id="start-up-fee"</code>): the heading with the policy lead, the starting prices (C3), the explainer token with its small print and one gold button; with them the fee scene and its $0 seal and three real-visit receipts, each with the caption that belongs to THAT photo. Four areas placed by one grid. Phone: heading (the seal takes the emblem&rsquo;s place and the scene is not shown), prices, proof. Tablet: heading, scene, prices, proof. From 900px: scene over proof in the picture half, heading over prices in the words column (the columns of a split, so the heading sits on the system&rsquo;s edge); from 900 to 1199px the receipts are slips. Identical on every city page but for the name and the three photos.</span></div>
+    <div class="kit__tint" style="background:var(--gold-050)">
+      <div class="city-deal">
+        <div class="city-deal__head">
+          <div class="sh sh--left sh--sky">
+            <span class="seal city-deal__seal"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="60" cy="60" r="50" fill="#ffc12f" stroke="#ffc12f" stroke-width="12" stroke-linecap="round" stroke-dasharray="0.1 12.99"/><circle cx="60" cy="60" r="46" fill="none" stroke="#062644" stroke-width="1.6" stroke-dasharray="2 4.5" opacity=".5"/></svg><span class="seal__txt"><b>$0</b>start-up fee</span></span>
+            <span class="sh__emblem city-deal__emblem"><img src="../../assets/step-icons/zero-fee.webp" width="50" height="50" loading="lazy" alt=""></span>
+            <p class="kicker">No start-up fee</p>
+            <p class="sh__title h2">Westfield prices, with no <span class="swash">start-up</span> fee</p>
+            <p class="sh__intro lead">New recurring customers pay no start-up fee. Your first cleanup costs the same as every visit after it, even when the yard has built up.</p>
+          </div>
+        </div>
+        <figure class="city-deal__art frame">
+          <img class="frame__img" src="../../assets/scenes/scene-fee.jpg" width="1254" height="1254" loading="lazy" decoding="async" alt="Purge Pros mascot leaning on his scooper on a clean lawn, holding up one tied bag.">
+          <span class="seal"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="60" cy="60" r="50" fill="#ffc12f" stroke="#ffc12f" stroke-width="12" stroke-linecap="round" stroke-dasharray="0.1 12.99"/><circle cx="60" cy="60" r="46" fill="none" stroke="#062644" stroke-width="1.6" stroke-dasharray="2 4.5" opacity=".5"/></svg><span class="seal__txt"><b>$0</b>start-up fee</span></span>
+        </figure>
+        <div class="city-deal__rates">
+          <p class="small">Here: the starting prices (C3), then the explainer token (<code>EXPLAIN</code>), shown below.</p>
+          {{EXPLAIN}}
+          <p class="city-deal__cta"><a class="btn btn--primary" href="#quote" data-purge-quote>See my Westfield price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+        </div>
+        <div class="city-deal__proof">
+          <div class="city-deal__proofhead">
+            <h3 class="h3">Proof from the route</h3>
+            <p>Real gates, cleanup tools, and finished visits from our service routes.</p>
+          </div>
+          <div class="receipts receipts--3">
+            <figure class="receipt">
+              <img class="receipt__img" src="../../assets/photos/closed-chain-link-gate-768.webp" width="768" height="576" loading="lazy" decoding="async" style="object-position:45% 70%" alt="Real visit photo: a closed chain-link yard gate with fallen leaves along the fence.">
+              <span class="tag tag--real receipt__tag">Real visit</span>
+              <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Closed at the end of the visit</p><p class="receipt__text">Leaves on the ground, gate shut behind us before we go.</p></figcaption>
+            </figure>
+            <figure class="receipt">
+              <img class="receipt__img" src="../../assets/photos/white-gate-latch-cleanup-tools-768.webp" width="768" height="576" loading="lazy" decoding="async" alt="Real visit photo: a latched white gate with the scooping bin and rake beside it.">
+              <span class="tag tag--real receipt__tag">Real visit</span>
+              <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Gate closed and latched</p><p class="receipt__text">We follow your gate and access instructions on every visit.</p></figcaption>
+            </figure>
+            <figure class="receipt">
+              <img class="receipt__img" src="../../assets/photos/wood-gate-yard-cleanup-tools-768.webp" width="768" height="576" loading="lazy" decoding="async" style="object-position:42% 70%" alt="Real visit photo: the scooping bin, rake and sanitizing sprayer inside a fenced yard.">
+              <span class="tag tag--real receipt__tag">Real visit</span>
+              <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Bin, rake and sprayer on the job</p><p class="receipt__text">Tools and footwear are sanitized between customer yards.</p></figcaption>
+            </figure>
+          </div>
+          <a class="city-deal__more" href="dog-waste-removal.html#every-visit">See everything a visit includes <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C6 -->
+  <section class="kit" id="kit-city-steps">
+    <div class="kit__label"><b>C6 Compact steps</b><code>.steps.steps--3.city-steps</code><span>The shared steps (kit 15) with one more class. From 620px nothing changes. On a phone the three steps of the route review become one tight strip: a smaller number badge with the sticker tucked on its corner, and closer rows. The words are the city&rsquo;s own three steps.</span></div>
+    <div class="kit__dark sec--navy">
+      <ol class="steps steps--3 city-steps">
+        <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>1</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-search.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Check the ZIP</h3><p class="step__text">Find out that we cover your ZIP before you fill in anything about the property.</p></li>
+        <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>2</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-per-visit-price.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Build the right-sized plan</h3><p class="step__text">How many dogs, how often we visit, and how much ground we scoop decide between a standard price and a custom quote.</p></li>
+        <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>3</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-service-calendar.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Wait for route approval</h3><p class="step__text">Your request is not an appointment until Purge Pros proposes a day and you approve it.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- C7 -->
+  <section class="kit" id="kit-city-guides">
+    <div class="kit__label"><b>C7 Yard Guide rows</b><code>.city-guides</code><span>A wrapper round the Yard Guide token (<code>GUIDE_CARDS</code>, three slugs). From 900px the shared cards (kit 19) are untouched, three across. Below that, where the shared grid is one column and each cover would fill the screen, a card is a row: the cover as a thumbnail at the left, its ribbon above the title, the link label under it. The excerpt shows from 620px; on a phone the row is ribbon, title and link. Each city page has its own three articles; no two city pages share more than one (the table is in shots/fix-city/family-data.mjs, with one link label per article).</span></div>
+    <div class="city-guides">
+      {{GUIDE_CARDS:dog-waste-cleanup-busy-families,poop-scooping-multiple-dogs,dog-waste-cleanup-fence-repairs-landscaping}}
+    </div>
+  </section>
+
+  <!-- C8 -->
+  <section class="kit" id="kit-city-pic">
+    <div class="kit__label"><b>C8 The town&rsquo;s own picture</b><code>figure.frame.frame--flip.frame--wide.city-pic</code><span>The picture of the yard section: one per town, <code>assets/scenes/city-dogs/&lt;slug&gt;.jpg</code> (3:2, the breed that stands in that town&rsquo;s hero), in the shared wide frame (kit 10). No two city pages share it. They are generated pictures of a breed, not photos from the town or of a customer&rsquo;s dog: the alt text is the plain description in that folder&rsquo;s README, and the caption never names the town, never says &ldquo;local&rdquo; and never calls the dog anyone&rsquo;s. The dog fills the picture down to its paws, so from 700px the caption hangs on the bottom edge instead of lying on the picture (on a phone the shared caption already does). <code>object-position</code> only where the dog is off centre.</span></div>
+    <div class="kit__row" style="align-items:flex-start">
+      <div style="flex:1 1 320px;max-width:588px">
+        <figure class="frame frame--flip frame--wide city-pic">
+          <img class="frame__img" src="../../assets/scenes/city-dogs/westfield.jpg" width="1200" height="800" loading="lazy" decoding="async" style="object-position:40% 50%" alt="A grey-and-white husky standing on a sunny lawn with its nose lifted into the breeze.">
+          <figcaption class="frame__cap"><img src="../../assets/brand-icons/pp-dog.webp" width="30" height="30" loading="lazy" alt="">More lawn means more to search. We cover every area you choose.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- C9 -->
+  <section class="kit" id="kit-city-blocks">
+    <div class="kit__label"><b>C9 The other blocks of a city page</b><code>shared kit components only</code><span>Nothing new to style. Each block below is built from components that are already in kit.html; CITY-PAGES.md gives the markup to copy.</span></div>
+    <ul class="ilist">
+      <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-local-area.webp" width="48" height="48" loading="lazy" alt=""><div><b>Local introduction</b><span>A split (kit 10) with the locator map as its picture; the first sentence of the local lead is the heading&rsquo;s intro, the rest is the paragraph under it, and the nearby pages (C4) close the words column.</span></div></li>
+      <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-service-calendar.webp" width="48" height="48" loading="lazy" alt=""><div><b>Route review, the city&rsquo;s &ldquo;how it works&rdquo;</b><span>The one navy section: centred heading written from the city&rsquo;s own route note, the ZIP ticket (C2), then the city&rsquo;s three steps (C6).</span></div></li>
+      <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-yard.webp" width="48" height="48" loading="lazy" alt=""><div><b>Yard planning and the local card</b><span>A flipped split: the three points as an icon list (kit 12), the local card as a notice (kit 16) with a title that says what its text says, and the town&rsquo;s own picture (C8), under a kicker that never names the town.</span></div></li>
+      <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-property-notes.webp" width="48" height="48" loading="lazy" alt=""><div><b>Questions</b><span>The shared accordion (kit 17): the city&rsquo;s own questions first, then the shared ones in plain words, one icon per question, one open at a time.</span></div></li>
+    </ul>
+  </section>

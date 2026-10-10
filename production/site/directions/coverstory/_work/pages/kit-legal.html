@@ -1,0 +1,140 @@
+<!--
+{
+  "title": "Family kit: legal | Cover Story page platform",
+  "description": "What the legal pages (terms, privacy) add to the Cover Story system: the document layout, the On this page list, the sheet, the clause, the list, the date line, the contact row and the closing ask.",
+  "css": [
+    "css/family-legal.css"
+  ],
+  "scripts": [
+    "js/family-legal.js"
+  ],
+  "hero": {
+    "recipe": "kit",
+    "title": "Family kit: legal",
+    "lead": "Nine components and a print sheet from css/family-legal.css, used on terms-conditions.html and privacy-policy.html. Same tokens, radii, shadows and type sizes as the shared kit. The legal text itself is never typed into a page: shots/legal/make-sources.mjs sets it from the live documents."
+  }
+}
+-->
+
+  <!-- L1 to L5, together: they are one composition -->
+  <section class="kit" id="kit-legal-doc">
+    <div class="kit__label"><b>L1 Document layout</b><code>.legal-doc &gt; nav.legal-toc + article.legal-sheet</code><span>The body of a legal page, inside a centred section (<code>.wrap.stack</code> under a <code>.sh--center</code> heading) on the sky tint. One column on phones: the list, then the sheet. From 900px the list takes a narrow left column and stays in view while the sheet scrolls. Both start on the container edges. One per page. The demo below is the whole composition, L1 to L5.</span></div>
+    <div class="kit__tint">
+      <div class="legal-doc" style="--legal-ground: var(--sky-050)">
+        <nav class="legal-toc" aria-label="On this page" data-legal-toc>
+          <p class="legal-toc__label"><img class="stk stk--thin" src="../../assets/brand-icons/pp-property-notes.webp" width="28" height="28" loading="lazy" alt="">On this page</p>
+          <div class="legal-toc__body">
+            <ol class="legal-toc__list">
+              <li><a href="#kit-legal-clause-a">A first example clause</a></li>
+              <li><a href="#kit-legal-clause-b">A second example clause &amp; a longer name</a></li>
+              <li><a href="#kit-legal-clause-c">Contact</a></li>
+            </ol>
+          </div>
+          <button class="legal-toc__print" type="button" data-legal-print hidden>Print this page</button>
+        </nav>
+        <article class="legal-sheet">
+          <p class="legal-sheet__intro">The opening statement of the document: what agreeing to it means, or what it covers. Plain words on cream, no icon and no mascot.</p>
+          <section class="legal-clause" id="kit-legal-clause-a" aria-labelledby="kit-legal-clause-a-title">
+            <div class="legal-clause__head">
+              <span class="legal-clause__ico"><img class="stk stk--thin" src="../../assets/brand-icons/pp-scoop.webp" width="38" height="38" loading="lazy" alt=""><span class="legal-clause__num">01</span></span>
+              <h3 class="legal-clause__title" id="kit-legal-clause-a-title">A first example clause</h3>
+            </div>
+            <div class="legal-clause__body">
+              <p>A paragraph of the document, in a reading measure of about 70 characters. Running text of the live document goes here, word for word, set by the script and never typed.</p>
+              <ul class="legal-points">
+                <li><strong>A label:</strong> The sentence that belongs to it, run in exactly as the document has it.</li>
+                <li><strong>A fee or a duty:</strong> A list in a legal document states costs and obligations as well as benefits, so the marker is a quiet dot, never a tick.</li>
+              </ul>
+            </div>
+          </section>
+          <section class="legal-clause" id="kit-legal-clause-b" aria-labelledby="kit-legal-clause-b-title">
+            <div class="legal-clause__head">
+              <span class="legal-clause__ico"><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-secure-payment.webp" width="38" height="38" loading="lazy" alt=""><span class="legal-clause__num">02</span></span>
+              <h3 class="legal-clause__title" id="kit-legal-clause-b-title">A second example clause &amp; a longer name</h3>
+            </div>
+            <div class="legal-clause__body">
+              <p>Each clause keeps the anchor the live page uses, so a link from an email or a message still lands on it. The script binds an ampersand in a heading to the word before it, so no line starts with it; the file keeps the plain space of the live text.</p>
+            </div>
+          </section>
+          <section class="legal-clause" id="kit-legal-clause-c" aria-labelledby="kit-legal-clause-c-title">
+            <div class="legal-clause__head">
+              <span class="legal-clause__ico"><img class="stk stk--thin" src="../../assets/brand-icons/pp-visit-message.webp" width="38" height="38" loading="lazy" alt=""><span class="legal-clause__num">03</span></span>
+              <h3 class="legal-clause__title" id="kit-legal-clause-c-title">Contact</h3>
+            </div>
+            <div class="legal-clause__body">
+              <p>Contact details inside the document are the text-first row (L10): the shared pair, Text then Call, and the document&rsquo;s mail link after it. The clause&rsquo;s own icon is the message icon, because the row leads with text; the ringing phone belongs on the Call button only.</p>
+              <p class="actions legal-reach">{{REACH}}<a class="btn btn--outline btn--sm legal-reach__mail" href="mailto:info@itspurgepros.com"><img class="btn__ico" src="../../assets/step-icons/email.webp" width="26" height="26" loading="lazy" alt="">info@itspurgepros.com</a></p>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- L2 -->
+  <section class="kit" id="kit-legal-toc">
+    <div class="kit__label"><b>L2 On this page</b><code>nav.legal-toc[data-legal-toc] · p.legal-toc__label · .legal-toc__body &gt; ol.legal-toc__list · button.legal-toc__print[data-legal-print][hidden]</code><span>One jump link per clause, in the words of its heading; the two-digit numbers are drawn by a counter, so the link text is the heading and nothing else. Every link is a 44px target. Without the script it is the plain card shown above at every width. With <code>js/family-legal.js</code>: the link of the clause being read is marked (<code>aria-current</code>, the gold row; on a desktop the clause whose heading has reached the middle of the window, and a clause that was jumped to stays marked while the page rests there). From 900px &ldquo;Print this page&rdquo; sits in the label row; it follows the list in the markup, as on the live page. In a short desktop window with a mouse (under 840px tall) the rows close up to a 36px pitch so fourteen fit at 1366 by 768 and 1280 by 720; if a list still does not fit, it scrolls inside the card and ends on a whole row. Under 900px the card becomes a slim bar pinned under the header (<code>.legal-toc--js</code>, <code>button.legal-toc__bar</code>): it wears the icon of the clause being read and its name on up to two lines, a band in the ground colour of the section lies behind it so no line of the document shows above or beside it, and it opens the list, which stays above the pinned price bar and ends on a whole row. Narrow this window to see the bar. The band reads the section&rsquo;s <code>--sec-bg</code>; outside a <code>.sec</code> set <code>--legal-ground</code> on <code>.legal-doc</code>, as this page does.</span></div>
+  </section>
+
+  <!-- L3 -->
+  <section class="kit" id="kit-legal-sheet">
+    <div class="kit__label"><b>L3 The sheet</b><code>article.legal-sheet · p.legal-sheet__intro</code><span>White paper on the tint of the section, one column. The opening statement sits apart on cream. Where the sheet is wide enough (700 to 899px, and from 1100px) the icon discs stand in an 88px margin and every line of text starts on one edge, 560px wide and centred on the sheet. Nothing goes on the sheet but the document: a summary, a date line, a mascot line or a button belongs outside it.</span></div>
+  </section>
+
+  <!-- L4 -->
+  <section class="kit" id="kit-legal-clause">
+    <div class="kit__label"><b>L4 A clause</b><code>section.legal-clause[id][aria-labelledby] · .legal-clause__head · span.legal-clause__ico &gt; img + span.legal-clause__num · h3.legal-clause__title · .legal-clause__body</code><span>An icon on a sky disc with the clause number pinned to it, the heading, then the body in a measure of about 70 characters. The icon must depict the clause, and the number is the section number of the document, never decoration. Brand, quote and glossy icons all take <code>.stk.stk--thin</code> here (alternate <code>.stk--r</code>) so the rail reads as one set. A plan icon (weekly, one-time) only where the clause is about that plan.</span></div>
+  </section>
+
+  <!-- L5 -->
+  <section class="kit" id="kit-legal-points">
+    <div class="kit__label"><b>L5 Document list</b><code>ul.legal-points &gt; li &gt; strong + text</code><span>The lists of the document: a bold label and its sentence, run in as written, with a quiet cyan dot. Use it only for legal text. Promises on an ordinary page keep the shared <code>ul.ilist</code>.</span></div>
+  </section>
+
+  <!-- L6 -->
+  <section class="kit" id="kit-legal-glance">
+    <div class="kit__label"><b>L6 Summary card link</b><code>a.fcard.legal-glance &gt; … &gt; p.fcard__foot &gt; span.tag</code><span>The short version above the document: the three highlights of the live page as shared feature cards in <code>.grid.grid--3.grid--compact</code>, each one a link to the clause it summarises. <code>.legal-glance</code> only keeps the words from being underlined; the pointer is the tag in the foot, which names the one section the card opens. Every card must be a faithful pointer to a clause, and the heading above the row says that the full text governs.</span></div>
+    <div class="grid grid--3 grid--compact" style="width:100%">
+      <a class="fcard legal-glance" href="#kit-legal-clause-a"><div class="fcard__plate dots"></div><img class="fcard__ico stk" src="../../assets/brand-icons/pp-per-visit-price.webp" width="84" height="84" loading="lazy" alt=""><h3 class="fcard__title">A live highlight</h3><p class="fcard__text">Its one sentence, word for word from the live page.</p><p class="fcard__foot"><span class="tag">Section 01 <img src="../../assets/brand-icons/pp-next-arrow.webp" width="16" height="16" loading="lazy" alt=""></span></p></a>
+      <a class="fcard fcard--gold legal-glance" href="#kit-legal-clause-b"><div class="fcard__plate dots"></div><img class="fcard__ico stk stk--r" src="../../assets/brand-icons/pp-local-area.webp" width="84" height="84" loading="lazy" alt=""><h3 class="fcard__title">A second highlight</h3><p class="fcard__text">The card jumps to the clause that says it in full.</p><p class="fcard__foot"><span class="tag">Section 02 <img src="../../assets/brand-icons/pp-next-arrow.webp" width="16" height="16" loading="lazy" alt=""></span></p></a>
+      <a class="fcard fcard--grass legal-glance" href="#kit-legal-clause-c"><div class="fcard__plate dots"></div><img class="fcard__ico stk" src="../../assets/brand-icons/pp-yard.webp" width="84" height="84" loading="lazy" alt=""><h3 class="fcard__title">A third highlight</h3><p class="fcard__text">Three cards, so the row fills at every width.</p><p class="fcard__foot"><span class="tag">Section 03 <img src="../../assets/brand-icons/pp-next-arrow.webp" width="16" height="16" loading="lazy" alt=""></span></p></a>
+    </div>
+  </section>
+
+  <!-- L7 -->
+  <section class="kit" id="kit-legal-ask">
+    <div class="kit__label"><b>L7 The closing ask</b><code>.legal-ask · __lead (&#123;&#123;REACH&#125;&#125; + a.btn--outline.btn--sm.legal-ask__mail) · p.says.legal-ask__says · ul.legal-ask__links (two li &gt; a.btn--quiet) · p.legal-ask__addr.small (print only)</code><span>The words column of the last split, under the heading &ldquo;Questions about this page?&rdquo;. Text first (owner decision, October 8): the row of contact buttons is the shared pair, the navy Text button with the number and then &ldquo;Call&rdquo;, and third the mail link of the live contact box as an outline button. Under it the mascot&rsquo;s one line, then the two page links of the live foot line as quiet links under a dotted rule, side by side where they fit and one above the other where they do not. The live words of each link are kept: the Call button reads &ldquo;Call&rdquo; and the number to a screen reader. Gold is kept for the price button of the closing scene directly below. The mailing address of the live foot line prints with the page and is not shown on screen, where the footer below carries it. Left with the heading on desktop, centred with it under 900px; on a phone the pair fills the row (Text takes the width) and the mail button is as wide as the block.</span></div>
+    <div style="width:min(100%, 486px)">
+      <div class="legal-ask">
+        <div class="legal-ask__lead">
+          {{REACH}}
+          <a class="btn btn--outline btn--sm legal-ask__mail" href="mailto:info@itspurgepros.com"><img class="btn__ico" src="../../assets/step-icons/email.webp" width="26" height="26" loading="lazy" alt="">Email us</a>
+        </div>
+        <p class="says legal-ask__says"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt="">I would answer, but I am the mascot. Text the team.</p>
+        <ul class="legal-ask__links"><li><a class="btn btn--quiet" href="privacy-policy.html">Privacy Policy <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></li><li><a class="btn btn--quiet" href="index.html">Back to Purge Pros <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></li></ul>
+        <p class="legal-ask__addr small"><b>Mailing address</b> (mail only, not a storefront):<br><span>5625 N German Church Rd., Unit 2036, Indianapolis, IN 46235</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- L9 -->
+  <section class="kit" id="kit-legal-updated">
+    <div class="kit__label"><b>L9 The date line of the document</b><code>.sh.sh--center &gt; … h2.sh__title + p.legal-updated &gt; span.legal-updated__s (one per sentence)</code><span>The short date line is in the hero (<code>hero.date</code>, a shared piece), on the first screen at every size. This is the document&rsquo;s own line, in full, as the last line of the heading block of the document section, outside the sheet. While approved text is not yet published it says so in two sentences, which the hero&rsquo;s line cannot hold (60 characters). Each sentence is a span that does not break inside, so on a phone the line breaks between the two; the date is bound with no-break spaces. Once the page carries a publication date (&ldquo;Last updated: &hellip;&rdquo; in the hero) this line is not written. Both lines print: the hero&rsquo;s under the title, this one over the document.</span></div>
+    <div class="kit__tint" style="width:100%">
+      <div class="sh sh--center">
+        <p class="kicker">Twelve sections, one page</p>
+        <p class="h2">The full document</p>
+        <p class="legal-updated"><span class="legal-updated__s">Updated terms approved October&nbsp;8,&nbsp;2026.</span> <span class="legal-updated__s">They take effect when published.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- L10 -->
+  <section class="kit" id="kit-legal-reach">
+    <div class="kit__label"><b>L10 The contact row of a clause</b><code>p.actions.legal-reach &gt; &#123;&#123;REACH&#125;&#125; + a.btn--outline.btn--sm.legal-reach__mail</code><span>Where the document gives its contact details (the last clause of each page). Text first: the shared pair, the Text button with the number and then &ldquo;Call&rdquo;, and after it the document&rsquo;s mail link with its own words. A call link never stands without the text link before it. On a phone the pair fills the row and the mail button the next. The demo is the third clause of the composition at the top of this page.</span></div>
+  </section>
+
+  <!-- L8 -->
+  <section class="kit" id="kit-legal-print">
+    <div class="kit__label"><b>L8 Print</b><code>@media print</code><span>Printing a page that holds a <code>.legal-doc</code> gives the document alone: title, date, summary, every clause and the mailing address in ink on white, in a measure of six inches. Text flows from page to page: a clause is not held whole on one page, only its heading stays with its first lines and a list item is not split. The hero&rsquo;s date line prints under the title as a plain line, and the document&rsquo;s full date line over the document. The header, the hero picture, the facts strip, the list of links, the photograph, the buttons of the closing ask, the mascot line, the closing scene and the footer are left out. Nothing changes on screen.</span></div>
+  </section>

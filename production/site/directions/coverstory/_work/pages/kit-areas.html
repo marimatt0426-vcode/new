@@ -1,0 +1,160 @@
+<!--
+{
+  "title": "Family kit: booking and coverage | Cover Story",
+  "description": "What the quote and all-service-areas pages add to the Cover Story kit: the taps track, paired actions, the mascot stage, the atlas with its ZIP check and map key, and the community directory.",
+  "css": ["css/family-areas.css"],
+  "hero": {
+    "recipe": "kit",
+    "title": "Family kit: booking and coverage",
+    "lead": "Five components that quote.html and additional.html add in css/family-areas.css, each with its class names, as kit.html shows the shared ones. Everything else on those two pages is a shared kit component. Notes for the next author are in FAMILY-NOTES-areas.md."
+  }
+}
+-->
+
+  <!-- A1 -->
+  <section class="kit" id="kit-areas-taps">
+    <div class="kit__label"><b>A1 Taps track</b><code>ol.areas-taps · .areas-tap · .areas-tap__pic · .areas-tap__pic--zoom · .areas-tap__name · .areas-tap__text · .areas-tap--price</code><span>The questions of &ldquo;Build your price&rdquo; in their real order (dogs, ZIP code, yard size, areas, how often), each with the picture the price card itself uses, and the price as the gold last stop. Always six stops: a column with a dotted route on phones, 3 by 2 from 620px, one row from 1100px. The numerals are the order of the questions; the last stop has none. One short line of text per stop, about 40 characters at most; it is balanced, so it never ends on a single word. A picture whose file has a lot of empty margin (the yard) takes <code>--zoom</code> and is enlarged inside its tile to the size of the others. Change a stop only when the price card changes.</span></div>
+    <ol class="areas-taps">
+      <li class="areas-tap"><span class="areas-tap__pic"><img src="../../assets/quote-icons/dog-2.webp" width="192" height="192" loading="lazy" alt=""></span><b class="areas-tap__name">Dogs</b><span class="areas-tap__text">How many use the yard.</span></li>
+      <li class="areas-tap"><span class="areas-tap__pic"><img src="../../assets/step-icons/pin.webp" width="256" height="256" loading="lazy" alt=""></span><b class="areas-tap__name">ZIP code</b><span class="areas-tap__text">To check we come to you.</span></li>
+      <li class="areas-tap"><span class="areas-tap__pic areas-tap__pic--zoom"><img src="../../assets/step-icons/yard-m.webp" width="256" height="256" loading="lazy" alt=""></span><b class="areas-tap__name">Yard size</b><span class="areas-tap__text">The part we scoop, not the whole lot.</span></li>
+      <li class="areas-tap"><span class="areas-tap__pic"><img src="../../assets/quote-icons/area-all.webp" width="192" height="192" loading="lazy" alt=""></span><b class="areas-tap__name">Areas</b><span class="areas-tap__text">Back, front, sides, or all three.</span></li>
+      <li class="areas-tap"><span class="areas-tap__pic"><img src="../../assets/quote-icons/frequency-weekly.webp" width="192" height="192" loading="lazy" alt=""></span><b class="areas-tap__name">How often</b><span class="areas-tap__text">From twice a week to one time.</span></li>
+      <li class="areas-tap areas-tap--price"><span class="areas-tap__pic"><img src="../../assets/step-icons/price-tag.webp" width="185" height="256" loading="lazy" alt=""></span><b class="areas-tap__name">Your price</b><span class="areas-tap__text">An exact price per visit.</span></li>
+    </ol>
+  </section>
+
+  <!-- A1b -->
+  <section class="kit" id="kit-areas-actions">
+    <div class="kit__label"><b>A1b Actions of a words column</b><code>.areas-actions &gt; .btn · .areas-actions &gt; .reach</code><span>The actions that close a words column: side by side from 620px, and under that each as wide as the block, stacked, the way a single closing button of a split already behaves. Text first: a row with a call in it holds the shared pair (<code>&#123;&#123;REACH&#125;&#125;</code>, kit 39): Text with the number, then Call, which fills the row by itself on a phone. A last quiet text action (<code>.btn--quiet</code>, the email address) keeps its own width and sits centred under them. Never a call button alone, and no loose paragraph of links after them.</span></div>
+    <div class="kit__row">
+      <div class="areas-actions">
+        {{REACH}}
+        <a class="btn btn--quiet" href="mailto:info@itspurgepros.com">Email info@itspurgepros.com</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- A2 -->
+  <section class="kit" id="kit-areas-stage">
+    <div class="kit__label"><b>A2 Mascot stage</b><code>figure.areas-stage · .areas-stage--flip · .areas-stage__plate · .areas-stage__pose · span.areas-stage__pin · figcaption.areas-stage__cap</code><span>A pose as the picture of a split, standing in a small drawn scene built like the drawn hero field: a sky plate cut like the picture frame (kit 10), a far rise and a near lawn mown in stripes, a contact shadow under his boots, ONE icon pinned on the square top corner of the plate the way a seal is pinned on a frame, and one caption sticker on the bottom edge so it never covers his boots. From 900px it fills the art column edge to edge, like <code>.frame</code>; under that it is a centred picture, 480px at most. The first split of a page takes the plain form (corner swept at the top left); a flipped split takes <code>--flip</code>. The pinned icon is the thing the section is about (a house for an address, a speech bubble for getting in touch), never decoration, and never an icon the list beside it uses. Never in view with <code>p.says</code>, and never in the last section of a page: the closing scene shows him too. The same construction as the <code>.city-stage</code> of the city pages.</span></div>
+    <div class="grid grid--2" style="align-items:start">
+      <figure class="areas-stage">
+        <div class="areas-stage__plate">
+          <img class="areas-stage__pose" src="../../assets/brand/poses/sorry-map.webp" width="597" height="900" loading="lazy" decoding="async" alt="Purge Pros mascot holding an unfolded street map, with a kind shrug.">
+        </div>
+        <span class="areas-stage__pin"><img src="../../assets/step-icons/house.webp" width="256" height="256" loading="lazy" alt=""></span>
+        <figcaption class="areas-stage__cap"><img src="../../assets/brand-icons/pp-local-area.webp" width="30" height="30" loading="lazy" alt="">Sorry. Even my map has edges.</figcaption>
+      </figure>
+      <figure class="areas-stage areas-stage--flip">
+        <div class="areas-stage__plate">
+          <img class="areas-stage__pose" src="../../assets/brand/poses/phone.webp" width="541" height="900" loading="lazy" decoding="async" alt="Purge Pros mascot holding up a phone and giving a thumbs-up.">
+        </div>
+        <span class="areas-stage__pin"><img src="../../assets/step-icons/chat.webp" width="256" height="256" loading="lazy" alt=""></span>
+        <figcaption class="areas-stage__cap"><img src="../../assets/brand-icons/pp-dog.webp" width="30" height="30" loading="lazy" alt="">Ask away. I don&rsquo;t bite.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- A3 -->
+  <section class="kit" id="kit-areas-atlas">
+    <div class="kit__label"><b>A3 Atlas: the map, the ZIP check and the key</b><code>.areas-atlas · .areas-atlas__map · .areas-atlas__side · form.areas-zipcard[data-pp-zip-form] · form.areas-zipline[data-pp-zip-form] · .areas-key · .areas-key__row · .areas-key__dot · .areas-key__ring</code><span>The service-area map at its largest (the shared plate, kit 20) with the ZIP check and the key to the map. From 1240px the map takes eight of the twelve columns and the two cards stand beside it, the key filling the height the map leaves. From 700px to 1239px the map comes first and the two cards follow side by side, all in one centred column 860px wide at most, so the picture and the cards share their edges. Under 700px the ZIP check comes first, then the map, then the key directly under it. The ZIP check is one field and one button: with scripts the ZIP goes straight into &ldquo;Build your price&rdquo; on the page; without them the form opens quote.html with the ZIP in its address. The field carries <code>pattern="[0-9]{5}"</code> and a title, so a short or mistyped ZIP gets the browser&rsquo;s own message and nothing opens. An empty press of &ldquo;See my price&rdquo; opens the first question; an out-of-area ZIP gets the price card&rsquo;s own kind answer. A link to the field (<code>href="#areas-zip"</code>) lands with the card&rsquo;s title in view and the cursor in the field. The key shows the same three marks the map draws and names the nine communities without a page. The map stays illustrative: the plate&rsquo;s own note says coverage is decided by ZIP. <code>form.areas-zipline</code> is the same check as one line for a words column; its field is required, so its button (&ldquo;Check my ZIP&rdquo;) always answers with the check.</span></div>
+    <div class="areas-atlas">
+      <div class="areas-atlas__map">
+        {{MAP}}
+      </div>
+      <div class="areas-atlas__side">
+        <form class="areas-zipcard" data-pp-zip-form action="quote.html" method="get">
+          <div class="areas-zipcard__head">
+            <img class="areas-zipcard__ico" src="../../assets/step-icons/pin.webp" width="256" height="256" loading="lazy" alt="">
+            <h3 class="areas-zipcard__title">Check your service ZIP</h3>
+            <p class="areas-zipcard__sub">Your ZIP code decides if we come to you.</p>
+          </div>
+          <div class="field field--join">
+            <label class="field__label" for="kit-areas-zip">Service ZIP code</label>
+            <input class="field__input" id="kit-areas-zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" title="Type all 5 digits, like 46032" placeholder="e.g. 46032">
+            <button class="btn btn--primary" type="submit">See my price</button>
+            <p class="field__help">See the available price or request a custom quote before sharing contact details. No payment today.</p>
+          </div>
+          <p class="says"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt="">Five digits. That is all I need.</p>
+        </form>
+        <div class="areas-key">
+          <h3 class="areas-key__title">How to read the map</h3>
+          <ul class="areas-key__list">
+            <li class="areas-key__row"><span class="areas-key__mark"><img src="../../assets/brand-icons/pp-local-area.webp" width="34" height="34" loading="lazy" alt=""></span><b class="areas-key__what">26 communities, each with its own page</b><span class="areas-key__note">Tap a name in <a class="link" href="#kit-areas-directory">the directory below</a>.</span></li>
+            <li class="areas-key__row"><span class="areas-key__mark"><i class="areas-key__ring"></i></span><b class="areas-key__what">The I-465 ring</b><span class="areas-key__note">Drawn for your bearings only.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="kit__row" style="max-width:490px">
+      <form class="areas-zipline" data-pp-zip-form action="quote.html" method="get">
+        <div class="field field--join">
+          <label class="field__label" for="kit-areas-zip-2">Your ZIP code</label>
+          <input class="field__input" id="kit-areas-zip-2" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" title="Type all 5 digits, like 46032" placeholder="5 digits" required>
+          <button class="btn btn--secondary" type="submit">Check my ZIP</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- A4 -->
+  <section class="kit" id="kit-areas-directory">
+    <div class="kit__label"><b>A4 Community directory</b><code>.areas-dir · .areas-legend · .areas-legend__item · .areas-legend__stamp · article.areas-county · --lead · .areas-county__head · svg.areas-county__dial · .areas-county__towns · li.areas-town · --many · --more · a.areas-town__name · .areas-town__dot · ul.areas-zips · li.areas-zip · --noted · form.areas-zip__form[data-pp-zip-form] · button.areas-zip__go · p.areas-town__note</code><span>Every accepted community grouped by county, with its accepted ZIP codes as real text. First a legend bar: one mascot line and the three marks the cards use. A community with a page is a link with a pin; one without is plain text with the open dot the map uses. Each ZIP stamp is a one-tap control, 44px tall: a small form with <code>data-pp-zip-form</code> and one button named <code>zip</code>, so a tap opens &ldquo;Build your price&rdquo; with that ZIP answered (without scripts it opens quote.html with the ZIP in its address). The head of a card is a tinted band: a compass dial that shows where the group sits from the middle of Indianapolis (one gold spot; the tick is north), the side of town, the county, and a count. Bands are sky and gold by position (they alternate down a phone and make a checkerboard in the pairs) and never the tint of the section the cards stand on. The first card takes the whole row; the others pair up from 1100px, so keep an even number of them. Every row is 58px; when one card of a pair has fewer rows, end it with a quiet link row (<code>li.areas-town--more</code>, shown only while the cards are paired) so both finish on the same line. A community with many ZIP codes takes <code>.areas-town--many</code>: 3 stamps across on a phone, 6 from 620px, 9 in the lead card from 1100px, so use 9 or 18. A ZIP code that needs a word (46280 is an Indianapolis ZIP code that also covers the south edge of Carmel) is the last stamp of its list and carries a gold spot (<code>li.areas-zip--noted</code>); the note under the list (<code>p.areas-town__note</code>, the last child of the row, named by the button&rsquo;s <code>aria-describedby</code>) starts with the same spot and ends under that stamp. PO Box ZIP codes are left out, as in the price card.</span></div>
+    <div class="areas-dir">
+      <div class="areas-legend">
+        <p class="says"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt="">Found yours? I&rsquo;ll fetch the price.</p>
+        <ul class="areas-legend__list" aria-label="How to read the directory">
+          <li class="areas-legend__item"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt="">Has its own page</li>
+          <li class="areas-legend__item"><span class="areas-legend__stamp" aria-hidden="true">ZIP</span>Tap a ZIP code to see your price</li>
+        </ul>
+      </div>
+      <article class="areas-county areas-county--lead">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="32" cy="32" r="6.500"/></svg>
+          <p class="areas-county__side">In the middle</p>
+          <h3 class="areas-county__name">Marion County</h3>
+          <p class="areas-county__count"><span>2 communities</span> <span>20 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town areas-town--many">
+            <a class="areas-town__name" href="indianapolis.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Indianapolis</u></a>
+            <ul class="areas-zips" aria-label="Indianapolis ZIP codes we cover">
+              <li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46214" aria-label="See my price for ZIP code 46214">46214</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46217" aria-label="See my price for ZIP code 46217">46217</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46220" aria-label="See my price for ZIP code 46220">46220</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46221" aria-label="See my price for ZIP code 46221">46221</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46227" aria-label="See my price for ZIP code 46227">46227</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46228" aria-label="See my price for ZIP code 46228">46228</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46231" aria-label="See my price for ZIP code 46231">46231</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46234" aria-label="See my price for ZIP code 46234">46234</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46237" aria-label="See my price for ZIP code 46237">46237</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46239" aria-label="See my price for ZIP code 46239">46239</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46240" aria-label="See my price for ZIP code 46240">46240</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46250" aria-label="See my price for ZIP code 46250">46250</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46256" aria-label="See my price for ZIP code 46256">46256</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46259" aria-label="See my price for ZIP code 46259">46259</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46260" aria-label="See my price for ZIP code 46260">46260</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46268" aria-label="See my price for ZIP code 46268">46268</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46278" aria-label="See my price for ZIP code 46278">46278</button></form></li><li class="areas-zip areas-zip--noted"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46280" aria-label="See my price for ZIP code 46280" aria-describedby="kit-areas-note-46280">46280</button></form></li>
+            </ul>
+            <p class="areas-town__note" id="kit-areas-note-46280"><span><b>46280</b> also covers the south edge of <a class="link" href="carmel.html">Carmel</a>.</span></p>
+          </li>
+          <li class="areas-town">
+            <a class="areas-town__name" href="lawrence.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Lawrence</u></a>
+            <ul class="areas-zips" aria-label="Lawrence ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46216" aria-label="See my price for ZIP code 46216">46216</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46236" aria-label="See my price for ZIP code 46236">46236</button></form></li></ul>
+          </li>
+        </ul>
+      </article>
+      <article class="areas-county">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="32" cy="53.5" r="6.500"/></svg>
+          <p class="areas-county__side">South side</p>
+          <h3 class="areas-county__name">Johnson and Morgan<span class="vh"> counties</span></h3>
+          <p class="areas-county__count"><span>3 communities</span> <span>4 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town"><a class="areas-town__name" href="greenwood.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Greenwood</u></a><ul class="areas-zips" aria-label="Greenwood ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46142" aria-label="See my price for ZIP code 46142">46142</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46143" aria-label="See my price for ZIP code 46143">46143</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="camby.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><span><u>Camby</u><small>Marion and Morgan county line</small></span></a><ul class="areas-zips" aria-label="Camby ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46113" aria-label="See my price for ZIP code 46113">46113</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="mooresville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Mooresville</u></a><ul class="areas-zips" aria-label="Mooresville ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46158" aria-label="See my price for ZIP code 46158">46158</button></form></li></ul></li>
+        </ul>
+      </article>
+      <article class="areas-county">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="16.800" cy="16.800" r="6.500"/></svg>
+          <p class="areas-county__side">Northwest</p>
+          <h3 class="areas-county__name">Boone County</h3>
+          <p class="areas-county__count"><span>2 communities</span> <span>2 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town"><a class="areas-town__name" href="whitestown.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Whitestown</u></a><ul class="areas-zips" aria-label="Whitestown ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46075" aria-label="See my price for ZIP code 46075">46075</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="zionsville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Zionsville</u></a><ul class="areas-zips" aria-label="Zionsville ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46077" aria-label="See my price for ZIP code 46077">46077</button></form></li></ul></li>
+          <li class="areas-town areas-town--more"><a class="areas-town__more" href="#kit-areas-zip"><img src="../../assets/brand-icons/pp-search.webp" width="24" height="24" loading="lazy" alt="">Near here? <u>Check your ZIP code</u></a></li>
+        </ul>
+      </article>
+    </div>
+  </section>

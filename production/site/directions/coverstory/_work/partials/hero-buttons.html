@@ -1,0 +1,13 @@
+<!--# Buttons a plain hero may carry (at most two; the first is the gold one). Named in the page's JSON: "buttons": ["quote", "text"].
+      TEXT FIRST (owner decision, October 8): "text" is the Text button with the number. "call" is the PAIR, Text first and
+      Call second (a hero never shows a call button alone); it is the same .reach pair as the page token {{REACH:dark}}. -->
+<!-- @block quote -->
+<a class="btn btn--primary" href="#quote" data-purge-quote>Get my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" alt=""></a>
+<!-- @block call -->
+{{>reach-dark}}
+<!-- @block text -->
+<a class="btn btn--on-dark btn--sm" href="sms:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" alt="">Text (317) 961-5865</a>
+<!-- @block first -->
+<a class="btn btn--primary" href="{{href}}"{{attrs}}>{{label}} <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" alt=""></a>
+<!-- @block second -->
+<a class="btn btn--on-dark btn--sm" href="{{href}}"{{attrs}}>{{label}}</a>

@@ -1,0 +1,91 @@
+/* ==========================================================================
+   Purge Pros — "Cover Story" direction
+   family-sanitizing.css : what the sanitizing and deodorizing page adds to the system.
+   Same tokens, radii, shadows and type sizes as css/site.css; every class starts with .sanitizing-.
+   Each component is shown on kit-sanitizing.html (source _work/pages/kit-sanitizing.html).
+   ========================================================================== */
+
+/* S1. TREATMENT FACTS ------------------------------------------------------
+   The product and what a treatment day needs, set as a product label: a title, a heavy rule and name-and-value rows.
+   A row may carry one line of small print under it (dd.sanitizing-facts__note) for the condition that belongs to it,
+   so no fact is said twice. The legal small print is a second sheet tucked under the label (.sanitizing-facts__foot):
+   it stays level when the label tilts on a desktop, and it holds the trademark notice word for word and the link
+   to the Terms on its own 44px line. It is the art side of a split, so it carries the frame's colour disc and a
+   sticker on its corner. One per page. */
+.sanitizing-facts { position: relative; isolation: isolate; width: min(100%, 470px); margin-inline: auto; }
+.sanitizing-facts::before { /* colour disc behind, as behind a picture frame */
+  content: ""; position: absolute; z-index: -2; width: 64%; aspect-ratio: 1; border-radius: 50%; left: -10%; bottom: -5%; background: var(--gold);
+}
+.sanitizing-facts__card {
+  position: relative; background: var(--paper); border-radius: var(--r-card);
+  box-shadow: inset 0 0 0 3px var(--navy), var(--sh-2); padding: 24px 22px 22px;
+}
+.sanitizing-facts__stk { position: absolute; right: -10px; top: -22px; width: 72px; height: 72px; }
+.sanitizing-facts__title { font: 800 clamp(34px, 3.6vw, 44px)/.95 var(--f-display); color: var(--navy); padding-right: 64px; }
+.sanitizing-facts__sub { margin-top: 6px; padding-bottom: 12px; border-bottom: 8px solid var(--navy); font: 600 15px/1.3 var(--f-text); color: var(--ink-700); }
+.sanitizing-facts__rows > div { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 3px 14px; padding: 9px 0 8px; border-bottom: 2px dotted var(--sky-200); }
+.sanitizing-facts__rows > div:last-child { border-bottom: 4px solid var(--navy); }
+.sanitizing-facts__rows dt { font: 600 15px/1.3 var(--f-text); color: var(--ink-700); }
+.sanitizing-facts__rows dd { font: 800 21px/1.05 var(--f-display); color: var(--navy); text-align: right; }
+.sanitizing-facts__rows .sanitizing-facts__note { flex-basis: 100%; font: 400 14px/1.4 var(--f-text); color: var(--ink-500); text-align: left; text-wrap: balance; }
+.sanitizing-facts__foot { /* the sheet behind the label: level, on the sky tint */
+  position: relative; z-index: -1; margin: -26px 12px 0; padding: 42px 20px 8px; border-radius: 0 0 20px 20px; background: var(--sky-050);
+}
+.sanitizing-facts__fine { font-size: 14px; line-height: 1.5; color: var(--ink-700); }
+.sanitizing-facts__fine + .sanitizing-facts__fine { margin-top: 8px; }
+.sanitizing-facts__more { /* a footnote's link: its own line, 44px tall */
+  display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px; font: 600 14px/1.3 var(--f-text); color: var(--blue-700);
+  text-decoration: underline; text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 4px;
+}
+@media (hover: hover) { .sanitizing-facts__more:hover { color: var(--navy); } }
+@media (min-width: 900px) {
+  .sanitizing-facts__card { transform: rotate(-1.2deg); padding: 28px 28px 24px; }
+  .sanitizing-facts__stk { right: -18px; top: -26px; width: 84px; height: 84px; }
+  .sanitizing-facts__rows dd { font-size: 23px; }
+  .sanitizing-facts__foot { margin-inline: 16px; padding-inline: 24px; }
+}
+
+/* S2. STRAIGHT ANSWERS BOARD ----------------------------------------------
+   What the treatment is (the short side, on the grass tint) and what it is not (the long side), in one card,
+   with the cover arc between them. The marks are the flat tick and cross. Statements are plain sentences:
+   no mascot, no joke, nothing softened. Side by side, the short side's rows share its height, so it never
+   ends in an empty tint beside the long side. */
+.sanitizing-board { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr); background: var(--paper); border-radius: var(--r-card); box-shadow: var(--sh-2); overflow: hidden; }
+.sanitizing-board__side { position: relative; padding: 24px 20px 26px; }
+.sanitizing-board__side--is { background: var(--grass-050); padding-bottom: 58px; }
+.sanitizing-board__side--is::after { /* the cover arc: the white side sweeps up over the tint (phone: from below) */
+  content: ""; position: absolute; left: -12%; right: -30%; bottom: -80px; height: 112px; border-radius: 50%; background: var(--paper);
+}
+.sanitizing-board__head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 14px; align-items: center; }
+.sanitizing-board__ico { width: 64px; height: 64px; grid-row: 1 / span 2; }
+.sanitizing-board__kicker { font: 700 14px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700); align-self: end; }
+.sanitizing-board__side--is .sanitizing-board__kicker { color: var(--grass-800); }
+.sanitizing-board__title { font: 800 clamp(26px, 2.5vw, 34px)/1 var(--f-display); color: var(--navy); align-self: start; }
+.sanitizing-board__list { display: grid; margin-top: 16px; }
+.sanitizing-board__list li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: start; padding: 14px 0; border-top: 2px dotted var(--sky-200); }
+.sanitizing-board__side--is .sanitizing-board__list li { border-top-color: var(--grass); }
+.sanitizing-board__list li:last-child { padding-bottom: 0; }
+.sanitizing-board__mark { width: 28px; height: 28px; margin-top: 1px; }
+.sanitizing-board__list b { display: block; font: 700 17px/1.25 var(--f-text); color: var(--navy); text-wrap: balance; }
+.sanitizing-board__list span { display: block; margin-top: 3px; font-size: 15px; line-height: 1.5; color: var(--ink-700); text-wrap: pretty; }
+@media (min-width: 700px) {
+  .sanitizing-board__side { padding: 30px 30px 32px; }
+  .sanitizing-board__side--is { padding-bottom: 66px; }
+}
+@media (min-width: 1000px) {
+  .sanitizing-board { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .sanitizing-board__side { padding: 36px 40px 38px; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+  .sanitizing-board__side--is { padding: 34px 58px 36px 32px; }
+  .sanitizing-board__side--is::after { left: auto; right: -84px; top: -16%; bottom: -16%; width: 124px; height: auto; }
+  .sanitizing-board__side--is .sanitizing-board__list { grid-auto-rows: minmax(0, 1fr); }
+  .sanitizing-board__side--not { padding-left: 16px; }
+}
+@media (min-width: 1200px) {
+  .sanitizing-board__side--is { padding: 36px 58px 38px 40px; }
+}
+
+/* S3. TALL POSE IN THE BAND ------------------------------------------------
+   The call-to-action band's art box is sized for a near-square pose (relax, sit). A tall standing pose (phone)
+   takes this class on the art box so he stands on the band's lawn at the right size at every width.
+   A width only: the lawn, the shadow and the band itself are the kit's. */
+.sanitizing-tallpose { width: min(250px, 62%); }

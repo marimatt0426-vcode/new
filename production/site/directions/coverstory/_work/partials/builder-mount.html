@@ -1,0 +1,44 @@
+<!--# The price-builder mount: the first question as plain links. Never edit the markup below (DESIGN.md section 12);
+      js/builder.js and css/builder.css belong to it. {{mountAttrs}} is filled by build-site.mjs from the page's hero, and by
+      nothing else: on a city page data-city="Carmel" (hero.city), data-zip="46074" (hero.zip, a one-ZIP community only) and
+      data-zips-also="46280" (hero.alsoZips: extra ZIPs of that community, separated by a space; the builder offers them after
+      the community's own and greets them with the page's city); on any page data-title (hero.cardTitle).
+      What each attribute does: BUILDER-NOTES.md section 2. -->
+    <!-- PRICE BUILDER: the first question as plain links. js/builder.js replaces this with the live builder (same size,
+         same look). If the script never runs, every control still goes somewhere: the standalone quote page. -->
+    <div id="pp-builder" class="ppb" data-pp-builder data-mode="inline" data-step="dogs"{{mountAttrs}}>
+      <div class="ppb-stage">
+        <div class="ppb-head">
+          <span class="ppb-avatar"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" alt=""></span>
+          <div>
+            <p class="ppb-title">Build your price <span class="ppb-count">Step 1 of 6</span></p>
+            <p class="ppb-say" aria-live="polite">Count the tails. I&rsquo;ll do the math.</p>
+          </div>
+        </div>
+        <ol class="ppb-progress" aria-label="Your progress">
+          <li class="is-current" aria-current="step"><span>Dogs</span></li>
+          <li><span>ZIP</span></li>
+          <li><span>Yard</span></li>
+          <li><span>Areas</span></li>
+          <li><span>How often</span></li>
+          <li><span>Price</span></li>
+        </ol>
+        <div class="ppb-body">
+          <div class="ppb-qrow">
+            <h2 class="ppb-q">How many dogs?</h2>
+            <p class="ppb-hint">Tap a number to start.</p>
+          </div>
+          <div class="ppb-tiles ppb-tiles--4">
+            <a class="ppb-tile" href="quote.html"><img class="ppb-tile__pic" src="../../assets/quote-icons/dog-1.webp" width="192" height="192" alt=""><span class="ppb-tile__label">1 dog</span></a>
+            <a class="ppb-tile" href="quote.html"><img class="ppb-tile__pic" src="../../assets/quote-icons/dog-2.webp" width="192" height="192" alt=""><span class="ppb-tile__label">2 dogs</span></a>
+            <a class="ppb-tile" href="quote.html"><img class="ppb-tile__pic" src="../../assets/quote-icons/dog-3.webp" width="192" height="192" alt=""><span class="ppb-tile__label">3 dogs</span></a>
+            <a class="ppb-tile" href="quote.html"><img class="ppb-tile__pic" src="../../assets/quote-icons/dog-4.webp" width="192" height="192" alt=""><span class="ppb-tile__label">4 dogs</span></a>
+            <a class="ppb-tile ppb-tile--wide" href="quote.html"><img class="ppb-tile__pic" src="../../assets/quote-icons/dog-5.webp" width="192" height="192" alt=""><span><span class="ppb-tile__label">5 or more</span><span class="ppb-tile__sub">A full pack? Pick 5 to 10+</span></span><span class="ppb-tile__caret" aria-hidden="true"></span></a>
+          </div>
+        </div>
+        <div class="ppb-foot">
+          <p class="ppb-price"><img class="ppb-price__ico" src="../../assets/step-icons/price-tag.webp" width="256" height="256" alt=""><span class="ppb-price__label">Weekly visits from</span><strong class="ppb-price__amt">$19.99</strong></p>
+          <a class="ppb-next" href="quote.html">Next <img src="../../assets/brand-icons/pp-next-arrow.webp" width="22" height="22" alt=""></a>
+        </div>
+      </div>
+    </div>

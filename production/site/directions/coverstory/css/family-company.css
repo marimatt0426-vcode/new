@@ -1,0 +1,271 @@
+/* ==========================================================================
+   Purge Pros — "Cover Story" direction
+   family-company.css : what the company pages (about, reviews, FAQ, welcome) add to the system.
+   Same tokens, radii, shadows and type sizes as css/site.css; every class starts with .company-.
+   Each component is shown on kit-company.html (source _work/pages/kit-company.html).
+
+   Contents
+     C1  .company-count   the headcount strip (about)
+     C2  .company-star    the cover-star card: the mascot introduced as a character (about)
+     C3  .company-stage   one pose standing on a round plate of sky and lawn (reviews, welcome; any company page)
+     C4  .company-pass    the route pass: a ticket that says where a new customer stands (welcome)
+     C5  .company-feed    the review wall: the live Google feed across the container, its themes four across (reviews)
+     C6  .company-nb      a phrase that must not break across lines ("one-time", "year-round") in a heading or a lead
+     C7  .company-fee     the no-start-up-fee lead as a plain sentence over the shared explainer (welcome)
+     C8  .company-steps   on ol.steps: the titles of a row of steps stay level when their texts differ in length
+     C9  .company-ask     on a Text button with a long label: it still fits the pill on a phone narrower than 360px
+   Add new components at the end, numbered on, with a line here and an entry on the kit page.
+   ========================================================================== */
+
+/* C1. HEADCOUNT STRIP -------------------------------------------------------
+   Real counts as designed data: a caps label, then exactly four numerals on sticker discs, each with a
+   one- or two-word name. Lives in the words column of a split, between the lead and the body copy.
+   Only numbers the business has stated; never a rating, a review count or a customer count. */
+.company-count { padding: 16px 8px 16px; border-radius: var(--r-tile); background: var(--cream); box-shadow: inset 0 0 0 2px var(--gold-300); }
+.company-count__label { text-align: center; font: 700 14px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700); }
+.company-count__list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 14px; }
+.company-count__list li { display: grid; justify-items: center; align-content: start; gap: 8px; padding: 0 2px; text-align: center; border-left: 2px dotted var(--gold-300); }
+.company-count__list li:first-child { border-left: 0; }
+.company-count__num { /* the numeral, as a sticker: colour disc, white keyline, a few degrees of tilt */
+  display: grid; place-items: center; width: 56px; aspect-ratio: 1; border-radius: 50%;
+  background: var(--gold-300); box-shadow: 0 0 0 3px var(--paper), var(--sh-1);
+  font: 800 38px/1 var(--f-display); color: var(--navy); transform: rotate(-4deg);
+}
+.company-count__list li:nth-child(even) .company-count__num { background: var(--sky-200); transform: rotate(4deg); }
+.company-count__name { font: 700 13.5px/1.2 var(--f-text); color: var(--ink-700); white-space: nowrap; }
+@media (max-width: 379.98px) {   /* a 78px cell: "Cane Corso" must not touch the dotted separators */
+  .company-count { padding-inline: 4px; }
+  .company-count__name { font-size: 12.5px; }
+}
+@media (min-width: 700px) {
+  .company-count { padding: 18px 14px 18px; }
+  .company-count__num { width: 64px; font-size: 44px; }
+  .company-count__name { font-size: 14px; }
+}
+
+/* C2. COVER-STAR CARD -------------------------------------------------------
+   A small magazine cover for the mascot: the site's own cover recipe (navy sweep, cyan keyline, sky, lawn)
+   at card size, with one pose standing on the lawn. It is the picture side of a split. The cover line is a
+   greeting in his voice; the caption sticker says plainly what he is. One per page; the pose goes inside the
+   shared .stand so he keeps his contact shadow, and nothing may cover his face. */
+.company-star { position: relative; isolation: isolate; width: min(100%, 440px); margin-inline: auto; }
+.company-star::before { /* colour disc behind, as behind a picture frame */
+  content: ""; position: absolute; z-index: -1; width: 54%; aspect-ratio: 1; border-radius: 50%; left: -7%; bottom: 0; background: var(--gold);   /* it peeks out at the side only: nothing hangs under the card, so the next section's keyline keeps 20px or more of clear air */
+}
+.company-star__cover {
+  position: relative; overflow: hidden; aspect-ratio: 5 / 6; border-radius: 28px; border: 6px solid var(--paper); box-shadow: var(--sh-2);
+  background:
+    radial-gradient(120% 60% at 72% 120%, var(--grass) 0 57%, transparent 57.4%),      /* the lawn he stands on: its crest is behind his shins */
+    radial-gradient(90% 50% at 8% 118%, var(--grass-700) 0 56%, transparent 56.4%),
+    linear-gradient(180deg, var(--sky) 0, var(--sky-200) 100%);
+}
+.company-star__cover::before { /* the navy sweep of a page cover */
+  content: ""; position: absolute; left: -50%; top: -52%; width: 112%; aspect-ratio: 1; border-radius: 50%; background: var(--navy);
+}
+.company-star__cover::after { /* its cyan keyline: the same circle, 11px larger all round, drawn as a ring */
+  content: ""; position: absolute; left: calc(-50% - 11px); top: calc(-52% - 11px); width: calc(112% + 22px); aspect-ratio: 1; border-radius: 50%;
+  border: 4px solid var(--cyan); pointer-events: none;
+}
+.company-star__kicker { position: absolute; left: 7%; top: 6%; font: 700 14px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--cyan-200); }
+.company-star__line { position: absolute; left: 7%; top: 12%; font: 800 clamp(32px, 9.4vw, 42px)/.94 var(--f-display); color: var(--paper); }
+.company-star__line span { display: block; color: var(--cyan); }
+.company-star__pose { position: absolute; right: 6%; bottom: 3.5%; width: 52%; }   /* boots and contact shadow are on the green, never on sky */
+.company-star__pose img { width: 100%; height: auto; }
+.company-star__cap { /* the sticker caption of a picture frame: on the bottom edge on phones, inside the picture from 700px */
+  position: relative; z-index: 1; display: flex; gap: 10px; align-items: center; width: fit-content; max-width: 92%; margin: -18px auto 0;
+  padding: 10px 14px; border-radius: 14px; background: var(--paper); box-shadow: var(--sh-2); font: 600 14px/1.35 var(--f-text); color: var(--ink-700);
+}
+.company-star__cap img { width: 30px; height: 30px; flex: none; }
+@media (min-width: 700px) {
+  .company-star__cap { position: absolute; left: 16px; bottom: 16px; margin: 0; max-width: min(44%, 196px); text-wrap: balance; }
+}
+@media (min-width: 900px) {   /* beside words: the card's outer edge is the container's edge, like every framed picture */
+  .company-star { width: min(100%, 500px); margin-inline: 0 auto; }
+  .split--flip .company-star { margin-inline: auto 0; }
+}
+
+/* C3. POSE STAGE ------------------------------------------------------------
+   One standing pose on a round plate of sky with a rise of lawn under his boots and a contact shadow, his
+   head breaking the top of the plate. For the picture side of a split on a page that has no scene to spare.
+   Standing poses only (wave, phone, think, clipboard, bag, present, point-down); one per screenful, never
+   beside a scene of him. */
+.company-stage { position: relative; isolation: isolate; width: min(82%, 360px); aspect-ratio: 1 / 1.12; margin-inline: auto; }
+.company-stage__plate {
+  position: absolute; left: 0; right: 0; bottom: 0; aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+  border: 6px solid var(--paper); box-shadow: var(--sh-2); background: linear-gradient(180deg, var(--sky) 0, var(--sky-200) 70%);
+}
+.company-stage__plate::after { /* the lawn he stands on */
+  content: ""; position: absolute; left: -16%; right: -16%; bottom: -24%; height: 56%; border-radius: 50%;
+  background: linear-gradient(180deg, var(--grass) 0, var(--grass-700) 62%);
+}
+.company-stage::after { /* contact shadow */
+  content: ""; position: absolute; z-index: 1; left: 27%; right: 27%; bottom: 7.5%; height: 6%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(3, 40, 12, .5), rgba(3, 40, 12, 0));
+}
+.company-stage__pose { position: absolute; z-index: 2; left: 50%; bottom: 9.5%; height: 90%; width: auto; max-width: none; transform: translateX(-50%); }
+
+/* C4. ROUTE PASS ------------------------------------------------------------
+   A ticket for a brand-new customer: the cover recipe of the site at card size (the navy sweep from the left, its
+   cyan keyline, sky beyond it, a two-tone line) over a perforated stub that lists what is done and the one thing
+   still to do. It is the picture side of a split where the mascot may not appear (the first two screens of the
+   welcome page show the gloved hero). The badge is a glossy icon on a white plate, sitting across the keyline as a
+   hero picture sits across the arc. Exactly three stub rows; the last one, .company-pass__next, is the job left
+   for the reader. Only states the page itself asserts (route approved, first service scheduled). One per page. */
+.company-pass { position: relative; isolation: isolate; width: min(100%, 480px); margin-inline: auto; }
+.company-pass__ticket { /* the tilt and the shadow live on the ticket, so the figure keeps a level box for the page rhythm */
+  transform: rotate(-1.5deg); filter: drop-shadow(0 2px 3px rgba(6, 38, 68, .1)) drop-shadow(0 16px 26px rgba(6, 38, 68, .16));
+}
+.company-pass__face { /* the cover; its two lower corners are bitten out where the stub tears off */
+  position: relative; overflow: hidden; min-height: 190px; padding: 24px 22px 28px; border-radius: 28px 28px 0 0;
+  background: linear-gradient(180deg, var(--sky) 0, var(--sky-200) 100%);
+  -webkit-mask: radial-gradient(circle 13px at 0 100%, transparent 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 13px at 100% 100%, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask: radial-gradient(circle 13px at 0 100%, transparent 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 13px at 100% 100%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+.company-pass__face::before { /* the navy sweep of a page cover: one circle, centred up and to the left, that holds every word */
+  content: ""; position: absolute; left: 16%; top: 36%; width: 128%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 34% 30%, var(--navy-600) 0, var(--navy) 62%);
+}
+.company-pass__face::after { /* its cyan keyline: the same circle, 11px larger all round, drawn as a ring */
+  content: ""; position: absolute; left: 16%; top: 36%; width: calc(128% + 22px); aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%);
+  border: 4px solid var(--cyan); pointer-events: none;
+}
+.company-pass__kicker { position: relative; z-index: 1; font: 700 14px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--cyan-200); }
+.company-pass__line { position: relative; z-index: 1; margin-top: 10px; font: 800 clamp(40px, 11vw, 60px)/.9 var(--f-display); color: var(--paper); }
+.company-pass__line span { display: block; color: var(--cyan); }
+.company-pass__badge { /* a glossy icon on its white plate, ringed in gold and tilted like a sticker */
+  position: absolute; z-index: 1; right: 18px; top: 50%; width: 100px; height: 100px; padding: 13px; border-radius: 50%; transform: translateY(-50%) rotate(8deg);
+  background: var(--paper); box-shadow: 0 0 0 4px var(--gold), 0 8px 18px rgba(1, 20, 36, .35);
+}
+.company-pass__stub { /* the tear-off stub: its two upper corners are bitten out to meet those of the cover */
+  position: relative; padding: 10px 18px 12px; border-radius: 0 0 28px 28px; background: var(--paper);
+  -webkit-mask: radial-gradient(circle 13px at 0 0, transparent 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 13px at 100% 0, transparent 98%, #000) right / 51% 100% no-repeat;
+          mask: radial-gradient(circle 13px at 0 0, transparent 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 13px at 100% 0, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+.company-pass__stub::before { /* the perforation */
+  content: ""; position: absolute; left: 22px; right: 22px; top: -2px; border-top: 4px dotted var(--sky-200);
+}
+.company-pass__stub li {
+  display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 50px; padding: 8px 2px;
+  border-top: 2px dotted var(--line); font: 700 16px/1.25 var(--f-text); color: var(--navy);
+}
+.company-pass__stub li:first-child { border-top: 0; }
+.company-pass__stub li > img { width: 24px; height: 24px; }
+.company-pass__state { /* "Done" or "Your move": never under 12.5px */
+  padding: 6px 10px 5px; border-radius: var(--r-pill); background: var(--grass-050); color: var(--grass-800);
+  font: 700 13px/1 var(--f-display); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+}
+.company-pass__next .company-pass__state { background: var(--gold); color: var(--navy); }
+@media (min-width: 900px) {   /* beside words: the pass's outer edge is the container's edge, like every framed picture */
+  .company-pass { width: min(100%, 520px); margin-inline: 0 auto; }
+  .split--flip .company-pass { margin-inline: auto 0; }
+}
+@media (min-width: 700px) {
+  .company-pass__face { min-height: 236px; padding: 32px 30px 36px; }
+  .company-pass__badge { right: 26px; width: 128px; height: 128px; padding: 17px; }
+  .company-pass__stub { padding: 12px 26px 14px; }
+  .company-pass__stub li { min-height: 54px; font-size: 17px; }
+}
+
+/* C5. REVIEW WALL -----------------------------------------------------------
+   The reviews page's own home for the live Google feed. The homepage teases the feed in half a card (.rfeed);
+   here it gets the whole container: the mascot's line, a mount at least 260px tall that the live feed fills, one
+   plain line saying where the reviews come from, the button, and under them the business's own four themes as a
+   band, four across. Until the feed is wired the mount shows .company-feed__empty: one card that says so in plain
+   words (a gold quote mark, the label, one line pointing at the button), between two dashed slots that reserve the
+   room (from 900px). No review text, name, date, rating, count or star row is ever typed in a page, and the frame
+   holds no badge: the feed brings its own figures (round 3, October 9). The loader's markup goes inside .company-feed__mount, and the
+   empty state steps aside by itself as soon as anything else is in the mount. One per page, on a centred section
+   with a short title (the peeking pose is the shared .peek and needs the clear air above the frame). */
+.company-feed.peek-host { margin-top: calc(var(--head-gap) + 66px); border-radius: 28px; background: var(--paper); box-shadow: var(--sh-2); }
+.company-feed .peek { right: 6%; margin-bottom: -9px; }   /* only his hands cross the frame's edge, as on .rfeed */
+.company-feed__top { padding: 26px 18px 0; }
+.company-feed__say { font: 800 clamp(27px, 2.8vw, 36px)/1.02 var(--f-display); color: var(--navy); }
+.company-feed__mount { display: grid; min-height: 260px; margin: 16px 18px 0; }   /* the live page reserves 260px for the feed; so does this */
+.company-feed__mount:has(> :not(.company-feed__empty):not(noscript):not(script)) > .company-feed__empty { display: none; }   /* the feed has arrived */
+.company-feed__empty { display: grid; gap: 20px; }
+.company-feed__now { /* the one card in focus: where a review will sit, saying so. A quote mark, the label, one line */
+  display: grid; gap: 10px; justify-items: center; align-content: center; padding: 26px 20px 28px; text-align: center;
+  border-radius: 20px; background: var(--cream); box-shadow: inset 0 0 0 2px var(--gold-300);
+}
+.company-feed__now::before { content: "\201C"; height: 46px; font: 800 104px/1 var(--f-display); color: var(--gold); }
+.company-feed__ph { max-width: 15em; font: 800 clamp(25px, 2.3vw, 30px)/1.06 var(--f-display); color: var(--navy); text-wrap: balance; }
+.company-feed__hint { max-width: 24em; font-size: 15px; line-height: 1.45; color: var(--ink-700); text-wrap: balance; }
+.company-feed__slot { display: none; }   /* a place kept for a review: an opening quote mark and three lines, never words */
+.company-feed__noscript { padding: 14px 4px 0; font-size: 14px; line-height: 1.5; color: var(--ink-700); text-align: center; }
+.company-feed__foot { display: grid; gap: 14px; padding: 18px 18px 24px; }
+.company-feed__src { font-size: 14px; line-height: 1.5; color: var(--ink-500); text-align: center; }
+.company-feed__themes { padding: 22px 18px 26px; border-radius: 0 0 28px 28px; background: var(--sky-050); }
+.company-feed__list { display: grid; gap: 16px; margin-top: 16px; }
+.company-feed__list li { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 14px; align-items: start; }
+.company-feed__list img { width: 48px; height: 48px; }
+.company-feed__list b { display: block; font: 700 17px/1.25 var(--f-text); color: var(--navy); }
+.company-feed__list span { display: block; margin-top: 2px; font-size: 15px; line-height: 1.45; color: var(--ink-500); }
+@media (max-width: 619.98px) {   /* a button that closes a block is as wide as the block */
+  .company-feed__more { display: flex; width: 100%; }
+}
+@media (min-width: 700px) {
+  .company-feed__top { padding: 30px 32px 0; }
+  .company-feed__mount { margin: 18px 32px 0; }
+  .company-feed__foot { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px 24px; padding: 18px 32px 28px; }
+  .company-feed__src { text-align: left; }
+  .company-feed__themes { padding: 28px 32px 32px; }
+  .company-feed__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
+}
+@media (min-width: 900px) {
+  .company-feed.peek-host { margin-top: calc(var(--head-gap) + 44px); }
+  .company-feed .peek { right: 4.5%; margin-bottom: -13px; }
+  .company-feed__top { padding: 34px 36px 0; }
+  .company-feed__mount { margin: 20px 36px 0; }
+  .company-feed__foot { padding: 20px 36px 30px; }
+  .company-feed__themes { padding: 30px 36px 34px; }
+  .company-feed__empty { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr); }
+  .company-feed__slot {
+    position: relative; display: grid; align-content: center; gap: 12px; padding: 30px 28px 26px; border-radius: 20px;
+    border: 2px dashed var(--sky-200); background: var(--sky-050);
+  }
+  .company-feed__slot::before { content: "\201C"; height: 44px; font: 800 96px/1 var(--f-display); color: var(--sky-200); }
+  .company-feed__slot i { display: block; height: 12px; border-radius: 6px; background: var(--sky-200); }
+  .company-feed__slot i:nth-child(2) { width: 88%; }
+  .company-feed__slot i:nth-child(3) { width: 56%; }
+  .company-feed__slot::after { /* where a name would sit: a disc and a short line */
+    content: ""; height: 34px; margin-top: 8px;
+    background: radial-gradient(circle 17px at 17px 50%, var(--sky-200) 97%, transparent), linear-gradient(var(--sky-200), var(--sky-200)) 46px 50% / 38% 10px no-repeat;
+  }
+}
+@media (min-width: 1100px) {   /* the four themes share one row: icon above, so each title has the column to itself */
+  .company-feed__list { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+  .company-feed__list li { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+}
+
+/* C6. NO-BREAK PHRASE -------------------------------------------------------
+   A hyphenated word that must stay on one line in a heading, a question or a lead ("one-time", "year-round",
+   "long-term"). A span around the word, nothing else: the text itself is unchanged, so structured data stays clean.
+   It stays an inline box wherever it is put, also inside an icon list, whose own spans are blocks. */
+span.company-nb { display: inline; white-space: nowrap; }
+
+/* C7. FEE NOTE --------------------------------------------------------------
+   The no-start-up-fee lead as one plain sentence directly over the shared explainer, for a column that is not a
+   split (the billing section of the welcome page). No card, no icon and no second title: the explainer under it
+   carries the title and the icon. The sentence is the lead of POLICY-WORDING.md, word for word, as p.lead. */
+.company-fee { display: grid; gap: 16px; align-content: start; }
+
+/* C8. LEVEL STEP TITLES -----------------------------------------------------
+   A class for ol.steps on a company page. From 900px a row of steps is as tall as its longest step, and the
+   shared step shares the spare height out between its rows, so the title of a step with a shorter text drops
+   below its neighbours' titles (16px on the welcome page at 1440). Here the spare height goes under the text and
+   every title in the row stays on one line. A workaround for a shared defect (FAMILY-NOTES-company.md, shared
+   item 14): once .steps in site.css does this itself, the class is harmless and can go. */
+@media (min-width: 900px) {
+  .company-steps .step { grid-template-rows: auto auto 1fr; }
+}
+
+/* C9. LONG TEXT BUTTON ------------------------------------------------------
+   A class for a Text button whose label is a whole phrase with the number ("Text a question to (317) 961-5865").
+   With its icon the label is 296px wide at the button's 18px; a 320px phone gives the button 288px, so the words
+   stood outside the pill. Under 360px the class sets the type a step down and tightens the icon and the padding:
+   one line, inside the pill, down to 320px. From 360px it does nothing. The number is never dropped (text first,
+   owner decision of October 8: a Text button shows the number so it is useful on a computer). */
+@media (max-width: 359.98px) {
+  a.company-ask { padding-inline: 10px; gap: 6px; font-size: 16px; }
+  a.company-ask .btn__ico { width: 22px; height: 22px; }
+}

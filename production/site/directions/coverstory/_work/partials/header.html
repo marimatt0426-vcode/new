@@ -1,0 +1,203 @@
+<!--# Skip link, sticky header and phone menu: identical on every page (DESIGN.md section 12, "Header").
+      One exception, chosen by the page's JSON block: "audience": "customer" (the welcome page). Its readers already
+      have a price, so the gold button of the bar and of the phone menu opens the client portal instead of the price
+      builder (the customer blocks below; every other page gets the visitor ones).
+      TEXT FIRST (owner decision, October 8): the bar's contact control reads "Text or call" with the number and opens
+      a choice of two, Text first and stronger, Call second. The phone menu has the same pair. Never a call link alone.
+      {{logoSmall}} is the logo at the size the header needs (assets/derived/brand/logo-mark-158.webp: the same
+      drawing, 10 KB instead of 144; width and height stay the original's 316 by 334, which only give the shape).
+      The space between the wordmark's two spans is deliberate: it is not drawn (the lockup is a grid) but it makes the
+      words read "Purge Pros Pet waste removal", not "ProsPet", to a screen reader and to voice control (audit m10).
+      THE PHONE MENU'S CONTROLS (audit M2, October 9): the burger and the close control are real buttons, so Space and
+      Enter work and Safari's Tab stops at them. js/site.js runs the menu (the page behind is inert while it is open,
+      focus and the scroll position are put back). Two small safety nets, both needed because GoHighLevel adds the site's
+      scripts late: (1) the inline script after the menu opens and closes it, and holds a tap on the hero's dog-count
+      tiles for the price builder, until js/site.js and js/builder.js are there (it stands down the moment they are);
+      (2) with scripts switched off, the <noscript> links open and close the menu by its address (#mnav), as before.
+      The rule that lets the address open the menu (.mnav:target) is in the <noscript> below and nowhere else (it was in
+      css/site.css until October 10): with scripts running, only the class is-open holds the menu open, so whatever
+      opened it, removing the class closes it (staging gate, October 9: a menu opened by its address before js/site.js
+      arrived could not be closed). The inline script also notes in window.PPEarly whether the reader moved the page
+      before js/site.js arrived; js/site.js reads it before it settles a page that was opened at a section.
+      After editing: node _work/build-site.mjs, then node _work/sync-kit.mjs so kit.html shows the same header. -->
+<a class="skip" href="#main">Skip to main content</a>
+
+<!-- HEADER -->
+<header class="hdr" data-hdr>
+  <div class="hdr__bar">
+    <div class="wrap hdr__in">
+      <a class="logo" href="index.html" aria-label="Purge Pros, pet waste removal. Home.">
+        <img class="logo__mark" src="../../assets/{{logoSmall}}" width="316" height="334" alt="">
+        <span class="logo__text"><span class="logo__name">Purge <b>Pros</b></span> <span class="logo__tag">Pet waste removal</span></span>
+      </a>
+      <span class="hdr__spacer"></span>
+      <nav class="nav" aria-label="Main navigation">
+        <ul class="nav__list">
+          <li class="nav__item nav__item--menu" data-menu>
+            <button class="nav__link" type="button" aria-expanded="false" aria-controls="menu-services">Services <svg class="caret" width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1.5 1.5 6 6l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="nav__drop" id="menu-services">
+              <div class="nav__panel">
+                <ul class="nav__sub">
+                  <li><a href="dog-waste-removal.html"><img src="../../assets/brand-icons/pp-scoop.webp" width="44" height="44" alt=""><span><b>Dog waste removal</b><small>Twice a week, weekly or every other week</small></span></a></li>
+                  <li><a href="sanitizing-and-deodorizing.html"><img src="../../assets/brand-icons/pp-deodorize.webp" width="44" height="44" alt=""><span><b>Sanitizing and deodorizing</b><small>A separate treatment, after the scoop</small></span></a></li>
+                  <li><a href="dog-waste-removal.html#one-time"><img src="../../assets/quote-icons/frequency-one-time.webp" width="44" height="44" alt=""><span><b>One-time cleanups</b><small>$89.99 for the first 30 minutes</small></span></a></li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="nav__item nav__item--menu" data-menu>
+            <button class="nav__link" type="button" aria-expanded="false" aria-controls="menu-areas">Areas <svg class="caret" width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1.5 1.5 6 6l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="nav__drop" id="menu-areas">
+              <div class="nav__panel">
+                <ul class="nav__sub nav__sub--plain">
+                  <li><a href="indianapolis.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="28" height="28" alt="">Indianapolis</a></li>
+                  <li><a href="carmel.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="28" height="28" alt="">Carmel</a></li>
+                  <li><a href="fishers.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="28" height="28" alt="">Fishers</a></li>
+                  <li><a href="noblesville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="28" height="28" alt="">Noblesville</a></li>
+                  <li><a href="westfield.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="28" height="28" alt="">Westfield</a></li>
+                </ul>
+                <a class="nav__more" href="additional.html"><span>All service areas<small>26 communities, checked by ZIP</small></span><img src="../../assets/brand-icons/pp-next-arrow.webp" width="22" height="22" alt=""></a>
+              </div>
+            </div>
+          </li>
+          <li class="nav__item"><a class="nav__link" href="about.html">Why Purge Pros</a></li>
+          <li class="nav__item"><a class="nav__link" href="yard-guide.html">Yard Guide</a></li>
+        </ul>
+      </nav>
+      <div class="hdr__reach nav__item nav__item--menu" data-menu>
+        <button class="hdr__tel" type="button" data-menu-btn aria-label="Text or call (317) 961-5865" aria-expanded="false" aria-controls="menu-reach"><img src="../../assets/brand-icons/pp-visit-message.webp" width="30" height="30" alt=""><span><small>Text or call</small>(317) 961-5865</span><svg class="caret" width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1.5 1.5 6 6l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="nav__drop nav__drop--end" id="menu-reach">
+          <div class="nav__panel">
+            <ul class="nav__sub nav__sub--reach">
+              <li><a class="nav__text" href="sms:+13179615865"><img src="../../assets/brand-icons/pp-visit-message.webp" width="44" height="44" alt=""><span><b>Text (317) 961-5865</b><small>Text us. Our team answers.</small></span></a></li>
+              <li><a href="tel:+13179615865"><img src="../../assets/brand-icons/pp-phone.webp" width="44" height="44" alt=""><span><b>Call (317) 961-5865</b><small>Same number, if you would rather talk</small></span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+{{#visitor}}
+      <a class="btn btn--primary btn--sm hdr__cta" href="#quote" data-purge-quote>Get my price</a>
+{{/visitor}}
+{{#customer}}
+      <a class="btn btn--primary btn--sm hdr__cta" href="{{portal}}" target="_blank" rel="noopener">Client portal<span class="vh"> (opens in a new tab)</span></a>
+{{/customer}}
+      <button class="hdr__burger" type="button" data-burger aria-controls="mnav" aria-expanded="false" aria-label="Open menu"><span></span></button>
+      <noscript><style>button.hdr__burger, button.mnav__close { display: none; } .mnav:target { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }</style><a class="hdr__burger" href="#mnav" aria-label="Open menu"><span></span></a></noscript>
+    </div>
+  </div>
+</header>
+
+<!-- PHONE MENU -->
+<div class="mnav" id="mnav" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1">
+  <div class="mnav__top">
+    <a class="logo logo--dark" href="index.html" aria-label="Purge Pros, pet waste removal. Home.">
+      <img class="logo__mark" src="../../assets/{{logoSmall}}" width="316" height="334" alt="">
+      <span class="logo__text"><span class="logo__name">Purge <b>Pros</b></span> <span class="logo__tag">Pet waste removal</span></span>
+    </a>
+    <button class="mnav__close" type="button" data-mnav-close aria-label="Close menu"><img src="../../assets/brand-icons/pp-close.webp" width="20" height="20" alt=""></button>
+    <noscript><a class="mnav__close" href="#main" aria-label="Close menu"><img src="../../assets/brand-icons/pp-close.webp" width="20" height="20" alt=""></a></noscript>
+  </div>
+  <nav class="mnav__body" aria-label="Menu">
+    <div class="mnav__group">
+      <p class="mnav__label">Services</p>
+      <ul class="mnav__links">
+        <li><a href="dog-waste-removal.html">Dog waste removal</a></li>
+        <li><a href="sanitizing-and-deodorizing.html">Sanitizing and deodorizing</a></li>
+        <li><a href="dog-waste-removal.html#one-time">One-time cleanups</a></li>
+      </ul>
+    </div>
+    <div class="mnav__group">
+      <p class="mnav__label">Areas</p>
+      <ul class="mnav__links mnav__links--cols">
+        <li><a href="indianapolis.html">Indianapolis</a></li>
+        <li><a href="carmel.html">Carmel</a></li>
+        <li><a href="fishers.html">Fishers</a></li>
+        <li><a href="noblesville.html">Noblesville</a></li>
+        <li><a href="westfield.html">Westfield</a></li>
+        <li><a href="additional.html">All service areas</a></li>
+      </ul>
+    </div>
+    <div class="mnav__group">
+      <p class="mnav__label">Purge Pros</p>
+      <ul class="mnav__links mnav__links--cols">
+        <li><a href="about.html">Why Purge Pros</a></li>
+        <li><a href="yard-guide.html">Yard Guide</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="mnav__foot">
+    <img class="mnav__mascot" src="../../assets/brand/poses/point-down.webp" width="500" height="900" loading="lazy" decoding="async" alt="">
+{{#visitor}}
+    <p class="mnav__say">Your price takes about a minute.</p>
+{{/visitor}}
+{{#customer}}
+    <p class="mnav__say">Your portal is right down here.</p>
+{{/customer}}
+    <div class="mnav__reach">
+      <a class="mnav__text" href="sms:+13179615865"><img src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" alt="">Text (317) 961-5865</a>
+      <a class="mnav__tel" href="tel:+13179615865"><img src="../../assets/brand-icons/pp-phone.webp" width="26" height="26" alt="">Call<span class="vh"> (317) 961-5865</span></a>
+    </div>
+{{#visitor}}
+    <a class="btn btn--primary btn--block" href="#quote" data-purge-quote>Get my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" alt=""></a>
+{{/visitor}}
+{{#customer}}
+    <a class="btn btn--primary btn--block" href="{{portal}}" target="_blank" rel="noopener">Client portal<span class="vh"> (opens in a new tab)</span> <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" alt=""></a>
+{{/customer}}
+  </div>
+</div>
+<script>
+/* Until the site's scripts are there (GoHighLevel adds them late): the menu button opens and closes the menu, a header
+   menu button opens its panel, and a tap on a dog-count tile of the hero waits for the price tool instead of leaving
+   the page (if it has not come after 2.5 seconds the link is followed as written). It stands down by itself. */
+(function (d, w) {
+  var r = d.documentElement, held = null, timer = 0;
+  /* whether the reader moved the page before js/site.js arrived: it then leaves the page where the reader put it */
+  var E = w.PPEarly = w.PPEarly || { moved: 0 };
+  ["wheel", "touchmove", "keydown"].forEach(function (n) { w.addEventListener(n, function () { E.moved = 1; }, { capture: true, passive: true }); });
+  /* the phone menu: the class is-open is the only thing that holds it open, so taking it off always closes it.
+     f: where focus goes (the panel on opening, the menu button on closing; nowhere when a menu link was followed) */
+  var menu = function (o, f) {
+    var m = d.getElementById("mnav"), b = d.querySelector("button[data-burger]");
+    if (!m) return;
+    m.classList.toggle("is-open", o); r.classList.toggle("is-locked", o);
+    if (b) { b.setAttribute("aria-expanded", String(o)); b.setAttribute("aria-label", o ? "Close menu" : "Open menu"); }
+    f = f && (o ? m : b);
+    if (f) { try { f.focus({ preventScroll: true }); } catch (x) { f.focus(); } }
+  };
+  /* an address that ends in #mnav (a link kept from a visit with scripts off) opens it the same way */
+  if (w.location.hash === "#mnav") menu(true, 1);
+  /* Escape closes the phone menu in that time too (js/site.js takes over once it has run) */
+  d.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape" || r.classList.contains("js")) return;
+    var m = d.getElementById("mnav");
+    if (m && m.classList.contains("is-open")) menu(false, 1);
+  });
+  d.addEventListener("click", function (e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    if (!r.classList.contains("js")) {
+      var m = d.getElementById("mnav"), b = t.closest("button[data-burger], button[data-mnav-close]"), k = t.closest("[data-menu] > button");
+      if (b && m) { menu(b.hasAttribute("data-burger") && !m.classList.contains("is-open"), 1); return; }
+      if (m && m.classList.contains("is-open") && t.closest("#mnav a[href]")) menu(false);   /* a menu link: the menu gives way to where it leads */
+      if (k) { k.parentNode.classList.toggle("is-open"); return; }
+    }
+    var a = t.closest("[data-pp-builder] a.ppb-tile, [data-pp-builder] a.ppb-next");
+    if (!a || w.PPBuilder || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    held = { link: a, n: [].indexOf.call(a.parentNode.querySelectorAll("a.ppb-tile"), a) + 1 };
+    if (timer) return;
+    var ticks = 0;
+    timer = w.setInterval(function () {
+      ticks += 1;
+      var live = d.querySelector("[data-pp-builder] [data-ppb-dogs]"), go = null;
+      if (!live && ticks < 25) return;
+      w.clearInterval(timer); timer = 0;
+      if (!live) { w.location.href = held.link.href; return; }
+      if (held.n >= 1 && held.n <= 4) go = d.querySelector('[data-pp-builder] [data-ppb-dogs="' + held.n + '"]');
+      else if (held.n === 5) go = d.querySelector("[data-pp-builder] [data-ppb-dogs-more]");
+      held = null;
+      if (go) go.click();
+    }, 100);
+  });
+})(document, window);
+</script>

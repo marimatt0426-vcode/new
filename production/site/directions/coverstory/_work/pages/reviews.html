@@ -1,0 +1,220 @@
+<!--
+{
+  "title": "Purge Pros Reviews | Indianapolis Dog Waste Removal",
+  "description": "Read customer feedback on Purge Pros dog waste removal in Indianapolis and nearby communities. See how our local team cares for yards, gates and pets.",
+  "css": ["css/family-company.css"],
+  "hero": {
+    "recipe": "plain",
+    "scene": "heroes/reviews.jpg",
+    "alt": "Purge Pros mascot high-fiving a golden retriever beside a wooden yard gate at sunset.",
+    "kw": "Indianapolis dog waste removal reviews",
+    "title": ["Don’t take our", "word for it."],
+    "wrap": "none",
+    "lead": "Read current Google feedback from Indianapolis-area customers who trusted Purge Pros with their yards, gates, and dogs.",
+    "buttons": ["quote", { "label": "Read the latest reviews", "href": "#latest-reviews" }]
+  },
+  "facts": {
+    "label": "Purge Pros reviews at a glance",
+    "items": [
+      { "icon": "pp-review-star", "value": "Live Google feed", "label": "Reviews in customers’ own words, updated automatically" },
+      "team",
+      "proof",
+      "pay"
+    ]
+  },
+  "schema": {
+    "breadcrumb": ["Google Reviews"],
+    "extra": [
+      {
+        "@type": "CollectionPage",
+        "@id": "https://itspurgepros.com/reviews#collection",
+        "url": "https://itspurgepros.com/reviews",
+        "name": "Purge Pros Customer Reviews",
+        "about": { "@id": "https://itspurgepros.com/#business" }
+      }
+    ]
+  },
+  "guideCards": {
+    "choose-pooper-scooper-service-indianapolis": { "more": "Compare with a checklist" },
+    "understanding-gate-closure-photo-after-scoop-visit": { "more": "Read the photo" },
+    "compare-per-visit-monthly-dog-waste-quotes": { "more": "Do the math" }
+  }
+}
+-->
+
+<!-- 1. THE LIVE FEED: the review wall (family component C5). The live Trustindex feed loads into .company-feed__mount,
+     across the whole container, with the four themes as a row under it. No review text, reviewer name, date, rating,
+     count or star row is typed here, and the frame holds no badge: until the feed is wired the mount shows the labelled
+     empty state, the button to Google and the no-JavaScript line. The only rating on this page is the footer's badge,
+     which the builder fills from the one switch (_work/partials/reviews.json). -->
+<section class="sec" data-edge="arc-r" id="latest-reviews" aria-labelledby="latest-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-review-star.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">Updated automatically</p>
+      <h2 class="sh__title" id="latest-title">The latest Google reviews,<br> in their <span class="swash">own words</span></h2>
+    </div>
+    <div class="company-feed peek-host">
+      <img class="peek" src="../../assets/brand/poses/peek.webp" width="900" height="689" loading="lazy" decoding="async" alt="">
+      <div class="company-feed__top">
+        <p class="company-feed__say">I&rsquo;m biased. Ask the neighbors.</p>
+      </div>
+      <div class="company-feed__mount" data-pp-live-reviews>
+        <div class="company-feed__empty">
+          <span class="company-feed__slot" aria-hidden="true"><i></i><i></i><i></i></span>
+          <div class="company-feed__now">
+            <p class="company-feed__ph">Live Google reviews load here on the real site</p>
+            <p class="company-feed__hint">Until they do, the button below opens them on Google.</p>
+          </div>
+          <span class="company-feed__slot" aria-hidden="true"><i></i><i></i><i></i></span>
+        </div>
+        <noscript><p class="company-feed__noscript">Please enable JavaScript to load the current Trustindex review feed.</p></noscript>
+      </div>
+      <div class="company-feed__foot">
+        <p class="company-feed__src">Reviews come straight from Google through Trustindex and update on their own.</p>
+        <a class="btn btn--secondary company-feed__more" href="https://www.google.com/maps/search/?api=1&amp;query=Google&amp;query_place_id=ChIJwxBb4j_CQ2IRKXPCYz1Nk78" rel="noopener">Read our reviews on Google <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+      </div>
+      <div class="company-feed__themes">
+        <h3 class="h3">What current customers mention</h3>
+        <ul class="company-feed__list">
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-visit-message.webp" width="48" height="48" loading="lazy" alt=""><div><b>Clear communication</b><span>Customers repeatedly mention easy booking, on-the-way updates, and knowing when service is complete.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-professional-team.webp" width="48" height="48" loading="lazy" alt=""><div><b>Professional service</b><span>Courtesy, efficiency, and dependable follow-through appear throughout the current feedback.</span></div></li>
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-yard.webp" width="48" height="48" loading="lazy" alt=""><div><b>A visibly cleaner yard</b><span>The result that matters most shows up clearly: customers notice the difference after service.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-property-notes.webp" width="48" height="48" loading="lazy" alt=""><div><b>Care for dogs and homes</b><span>Pet-friendly touches, secured gates, and respect for the property help turn a chore into peace of mind.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. JOB PHOTOS: the two photos of the live page and two more, as receipts. Only one of the four is on the homepage. -->
+<section class="sec sec--sky" data-edge="arc" id="job-photos" aria-labelledby="photos-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-gate-photo.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">From our own job photos</p>
+      <h2 class="sh__title" id="photos-title">See the <span class="swash">everyday</span> details</h2>
+      <p class="sh__intro lead">Backyard gates and the work around them, photographed on our visits.</p>
+    </div>
+    <div class="receipts">
+      <figure class="receipt">
+        <img class="receipt__img" src="../../assets/photos/closed-chain-link-gate-768.webp" width="768" height="576" loading="lazy" decoding="async" style="object-position:45% 70%" alt="Real visit photo: a closed chain-link backyard gate with fallen leaves along the fence.">
+        <span class="tag tag--real receipt__tag">Real visit</span>
+        <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Closed after a winter visit</p><p class="receipt__text">We work through ordinary rain, cold, and snow when the yard can be serviced safely.</p></figcaption>
+      </figure>
+      <figure class="receipt">
+        <img class="receipt__img" src="../../assets/photos/arched-gate-green-yard-original-768.webp" width="768" height="666" loading="lazy" decoding="async" alt="Real visit photo: a closed arched metal gate with the scooping bin and rake beside it, and a play area beyond.">
+        <span class="tag tag--real receipt__tag">Real visit</span>
+        <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Photographed on the way out</p><p class="receipt__text">The last job on every visit: close the gate and photograph it.</p></figcaption>
+      </figure>
+      <figure class="receipt">
+        <img class="receipt__img" src="../../assets/photos/wood-gate-yard-cleanup-tools-768.webp" width="768" height="576" loading="lazy" decoding="async" style="object-position:42% 70%" alt="Real visit photo: the collection bin, rake and sanitizing sprayer on the grass inside a wooden fence.">
+        <span class="tag tag--real receipt__tag">Real visit</span>
+        <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Bin, rake and sprayer on the job</p><p class="receipt__text">Tools and footwear are sanitized between customer yards.</p></figcaption>
+      </figure>
+      <figure class="receipt">
+        <img class="receipt__img" src="../../assets/photos/purge-pros-service-vehicle-privacy-768.webp" width="768" height="576" loading="lazy" decoding="async" style="object-position:50% 62%" alt="Real visit photo: the Purge Pros service vehicle with the business sign on its door.">
+        <span class="tag tag--real receipt__tag">Real visit</span>
+        <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">The Purge Pros service vehicle</p><p class="receipt__text">Serving Central Indiana yards since 2023.</p></figcaption>
+      </figure>
+    </div>
+    <div class="center-row">
+      <p class="says"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt="">Not glamorous. Very real.</p>
+      <a class="btn btn--secondary" href="dog-waste-removal.html">See what a visit includes <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. THE STANDARDS BEHIND THE FEEDBACK: the four points of the live page, in its own wording -->
+<section class="sec" data-edge="scoop" id="standards" aria-labelledby="standards-title">
+  <div class="wrap">
+    <div class="split">
+      <div class="split__art">
+        <figure class="frame">
+          <img class="frame__img" src="../../assets/scenes/lab.jpg" width="760" height="950" loading="lazy" decoding="async" style="object-position:50% 38%" alt="Black Labrador sitting on a sunny, freshly cleaned back lawn beside a blue ball.">
+          <figcaption class="frame__cap"><img src="../../assets/brand-icons/pp-dog.webp" width="30" height="30" loading="lazy" alt="">The toughest reviewer has four legs.</figcaption>
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left">
+          <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-scoop.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">The service behind the feedback</p>
+          <h2 class="sh__title" id="standards-title">Professional details customers can actually <span class="swash">notice</span></h2>
+          <p class="sh__intro lead">A clean yard matters. Consistent communication, secure access, and respect for the property are what make the entire experience dependable.</p>
+        </div>
+        <ul class="ilist">
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-visit-message.webp" width="48" height="48" loading="lazy" alt=""><div><b>Heads-up text</b><span>You know when your technician is on the way.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-gate-photo.webp" width="48" height="48" loading="lazy" alt=""><div><b>Gate-closure photo</b><span>You receive visual confirmation after the completed visit.</span></div></li>
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-sanitized-tools.webp" width="48" height="48" loading="lazy" alt=""><div><b>Sanitized equipment</b><span>Tools and footwear are treated between yards.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-waste-bag.webp" width="48" height="48" loading="lazy" alt=""><div><b>Waste hauled away</b><span>Collected waste does not remain in your household trash.</span></div></li>
+        </ul>
+        <p><a class="btn btn--quiet" href="about.html">Meet the team behind the standards <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. EXISTING CUSTOMERS: where to leave a review. The link is the business's Google listing from the live page. -->
+<section class="sec sec--cream" data-edge="arc" id="write-a-review" aria-labelledby="write-title">
+  <div class="wrap">
+    <div class="split split--flip">
+      <div class="split__art">
+        <figure class="company-stage">
+          <span class="company-stage__plate"></span>
+          <img class="company-stage__pose" src="../../assets/brand/poses/phone.webp" width="541" height="900" loading="lazy" decoding="async" alt="Purge Pros mascot holding up a phone and giving a thumbs-up.">
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left sh--sky">
+          <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-offer-cursor.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">Your turn</p>
+          <h2 class="sh__title" id="write-title">Already a Purge&nbsp;Pros <span class="swash">customer?</span></h2>
+          <p class="sh__intro lead">Share an honest account of your experience on our Google listing.</p>
+        </div>
+        <p><a class="btn btn--secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Google&amp;query_place_id=ChIJwxBb4j_CQ2IRKXPCYz1Nk78" rel="noopener">Open our Google listing <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. YOUR PRICE: the final band of the live page, as the three steps it names -->
+<section class="sec sec--navy" data-edge="arc-r" data-keyline id="your-price" aria-labelledby="price-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-per-visit-price.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">Ready to experience it yourself?</p>
+      <h2 class="sh__title" id="price-title">See your exact <span class="company-nb">per-visit price</span><br> <span class="pop">in about 60 seconds.</span></h2>
+      <p class="sh__intro lead">No payment is collected when you build your price, and your route is reviewed before service is confirmed.</p>
+    </div>
+    <ol class="steps steps--3 company-steps">
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>1</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-local-area.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Check availability</h3><p class="step__text">Enter your ZIP and find out straight away whether it is on our routes.</p></li>
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>2</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-dog.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Build your plan</h3><p class="step__text">Tell us about your dogs, cleanup areas, yard size, and preferred schedule.</p></li>
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>3</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-visit-message.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Request service</h3><p class="step__text">Review your per-visit price, add your address, and send the request to Purge&nbsp;Pros.</p></li>
+    </ol>
+    <div class="notice" style="max-width:760px;margin-inline:auto">
+      <img class="notice__ico stk stk--thin" src="../../assets/brand-icons/pp-no-contract.webp" width="52" height="52" loading="lazy" alt="">
+      <p class="notice__title">Pay per visit, with no <span class="company-nb">long-term</span> service contract</p>
+      <p class="notice__text">There is no minimum number of visits and no cancellation fee. Our local team reviews your route before service is activated.</p>
+    </div>
+    <div class="center-row">
+      <p class="says"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt="">About 60 seconds. I timed it.</p>
+      <a class="btn btn--primary" href="#quote" data-purge-quote>Get my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+  </div>
+</section>
+
+<!-- 6. FROM THE YARD GUIDE: three articles for someone comparing services -->
+<section class="sec" data-edge="scoop" id="yard-guide" aria-labelledby="guide-title">
+  <div class="wrap stack">
+    <div class="sh sh--center sh--grass">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-yard-guide.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">From the Yard Guide</p>
+      <h2 class="sh__title" id="guide-title">Comparing services? Do your <span class="swash">homework.</span></h2>
+      <p class="sh__intro lead">Practical guides on choosing a pooper scooper service, reading a <span class="company-nb">gate-closure</span> photo, and comparing <span class="company-nb">per-visit</span> and monthly quotes.</p>
+    </div>
+    {{GUIDE_CARDS:choose-pooper-scooper-service-indianapolis,understanding-gate-closure-photo-after-scoop-visit,compare-per-visit-monthly-dog-waste-quotes}}
+    <div class="center-row">
+      <a class="btn btn--secondary" href="yard-guide.html">Browse the whole Yard Guide <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+  </div>
+</section>

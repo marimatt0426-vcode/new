@@ -1,0 +1,350 @@
+{
+ "_note": "Illustrative map data. Coordinates are approximate town centres (not boundaries); x and y are percentages of a square map, north at the top. Verify before using for anything other than an illustrative map. Service is decided by ZIP code, never by this map.",
+ "ring": {
+  "name": "I-465 (approximate)",
+  "cx": 41.93,
+  "cy": 60.8,
+  "r": 15.2
+ },
+ "communities": [
+  {
+   "name": "Indianapolis",
+   "slug": "indianapolis",
+   "hasPage": true,
+   "lat": 39.7684,
+   "lon": -86.1581,
+   "x": 41.93,
+   "y": 62,
+   "zips": [
+    "46214",
+    "46217",
+    "46220",
+    "46221",
+    "46227",
+    "46228",
+    "46231",
+    "46234",
+    "46237",
+    "46239",
+    "46240",
+    "46250",
+    "46256",
+    "46259",
+    "46260",
+    "46268",
+    "46278",
+    "46280"
+   ]
+  },
+  {
+   "name": "Carmel",
+   "slug": "carmel",
+   "hasPage": true,
+   "lat": 39.9784,
+   "lon": -86.118,
+   "x": 45.63,
+   "y": 36.79,
+   "zips": [
+    "46032",
+    "46033"
+   ]
+  },
+  {
+   "name": "Fishers",
+   "slug": "fishers",
+   "hasPage": true,
+   "lat": 39.9568,
+   "lon": -86.0134,
+   "x": 55.27,
+   "y": 39.38,
+   "zips": [
+    "46037",
+    "46038"
+   ]
+  },
+  {
+   "name": "Noblesville",
+   "slug": "noblesville",
+   "hasPage": true,
+   "lat": 40.0456,
+   "lon": -86.0086,
+   "x": 55.71,
+   "y": 28.72,
+   "zips": [
+    "46060",
+    "46061",
+    "46062"
+   ]
+  },
+  {
+   "name": "Westfield",
+   "slug": "westfield",
+   "hasPage": true,
+   "lat": 40.0428,
+   "lon": -86.1275,
+   "x": 44.75,
+   "y": 29.06,
+   "zips": [
+    "46074"
+   ]
+  },
+  {
+   "name": "Anderson",
+   "slug": "anderson",
+   "hasPage": true,
+   "lat": 40.1053,
+   "lon": -85.6803,
+   "x": 85.96,
+   "y": 21.56,
+   "zips": [
+    "46011",
+    "46013",
+    "46014",
+    "46015",
+    "46016"
+   ]
+  },
+  {
+   "name": "Avon",
+   "slug": "avon",
+   "hasPage": true,
+   "lat": 39.7628,
+   "lon": -86.3997,
+   "x": 19.67,
+   "y": 62.67,
+   "zips": [
+    "46123"
+   ]
+  },
+  {
+   "name": "Brownsburg",
+   "slug": "brownsburg",
+   "hasPage": true,
+   "lat": 39.8434,
+   "lon": -86.3978,
+   "x": 19.85,
+   "y": 53,
+   "zips": [
+    "46112"
+   ]
+  },
+  {
+   "name": "Danville",
+   "slug": "danville",
+   "hasPage": true,
+   "lat": 39.7606,
+   "lon": -86.5264,
+   "x": 8,
+   "y": 62.93,
+   "zips": [
+    "46122"
+   ]
+  },
+  {
+   "name": "Fortville",
+   "slug": "fortville",
+   "hasPage": true,
+   "lat": 39.9323,
+   "lon": -85.848,
+   "x": 70.5,
+   "y": 42.32,
+   "zips": [
+    "46040"
+   ]
+  },
+  {
+   "name": "Greenfield",
+   "slug": "greenfield",
+   "hasPage": true,
+   "lat": 39.7851,
+   "lon": -85.7694,
+   "x": 77.75,
+   "y": 59.99,
+   "zips": [
+    "46140"
+   ]
+  },
+  {
+   "name": "Greenwood",
+   "slug": "greenwood",
+   "hasPage": true,
+   "lat": 39.6137,
+   "lon": -86.1067,
+   "x": 46.67,
+   "y": 80.57,
+   "zips": [
+    "46142",
+    "46143"
+   ]
+  },
+  {
+   "name": "Ingalls",
+   "slug": "ingalls",
+   "hasPage": true,
+   "lat": 39.957,
+   "lon": -85.805,
+   "x": 74.47,
+   "y": 39.36,
+   "zips": [
+    "46048"
+   ]
+  },
+  {
+   "name": "Lawrence",
+   "slug": "lawrence",
+   "hasPage": true,
+   "lat": 39.8387,
+   "lon": -86.0253,
+   "x": 54.17,
+   "y": 53.56,
+   "zips": [
+    "46216",
+    "46236"
+   ]
+  },
+  {
+   "name": "McCordsville",
+   "slug": "mccordsville",
+   "hasPage": true,
+   "lat": 39.9081,
+   "lon": -85.9228,
+   "x": 63.61,
+   "y": 45.23,
+   "zips": [
+    "46055"
+   ]
+  },
+  {
+   "name": "New Palestine",
+   "slug": "new-palestine",
+   "hasPage": true,
+   "lat": 39.722,
+   "lon": -85.8891,
+   "x": 66.72,
+   "y": 67.57,
+   "zips": [
+    "46163"
+   ]
+  },
+  {
+   "name": "Plainfield",
+   "slug": "plainfield",
+   "hasPage": true,
+   "lat": 39.7042,
+   "lon": -86.3994,
+   "x": 19.7,
+   "y": 69.71,
+   "zips": [
+    "46168"
+   ]
+  },
+  {
+   "name": "Cicero",
+   "slug": "cicero",
+   "hasPage": true,
+   "lat": 40.1239,
+   "lon": -86.0133,
+   "x": 55.27,
+   "y": 19.32,
+   "zips": [
+    "46034"
+   ]
+  },
+  {
+   "name": "Lapel",
+   "slug": "lapel",
+   "hasPage": true,
+   "lat": 40.0684,
+   "lon": -85.8483,
+   "x": 70.48,
+   "y": 25.98,
+   "zips": [
+    "46051"
+   ]
+  },
+  {
+   "name": "Markleville",
+   "slug": "markleville",
+   "hasPage": true,
+   "lat": 39.9778,
+   "lon": -85.6147,
+   "x": 92,
+   "y": 36.86,
+   "zips": [
+    "46056"
+   ]
+  },
+  {
+   "name": "Pendleton",
+   "slug": "pendleton",
+   "hasPage": true,
+   "lat": 39.9975,
+   "lon": -85.7466,
+   "x": 79.85,
+   "y": 34.5,
+   "zips": [
+    "46064"
+   ]
+  },
+  {
+   "name": "Whitestown",
+   "slug": "whitestown",
+   "hasPage": true,
+   "lat": 39.9973,
+   "lon": -86.3458,
+   "x": 24.64,
+   "y": 34.52,
+   "zips": [
+    "46075"
+   ]
+  },
+  {
+   "name": "Zionsville",
+   "slug": "zionsville",
+   "hasPage": true,
+   "lat": 39.9509,
+   "lon": -86.2619,
+   "x": 32.37,
+   "y": 40.09,
+   "zips": [
+    "46077"
+   ]
+  },
+  {
+   "name": "Camby",
+   "slug": "camby",
+   "hasPage": true,
+   "lat": 39.6625,
+   "lon": -86.3164,
+   "x": 27.35,
+   "y": 74.71,
+   "zips": [
+    "46113"
+   ]
+  },
+  {
+   "name": "Mooresville",
+   "slug": "mooresville",
+   "hasPage": true,
+   "lat": 39.6128,
+   "lon": -86.3742,
+   "x": 22.02,
+   "y": 80.68,
+   "zips": [
+    "46158"
+   ]
+  },
+  {
+   "name": "Pittsboro",
+   "slug": "pittsboro",
+   "hasPage": true,
+   "lat": 39.8639,
+   "lon": -86.4669,
+   "x": 13.48,
+   "y": 50.53,
+   "zips": [
+    "46167"
+   ]
+  }
+ ]
+}

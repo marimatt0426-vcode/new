@@ -1,0 +1,35 @@
+<!--# Hero recipes "service" and "city": .cover.cover--page. One 16:9 scene at every width, builder in the hero.
+      A city page differs only in its fields: the scene, --cover-lawn, data-zip / data-city on the mount, and the class
+      cover--city (its headline breaks and size are set by the builder: cityTitle in build-site.mjs).
+      The seal comes before the price card in the source, so a keyboard reaches it before the card's controls; CSS places
+      it on the card's corner. "seal": false in the page's JSON leaves it out; "action" adds the page's own button under the lead.
+      {{sceneSources}}: the builder's <source> lines (heroSources in build-site.mjs): WebP copies of the scene, two
+      widths for a phone and the full width for everything wider. The <img> stays the JPEG, for a browser without WebP. -->
+<!-- COVER (hero): recipe "{{recipe}}", .cover--page -->
+<section class="cover cover--page{{coverClass}}"{{style}} aria-labelledby="cover-title">
+  <picture class="cover__scene">
+{{sceneSources}}
+    <img src="../../assets/{{scene}}" width="{{sceneW}}" height="{{sceneH}}" fetchpriority="high" decoding="async" alt="{{alt}}">
+  </picture>
+{{>hero-arcs}}
+
+{{>hero-head}}
+
+{{#seal}}
+{{>hero-seal}}
+
+{{/seal}}
+  <div class="cover__builder" id="quote">
+{{>builder-mount}}
+  </div>
+
+  <div class="cover__note">
+    <p class="cover__lead">{{lead}}</p>
+{{#action}}
+    <p class="cover__act"><a class="btn btn--on-dark btn--sm" href="{{actionHref}}"><img class="btn__ico" src="../../assets/brand-icons/{{actionIcon}}.webp" width="26" height="26" alt="">{{action}}</a></p>
+{{/action}}
+    <p class="cover__promise"><img src="../../assets/brand-icons/pp-service-check.webp" width="20" height="20" alt="">See your price before sharing contact details. No payment today.</p>
+  </div>
+
+{{>hero-badge}}
+</section>

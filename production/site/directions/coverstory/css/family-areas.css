@@ -1,0 +1,288 @@
+/* family-areas.css : what the quote page and the all-service-areas page add to the Cover Story system.
+   Shown on kit-areas.html. Same tokens, radii, shadows and type sizes as css/site.css. Every class starts with
+   .areas- (a hyphen: the shared map component is .areas and .areas__map, with underscores, and is not touched here).
+   A shared component placed INSIDE one of these is only sized or placed, never recoloured or reshaped. */
+
+/* A1. TAPS TRACK -------------------------------------------------------------------------------------------------
+   The questions of "Build your price" in their real order, each with the picture the price card itself uses, and
+   the price as the gold last stop. Always six stops: a column on phones, 3 by 2 from 620px, one row from 1100px.
+   The numerals are the order of the questions (the list is an <ol>); the last stop carries no number. Captions are
+   balanced, so none ends on a single word. A picture with a lot of empty margin in its file (the yard) takes
+   .areas-tap__pic--zoom and is enlarged inside its tile to the size of the others. */
+.areas-taps { display: grid; grid-template-columns: minmax(0, 1fr); counter-reset: areas-tap; }
+.areas-tap {
+  position: relative; display: grid; grid-template-columns: 72px minmax(0, 1fr); column-gap: 16px; align-content: center;
+  min-height: 92px; padding: 10px 0; counter-increment: areas-tap; text-align: left;
+}
+.areas-tap::before { /* the dotted route to the next stop */
+  content: ""; position: absolute; left: 35px; top: 84px; bottom: -8px; border-left: 3px dotted var(--cyan);
+}
+.areas-tap:last-child::before { content: none; }
+.areas-tap__pic {
+  position: relative; z-index: 1; grid-row: 1 / span 2; align-self: center; display: grid; place-items: center;
+  width: 72px; height: 72px; border-radius: 22px; background: #fff; box-shadow: var(--sh-1), inset 0 0 0 2px var(--sky-200);
+}
+.areas-tap__pic img { width: 52px; height: 52px; }
+.areas-tap__pic--zoom img { transform: scale(1.36); }
+.areas-tap__pic::after { /* which question it is */
+  content: counter(areas-tap); position: absolute; right: -8px; top: -8px; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy); color: #fff; font: 800 17px/28px var(--f-display); text-align: center; box-shadow: 0 0 0 3px #fff;
+}
+.areas-tap__name { align-self: end; font: 800 25px/1.05 var(--f-display); color: var(--navy); }
+.areas-tap__text { align-self: start; margin-top: 3px; font-size: 15px; line-height: 1.4; color: var(--ink-700); text-wrap: balance; }
+.areas-tap--price .areas-tap__pic { border-radius: 50%; background: var(--gold); box-shadow: var(--sh-2), inset 0 0 0 3px var(--gold-300); }
+.areas-tap--price .areas-tap__pic::after { content: none; }
+@media (min-width: 620px) {
+  .areas-taps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 34px var(--gap); }
+  .areas-tap { grid-template-columns: minmax(0, 1fr); justify-items: center; align-content: start; min-height: 0; padding: 0; text-align: center; }
+  .areas-tap__pic { grid-row: auto; width: 96px; height: 96px; border-radius: 28px; margin-bottom: 14px; }
+  .areas-tap__pic img { width: 68px; height: 68px; }
+  .areas-tap__name { font-size: 27px; }
+  .areas-tap__text { max-width: 24ch; }
+  .areas-tap::before { left: calc(50% + 62px); width: calc(100% + var(--gap) - 124px); top: 47px; bottom: auto; border-left: 0; border-top: 3px dotted var(--cyan); }
+  .areas-tap:nth-child(3n)::before { content: none; }
+}
+@media (min-width: 1100px) {
+  .areas-taps { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .areas-tap__pic { width: 112px; height: 112px; border-radius: 32px; margin-bottom: 16px; }
+  .areas-tap__pic img { width: 78px; height: 78px; }
+  .areas-tap__pic::after { right: -9px; top: -9px; width: 32px; height: 32px; font-size: 20px; line-height: 32px; }
+  .areas-tap__name { font-size: 29px; }
+  .areas-tap__text { font-size: 15.5px; }
+  .areas-tap::before { left: calc(50% + 70px); width: calc(100% + var(--gap) - 140px); top: 55px; }
+  .areas-tap:nth-child(3n)::before { content: ""; }
+  .areas-tap:last-child::before { content: none; }
+}
+
+/* A1b. ACTIONS OF A WORDS COLUMN: two or three buttons side by side that become full-width, stacked buttons under
+   620px, as a single closing button of a split does. A quiet text action (.btn--quiet) may be the last one: it
+   keeps its own width and sits centred under the stacked buttons. Where the row offers a call it holds the shared
+   text-first pair ({{REACH}}: Text with the number, then Call), which fills the row by itself under 620px. */
+.areas-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+@media (max-width: 619.98px) {
+  .areas-actions > .btn:not(.btn--quiet) { display: flex; width: 100%; }
+  .areas-actions > .btn--quiet { margin-inline: auto; }
+}
+
+/* a word that must not break at its hyphen ("one-time" in a heading) */
+.areas-nb { white-space: nowrap; }
+
+/* A2. MASCOT STAGE -----------------------------------------------------------------------------------------------
+   A pose as the picture of a split, standing in a small drawn scene of its own, built like the drawn hero field
+   (DESIGN.md section 12): a sky plate cut like the picture frame (kit 10), a far rise and a near lawn mown in
+   stripes, a contact shadow under his boots, ONE icon pinned on the square top corner of the plate the way a seal
+   is pinned on a frame, and one caption sticker on the bottom edge so it never covers his boots. From 900px it
+   fills the art column edge to edge, like .frame; under that it is a centred picture, 480px at most. The first
+   split of a page takes the plain form (corner swept at the top left, disc at the bottom right); a flipped split
+   takes --flip. Never in view with p.says and never in the screen above the closing scene. The city pages have the
+   same stage as .city-stage: see FAMILY-NOTES-areas.md. */
+.areas-stage { position: relative; isolation: isolate; max-width: 480px; margin-inline: auto; }
+@media (min-width: 900px) { .areas-stage { max-width: none; margin-inline: 0; } }
+.areas-stage::before { content: ""; position: absolute; z-index: -1; width: 58%; aspect-ratio: 1; border-radius: 50%; right: -5%; bottom: -6%; background: var(--gold); }
+.areas-stage--flip::before { right: auto; left: -5%; }
+.areas-stage__plate {
+  position: relative; aspect-ratio: 1 / 1; overflow: hidden;
+  border-radius: 44% 28px 28px 28px / 36% 28px 28px 28px; border: 6px solid #fff; box-shadow: var(--sh-2);
+  background:
+    radial-gradient(56% 44% at 50% 38%, rgba(255, 255, 255, .6) 0, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(78% 41% at 100% 100%, var(--grass-700) 0 99%, rgba(61, 143, 44, 0) 100%),
+    linear-gradient(180deg, var(--sky) 0, var(--sky-200) 60%, var(--sky-050) 100%);
+}
+.areas-stage--flip .areas-stage__plate {
+  border-radius: 28px 44% 28px 28px / 28px 36% 28px 28px;
+  background:
+    radial-gradient(56% 44% at 50% 38%, rgba(255, 255, 255, .6) 0, rgba(255, 255, 255, 0) 100%),
+    radial-gradient(78% 41% at 0 100%, var(--grass-700) 0 99%, rgba(61, 143, 44, 0) 100%),
+    linear-gradient(180deg, var(--sky) 0, var(--sky-200) 60%, var(--sky-050) 100%);
+}
+.areas-stage__plate::before { /* the near lawn he stands on, mown in stripes */
+  content: ""; position: absolute; left: -24%; right: -24%; bottom: -37%; height: 60%; border-radius: 50%;
+  background:
+    repeating-linear-gradient(98deg, rgba(255, 255, 255, .1) 0 30px, rgba(255, 255, 255, 0) 30px 60px),
+    linear-gradient(180deg, var(--grass) 0, var(--grass-700) 54%);
+  box-shadow: inset 0 5px 0 rgba(255, 255, 255, .2);
+}
+.areas-stage__plate::after { /* contact shadow */
+  content: ""; position: absolute; z-index: 0; left: 27%; right: 27%; bottom: 6.2%; height: 6.5%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(3, 40, 12, .55), rgba(3, 40, 12, 0));
+}
+.areas-stage__pose { position: absolute; z-index: 1; left: 50%; bottom: 8%; height: 80%; width: auto; max-width: none; transform: translateX(-50%); }
+.areas-stage__pin { /* the one pinned icon: a white sticker on the square top corner of the plate */
+  position: absolute; z-index: 2; top: -14px; right: -10px; display: grid; place-items: center; width: clamp(68px, 16%, 92px); aspect-ratio: 1;
+  border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 6px var(--sky-200), var(--sh-2); transform: rotate(7deg);
+}
+.areas-stage__pin img { width: 62%; height: 62%; object-fit: contain; }
+.areas-stage--flip .areas-stage__pin { right: auto; left: -10px; transform: rotate(-7deg); }
+.areas-stage__cap {
+  position: relative; z-index: 2; width: fit-content; max-width: 88%; margin: -22px auto 0; padding: 10px 14px; border-radius: 14px; background: #fff; box-shadow: var(--sh-2);
+  font: 600 14px/1.35 var(--f-text); color: var(--ink-700); display: flex; gap: 10px; align-items: center; text-align: left;
+}
+.areas-stage__cap img { width: 30px; height: 30px; flex: none; }
+
+/* A3. ATLAS ------------------------------------------------------------------------------------------------------
+   The service-area map at its largest (the shared plate, kit 20) with the ZIP check and the key to the map.
+   From 1240px the map takes eight of the twelve columns and the two cards stand beside it, the key filling the
+   height the map leaves. From 700px to 1239px the map comes first and the two cards follow side by side, all three
+   in one centred column 860px wide at most, so the picture and the cards share their edges. Under 700px the ZIP
+   check comes FIRST (it is the answer the page exists for), then the map, then the key directly under the map. */
+.areas-atlas { display: grid; gap: var(--gap); align-items: start; grid-template-columns: minmax(0, 1fr); width: 100%; max-width: 860px; margin-inline: auto; }
+.areas-atlas__map { width: 100%; }
+.areas-atlas__side { display: grid; gap: var(--gap); grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 699.98px) {
+  .areas-atlas__side { display: contents; }
+  .areas-zipcard { order: -1; }
+}
+@media (min-width: 700px) and (max-width: 1239.98px) {
+  .areas-atlas__side { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; }
+}
+@media (min-width: 1240px) {
+  .areas-atlas { grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: stretch; max-width: none; }
+  .areas-atlas__map { grid-column: 1 / span 8; }
+  .areas-atlas__map > .map { height: 100%; }
+  .areas-atlas__side { grid-column: 9 / span 4; grid-template-rows: auto minmax(0, 1fr); }
+}
+
+/* the ZIP check: one field and one button. With scripts the ZIP goes straight into "Build your price" on this page
+   (data-pp-zip-form); without them the form opens the quote page with the ZIP in its address. The field takes
+   pattern="[0-9]{5}" and a title, so a short or mistyped ZIP gets the browser's own message and nothing opens.
+   A link to the field (href="#areas-zip") lands with the title of the card in view under the sticky header. */
+.areas-zipcard {
+  position: relative; overflow: hidden; display: grid; gap: 14px; align-content: start; padding: 20px 20px 22px;
+  border-radius: var(--r-card); background: var(--sky-050); box-shadow: inset 0 0 0 2px var(--sky-200); text-align: left;
+}
+.areas-zipcard::before { content: ""; position: absolute; right: -58px; top: -58px; width: 150px; height: 150px; border-radius: 50%; background: var(--sky-200); }
+.areas-zipcard__head { position: relative; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 2px 14px; align-items: center; }
+.areas-zipcard__ico { grid-row: 1 / span 2; width: 56px; height: 56px; }
+.areas-zipcard__title { align-self: end; font: 800 clamp(25px, 2.4vw, 28px)/1.02 var(--f-display); color: var(--navy); }
+.areas-zipcard__sub { align-self: start; font-size: 14.5px; line-height: 1.35; color: var(--ink-700); }
+.areas-zipcard .field__input { scroll-margin-top: calc(var(--hdr-h) + 150px); }
+
+/* the same check as one line inside a words column (the "not listed" split): label, field and button on a tinted
+   panel. Its field is required, so the button always answers with the ZIP check and never with another question. */
+.areas-zipline { padding: 14px 16px 16px; border-radius: 20px; background: var(--sky-050); box-shadow: inset 0 0 0 2px var(--sky-200); text-align: left; }
+@media (max-width: 899.98px) { .areas-zipline { max-width: 520px; margin-inline: auto; } }
+
+/* the key to the map: the same three marks the map draws, each with what it means */
+.areas-key { display: grid; align-content: start; gap: 2px; padding: 18px 20px 10px; border-radius: var(--r-card); background: #fff; box-shadow: var(--sh-1); text-align: left; }
+.areas-key__title { font: 800 23px/1.1 var(--f-display); color: var(--navy); }
+.areas-key__row { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 12px; align-items: start; padding: 9px 0; border-bottom: 2px dotted rgba(6, 38, 68, .2); }
+.areas-key__row:last-child { border-bottom: 0; }
+.areas-key__mark { grid-column: 1; grid-row: 1 / span 2; display: grid; place-items: center; width: 40px; height: 40px; }
+.areas-key__mark img { width: 34px; height: 34px; }
+.areas-key__dot { width: 15px; height: 15px; border-radius: 50%; background: #fff; border: 3px solid var(--blue); }
+.areas-key__ring { width: 32px; height: 32px; border-radius: 50%; background: var(--grass-050); border: 2.5px dashed var(--blue); }
+.areas-key__what { grid-column: 2; font: 700 16px/1.3 var(--f-text); color: var(--navy); }
+.areas-key__note { grid-column: 2; font-size: 14.5px; line-height: 1.45; color: var(--ink-700); }
+
+/* A4. COMMUNITY DIRECTORY ----------------------------------------------------------------------------------------
+   Every community Purge Pros accepts, grouped by county, with its accepted ZIP codes as real text. First a legend
+   bar (.areas-legend: one mascot line and the three marks the cards use). Then one card per group: a tinted head
+   (a compass dial that shows where the group sits from the middle of Indianapolis, the side of town, the county,
+   and a count), then one row per community, every row 58px. A community with a page is a link with a pin; one
+   without is plain text with the open dot the map uses. Each ZIP stamp is a one-tap control: a small form with
+   data-pp-zip-form and one button named "zip", so a tap opens "Build your price" with that ZIP answered (without
+   scripts it opens the quote page with the ZIP in its address). The first card (.areas-county--lead) takes the
+   whole row; the others pair up from 1100px, so use an even number of them. Head bands are sky and gold by
+   position: they alternate down a phone and make a checkerboard in the pairs, and never use the tint of the
+   section they stand on. When one card of a pair has fewer rows, end it with a quiet link row
+   (li.areas-town--more, shown only while the cards are paired) so both cards finish on the same line. */
+.areas-dir { display: grid; gap: var(--gap); grid-template-columns: minmax(0, 1fr); }
+.areas-legend {
+  grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 26px; padding: 12px 20px;
+  border-radius: 22px; background: #fff; box-shadow: var(--sh-1); text-align: left;
+}
+.areas-legend__list { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 22px; }
+.areas-legend__item { display: inline-flex; align-items: center; gap: 8px; font: 600 14.5px/1.3 var(--f-text); color: var(--navy); }
+.areas-legend__item img { width: 24px; height: 24px; flex: none; }
+.areas-legend__stamp {
+  flex: none; padding: 5px 7px 3px; border-radius: 9px; background: var(--sky-050); box-shadow: inset 0 0 0 2px var(--sky-200), 0 2px 0 var(--sky-200);
+  font: 800 16px/1 var(--f-display); letter-spacing: .03em; color: var(--navy);
+}
+@media (max-width: 619.98px) { /* a phone: the line, then the three marks in one column with their words on one left edge */
+  .areas-legend { flex-direction: column; gap: 12px; padding: 14px 18px 16px; }
+  .areas-legend__list { flex-direction: column; align-items: stretch; gap: 8px; }
+  .areas-legend__item { display: grid; grid-template-columns: 40px minmax(0, 1fr); justify-items: start; }
+  .areas-legend__item > * { justify-self: center; }
+}
+@media (min-width: 1100px) { .areas-legend { justify-content: space-between; padding: 12px 24px; } }
+
+.areas-county { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); background: #fff; border-radius: var(--r-card); box-shadow: var(--sh-1); overflow: hidden; text-align: left; }
+.areas-county__head {
+  position: relative; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 2px 14px; align-items: center;
+  padding: 14px 18px 16px; background: var(--sky-050); color: var(--blue);
+}
+.areas-county:nth-of-type(even) .areas-county__head { background: var(--gold-050); color: var(--gold-600); }
+.areas-county__dial { position: relative; z-index: 1; grid-row: 1 / span 2; width: 56px; height: 56px; }
+.areas-county__side { position: relative; z-index: 1; align-self: end; font: 700 14px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700); }
+.areas-county .areas-county__name { position: relative; z-index: 1; align-self: start; font: 800 clamp(26px, 2.5vw, 30px)/1.02 var(--f-display); color: var(--navy); }
+.areas-county__count {
+  position: relative; z-index: 1; grid-column: 2; justify-self: start; display: flex; flex-wrap: wrap; gap: 0 14px; margin-top: 8px; padding: 5px 12px; border-radius: 14px;
+  background: #fff; font: 700 13.5px/1.35 var(--f-text); color: var(--navy);
+}
+.areas-county__count span { white-space: nowrap; }
+.areas-county__towns { display: grid; grid-auto-rows: minmax(58px, auto); align-content: start; padding: 4px 18px 8px; }
+.areas-town { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 12px; min-height: 58px; padding: 6px 0; }
+.areas-town + .areas-town { border-top: 2px dotted rgba(6, 38, 68, .2); } /* the rule is above a row, so a hidden last row leaves no line under the card */
+.areas-town__name { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font: 700 17px/1.2 var(--f-text); color: var(--navy); text-decoration: none; }
+.areas-town__name img { width: 24px; height: 24px; flex: none; }
+.areas-town__name u { text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+@media (hover: hover) { a.areas-town__name:hover u { color: var(--blue-700); } }
+.areas-town__name small { display: block; margin-top: 2px; font: 500 13.5px/1.3 var(--f-text); color: var(--ink-500); }
+.areas-town__dot { flex: none; width: 13px; height: 13px; margin: 0 5.5px; border-radius: 50%; background: #fff; border: 2.5px solid var(--blue); }
+.areas-town--more { display: none; }
+.areas-town__more { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font: 600 15.5px/1.2 var(--f-text); color: var(--ink-700); text-decoration: none; }
+.areas-town__more img { width: 24px; height: 24px; flex: none; }
+.areas-town__more u { color: var(--blue-700); text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+@media (hover: hover) { .areas-town__more:hover u { color: var(--navy); } }
+.areas-zips { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; margin-left: auto; }
+.areas-zip { display: block; }
+.areas-zip__form { display: block; margin: 0; }
+.areas-zip__go { /* a stamp you can press: 44px tall, with the hover of a chip */
+  appearance: none; display: inline-flex; align-items: center; justify-content: center; width: 100%; min-width: 44px; min-height: 44px; margin: 0; padding: 2px 9px 0;
+  border: 0; border-radius: 12px; background: var(--sky-050); box-shadow: inset 0 0 0 2px var(--sky-200), 0 2px 0 var(--sky-200); cursor: pointer;
+  font: 800 19px/1 var(--f-display); letter-spacing: .03em; color: var(--navy); white-space: nowrap; -webkit-tap-highlight-color: transparent;
+  transition: box-shadow .16s, transform .16s var(--ease), background-color .16s;
+}
+@media (hover: hover) { .areas-zip__go:hover { background: var(--cyan-050); box-shadow: inset 0 0 0 2px var(--cyan), 0 2px 0 var(--cyan-200); transform: translateY(-2px); } }
+.areas-zip__go:active { transform: translateY(1px); box-shadow: inset 0 0 0 2px var(--cyan); }
+/* a community with many ZIP codes: its row is the name, then a grid of stamps that fills every row (3 across on a
+   phone, 6 from 620px, 9 from 1100px: use 9, 18 or 27 stamps) */
+@media (max-width: 379.98px) { .areas-town { column-gap: 8px; } .areas-zips { gap: 4px; } .areas-zip__go { font-size: 18px; padding: 2px 7px 0; } }
+.areas-town--many { display: grid; grid-template-columns: minmax(0, 1fr); }
+.areas-town--many .areas-zips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 2px 0 8px; }
+.areas-town--many .areas-zip__go { min-height: 46px; font-size: 22px; padding: 2px 4px 0; }
+/* a ZIP code that needs a word (46280 is an Indianapolis ZIP code that also covers the south edge of Carmel): its
+   stamp carries a gold spot on the corner (li.areas-zip--noted) and the note under the list (p.areas-town__note,
+   the last child of the row) starts with the same spot. The note ends under the last stamp, so put the marked ZIP
+   code last. One line from 380px; the words stay left-aligned when they wrap. */
+.areas-zip--noted { position: relative; }
+.areas-zip--noted::after { content: ""; position: absolute; z-index: 1; top: -4px; right: -4px; width: 13px; height: 13px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 2.5px #fff; pointer-events: none; }
+.areas-town__note { display: flex; align-items: flex-start; justify-content: flex-end; gap: 8px; margin: 2px 0 10px; font: 500 14.5px/1.4 var(--f-text); color: var(--ink-700); text-align: left; }
+.areas-town__note::before { content: ""; flex: none; width: 11px; height: 11px; margin-top: 5px; border-radius: 50%; background: var(--gold); } /* level with the first line */
+.areas-town__note b { font-weight: 700; color: var(--navy); }
+@media (min-width: 620px) {
+  .areas-county__head { grid-template-columns: 64px minmax(0, 1fr) auto; gap: 2px 16px; padding: 16px 22px 18px; }
+  .areas-county__dial { width: 64px; height: 64px; }
+  .areas-county__count { grid-column: 3; grid-row: 1 / span 2; align-self: center; justify-self: end; display: grid; gap: 0; margin: 0; padding: 7px 14px; text-align: right; }
+  .areas-county__towns { padding: 6px 22px 10px; }
+  .areas-zip__go { min-width: 71px; font-size: 20px; padding: 2px 10px 0; }
+  .areas-town--many .areas-zip__go { min-width: 44px; font-size: 22px; padding: 2px 4px 0; }
+  .areas-town--many .areas-zips { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+  .areas-dir { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .areas-county--lead { grid-column: 1 / -1; }
+  .areas-county--lead .areas-town--many .areas-zips { grid-template-columns: repeat(9, minmax(0, 1fr)); }
+  .areas-town--more { display: flex; }
+  /* the pairs as a checkerboard: cards 2 and 3 share a row, then 4 and 5, then 6 and 7 */
+  .areas-county:nth-of-type(4n) .areas-county__head, .areas-county:nth-of-type(4n + 3) .areas-county__head { background: var(--sky-050); color: var(--blue); }
+  .areas-county:nth-of-type(4n + 1) .areas-county__head, .areas-county:nth-of-type(4n + 2) .areas-county__head { background: var(--gold-050); color: var(--gold-600); }
+  .areas-county--lead:nth-of-type(n) .areas-county__head { background: var(--sky-050); color: var(--blue); }
+}
+
+/* the compass dial: a white face, the dashed ring of I-465 in the middle, a tick for north, and one gold spot
+   where the group sits. Drawn as inline SVG in the page; coloured here with the tokens. */
+.areas-dial__face { fill: #fff; stroke: var(--navy); stroke-width: 3; }
+.areas-dial__ring { fill: var(--grass-050); stroke: var(--blue); stroke-width: 2; stroke-dasharray: 3.2 2.6; }
+.areas-dial__north { fill: var(--navy); }
+.areas-dial__spot { fill: var(--gold); stroke: var(--navy); stroke-width: 2.5; }

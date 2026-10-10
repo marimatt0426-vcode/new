@@ -1,0 +1,5 @@
+{
+  "_how": "The site's rollout settings: two of them. (1) assetsBase: the public https address of the assets folder once it is published (no slash at the end), for example https://assets.example.com/site . null in the review build. When it is set, every page names its own link-preview picture, <assetsBase>/derived/share/<slug>.jpg, as og:image and twitter:image; when it is null those two tags are left out and the build says so. See ADD-A-PAGE.md section 10. (2) review: true in the review build, and only then does every footer end with the line 'Review build. Nothing on this page is sent anywhere...'. For rollout set it to false (or remove it) and build again: no page and no GoHighLevel block then carries that line. Only the exact value true turns the line on, so a build without the setting is a rollout build. PP_REVIEW=1 or PP_REVIEW=0 in the environment sets it for one build without editing this file; check-site reads the same setting and fails a page that disagrees with it.",
+  "assetsBase": null,
+  "review": true
+}

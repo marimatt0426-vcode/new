@@ -1,0 +1,26 @@
+<!--# Hero recipe "home": .cover.cover--home. Landscape scene from 700px, portrait scene on phones, builder in the hero.
+      {{sceneSources}}: the builder's <source> lines (heroSources in build-site.mjs): the phone scene as WebP in two
+      widths and as JPEG, then the landscape scene as WebP. The <img> stays the JPEG, for a browser without WebP. -->
+<!-- COVER (hero): recipe "home" -->
+<section class="cover cover--home"{{style}} aria-labelledby="cover-title">
+  <picture class="cover__scene">
+{{sceneSources}}
+    <img src="../../assets/heroes/home-desktop.jpg" width="1600" height="900" fetchpriority="high" decoding="async" alt="{{alt}}">
+  </picture>
+{{>hero-arcs}}
+
+{{>hero-head}}
+
+{{>hero-seal}}
+
+  <div class="cover__builder" id="quote">
+{{>builder-mount}}
+  </div>
+
+  <div class="cover__note">
+    <p class="cover__lead">{{lead}}</p>
+    <p class="cover__promise"><img src="../../assets/brand-icons/pp-service-check.webp" width="20" height="20" alt="">See your price before sharing contact details. No payment today.</p>
+  </div>
+
+{{>hero-badge}}
+</section>

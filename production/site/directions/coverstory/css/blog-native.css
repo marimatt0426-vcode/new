@@ -1,0 +1,233 @@
+/* ==========================================================================
+   Purge Pros — "Cover Story" direction
+   blog-native.css : a NATIVE GoHighLevel blog post in the new design.
+
+   Yard Guide articles stay native GoHighLevel posts (owner decision, October 8, 2026). GoHighLevel writes the
+   post's markup itself, in a fixed order, and no article is rebuilt. This file is everything that dresses that
+   markup. It holds no rule for anything Purge Pros writes (the header, the opening band, the price prompt, the
+   row of guides, the footer): those are custom code and keep their own classes in site.css and family-guide.css.
+
+   HOW IT IS LOADED. On the live blog: one <link> in the blog-post template's header code, AFTER site.css,
+   because every colour, typeface, radius and shadow below is a token of site.css (:root). It adds one measure
+   of its own, the width of the text column.
+   In the review build: js/family-guide.js adds the same <link> (the review builder puts only family
+   stylesheets in a page's head).
+
+   WHAT IT STYLES, in the order GoHighLevel writes it (class names as captured from the 45 live posts on
+   2026-10-04, purge-pros-production/production/website/blog/articles/):
+     1  div.blog-cover-image-container > picture.hl-image-picture > img.blog-content-blog-image    the cover
+     2  h1.header-title.blog-content-title                                                         the title
+     3  div.meta-section-1 > span.blog-category > a                                                the topic
+     4  div.meta-section-1 > span.blog-date + span.blog-info-dot + span.blog-read-time             date, read time
+     5  div#blogPostContent.blog-html                                                              the post's text
+     6  div.blog-tags                                                                              tags (empty today)
+     7  div.blog-author-details … a.blog-author … p.blog-author-name (+ p.blog-author-description)  the author
+     8  div.hl-blog-content-back-to-top-container > button.back-to-top                             not shown
+     9  a.blog-back-button                                                                         not shown
+
+   RULES OF THIS FILE.
+   - Selectors are GoHighLevel's own class names and the one id it writes (#blogPostContent). No rule needs a
+     class added to a post, and no rule moves an element out of the order above.
+   - Every element sets its own width and centres itself, so the layout does not depend on the wrappers
+     GoHighLevel puts around the post. Section A resets the wrappers the current live Custom CSS already resets.
+   - EVERYTHING IS IN ONE CASCADE LAYER, AND EVERY DECLARATION IS !important. GoHighLevel's own blog styles could
+     not be read offline. What is known: today's live Custom CSS writes every rule against the element's id with
+     !important to get past them, and three native elements carry inline styles. An !important declaration inside
+     a layer wins over every !important declaration outside a layer, whatever its selector, so nothing here has
+     to out-shout a selector it cannot see (and a line left behind in the template page's Custom CSS cannot undo
+     it). Needs a browser from March 2022 or later (Chrome 99, Safari 15.4, Firefox 97); an older one shows the
+     post as plain text in site.css's base type.
+   - No url(): nothing here needs a picture, so no address has to change between the review build and the blog.
+   ========================================================================== */
+@layer pp-native {
+
+/* the one measure this file adds: the width of the text column */
+:root { --pp-post-col: 580px; }
+@media (min-width: 1000px) { :root { --pp-post-col: 612px; } }
+
+/* A. THE WRAPPERS OF THE BLOG-POST TEMPLATE ------------------------------------
+   Three GoHighLevel sections make the template page: the header code (o5uXbU2hpl), the native post (ls7ncrU9WS)
+   and the footer code (4sh_gIbdbP); the native element is #blog-content-SNKZYT25pP and carries the custom class
+   pp-blog-native-post. These ids are the ones in today's live Custom CSS. If the template page is ever rebuilt
+   GoHighLevel gives it new ids: change them here, in this block only. Nothing below this block depends on them. */
+#section-o5uXbU2hpl, #section-4sh_gIbdbP { padding: 0 !important; margin: 0 !important; }
+/* THE HEADER CODE'S WRAPPERS DRAW NO BOX. The site header keeps to the top of the window by being sticky, and a sticky
+   element can only travel inside its parent: wrapped in GoHighLevel's section it would scroll away with the header
+   code. With no box of their own (display: contents) the wrappers hand the header to the page itself. This holds on
+   the blog only if no further wrapper stands between these four and the header; look at it first (the notes, 4.8). */
+#section-o5uXbU2hpl, #section-o5uXbU2hpl > .inner, #section-o5uXbU2hpl .c-row, #section-o5uXbU2hpl .c-column { display: contents !important; }
+#section-o5uXbU2hpl > .inner, #section-4sh_gIbdbP > .inner, #section-ls7ncrU9WS > .inner { max-width: 100% !important; width: 100% !important; }
+#section-o5uXbU2hpl .c-row, #section-o5uXbU2hpl .c-column, #section-4sh_gIbdbP .c-row, #section-4sh_gIbdbP .c-column,
+#section-ls7ncrU9WS .c-row, #section-ls7ncrU9WS .c-column { padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; }
+/* the post's own section: white, with no padding of its own. Each element below keeps the page gutter itself, and
+   the room between the post and what follows belongs to the footer code's wrapper (family-guide.css, G19), so
+   no space on this page depends on a margin reaching across two of GoHighLevel's sections */
+#section-ls7ncrU9WS { margin: 0 !important; padding: 0 !important; background: var(--paper, #fff) !important; }
+#blog-content-SNKZYT25pP, #blog-content-SNKZYT25pP .pp-blog-native-post { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+
+/* B. THE COVER ------------------------------------------------------------------
+   The opening picture of the article, whole: covers carry lettering to every edge, so it is never cropped. A white
+   print border, the card radius and the deep soft shadow. It is at most as wide as the title (880px) and, from
+   700px, never taller than 48% of the window, so the whole title is on the first screen at 1280 by 720 too.
+   GoHighLevel writes no width or height on it; the covers are 3:2, and a cover of another shape is still whole. */
+.blog-cover-image-container {
+  box-sizing: border-box !important; width: min(100% - 2 * var(--g, 16px), 880px) !important; max-width: none !important;
+  margin: 26px auto 0 !important; padding: 0 !important; text-align: center !important; background: none !important;
+}
+.blog-cover-image-container .hl-image-picture { display: block !important; margin: 0 !important; }
+.blog-cover-image-container img, .blog-cover-image-container .blog-content-blog-image {
+  box-sizing: border-box !important; display: block !important; width: auto !important; height: auto !important;
+  max-width: 100% !important; max-height: min(600px, 48vh) !important; max-height: min(600px, 48svh) !important; margin: 0 auto !important;
+  object-fit: contain !important; border: 6px solid #fff !important; border-radius: var(--r-card, 24px) !important;
+  background: var(--sky-050, #e6f5ff) !important; box-shadow: var(--sh-3) !important;
+}
+@media (min-width: 700px) { .blog-cover-image-container { margin-top: 36px !important; } }
+@media (max-width: 699.98px) { .blog-cover-image-container img, .blog-cover-image-container .blog-content-blog-image { max-height: none !important; border-width: 4px !important; border-radius: var(--r-photo, 20px) !important; } }
+
+/* C. THE TITLE ------------------------------------------------------------------
+   The page's one h1, in the display face, centred under the cover like every heading of a one-column page. */
+.blog-content-title, .header-title.blog-content-title {
+  box-sizing: border-box !important; width: min(100% - 2 * var(--g, 16px), 880px) !important; max-width: none !important;
+  margin: 26px auto 0 !important; padding: 0 !important;
+  font: 800 clamp(34px, 5.1vw, 58px)/.98 var(--f-display) !important; letter-spacing: -.005em !important; text-transform: none !important;
+  text-align: center !important; text-wrap: balance !important; overflow-wrap: break-word !important; color: var(--navy) !important;
+}
+@media (min-width: 700px) { .blog-content-title, .header-title.blog-content-title { margin-top: 34px !important; } }
+
+/* D. THE TOPIC, THE DATE AND THE READ TIME ------------------------------------------
+   Two rows under the title, each centred. The topic is the ribbon of the Yard Guide index in the same four colours
+   (grass, navy, cyan, gold), chosen by the last word of the address GoHighLevel gives the link; a topic added later
+   gets the navy ribbon until a line is added for it. The link is 44px tall; the ribbon is drawn inside it. */
+.meta-section-1 {
+  box-sizing: border-box !important; display: flex !important; flex-wrap: wrap !important; justify-content: center !important; align-items: center !important; gap: 4px 10px !important;
+  width: min(100% - 2 * var(--g, 16px), var(--pp-post-col, 612px)) !important; max-width: none !important; margin: 6px auto 0 !important; padding: 0 !important;
+  font: 600 15px/1.3 var(--f-text) !important; color: var(--ink-500) !important; text-align: center !important;
+}
+.blog-content-title + .meta-section-1 { margin-top: 12px !important; }
+.meta-section-1 .blog-category { display: inline-flex !important; margin: 0 !important; padding: 0 !important; }
+.meta-section-1 .blog-category a {
+  position: relative !important; isolation: isolate !important; display: inline-flex !important; align-items: center !important; min-height: 44px !important; padding: 1px 24px 0 !important;
+  font: 700 14.5px/1 var(--f-display) !important; letter-spacing: .12em !important; text-transform: uppercase !important; text-decoration: none !important; white-space: nowrap !important;
+  color: #fff !important; background: none !important; border: 0 !important;
+}
+.meta-section-1 .blog-category a::before {
+  content: "" !important; position: absolute !important; z-index: -1 !important; inset: 7px 0 !important; background: var(--navy) !important;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 50%, 100% 100%, 0 100%, 9px 50%) !important; transition: transform .2s var(--ease, ease) !important;
+}
+.meta-section-1 .blog-category a:hover::before { transform: scaleX(1.05) !important; }
+.meta-section-1 .blog-category a[href$="/yard-care"], .meta-section-1 .blog-category a[href$="/service-guides"], .meta-section-1 .blog-category a[href$="/seasonal-yard-care"] { color: var(--navy) !important; }
+.meta-section-1 .blog-category a[href$="/yard-care"]::before { background: var(--grass) !important; }
+.meta-section-1 .blog-category a[href$="/property-guides"]::before { background: var(--navy) !important; }
+.meta-section-1 .blog-category a[href$="/service-guides"]::before { background: var(--cyan) !important; }
+.meta-section-1 .blog-category a[href$="/seasonal-yard-care"]::before { background: var(--gold) !important; }
+.meta-section-1 .blog-date, .meta-section-1 .blog-read-time { font: inherit !important; color: inherit !important; }
+/* the dot between them is GoHighLevel's own character, in cyan */
+.meta-section-1 .blog-info-dot { font: 700 20px/1 var(--f-text) !important; color: var(--cyan) !important; }
+
+/* E. THE POST'S TEXT ------------------------------------------------------------------
+   #blogPostContent holds whatever the editor wrote. In the 45 live posts that is paragraphs, h2 sections, links,
+   eleven bulleted lists, two numbered lists and a little bold text; the stylesheet also dresses what a post may
+   hold later (h3, a quote, a table, a picture, a rule). One column, about 74 characters to a full line: 612px wide at
+   18px, 580px at 17px (--pp-post-col; the topic row, the tags and the author keep to the same column).
+   A dotted rule opens it under the post's header, and the first paragraph is set a step larger, as a standfirst. */
+#blogPostContent, .blog-html#blogPostContent {
+  box-sizing: border-box !important; width: min(100% - 2 * var(--g, 16px), var(--pp-post-col, 612px)) !important; max-width: none !important;
+  margin: 22px auto 0 !important; padding: 30px 0 0 !important; border-top: 2px dotted var(--line) !important;
+  font: 400 17px/1.7 var(--f-text) !important; color: var(--ink-700) !important; text-align: left !important; overflow-wrap: break-word !important;
+}
+@media (min-width: 1000px) { #blogPostContent, .blog-html#blogPostContent { font-size: 18px !important; margin-top: 26px !important; padding-top: 36px !important; } }
+#blogPostContent * { box-sizing: border-box !important; }
+/* what the editor leaves behind on 18 of the posts: an inline left margin on every paragraph and heading */
+#blogPostContent [style*="margin-left"] { margin-left: 0 !important; }
+
+#blogPostContent p { margin: 0 0 1.1em !important; padding: 0 !important; font: inherit !important; color: inherit !important; text-wrap: pretty !important; }
+#blogPostContent > p:first-child { font-size: 1.14em !important; line-height: 1.55 !important; font-weight: 500 !important; color: var(--navy) !important; }
+
+#blogPostContent h2, #blogPostContent h3, #blogPostContent h4 { padding: 0 !important; font-family: var(--f-display) !important; letter-spacing: 0 !important; text-transform: none !important; text-wrap: balance !important; color: var(--navy) !important; }
+#blogPostContent h2 { margin: 1.75em 0 .5em !important; font-size: clamp(28px, 3.3vw, 36px) !important; line-height: 1.04 !important; font-weight: 800 !important; }
+#blogPostContent h2::before { content: "" !important; display: block !important; width: 56px !important; height: 5px !important; margin: 0 0 16px !important; border-radius: 3px !important; background: var(--cyan) !important; }
+#blogPostContent h3 { margin: 1.5em 0 .4em !important; font-size: clamp(23px, 2.5vw, 27px) !important; line-height: 1.08 !important; font-weight: 700 !important; }
+#blogPostContent h4 { margin: 1.4em 0 .35em !important; font: 700 1em/1.3 var(--f-text) !important; }
+
+#blogPostContent a { color: var(--blue-700) !important; font-weight: 600 !important; text-decoration: underline !important; text-decoration-color: var(--cyan) !important; text-decoration-thickness: 2px !important; text-underline-offset: 4px !important; }
+#blogPostContent a:hover { color: var(--navy) !important; text-decoration-color: var(--gold-600) !important; }
+#blogPostContent strong, #blogPostContent b { font-weight: 700 !important; color: var(--navy) !important; }
+#blogPostContent em, #blogPostContent i { font-style: italic !important; }
+
+/* lists: a cyan dot for a bulleted list, a gold disc with the number for a numbered one */
+#blogPostContent ul, #blogPostContent ol { display: grid !important; gap: .6em !important; margin: 0 0 1.25em !important; padding: 0 !important; list-style: none !important; }
+#blogPostContent li { position: relative !important; margin: 0 !important; padding: 0 0 0 32px !important; font: inherit !important; color: inherit !important; list-style: none !important; }
+#blogPostContent li > p { margin: 0 !important; }
+#blogPostContent li > ul, #blogPostContent li > ol { margin: .6em 0 0 !important; }
+#blogPostContent ul > li::before { content: "" !important; position: absolute !important; left: 6px !important; top: .62em !important; width: 10px !important; height: 10px !important; border-radius: 50% !important; background: var(--cyan) !important; box-shadow: 0 0 0 4px var(--cyan-050) !important; }
+#blogPostContent ol { counter-reset: pp-post-step !important; }
+#blogPostContent ol > li { padding-left: 44px !important; min-height: 32px !important; counter-increment: pp-post-step !important; }
+#blogPostContent ol > li::before {
+  content: counter(pp-post-step) !important; position: absolute !important; left: 0 !important; top: -.08em !important; display: grid !important; place-items: center !important; width: 32px !important; height: 32px !important;
+  border-radius: 50% !important; background: var(--gold-300) !important; box-shadow: var(--sh-1) !important; font: 800 20px/1 var(--f-display) !important; color: var(--navy) !important;
+}
+
+/* a quote: a cream note with a cyan edge */
+#blogPostContent blockquote {
+  margin: 1.5em 0 !important; padding: 18px 22px 18px 26px !important; border: 0 !important; border-radius: var(--r-tile, 16px) !important;
+  background: var(--cream) !important; box-shadow: inset 6px 0 0 var(--cyan) !important; font: 500 1.02em/1.6 var(--f-text) !important; font-style: normal !important; color: var(--navy) !important;
+}
+#blogPostContent blockquote > :last-child { margin-bottom: 0 !important; }
+
+/* a table: a navy head, dotted rows, the first column bold. Cells wrap; a table of more than four short columns is
+   too tight for a phone and is better written as a list */
+#blogPostContent table {
+  width: 100% !important; margin: 1.6em 0 !important; border-collapse: separate !important; border-spacing: 0 !important; border: 0 !important;
+  border-radius: var(--r-tile, 16px) !important; overflow: hidden !important; background: var(--paper) !important; box-shadow: var(--sh-1) !important; font-size: .9em !important; line-height: 1.45 !important;
+}
+#blogPostContent th, #blogPostContent td { padding: 12px 14px !important; border: 0 !important; border-top: 2px dotted var(--line) !important; text-align: left !important; vertical-align: top !important; color: var(--ink-700) !important; background: none !important; }
+#blogPostContent thead th { border-top: 0 !important; background: var(--navy) !important; color: #fff !important; font: 700 1.05em/1.2 var(--f-display) !important; letter-spacing: .08em !important; text-transform: uppercase !important; }
+#blogPostContent tbody tr:first-child > * { border-top: 0 !important; }
+#blogPostContent tbody th, #blogPostContent td:first-child { font-weight: 700 !important; color: var(--navy) !important; }
+#blogPostContent tbody tr:nth-child(even) > * { background: var(--sky-050) !important; }
+
+/* a picture inside a post, with or without a caption; a film; a rule */
+#blogPostContent img { display: block !important; max-width: 100% !important; height: auto !important; margin: 1.6em auto !important; border-radius: var(--r-photo, 20px) !important; box-shadow: var(--sh-2) !important; }
+#blogPostContent figure { margin: 1.6em 0 !important; padding: 0 !important; }
+#blogPostContent figure img { margin: 0 auto !important; }
+#blogPostContent figcaption { margin: 12px 0 0 !important; font: 500 14.5px/1.45 var(--f-text) !important; text-align: center !important; color: var(--ink-500) !important; }
+#blogPostContent iframe, #blogPostContent video { display: block !important; max-width: 100% !important; margin: 1.6em auto !important; border: 0 !important; border-radius: var(--r-tile, 16px) !important; }
+#blogPostContent hr { height: 0 !important; margin: 2em 0 !important; border: 0 !important; border-top: 2px dotted var(--line) !important; background: none !important; }
+#blogPostContent > :first-child { margin-top: 0 !important; }
+#blogPostContent > :last-child { margin-bottom: 0 !important; }
+
+/* F. TAGS ------------------------------------------------------------------------
+   The container is empty on every post today and takes no room. If tags are ever used, they sit under the text. */
+.blog-tags { box-sizing: border-box !important; display: flex !important; flex-wrap: wrap !important; gap: 8px !important; width: min(100% - 2 * var(--g, 16px), var(--pp-post-col, 612px)) !important; max-width: none !important; margin: 26px auto 0 !important; padding: 0 !important; font: 600 14.5px/1.3 var(--f-text) !important; color: var(--ink-500) !important; }
+.blog-tags:empty { display: none !important; }
+
+/* G. THE AUTHOR --------------------------------------------------------------------
+   GoHighLevel writes the author under the text: a link to its own author page, a placeholder portrait and the
+   name. The portrait is a grey outline with no face, so it is not shown. The name stands under a dotted rule with
+   the small label "Written by" (the label is this stylesheet's; the name is the post's). */
+.blog-author-details { box-sizing: border-box !important; width: min(100% - 2 * var(--g, 16px), var(--pp-post-col, 612px)) !important; max-width: none !important; margin: 34px auto 0 !important; padding: 14px 0 0 !important; border: 0 !important; border-top: 2px dotted var(--line) !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; }
+.blog-author-details .blog-author-container { margin: 0 !important; padding: 0 !important; border: 0 !important; background: none !important; box-shadow: none !important; }
+.blog-author-details .blog-author-container > div { display: block !important; }
+.blog-author-details .blog-author { display: inline-flex !important; align-items: center !important; min-height: 48px !important; margin: 0 !important; padding: 0 !important; text-decoration: none !important; color: var(--navy) !important; }
+.blog-author-details .blog-author > div { display: block !important; }
+.blog-author-details .blog-author-image-post { display: none !important; }
+.blog-author-details .blog-author-name { margin: 0 !important; padding: 0 !important; font: 700 18px/1.2 var(--f-text) !important; color: var(--navy) !important; }
+.blog-author-details .blog-author-name::before { content: "Written by" !important; display: block !important; margin: 0 0 4px !important; font: 700 13.5px/1.1 var(--f-display) !important; letter-spacing: .14em !important; text-transform: uppercase !important; color: var(--blue-700) !important; }
+.blog-author-details .blog-author:hover .blog-author-name { text-decoration: underline !important; text-decoration-color: var(--cyan) !important; text-decoration-thickness: 2px !important; text-underline-offset: 4px !important; }
+/* an author may have a line about them (today: the one post written by "Purge Pros"); it sits under the name */
+.blog-author-details .blog-author-description { max-width: 60ch !important; margin: 6px 0 0 !important; padding: 0 !important; font: 400 15.5px/1.55 var(--f-text) !important; color: var(--ink-700) !important; }
+.blog-author-details .author-icons-container:empty { display: none !important; }
+
+/* H. NOT SHOWN ---------------------------------------------------------------------
+   GoHighLevel's "Back to Top" button and "Back to Blog" link. Their words cannot be changed from a stylesheet
+   ("Blog" is the Yard Guide here), the header stays on screen with its Yard Guide link, the band above the post
+   links back to the Yard Guide, and the row of guides under the post ends with "The whole Yard Guide". */
+.hl-blog-content-back-to-top-container, .back-to-top, .blog-back-button { display: none !important; }
+
+/* PRINT: the post as a clean page */
+@media print {
+  .blog-cover-image-container img, .blog-cover-image-container .blog-content-blog-image { max-height: 300px !important; box-shadow: none !important; }
+  #blogPostContent a { color: inherit !important; text-decoration: none !important; }
+}
+
+}   /* end of @layer pp-native */

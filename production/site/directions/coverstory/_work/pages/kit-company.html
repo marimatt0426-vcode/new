@@ -1,0 +1,178 @@
+<!--
+{
+  "title": "Family kit: company | Cover Story page platform",
+  "description": "What the company pages (about, reviews, FAQ, welcome) add to the Cover Story system: headcount strip, cover-star card, pose stage, route pass, review wall, no-break phrase, fee note.",
+  "css": [
+    "css/family-company.css"
+  ],
+  "hero": {
+    "recipe": "kit",
+    "title": "Family kit: company",
+    "lead": "Eight components from css/family-company.css, used on about.html, reviews.html, faq.html and welcome.html. Same tokens, radii, shadows and type sizes as the shared kit."
+  }
+}
+-->
+
+  <!-- C1 -->
+  <section class="kit" id="kit-company-count">
+    <div class="kit__label"><b>C1 Headcount strip</b><code>.company-count · __label · ul.company-count__list · __num · __name</code><span>Real counts as designed data: a caps label, then exactly four numerals on sticker discs, each with a one- or two-word name. It sits in the words column of a split, between the lead and the body copy. Only numbers the business has stated itself, named in its own words; never a rating, a review count or a customer count. Under 380px the names drop to 12.5px so the longest keeps clear of the dotted separators. The mascot&rsquo;s line under it is the shared <code>p.says</code>.</span></div>
+    <div class="kit__row">
+      <div style="width:min(100%, 470px)">
+        <div class="company-count">
+          <p class="company-count__label">The home team, counted</p>
+          <ul class="company-count__list">
+            <li><span class="company-count__num">2</span><span class="company-count__name">parents</span></li>
+            <li><span class="company-count__num">5</span><span class="company-count__name">kids</span></li>
+            <li><span class="company-count__num">1</span><span class="company-count__name">Cane Corso</span></li>
+            <li><span class="company-count__num">2</span><span class="company-count__name">cats</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C2 -->
+  <section class="kit" id="kit-company-star">
+    <div class="kit__label"><b>C2 Cover-star card</b><code>figure.company-star · __cover · __kicker · __line · span.stand.company-star__pose · figcaption.company-star__cap</code><span>A small magazine cover for the mascot: the site&rsquo;s own cover recipe (navy sweep, cyan keyline, sky, lawn) at card size, with one pose standing on the lawn inside the shared <code>.stand</code>. It is the picture side of a split: from 900px its outer edge is the container&rsquo;s edge (right in a flipped split, left otherwise), like every framed picture. His boots and contact shadow are on the green, and the gold disc peeks out at the side only, so nothing hangs under the card. The cover line is a short greeting in his voice (the second word in a <code>span</code> turns cyan); the caption sticker says plainly what he is. One per page, and never in a screenful that already shows him; the section&rsquo;s emblem is then not his head.</span></div>
+    <div class="kit__row" style="padding:10px 12px 30px">
+      <figure class="company-star">
+        <div class="company-star__cover">
+          <p class="company-star__kicker">Cover star</p>
+          <p class="company-star__line">Hello, <span>neighbor.</span></p>
+          <span class="stand company-star__pose"><img src="../../assets/brand/poses/wave.webp" width="585" height="900" loading="lazy" decoding="async" alt="Purge Pros mascot waving, his scooper planted beside him."></span>
+        </div>
+        <figcaption class="company-star__cap"><img src="../../assets/brand-icons/pp-mascot-silhouette.webp" width="30" height="30" loading="lazy" alt="">Brand character. Not a technician.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- C3 -->
+  <section class="kit" id="kit-company-stage">
+    <div class="kit__label"><b>C3 Pose stage</b><code>figure.company-stage · span.company-stage__plate · img.company-stage__pose</code><span>One standing pose on a round plate of sky, with a rise of lawn under his boots and a contact shadow, his head breaking the top of the plate. For the picture side of a split on a page that has no scene to spare. Standing poses only (wave, phone, think, clipboard, bag, present, point-down). One per screenful, never beside a scene of him.</span></div>
+    <div class="kit__row" style="padding:10px 12px 16px;gap:40px">
+      <figure class="company-stage">
+        <span class="company-stage__plate"></span>
+        <img class="company-stage__pose" src="../../assets/brand/poses/phone.webp" width="541" height="900" loading="lazy" decoding="async" alt="Purge Pros mascot holding up a phone and giving a thumbs-up.">
+      </figure>
+      <figure class="company-stage">
+        <span class="company-stage__plate"></span>
+        <img class="company-stage__pose" src="../../assets/brand/poses/think.webp" width="485" height="900" loading="lazy" decoding="async" alt="Purge Pros mascot with a hand on his chin, thinking.">
+      </figure>
+    </div>
+  </section>
+
+  <!-- C4 -->
+  <section class="kit" id="kit-company-pass">
+    <div class="kit__label"><b>C4 Route pass</b><code>figure.company-pass · .company-pass__ticket · .company-pass__face · __kicker · __line · img.company-pass__badge · ul.company-pass__stub · li.company-pass__next · span.company-pass__state</code><span>A ticket for a brand-new customer: the cover recipe at card size (the navy sweep from the left, its cyan keyline, sky beyond it, a two-tone line) over a perforated stub that says what is done and the one thing still to do. It is the picture side of a split where the mascot may not appear: the welcome hero shows him gloved, so no pose or scene may sit in the first two screens. The badge is a glossy icon on its white plate, sitting across the keyline. The tilt is on <code>.company-pass__ticket</code>, so the figure keeps a level box. From 900px its outer edge is the container&rsquo;s edge. Exactly three stub rows, each with a state; the last row, <code>li.company-pass__next</code>, is the reader&rsquo;s job. Only states the page itself asserts. One per page.</span></div>
+    <div class="kit__row" style="padding:14px 12px 18px">
+      <figure class="company-pass">
+        <div class="company-pass__ticket">
+        <div class="company-pass__face">
+          <p class="company-pass__kicker">Route pass</p>
+          <p class="company-pass__line">Admit <span>one yard.</span></p>
+          <img class="company-pass__badge" src="../../assets/step-icons/customer-new.webp" width="256" height="254" loading="lazy" alt="">
+        </div>
+        <ul class="company-pass__stub">
+          <li><img src="../../assets/brand-icons/pp-service-check.webp" width="24" height="24" loading="lazy" alt="">Route approved<span class="company-pass__state">Done</span></li>
+          <li><img src="../../assets/brand-icons/pp-service-check.webp" width="24" height="24" loading="lazy" alt="">First service scheduled<span class="company-pass__state">Done</span></li>
+          <li class="company-pass__next"><img src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt="">Secure card setup<span class="company-pass__state">Your move</span></li>
+        </ul>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- C5 -->
+  <section class="kit" id="kit-company-feed">
+    <div class="kit__label"><b>C5 Review wall</b><code>.company-feed.peek-host · .company-feed__top · p.company-feed__say · .company-feed__mount[data-pp-live-reviews] · .company-feed__empty · span.company-feed__slot · .company-feed__now · p.company-feed__ph · p.company-feed__hint · p.company-feed__noscript · .company-feed__foot · p.company-feed__src · a.company-feed__more · .company-feed__themes · ul.company-feed__list</code><span>The reviews page&rsquo;s own home for the live Google feed. The homepage teases the feed in half a card (kit 32); here it has the whole container. The mount is at least 260px tall, as on the live page, and the loader&rsquo;s markup goes inside it. Until then it shows the empty state: one card that says so in plain words (a gold quote mark, the label, one line pointing at the button), between two dashed slots (from 900px) that keep the room. The frame holds no rating, no count, no star row and no badge: the feed brings its own figures, and the only badge on the page is the footer&rsquo;s, filled from the one switch. The slots hold a quote mark and lines, never words: no review text, name, date or rating is ever typed. As soon as anything else is in the mount the empty state steps aside by itself (second example). Under the mount: one plain line saying where the reviews come from, and the button. The four themes are the business&rsquo;s own summary: one column on a phone, two by two from 700px, four across from 1100px. The peeking pose is the shared <code>.peek</code>; the section title over it is short and has no intro.</span></div>
+    <div class="kit__tint" style="background:var(--cream);padding:110px 22px 26px">
+      <div class="company-feed peek-host" style="margin-top:0">
+        <img class="peek" src="../../assets/brand/poses/peek.webp" width="900" height="689" loading="lazy" decoding="async" alt="">
+        <div class="company-feed__top">
+          <p class="company-feed__say">I&rsquo;m biased. Ask the neighbors.</p>
+        </div>
+        <div class="company-feed__mount">
+          <div class="company-feed__empty">
+            <span class="company-feed__slot" aria-hidden="true"><i></i><i></i><i></i></span>
+            <div class="company-feed__now">
+              <p class="company-feed__ph">Live Google reviews load here on the real site</p>
+              <p class="company-feed__hint">Until they do, the button below opens them on Google.</p>
+            </div>
+            <span class="company-feed__slot" aria-hidden="true"><i></i><i></i><i></i></span>
+          </div>
+        </div>
+        <div class="company-feed__foot">
+          <p class="company-feed__src">Reviews come straight from Google through Trustindex and update on their own.</p>
+          <a class="btn btn--secondary company-feed__more" href="reviews.html">Read our reviews on Google <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+        </div>
+        <div class="company-feed__themes">
+          <h3 class="h3">What current customers mention</h3>
+          <ul class="company-feed__list">
+            <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-visit-message.webp" width="48" height="48" loading="lazy" alt=""><div><b>Clear communication</b><span>Customers repeatedly mention easy booking, on-the-way updates, and knowing when service is complete.</span></div></li>
+            <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-professional-team.webp" width="48" height="48" loading="lazy" alt=""><div><b>Professional service</b><span>Courtesy, efficiency, and dependable follow-through appear throughout the current feedback.</span></div></li>
+            <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-yard.webp" width="48" height="48" loading="lazy" alt=""><div><b>A visibly cleaner yard</b><span>The result that matters most shows up clearly: customers notice the difference after service.</span></div></li>
+            <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-property-notes.webp" width="48" height="48" loading="lazy" alt=""><div><b>Care for dogs and homes</b><span>Pet-friendly touches, secured gates, and respect for the property help turn a chore into peace of mind.</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="kit__tint" style="background:var(--cream);padding:26px 22px">
+      <div class="company-feed peek-host" style="margin-top:0">
+        <div class="company-feed__top">
+          <p class="company-feed__say">With the feed in the mount</p>
+        </div>
+        <div class="company-feed__mount">
+          <div class="company-feed__empty">
+            <div class="company-feed__now"><p class="company-feed__ph">Live Google reviews load here on the real site</p></div>
+          </div>
+          <div style="display:grid;place-items:center;min-height:320px;border-radius:16px;background:var(--sky-050);color:var(--ink-700);font-size:14px;text-align:center;padding:16px">Kit stand-in for the vendor&rsquo;s feed (320px tall here). It is not a review; the empty state above it has stepped aside.</div>
+        </div>
+        <div class="company-feed__foot">
+          <p class="company-feed__src">Reviews come straight from Google through Trustindex and update on their own.</p>
+          <a class="btn btn--secondary company-feed__more" href="reviews.html">Read our reviews on Google <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C6 -->
+  <section class="kit" id="kit-company-nb">
+    <div class="kit__label"><b>C6 No-break phrase</b><code>span.company-nb</code><span>A hyphenated word that must stay on one line in a heading, a question, a card title or a lead: <code>one-time</code>, <code>year-round</code>, <code>long-term</code>, <code>W-2</code>. A span around the word and nothing else, so the text itself is unchanged and the FAQ data written from it stays clean. Not for running text, where a break after a hyphen is ordinary.</span></div>
+    <div class="kit__row" style="gap:28px;align-items:start">
+      <div style="width:112px"><p class="micro" style="margin-bottom:6px">Without</p><h3 class="h3">Service, year-round</h3></div>
+      <div style="width:112px"><p class="micro" style="margin-bottom:6px">With <code>.company-nb</code></p><h3 class="h3">Service, <span class="company-nb">year-round</span></h3></div>
+    </div>
+  </section>
+
+  <!-- C7 -->
+  <section class="kit" id="kit-company-fee">
+    <div class="kit__label"><b>C7 Fee note</b><code>.company-fee &gt; p.lead + the explainer token</code><span>The no-start-up-fee lead as one plain sentence directly over the shared explainer, for a column that is not a split (the billing section of the welcome page). No card, no icon and no second title: the explainer under it carries the title, the icon and the small print. The sentence is the lead of <code>POLICY-WORDING.md</code>, word for word.</span></div>
+    <div class="kit__row">
+      <div style="width:min(100%, 560px)">
+        <div class="company-fee">
+          <p class="lead">New recurring customers pay no start-up fee. Your first cleanup costs the same as every visit after it, even when the yard has built up.</p>
+          {{EXPLAIN}}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C8 -->
+  <section class="kit" id="kit-company-steps">
+    <div class="kit__label"><b>C8 Level step titles</b><code>ol.steps.steps--3.company-steps · ol.steps.steps--4.company-steps</code><span>A class for the shared steps on a company page. From 900px a row of steps is as tall as its longest step, and the shared step shares the spare height out between its rows, so the title of a step with a shorter text drops below its neighbours (16px on the welcome page at 1440; the same shows on the homepage at 1024). With <code>.company-steps</code> the spare height goes under the text and every title in the row stays level. A workaround for a shared defect: once <code>.steps</code> in <code>site.css</code> does this itself the class is harmless and can go.</span></div>
+    <div class="kit__tint" style="padding:26px 22px">
+      <ol class="steps steps--3 company-steps">
+        <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>1</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-visit-message.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title"><span class="company-nb">Night-before</span> reminder</h3><p class="step__text">We send a reminder before your route day so you can make sure the service areas are accessible.</p></li>
+        <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>2</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-local-area.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title"><span class="company-nb">En-route</span> <span class="company-nb">heads-up</span></h3><p class="step__text">We text when the technician is on the way to your yard.</p></li>
+        <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>3</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-service-check.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Completion update</h3><p class="step__text">We let you know when the visit is complete. Available service records and photos are kept with your account.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- C9 -->
+  <section class="kit" id="kit-company-ask">
+    <div class="kit__label"><b>C9 Long text button</b><code>a.btn.btn--outline.company-ask</code><span>A class for a Text button whose label is a whole phrase with the number. Text first (owner decision, October 8): a Text button always shows the number, so it is useful on a computer. With its icon this label is 296px wide; a 320px phone gives the button 288px. Under 360px <code>.company-ask</code> sets the type a step down and tightens the icon and the padding, so the label stays on one line inside the pill. From 360px it does nothing. A Call button never stands without a Text button before it; for a pair use the shared <code>&#123;&#123;REACH&#125;&#125;</code> (kit 39).</span></div>
+    <div class="kit__row">
+      <a class="btn btn--outline company-ask" href="sms:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" loading="lazy" alt="">Text a question to (317) 961-5865</a>
+    </div>
+  </section>

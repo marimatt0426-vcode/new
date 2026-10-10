@@ -1,0 +1,296 @@
+<!--
+{
+  "title": "New Customer Welcome | Purge Pros",
+  "description": "What new Purge Pros customers can expect before, during, and after pet waste removal service.",
+  "robots": "noindex",
+  "audience": "customer",
+  "body": { "data-no-price-bar": true },
+  "css": ["css/family-company.css"],
+  "scripts": ["js/family-company.js"],
+  "hero": {
+    "recipe": "plain",
+    "scene": "heroes/welcome.jpg",
+    "alt": "Purge Pros mascot in blue gloves waving beside an open wooden gate while a golden retriever runs across the lawn toward him.",
+    "kw": "New customer welcome guide",
+    "title": ["You’re on", "the route."],
+    "wrap": "none",
+    "lead": "Your first service is scheduled. Here is what happens before, during, and after each Purge Pros visit.",
+    "buttons": [{ "label": "Start with your card", "href": "#add-card" }, "text"]
+  },
+  "facts": {
+    "label": "Your Purge Pros service at a glance",
+    "items": [
+      { "icon": "pp-secure-payment", "value": "Card setup", "label": "Through your private Housecall Pro link" },
+      { "icon": "pp-visit-message", "value": "En-route texts", "label": "A heads-up before every visit" },
+      { "icon": "pp-per-visit-price", "value": "Pay per visit", "label": "No flat monthly bill" },
+      { "icon": "pp-property-notes", "value": "Online portal", "label": "Secure invoices, receipts and service records" }
+    ]
+  },
+  "schema": { "breadcrumb": ["New Customer Welcome"] },
+  "guideCards": {
+    "prepare-first-pooper-scooper-visit": { "more": "Get ready for visit one" },
+    "gate-access-dog-waste-removal": { "more": "Run the gate checklist" },
+    "understanding-gate-closure-photo-after-scoop-visit": { "more": "Read your gate photo" }
+  },
+  "allow": ["spam or promotions folder"]
+}
+-->
+
+<!-- 1. ADD YOUR CARD: the one job a new customer has. No mascot here: the hero shows him gloved (the glove rule),
+     so the picture is the route pass. The hero button lands on the heading block (#add-card), so on a phone the task
+     is readable where the button lands. When the card is charged is said once, in section 4. -->
+<section class="sec" data-edge="scoop" id="card-setup" aria-labelledby="card-title">
+  <div class="wrap">
+    <div class="split">
+      <div class="split__art">
+        <figure class="company-pass">
+          <div class="company-pass__ticket">
+          <div class="company-pass__face">
+            <p class="company-pass__kicker">Route pass</p>
+            <p class="company-pass__line">Admit <span>one yard.</span></p>
+            <img class="company-pass__badge" src="../../assets/step-icons/customer-new.webp" width="256" height="254" loading="lazy" alt="">
+          </div>
+          <ul class="company-pass__stub">
+            <li><img src="../../assets/brand-icons/pp-service-check.webp" width="24" height="24" loading="lazy" alt="">Route approved<span class="company-pass__state">Done</span></li>
+            <li><img src="../../assets/brand-icons/pp-service-check.webp" width="24" height="24" loading="lazy" alt="">First service scheduled<span class="company-pass__state">Done</span></li>
+            <li class="company-pass__next"><img src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt="">Secure card setup<span class="company-pass__state">Your move</span></li>
+          </ul>
+          </div>
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left" id="add-card">
+          <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-secure-payment.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">First job: your card</p>
+          <h2 class="sh__title" id="card-title">Complete your secure <span class="swash">card setup</span></h2>
+          <p class="sh__intro lead">Your private Housecall Pro card request is sent separately. Please complete it before your first service so your account is ready when the route begins.</p>
+        </div>
+        <ul class="ilist">
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-offer-cursor.webp" width="48" height="48" loading="lazy" alt=""><div><b>Watch for your private link</b><span>Use only the private Housecall Pro link sent directly to you.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-no-contract.webp" width="48" height="48" loading="lazy" alt=""><div><b>Never send card details by reply</b><span>Purge Pros never asks you to reply with card information, and this public page never collects it.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. SERVICE DAY: the four updates of the live page, a real sequence, then the "heads-up, not an appointment" callout -->
+<section class="sec sec--navy" data-edge="arc-r" data-keyline id="service-day" aria-labelledby="day-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-service-calendar.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">What happens on service day</p>
+      <h2 class="sh__title" id="day-title">A clear update <span class="pop">at every step.</span></h2>
+      <p class="sh__intro lead">Your route day is consistent, but it is not a fixed appointment time. Daily routes can shift with weather, workload, and traffic.</p>
+    </div>
+    <ol class="steps steps--4 company-steps">
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>1</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-service-calendar.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Route confirmed</h3><p class="step__text">Your confirmation message identifies your first service date and normal route day.</p></li>
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>2</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-visit-message.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title"><span class="company-nb">Night-before</span> reminder</h3><p class="step__text">We send a reminder before your route day so you can make sure the service areas are accessible.</p></li>
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>3</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-local-area.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title"><span class="company-nb">En-route</span> <span class="company-nb">heads-up</span></h3><p class="step__text">We text when the technician is on the way to your yard.</p></li>
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>4</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-service-check.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Completion update</h3><p class="step__text">We let you know when the visit is complete. Available service records and photos are kept with your account.</p></li>
+    </ol>
+    <div class="notice" style="max-width:760px;margin-inline:auto">
+      <img class="notice__ico stk stk--thin" src="../../assets/brand-icons/pp-professional-team.webp" width="52" height="52" loading="lazy" alt="">
+      <p class="notice__title">A <span class="company-nb">heads-up</span>, not an appointment time</p>
+      <p class="notice__text">We send your en-route text when the technician is heading your way, generally 10 to 45 minutes before arrival.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. PROOF ON YOUR PHONE: the on-the-way text as a prop (tagged as an example), the visit, the gate photo.
+     The wording of the three points is the live FAQ's (Q2 and Q10). No receipts here: the eight real photos are spent
+     on about, reviews and the FAQ, and every photo in this row was a repeat. -->
+<section class="sec sec--sky" data-edge="arc" id="proof" aria-labelledby="proof-title">
+  <div class="wrap">
+    <div class="split split--flip">
+      <div class="split__art">
+        <figure class="frame frame--flip frame--wide frame--phone">
+          <img class="frame__img" src="../../assets/scenes/scene-ontheway.jpg" width="1600" height="900" loading="lazy" decoding="async" style="object-position:100% 50%" alt="Purge Pros mascot walking up a stone path to a wooden side gate with his scooper and bucket, holding up his phone.">
+          <figcaption class="msgphone">
+            <div class="msgphone__screen">
+              <div class="msgphone__bar"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt=""><span><b>Purge Pros</b><small>Text message</small></span></div>
+              <div class="msgphone__thread">
+                <p class="msgphone__bubble">Heads up: your Purge Pros technician is on the way to your yard.</p>
+                <span class="tag tag--gold"><span>Example of the <span class="company-nb">on-the-way</span> text</span></span>
+              </div>
+            </div>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left">
+          <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-gate-photo.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">Proof, every visit</p>
+          <h2 class="sh__title" id="proof-title">A text before.<br> A gate <span class="swash">photo</span> after.</h2>
+          <p class="sh__intro lead">You do not need to be home, and you never have to wonder whether we came.</p>
+        </div>
+        <ul class="ilist">
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-visit-message.webp" width="48" height="48" loading="lazy" alt=""><div><b>Before we arrive</b><span>You receive a heads-up text when the technician is on the way.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-scoop.webp" width="48" height="48" loading="lazy" alt=""><div><b>During the visit</b><span>We follow the approved instructions saved for your property and pets.</span></div></li>
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-gate-photo.webp" width="48" height="48" loading="lazy" alt=""><div><b>After service</b><span>We close the gate and send a photo showing it secured.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. BILLING: pay per visit, when the card is charged (its one home on this page, with the quick answer), the portal;
+     then the first-cleanup lead as a plain sentence over the titled explainer (it replaces the two live quick answers
+     about the first cleanup; POLICY-WORDING.md). The live footnote sits once, under the portal button. -->
+<section class="sec sec--cream" data-edge="scoop" id="billing" aria-labelledby="billing-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-per-visit-price.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">How billing works</p>
+      <h2 class="sh__title" id="billing-title">Simple&nbsp;billing. Useful&nbsp;records. No&nbsp;<span class="swash">guesswork.</span></h2>
+      <p class="sh__intro lead">You pay per visit, and your invoices and receipts are kept in your customer portal.</p>
+    </div>
+    <div class="grid grid--2" style="align-items:start">
+      <ul class="ilist">
+        <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-per-visit-price.webp" width="48" height="48" loading="lazy" alt=""><div><b>You pay per visit</b><span>Recurring service is pay per visit, not a flat monthly bill.</span></div></li>
+        <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-secure-payment.webp" width="48" height="48" loading="lazy" alt=""><div><b>Charged when we are on the way</b><span>Your card is charged when we text that we are on the way. Any extra minutes are invoiced after the visit.</span></div></li>
+        <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-property-notes.webp" width="48" height="48" loading="lazy" alt=""><div><b>Records in your customer portal</b><span>Use the secure portal for available appointments, invoices, receipts, account details, and service records.</span></div></li>
+      </ul>
+      <div class="company-fee">
+        <p class="lead">New recurring customers pay no start-up fee. Your first cleanup costs the same as every visit after it, even when the yard has built up.</p>
+        {{EXPLAIN}}
+      </div>
+    </div>
+    <div class="center-row">
+      <a class="btn btn--secondary" href="https://client.housecallpro.com/customer_portal/request-link?token=5621b4767b82412482e8822eed5916a4" target="_blank" rel="noopener">Open the customer portal <span class="vh">(opens in a new tab)</span><img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+    <p class="pnote">Your individual service confirmation and the Purge Pros <a href="terms-conditions.html">Terms &amp; Conditions</a> govern your plan.</p>
+  </div>
+</section>
+
+<!-- 5. GET THE YARD READY: gate, access notes, pets. The live checklist (its card and portal items live in 1 and 4),
+     plus the unsafe-conditions rule from the live FAQ, word for word. -->
+<section class="sec" data-edge="arc-r" id="yard-ready" aria-labelledby="ready-title">
+  <div class="wrap">
+    <div class="split">
+      <div class="split__art">
+        <figure class="company-stage">
+          <span class="company-stage__plate"></span>
+          <img class="company-stage__pose" src="../../assets/brand/poses/clipboard.webp" width="521" height="900" loading="lazy" decoding="async" alt="Purge Pros mascot ticking a checklist on a clipboard.">
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left">
+          <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-yard.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">Before the first visit</p>
+          <h2 class="sh__title" id="ready-title">Help us make day&nbsp;one <span class="swash">effortless</span></h2>
+          <p class="sh__intro lead">A few quick details keep the first service smooth, safe, and fully documented.</p>
+        </div>
+        <ul class="ilist">
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-yard.webp" width="48" height="48" loading="lazy" alt=""><div><b>Make the service areas accessible</b><span>Unlock any required gates and move obstacles that could prevent safe access to the selected areas, including any patio or concrete approved for scooping.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-no-contract.webp" width="48" height="48" loading="lazy" alt=""><div><b>Share gate codes and property notes</b><span>Text us any code, parking direction, access detail, or property instruction that should be saved to your account.</span></div></li>
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-property-notes.webp" width="48" height="48" loading="lazy" alt=""><div><b>Tell us about dogs outside or changing conditions</b><span>Let the office know ahead of time so current pet and access notes can be reflected on the route.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/brand-icons/pp-dog.webp" width="48" height="48" loading="lazy" alt=""><div><b>Keep reactive or escape-risk dogs inside</b><span>Reactive, protective, or escape-risk dogs must remain inside. We may pause a visit if safe service is not possible.</span></div></li>
+        </ul>
+        <p><a class="btn btn--outline company-ask" href="sms:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" loading="lazy" alt="">Text a question to (317) 961-5865</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. CHANGE OR PAUSE: three cards for the customer's own changes, then two notices: the live "weather and route
+     changes" card leads the weather notice, and the skip and restart wording is the live FAQ's as it stands on the
+     approved dog waste removal page -->
+<section class="sec sec--grass" data-edge="scoop" id="changes" aria-labelledby="changes-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-service-calendar.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">Plans change. So can we.</p>
+      <h2 class="sh__title" id="changes-title">Need to skip, pause or <span class="swash">reschedule?</span></h2>
+      <p class="sh__intro lead">Text the office as early as possible with gate, pet, property, or schedule changes.</p>
+    </div>
+    <div class="grid grid--3 grid--compact">
+      <article class="fcard tilts"><div class="fcard__plate dots"></div><img class="fcard__ico stk" src="../../assets/brand-icons/pp-visit-message.webp" width="84" height="84" loading="lazy" alt=""><h3 class="fcard__title">Skipping or pausing</h3><p class="fcard__text">Contact us as early as possible, preferably at least 48 hours before your route day.</p></article>
+      <article class="fcard fcard--gold tilts"><div class="fcard__plate dots"></div><img class="fcard__ico stk stk--r" src="../../assets/brand-icons/pp-local-area.webp" width="84" height="84" loading="lazy" alt=""><h3 class="fcard__title">Asking for another day</h3><p class="fcard__text">We will try to accommodate another day, but a specific alternate day cannot be guaranteed.</p></article>
+      <article class="fcard fcard--grass tilts"><div class="fcard__plate dots"></div><img class="fcard__ico stk" src="../../assets/brand-icons/pp-dog.webp" width="84" height="84" loading="lazy" alt=""><h3 class="fcard__title">Dogs away for a while</h3><p class="fcard__text">If your dogs are away and no new waste is accumulating, let us know.</p></article>
+    </div>
+    <div class="grid grid--2">
+      <div class="notice">
+        <img class="notice__ico stk stk--thin" src="../../assets/brand-icons/pp-service-calendar.webp" width="52" height="52" loading="lazy" alt="">
+        <p class="notice__title">A weather day is on us</p>
+        <p class="notice__text">Safety and weather can affect a route. If service timing or the route day must change, Purge Pros will send an update. A Purge Pros weather cancellation is not treated as a customer skip; accumulated waste is handled on the next scheduled visit without an extra accumulation charge.</p>
+      </div>
+      <div class="notice notice--sky">
+        <img class="notice__ico stk stk--thin" src="../../assets/brand-icons/pp-waste-bag.webp" width="52" height="52" loading="lazy" alt="">
+        <p class="notice__title">After a long pause</p>
+        <p class="notice__text">If waste continues to accumulate during a long pause or repeated customer-requested skips, we may need a restart cleanup: your quoted visit rate includes the first 30 minutes, then $1 per actual additional minute. We confirm any restart pricing with you before you approve anything; extra time is invoiced after the visit.</p>
+      </div>
+    </div>
+    <div class="center-row">
+      {{REACH}}
+      <a class="btn btn--outline btn--sm" href="faq.html#faq-schedule-changes">Read the full answers <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+  </div>
+</section>
+
+<!-- 7. QUICK ANSWERS and HOW TO REACH A PERSON: six of the live page's eight questions (the two about the first
+     cleanup are the explainer in section 4), then the live contact band, large. TEXT FIRST (owner, October 8): the gold
+     Text button carries the number, Call is second and compact; the lead does not say who answers a call. -->
+<section class="sec sec--cream" data-edge="arc" id="quick-answers" aria-labelledby="answers-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-search.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">Quick answers</p>
+      <h2 class="sh__title" id="answers-title">Before your first <span class="swash">scoop</span></h2>
+    </div>
+    <div class="faq">
+      <details class="faq__item" name="welcome-faq" open>
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-gate-photo.webp" width="42" height="42" loading="lazy" alt=""><h3>Do I need to be home?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>No. As long as the selected service areas are safely accessible and your current access notes are on the account, service can be completed without you at home.</p></div>
+      </details>
+      <details class="faq__item" name="welcome-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-professional-team.webp" width="42" height="42" loading="lazy" alt=""><h3>What time will the technician arrive?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Your route day is consistent, but it is not a fixed appointment time. We send an en-route text when the technician is heading your way.</p></div>
+      </details>
+      <details class="faq__item" name="welcome-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-per-visit-price.webp" width="42" height="42" loading="lazy" alt=""><h3>When will my card be charged?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Your card is charged when we text that we are on the way. Any extra minutes are invoiced after the visit: time past 30 minutes on a restart or one-time cleanup, or extra time you agreed to before a first cleanup that needs more than two hours. What you were charged up front counts toward the total; it is not added a second time.</p><p>Regular scheduled visits are never charged by the minute. There is no flat monthly bill.</p></div>
+      </details>
+      <details class="faq__item" name="welcome-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-secure-payment.webp" width="42" height="42" loading="lazy" alt=""><h3>Where do I add my card?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Use the private Housecall Pro card request sent separately by Purge Pros. This page does not collect payment information, and you should never send card details in a text reply.</p></div>
+      </details>
+      <details class="faq__item" name="welcome-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-search.webp" width="42" height="42" loading="lazy" alt=""><h3>Where is my customer portal?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Your portal invitation is sent separately by email. Check your spam or promotions folder if it is not in your main inbox, then save the link for future access.</p></div>
+      </details>
+      <details class="faq__item" name="welcome-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="42" height="42" loading="lazy" alt=""><h3>What if access, weather, or my plans change?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Text the office as early as possible with gate, pet, property, or schedule changes. If weather affects the route, Purge Pros will communicate the updated plan.</p></div>
+      </details>
+    </div>
+    <div class="cta" id="help" role="region" aria-labelledby="help-title">
+      <div class="cta__copy">
+        <p class="kicker" style="color:var(--cyan)">Need help?</p>
+        <h2 class="cta__title h2" id="help-title" style="margin-top:8px">Questions before your first visit? <span class="pop">We are a text away.</span></h2>
+        <p class="cta__text lead">Text us and our team answers as soon as possible. Prefer to talk? Call the same number.</p>
+        <div class="actions">
+          <a class="btn btn--primary btn--lg" href="sms:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" loading="lazy" alt="">Text (317) 961-5865</a>
+          <a class="btn btn--ghost-dark" href="tel:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-phone.webp" width="26" height="26" loading="lazy" alt="">Call<span class="vh"> (317) 961-5865</span></a>
+        </div>
+      </div>
+      <div class="cta__art"><img src="../../assets/brand/poses/relax.webp" width="900" height="875" loading="lazy" alt="Purge Pros mascot relaxing in a striped lawn chair with a glass of lemonade beside him."></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. FROM THE YARD GUIDE: three articles for the week before a first visit -->
+<section class="sec" data-edge="scoop" id="yard-guide" aria-labelledby="guide-title">
+  <div class="wrap stack">
+    <div class="sh sh--center sh--grass">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-yard-guide.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">From the Yard Guide</p>
+      <h2 class="sh__title" id="guide-title">Getting ready for visit <span class="swash">one</span></h2>
+      <p class="sh__intro lead">Short guides on preparing for a first visit, a gate checklist, and what your <span class="company-nb">gate-closure</span> photo tells you.</p>
+    </div>
+    {{GUIDE_CARDS:prepare-first-pooper-scooper-visit,gate-access-dog-waste-removal,understanding-gate-closure-photo-after-scoop-visit}}
+    <div class="center-row">
+      <a class="btn btn--secondary" href="yard-guide.html">Browse the whole Yard Guide <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,32 @@
+<!--# Hero recipes "plain" and "legal": .cover.cover--plain. No builder in the hero.
+      "plain" shows the page's 16:9 scene, or one pose standing on the drawn field, or (a Yard Guide article) the article's
+      own cover on the drawn field, with a lead and one or two buttons.
+      "legal" is the quiet opening: the drawn field, one pose, the lead, the document's date line and nothing else.
+      THE DRAWN FIELD (.cover--drawn, hero-drawn.html): sky, drawn clouds, a pale disc behind the pose, two hills of lawn
+      and up to three sticker icons that belong to the page. The pose stands ON the front hill at every width: the hill
+      crests under him and his boots overlap the grass (css/site.css, "THE DRAWN FIELD"). Never a pose in mid-sky. -->
+<!-- COVER (hero): recipe "{{recipe}}", .cover--plain -->
+<section class="cover cover--plain{{coverClass}}"{{style}} aria-labelledby="cover-title">
+{{#scene}}
+  <picture class="cover__scene">
+{{sceneSources}}
+    <img src="../../assets/{{scene}}" width="{{sceneW}}" height="{{sceneH}}" fetchpriority="high" decoding="async" alt="{{alt}}">
+  </picture>
+{{/scene}}
+{{#drawn}}
+{{>hero-drawn}}
+{{/drawn}}
+{{>hero-arcs}}
+
+{{>hero-head}}
+
+  <div class="cover__note">
+    <p class="cover__lead">{{lead}}</p>
+{{#date}}
+    <p class="cover__date"><img src="../../assets/brand-icons/pp-service-calendar.webp" width="24" height="24" alt="">{{date}}</p>
+{{/date}}
+{{#buttons}}
+    <div class="actions">{{buttons}}</div>
+{{/buttons}}
+  </div>
+</section>
