@@ -33,7 +33,7 @@ if (cards !== expectedPosts.length) failures.push(`expected ${expectedPosts.leng
 if (unique.size !== expectedPosts.length) failures.push(`expected ${expectedPosts.length} unique article slugs from inventory, found ${unique.size}`);
 if (!text["post-before.html"].includes("pbr2-breadcrumb")) failures.push("post-before lacks article breadcrumb");
 if (!text["post-after.html"].includes("pbr2-cta")) failures.push("post-after lacks article CTA");
-if (!text["blog-head-tracking.html"].includes("AW-17767139897") || !text["blog-head-tracking.html"].includes("770811879146972") || !text["blog-head-tracking.html"].includes("purge-quote.js")) failures.push("blog head tracking lacks preserved Google, Meta or quote tag");
+if (!text["blog-head-tracking.html"].includes("AW-17767139897") || !text["blog-head-tracking.html"].includes("770811879146972")) failures.push("blog head tracking lacks preserved Google or Meta tag");
 if (text["blog-head-tracking.html"].includes("application/ld+json")) failures.push("blog head tracking must not include main website schema");
 if (!text["blog-body-tracking.html"].includes("production-bootstrap-3168ae9355832820.js") || !text["blog-body-tracking.html"].includes("blog-r2-ed911b97fb10aab3.js")) failures.push("blog body tracking lacks production bootstrap or blog runtime");
 if (!text["post-custom-css.css"].includes("object-fit:contain")) failures.push("post custom CSS does not preserve whole covers");

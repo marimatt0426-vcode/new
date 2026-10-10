@@ -6,6 +6,56 @@ Website content is edited in GHL using the corresponding page/shared custom-code
 
 Before any future deployment, reconcile current native state and owner changes. The checked-in configurations document nonsecret settings only, not a complete export of Cloudflare runtime bindings. Preserve existing secret values, Durable Object namespaces, routes, feature flags and runtime metadata. Never blindly deploy the partial config to replace account settings. Production QA must separately cover quote pricing, unsupported ZIP handling, consent, saved-plan links, attribution and dispatch.
 
+## Rebuilt website (v5)
+
+State of everything in this section on October 10, 2026: **prepared and locally tested. Not installed in GHL, not uploaded to Cloudflare.** The website that is live is still the September one, kept in `legacy/2026-09-website/`. Nothing here is installed until the owner approves the switch.
+
+### What is here
+
+| Where | What |
+|---|---|
+| `website/pages/` | The body blocks of 38 website pages (47 files): one Custom Code block per page; four large pages (`index`, `additional`, `indianapolis`, `dog-waste-removal`) are two blocks (`.1.html`, `.2.html`) and a page-data file (`.schema.html`); `faq` is one block and a page-data file, by the setting `pageDataInOwnFile` in `site/directions/coverstory/_work/ghl/fragments.config.json`, so that every profile packages it the same way whatever the length of its addresses. With the two blog templates that makes 40 pages: 30 approved by the owner on October 9, and nine town pages (Camby, Cicero, Lapel, Markleville, Mooresville, Pendleton, Pittsboro, Whitestown, Zionsville) and the page-not-found page added on October 10. |
+| `website/shared/` | `header.html`, `footer.html` (the two Global Sections), `welcome-header.html`, `welcome-footer.html` (the Welcome page's own), `site-head.html`, `site-body.html` (the website's head and body code). `head.html` and `body.html` are the September site code and stay: the packaging tool copies the Google and Meta tags from `head.html` byte for byte. |
+| `website/blog/blocks/` | The blocks of the two blog templates and the blog's head and body code. The two `NATIVE` text files mark where GHL's own element stays. |
+| `website/FIELDS.md`, `website/fields.json` | The field sheet: per page what is typed (path, title, description, canonical, share image, robots tag, schema) and what is pasted, in order. |
+| `website/BLOCKS-MANIFEST.json` | Every block with size and hash, and the list of the 438 hosted files the blocks name. |
+| `site/` | The source the blocks are made from, in the folder tree the tools expect, which is also the tree of the hosted files: `site/shared/` (the price engine `pp-quote-core.js`, its guide, tests and checkers), `site/assets/` (pictures and icons), `site/directions/coverstory/` (the 40 built pages, `css/`, `js/`, and `_work/`: page sources, partials, the page builder, the checkers and the packaging tool `_work/ghl/`). |
+
+The blocks are the **production profile**: live mode, the live quote Worker's addresses, the Google and Meta tags in the site head code only.
+
+### The `v5-DATE` placeholder
+
+Every hosted address in the blocks reads `https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-DATE/...`. `v5-DATE` is a placeholder for the folder the files will be uploaded to; it is not a real address, and **a block that still says `v5-DATE` must not be pasted**. Two more things wait for the same day: the Terms version label a service request records (`site/shared/terms-version.json` still holds the live label, `switchDay` null) and the publication date line of the Terms and the Privacy Policy. The day is set in the owner's private workspace, where the picture masters and the legal-text tools are; the result is then copied here again, the manifest updated and the tests run. `npm test` prints the placeholder while it is still in use.
+
+### Tests
+
+- `npm run test:engine` runs the price engine's own suite (340 tests): prices against the live tool, ZIPs, validation, consent, the request form, saved plans, attribution, tracking events and the send switch.
+- `npm run test:site` (`site/verify-blocks.mjs`) packages the built pages again and requires every block, the field sheet and the block manifest in `website/` to be byte for byte what the tool makes; then it runs the packaging tool's checker (visible text, links, picture addresses, tracking tags, the settings object, robots, block sizes). It writes only to `site/rollout/`, which git ignores.
+- `node production/verify-manifest.mjs` requires 40 pages, every block at its packaged hash and in the manifest, and every hosted file at the hash the blocks were packaged with.
+- Both are part of `npm test`.
+
+Checkers under `site/shared/verify/` run with plain Node from the repository (for example `node production/site/shared/verify/contract-check.mjs`, the engine against the pinned live Worker source, and `candidate-check.mjs`, the engine against `quote/src`).
+
+### What is not here, and what does not run here
+
+- The picture masters (full-size covers, logo masters, about 40 MB) and the city research data. `site/directions/coverstory/_work/build-site.mjs` therefore reports missing or older derived pictures here and does not reproduce the built pages; with the masters present it reproduces all 40 byte for byte. The built pages are checked in for that reason. `site/spec/cities.json` is a reduced copy holding only the ZIP table one engine test compares with.
+- The tools that set the switch day, derive pictures, minify, or generate a city page from research data.
+- A headless-browser helper. `check-site.mjs`, `check-layout.mjs`, `check-map.mjs`, `compare-builds.mjs`, `audit-contact-icons.mjs`, `_work/ghl/simulate.mjs` and `_work/ghl/packaged-send-check.mjs` need one (`PP_PPTR_DIR`, `PP_PLAYWRIGHT_DIR`, `PP_CHROME`) and are kept as source; they are run in the private workspace.
+- The built pages are the **review build**: each footer ends with a "Review build" line. The packaging tool reads their rollout form, which is the same page without that line; no block carries it (`_work/ghl/prove-rollout-form.mjs`).
+- The staging profile in `_work/ghl/fragments.config.json` holds `.invalid` placeholders. Staging addresses and page ids are kept out of this repository. `POLICY-WORDING.md` is the public edition (the rule and the approved wording only).
+
+### Updating
+
+1. Change the page source or shared piece in the private workspace, build, check and package there.
+2. Copy the result here (the same file list as before; nothing private).
+3. `node production/update-manifest.mjs --source "<where the change comes from and why>"`, then `npm run build`, `npm run check`, `npm test`.
+
+The hosted files are uploaded beside the files already live, never in place of them (see Assets and content). The upload folder is put together from `site/` by the list in `website/BLOCKS-MANIFEST.json` (`uploadList`); `site-assets/public/` holds only the files that are live today. The footer blocks carry the script loader, so the footer is pasted again after every repackaging.
+
+### Blog index after the switch
+
+`website/blog/prepared/`, `published-cards.json` and `refresh-index.mjs` make the September index. After the switch the index is the Yard Guide page of the rebuilt site (`website/blog/blocks/`, made from `site/directions/coverstory/yard-guide.html` and `site/assets/covers/covers.json`), and the September index must not be pasted again. The September tools stay in the tree until the owner retires them. `validate-prep.mjs` no longer requires the blog head code to load `purge-quote.js`.
+
 ## Quote build
 
 State of the checked-in bundle: a prepared candidate, locally tested, not deployed. The live Worker is still the October 5 release until the owner approves a deployment; that release is kept byte for byte as `quote/tests/fixtures/2026-10-05-live-worker.mjs` (SHA-256 `113ce3be...a95c`).

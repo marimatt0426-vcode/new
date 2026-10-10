@@ -6,13 +6,17 @@ This October 4, 2026 reconciliation brings the approved September website rollou
 
 ## Source map
 
-- `production/website/pages/`: all 27 GHL body fragments, including city pages and current FAQ/Welcome.
-- `production/website/shared/`: current global header, footer, Head and Body snippets.
-- `production/website/blog/`: native template fragments, public card inventory and index tools.
-- `production/site-assets/`: existing hosted static styles, scripts and quote artwork.
+The rebuilt website (v5) was brought in on October 10, 2026: **prepared and locally tested, not installed**. Until the owner approves the switch, the live website is the September one, now in `legacy/2026-09-website/`. The v5 blocks still carry the placeholder `v5-DATE` in every hosted address and must not be pasted while they do; see `production/OPERATIONS.md`.
+
+- `production/website/pages/`: the body blocks of the 38 rebuilt website pages (GHL Custom Code blocks).
+- `production/website/shared/`: the rebuilt header and footer sections, the Welcome page's own, the site head and body code; `head.html` and `body.html` are the September site code the tracking tags are copied from.
+- `production/website/FIELDS.md`, `fields.json`, `BLOCKS-MANIFEST.json`: what is typed and pasted per page; every block and hosted file with its hash.
+- `production/website/blog/`: `blocks/` holds the rebuilt blog template blocks; the rest is the September index (templates, card inventory, tools) and the public article snapshots.
+- `production/site/`: the source of the rebuilt site: the price engine with its tests and checkers, the built pages, page sources, partials, styles, scripts, the page builder, the packaging tool, and the pictures and icons the pages use.
+- `production/site-assets/`: the hosted static styles, scripts and quote artwork that are live today.
 - `production/quote/src/`: the Worker template and the small quote launcher script. The widget and landing page bundled until October 2026 are history in `legacy/2026-10-quote-widget/`.
 - `production/quote/dist/worker.mjs`: deterministically rebuilt Worker bundle. As of October 9, 2026 it is a prepared candidate, not the deployed release; see `production/OPERATIONS.md`.
-- `production/SOURCE-MANIFEST.json`: source provenance and exact hashes.
+- `production/SOURCE-MANIFEST.json`: source provenance and exact hashes (`production/update-manifest.mjs` rewrites it; `production/verify-manifest.mjs` checks it).
 - `production/OPERATIONS.md`: maintenance, deployment boundaries and known gaps.
 
 ## Verify locally
@@ -24,6 +28,8 @@ npm run build
 npm run check
 npm test
 ```
+
+`npm test` runs the quote Worker regression, the September blog index check, the price engine's suite (`npm run test:engine`), the block check (`npm run test:site`: the blocks equal a fresh packaging of the built pages) and the manifest check. It takes about a minute.
 
 These commands do not deploy, submit a lead or send a customer message. No deployment automation is installed in this repository. A GitHub commit is not a live GHL or Cloudflare change.
 

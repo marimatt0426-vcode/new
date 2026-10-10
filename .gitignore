@@ -8,3 +8,6 @@ node_modules/
 *.log
 production/quote/test-output/
 production/website/blog/prepared-files.json
+production/site/rollout/
+production/site/directions/coverstory/shots/
+production/site/directions/coverstory/_work/_before-*/
