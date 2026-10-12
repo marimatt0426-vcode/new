@@ -6,7 +6,7 @@ This October 4, 2026 reconciliation brings the approved September website rollou
 
 ## Source map
 
-The rebuilt website (v5) was brought in on October 10, 2026 and frozen that evening for the switch day, October 11, 2026: **prepared and locally tested, not installed**. Until the owner approves the switch, the live website is the September one, now in `legacy/2026-09-website/`. Every hosted address in the v5 blocks names the folder `v5-20261011`; see `production/OPERATIONS.md`.
+The rebuilt website (v5) was brought in on October 10, 2026, frozen that evening for the switch day and installed on the live website on October 11, 2026. On October 12, 2026 the corrected build `v5-20261012` (this copy) was installed on the live website and the file host and checked there page by page: **live**. The September website it replaced is in `legacy/2026-09-website/`. Every hosted address in these blocks names the folder `v5-20261012`; twelve blocks that changed in nothing but that name were not pasted again, see `production/OPERATIONS.md`.
 
 - `production/website/pages/`: the body blocks of the 38 rebuilt website pages (GHL Custom Code blocks).
 - `production/website/shared/`: the rebuilt header and footer sections, the Welcome page's own, the site head and body code; `bridge-site-head.html` and `bridge-site-body.html` are the site code of the switch evening only; `head.html` and `body.html` are the September site code the tracking tags are copied from.
