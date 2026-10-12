@@ -1008,8 +1008,9 @@ blog template: Blog Home (fields belong to the blog's settings).
 | # | File | Where |
 |---|---|---|
 | 1 | `blog/home-1-header-and-index.1.html` (20,956 characters) | the template's Custom Code elements, in this order (the native blog element stays between them; see the two `.txt` markers in `blog/`) |
-| 2 | `blog/home-1-header-and-index.2.html` (64,284 characters) | the template's Custom Code elements, in this order (the native blog element stays between them; see the two `.txt` markers in `blog/`) |
-| 3 | `blog/home-3-footer.html` (10,371 characters) | the template's last Custom Code element |
+| 2 | `blog/home-1-header-and-index.2.html` (24,140 characters) | the template's Custom Code elements, in this order (the native blog element stays between them; see the two `.txt` markers in `blog/`) |
+| 3 | `blog/home-1-header-and-index.older-1.html` (40,660 characters) | the template's Custom Code elements, in this order (the native blog element stays between them; see the two `.txt` markers in `blog/`) |
+| 4 | `blog/home-3-footer.html` (10,371 characters) | the template's last Custom Code element |
 
 ## zionsville
 

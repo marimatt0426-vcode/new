@@ -4,8 +4,8 @@
   "files": [
     {
       "path": "production/OPERATIONS.md",
-      "sha256": "bcdf1bd6306ed098551c27295eaefccddcbaf9ae6893eac326307d01ff7487f7",
-      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget; revised after independent review on October 9, 2026 (still prepared, not deployed); October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there"
+      "sha256": "0157fb238f3d06affc826a1eaa62c82aae303d6c80e416d60e280dd53ebbaf0d",
+      "source": "October 4 reconciliation: generated/split from approved bundle, public metadata/body snapshot, or maintenance tooling; updated October 5, 2026 for the pixel step release; October 9, 2026 candidate (prepared, not deployed): owner decisions of October 5 to 9, 2026, 120-minute first cleanup and retired bundled widget; revised after independent review on October 9, 2026 (still prepared, not deployed); October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there; October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/quote/build.mjs",
@@ -2444,13 +2444,13 @@
     },
     {
       "path": "production/site/directions/coverstory/_work/ghl/build-fragments.mjs",
-      "sha256": "f5f225e822bd2ae6375698454629bc1f6a6c7f41e8cfb72c00acd892ea3b5b19",
-      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed"
+      "sha256": "4975885f6b2d3c267f2f79eb9bd0b482a8ddbfad79942ee235d7aa43de66a156",
+      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/site/directions/coverstory/_work/ghl/check-fragments.mjs",
-      "sha256": "ce076a92fed41b8ec8d35d1de94d76a626ced57c8acf1c96ddca71a7c9417ae1",
-      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed"
+      "sha256": "03ab163d52e31fb8800ca0870632cf00cdf8e79c51011f7647cc629aa6e02b36",
+      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/site/directions/coverstory/_work/ghl/fragments.config.json",
@@ -2464,8 +2464,8 @@
     },
     {
       "path": "production/site/directions/coverstory/_work/ghl/packaged-send-check.mjs",
-      "sha256": "7a5e93f418adf3492c0ef29144bc52b02588babffaf964622ea6b6bcfe5043ed",
-      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening"
+      "sha256": "b3ad86313ec73ef384693dbc1cd8d609d41835c14467e139fb28a49fbc60ef47",
+      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/site/directions/coverstory/_work/ghl/prove-rollout-form.mjs",
@@ -2476,6 +2476,11 @@
       "path": "production/site/directions/coverstory/_work/ghl/simulate.mjs",
       "sha256": "0507d8105659db6c4bbd550c98a44fec6683bc05eb05c73df5cd9295e2ccaf5f",
       "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening"
+    },
+    {
+      "path": "production/site/directions/coverstory/_work/ghl/split-guide.mjs",
+      "sha256": "d88e810444e9743f3f4623df1a95afd55aa30a2b15126a3cc597c6ede6e5e79d",
+      "source": "October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/site/directions/coverstory/_work/measure-rhythm.js",
@@ -3358,6 +3363,11 @@
       "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening"
     },
     {
+      "path": "production/site/shared/verify/review-requests.mjs",
+      "sha256": "9231d46e0ffc9da21e7dd28d5ff987bf95cff0adf89ad0c6f5bcb55cbc86fa5a",
+      "source": "October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
+    },
+    {
       "path": "production/site/shared/verify/session-check.mjs",
       "sha256": "c20837c5d36078576f256f0fff3aae06a658a91353a380aa4dd014d3aa660de4",
       "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening"
@@ -3399,13 +3409,13 @@
     },
     {
       "path": "production/website/BLOCKS-MANIFEST.json",
-      "sha256": "ce44fefc1845867b9cb9dddb56154e0eb141c8d5523847356ba2946a80de1bc3",
-      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there"
+      "sha256": "410a601f11555fc53910cc0937b81ec8988d3451db4fb69c181e827e3ebbd201",
+      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there; October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/website/FIELDS.md",
-      "sha256": "9cc6ee2074d94850979253c96e3d6b9a1714285d2836f7e8b1abf57c9f769a82",
-      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there"
+      "sha256": "8d18d2d7f1b2bb1c7c4a23e5701671a31c485f3f1124b2e035badfd5300adf84",
+      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there; October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/website/blog/articles/MANIFEST.json",
@@ -3644,8 +3654,13 @@
     },
     {
       "path": "production/website/blog/blocks/home-1-header-and-index.2.html",
-      "sha256": "523bcb01445cfd10f910c4218d2c004a0adfcf47af2aa99609777726fa7a4d93",
-      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there"
+      "sha256": "6d1bac7da438125f62bdd7d826ae4be9a0ab05b35bd8734189406f2a2da62e08",
+      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there; October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
+    },
+    {
+      "path": "production/website/blog/blocks/home-1-header-and-index.older-1.html",
+      "sha256": "c3c7a84896fd6f5b858a54d549e9441a0fd0082d585f7e75024f44b7b25c5424",
+      "source": "October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/website/blog/blocks/home-1-header-and-index.schema.html",
@@ -3764,8 +3779,8 @@
     },
     {
       "path": "production/website/fields.json",
-      "sha256": "a528b5a948aae573b5072a9bcdd69f5c6c0edfc4f25113bdaa56d1097f41cb78",
-      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there"
+      "sha256": "f57fe1f9338b766332b6b08293256c733f568eadce0e8a5b40fa74e842d363d1",
+      "source": "October 10, 2026: rebuilt website (v5) brought in from the owner's private release folder, prepared and locally tested, not installed; blocks are the production profile and carried the v5-DATE placeholder until the freeze of that evening; October 10, 2026 (evening): frozen for the switch day October 11, 2026 in the owner's private release folder and copied here again (hosted files' folder v5-20261011, Terms version label 2026-10-11-no-start-up-fee, publication date on the Terms and the Privacy Policy, the bridge site code of the switch evening); prepared and locally tested, not installed; October 12, 2026: build v5-20261012 from the owner's private release folder (price builder 2026-10-12b with Start over, Text button in the phone top bar, live Google reviews on Home, three Yard Guide cards for 49, wording corrections on pages); installed on the live website and the file host that day and checked there; October 12, 2026 (evening): the Yard Guide index's cards are cut over several blocks by the packaging tool (the newest in the library block, older ones in blocks of their own that a small script joins into the same grid), installed on the live blog that evening and checked; three browser checks accept the reviews loader on Home through one shared list"
     },
     {
       "path": "production/website/pages/about.html",

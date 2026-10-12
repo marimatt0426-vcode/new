@@ -58,6 +58,9 @@ import { HERE, ROOT, RELEASE, OUT, posix, read, sha256, loadConfig, placeholders
 import { createRequire } from "node:module";
 import { BRIDGE, checkBridge } from "./bridge.mjs";
 
+import { GUIDE_BASE, guidePlan, guideCards, rejoinGuide } from "./split-guide.mjs";
+import { GUIDE_BLOCK_LIMIT, GUIDE_CHUNK_SIZE, GUIDE_MIN_NEWEST } from "./build-fragments.mjs";
+
 const args = process.argv.slice(2);
 const opt = (name) => { const i = args.indexOf("--" + name); return i < 0 ? null : args[i + 1]; };
 const cfg = loadConfig();
@@ -79,12 +82,41 @@ function checkProfile(dir, profile) {
   const done = { text: 0, links: 0, pictures: 0, blocks: 0, addresses: 0 };
   const safeTop = (rel) => { try { return topLevel(get(rel)); } catch (e) { fail(`${rel}: ${e.message.replace(/^topLevel: /, "")}`); return []; } };
 
+  // Yard Guide: ordered element inventory, exact card partition, complete page data and capacity.
+  const guideFiles = blockFiles.filter(f => f.startsWith(GUIDE_BASE + "."));
+  if (guideFiles.length) {
+    const source = pages.find(p => fieldOf.get(p.slug)?.where.includes("Blog Home"));
+    const count = source ? guideCards(source.mainInner).length : -1;
+    const expected = guidePlan(count, GUIDE_CHUNK_SIZE, GUIDE_MIN_NEWEST);
+    if (JSON.stringify(guideFiles) !== JSON.stringify(expected.templateOrder)) fail("Yard Guide manifest elements are missing or out of order; rebuild and arrange the template in manifest order before publishing.");
+    if (JSON.stringify(manifest.sizes.find(s => s.block === GUIDE_BASE)?.guide) !== JSON.stringify(expected)) fail("Yard Guide capacity record is stale; rebuild before pasting.");
+    const newest = has(GUIDE_BASE + ".2.html") ? guideCards(get(GUIDE_BASE + ".2.html")).length : -1;
+    if (newest !== expected.newestCards) fail("Yard Guide newest block has the wrong card count; rebuild before pasting.");
+    for (const f of guideFiles.filter(f => /\.older-/.test(f))) if (has(f) && guideCards(get(f)).length !== GUIDE_CHUNK_SIZE) fail(f + ": expected " + GUIDE_CHUNK_SIZE + " complete cards; rebuild before pasting.");
+    const schema = has(GUIDE_BASE + ".schema.html") ? get(GUIDE_BASE + ".schema.html") : "";
+    const itemList = [...schema.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(m => { try { const d = JSON.parse(m[1]); return d['@graph'] || [d]; } catch { return []; } }).find(d => d['@type'] === 'Blog');
+    const sourceList = (source?.jsonld || []).flatMap(t => { const d = JSON.parse(t); return d['@graph'] || [d]; }).find(d => d['@type'] === 'Blog');
+    if (!itemList || itemList.blogPost?.length !== count || JSON.stringify(itemList.blogPost) !== JSON.stringify(sourceList?.blogPost)) fail("Yard Guide schema must list every card in source order; rebuild the index and page data before pasting.");
+    notes.push(expected.warning);
+    const inventoryArg = args.find(a => a.startsWith("--guide-elements="));
+    if (inventoryArg) {
+      const record = JSON.parse(read(path.resolve(inventoryArg.slice("--guide-elements=".length))));
+      const inventory = Array.isArray(record) ? record : record.templateOrder || record.blocks?.map(b => b.file.startsWith("blog/") ? b.file : "blog/" + b.file);
+      if (!Array.isArray(inventory)) fail("Yard Guide element inventory must be a filename array, templateOrder, or installed blocks record.");
+      else {
+        const actual = inventory.filter(f => f.startsWith(GUIDE_BASE + "."));
+        if (JSON.stringify(actual) !== JSON.stringify(expected.templateOrder)) fail("Yard Guide template needs elements added, removed or reordered before publishing. Required order: " + expected.templateOrder.join(" -> ") + ". Save all changed blocks in one unpublished draft and publish once.");
+      }
+    } else notes.push("PASTE READINESS NOT CHECKED: rerun with --guide-elements=<installed record or verified draft element list> before publishing; the manifest is a required plan, not evidence of installed elements.");
+  }
+
   // ---- helpers over the blocks on disk -------------------------------------------------------------------------------
   const bodyOf = (slug, base) => {
     const one = `${base}.html`, two = [`${base}.1.html`, `${base}.2.html`];
     if (has(one) && has(two[0])) fail(`${slug}: both ${one} and ${two[0]} exist`);
     if (has(one)) return [one];
-    if (has(two[0]) && has(two[1])) return two;
+    if (has(two[0]) && has(two[1])) return base === GUIDE_BASE
+      ? blockFiles.filter(f => f.startsWith(GUIDE_BASE + ".") && !f.endsWith(".schema.html")) : two;
     fail(`${slug}: no body block ${one} (or ${two.join(" + ")})`); return [];
   };
   const quoteHrefIn = (headerText) => { const m = /getAttribute\("href"\)===("(?:[^"\\]|\\.)*")/.exec(headerText); return m ? JSON.parse(m[1]) : null; };
@@ -122,7 +154,11 @@ function checkProfile(dir, profile) {
 
   function compare(slug, kind, approvedHtml, parts, inPlace) {
     // parts: [{ file, role }] in page order
-    const texts = parts.map((p) => ({ ...p, html: get(p.file) }));
+    let texts = parts.map((p) => ({ ...p, html: get(p.file) }));
+    if (parts.some(p => p.file === GUIDE_BASE + ".2.html")) {
+      const older = texts.filter(p => /\.older-\d+\.html$/.test(p.file));
+      texts = texts.filter(p => !older.includes(p)).map(p => p.file === GUIDE_BASE + ".2.html" ? { ...p, html: rejoinGuide(p.html, older.map(q => q.html)) } : p);
+    }
     const header = texts.find((p) => p.role === "header");
     const quoteHref = header ? quoteHrefIn(header.html) : null;
     if (header && quoteHref === null) fail(`${header.file}: the script that points the price buttons at the builder was not found`);
@@ -224,6 +260,7 @@ function checkProfile(dir, profile) {
     if (sha256(text) !== b.sha256) fail(`${b.file}: its SHA-256 is not the one in MANIFEST.json (edited by hand?)`);
     const dated = text.length + grow * (text.split(profile.assetsBase).length - 1);
     largest.push([dated, text.length, Buffer.byteLength(text), b.file]);
+    if (b.file.startsWith(GUIDE_BASE + ".") && dated > GUIDE_BLOCK_LIMIT) fail(b.file + ": " + dated + " characters exceeds 60,000. Do not paste; reduce the named chunk-size setting or arrange another content split, rebuild BOTH profiles and rerun the checks.");
     if (dated > cfg.blockLimit) fail(`${b.file}: ${dated} characters with the date filled in (${text.length} now); the limit is ${cfg.blockLimit}`);
     for (const p of balance(text)) fail(`${b.file}: ${p}`);
     for (const t of tokens(text)) {
@@ -454,7 +491,7 @@ function checkProfile(dir, profile) {
   // ---- 8 stylesheets first in every header block ---------------------------------------------------------------------------
   const siteCss = read(path.join(ROOT, "css/site.css"));
   const bodyFont = /(?:^|\})\s*body\s*\{[^}]*?\bfont:\s*(\d{3})\s+[\d.]+px\s*\/\s*([\d.]+)\s/m.exec(siteCss);
-  for (const b of manifest.blocks.filter((x) => x.role === "header" || x.role === "blog-post-header" || (x.role === "blog-home-header-index" && !/\.2\.html$|schema/.test(x.file)))) {
+  for (const b of manifest.blocks.filter((x) => x.role === "header" || x.role === "blog-post-header" || (x.role === "blog-home-header-index" && !/\.2\.html$|\.older-\d+\.html$|schema/.test(x.file)))) {
     const first = safeTop(b.file).filter((n) => n.kind === "element" || n.kind === "raw");
     // the block opens with its own small <style> (it must stand before css/site.css, which has to win over it), then the links
     if (first[0] && first[0].tag !== "style") fail(`${b.file}: the wrapper style must be the first thing in the block, before css/site.css`);
@@ -487,6 +524,7 @@ function checkProfile(dir, profile) {
   const ph = placeholders(cfg, profile);
   if (ph.length) console.log(`  still a placeholder (not a failure): ${ph.join("; ")}`);
   for (const w of manifest.warnings || []) console.log(`  builder note: ${w}`);
+  for (const note of notes) console.log("  note: " + note);
   for (const f of fails) console.log(`  FAIL ${f}`);
   if (fails.length) failed += 1;
   return manifest;

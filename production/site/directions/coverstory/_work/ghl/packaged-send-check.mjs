@@ -36,6 +36,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { RELEASE, OUT, read, loadConfig } from "./lib.mjs";
+import { isHomeReviewRequest } from "../../../../shared/verify/review-requests.mjs";
+
+function isUnexpectedRequest(pageAddress, requestUrl) {
+  let pageName = "";
+  try { pageName = new URL(pageAddress).searchParams.get("pp-test-page") || ""; } catch {}
+  return !isHomeReviewRequest(pageName, requestUrl);
+}
 
 const TOOLS = process.env.PP_PLAYWRIGHT_DIR || "tools/playwright";
 process.env.PLAYWRIGHT_BROWSERS_PATH = process.env.PLAYWRIGHT_BROWSERS_PATH || path.join(TOOLS, "browsers");
@@ -120,6 +127,9 @@ async function world(browser, profileName, pageOrigin, viewport, slowScriptsMs =
     }
     if (/fonts\.(googleapis|gstatic)\.com$/.test(url.hostname)) { log.fonts += 1; return route.abort("blockedbyclient"); }
     if (/googletagmanager\.com$|connect\.facebook\.net$|facebook\.com$|google-analytics\.com$|doubleclick\.net$|google\.com$/.test(url.hostname)) { log.tagScripts.push(url.hostname + url.pathname.slice(0, 40)); return route.abort("blockedbyclient"); }
+    let pageAddress = "";
+    try { pageAddress = request.frame().page().mainFrame().url(); } catch {}
+    if (!isUnexpectedRequest(pageAddress, url.href)) return route.abort("blockedbyclient");
     log.unexpected.push(request.method() + " " + url.href.slice(0, 160));
     return route.abort("blockedbyclient");
   });

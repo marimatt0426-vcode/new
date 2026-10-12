@@ -1,11 +1,13 @@
 {
   "state": "Prepared and locally simulated; not in GoHighLevel",
   "profile": "production",
-  "generated": "2026-10-12T19:41:09.013Z",
+  "generated": "2026-10-12T22:24:10.443Z",
   "assetsBase": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-20261012",
   "blockLimit": 65000,
   "placeholdersStillInUse": [],
-  "warnings": [],
+  "warnings": [
+    "In 31 posts a new Custom Code element is needed between blog/home-1-header-and-index.2.html and blog/home-1-header-and-index.older-1.html: add blog/home-1-header-and-index.older-2.html to the unpublished template draft before publishing all changed blocks together."
+  ],
   "notes": [
     "The article page's own page data (1 block(s)) names one article and is NOT in the blog-post template, which is one block for all posts. GoHighLevel writes no structured data for a post (GHL audit 1.8).",
     "The pages on disk are a REVIEW build (40 of 40 carry the footer's \"Review build\" line). The blocks were made from their rollout form, which is the same page without that one line (lib.mjs rolloutForm; proven equal to a real rollout build by _work/ghl/prove-rollout-form.mjs). No block carries the line."
@@ -661,10 +663,21 @@
       "page": "yard-guide",
       "remedy": "a + b: body split in two blocks",
       "part": "body",
-      "chars": 64284,
-      "charsWhenDated": 64284,
-      "bytes": 64284,
-      "sha256": "523bcb01445cfd10f910c4218d2c004a0adfcf47af2aa99609777726fa7a4d93"
+      "chars": 24140,
+      "charsWhenDated": 24140,
+      "bytes": 24140,
+      "sha256": "6d1bac7da438125f62bdd7d826ae4be9a0ab05b35bd8734189406f2a2da62e08"
+    },
+    {
+      "file": "blog/home-1-header-and-index.older-1.html",
+      "role": "blog-home-header-index",
+      "page": "yard-guide",
+      "remedy": "a + b: body split in two blocks",
+      "part": "body",
+      "chars": 40660,
+      "charsWhenDated": 40660,
+      "bytes": 40660,
+      "sha256": "c3c7a84896fd6f5b858a54d549e9441a0fd0082d585f7e75024f44b7b25c5424"
     },
     {
       "file": "blog/home-1-header-and-index.schema.html",
@@ -1429,6 +1442,25 @@
       "level": 2,
       "k": 2,
       "remedy": "a + b: body split in two blocks",
+      "guide": {
+        "cards": 49,
+        "chunkSize": 36,
+        "minimumNewest": 8,
+        "newestCards": 13,
+        "templateOrder": [
+          "blog/home-1-header-and-index.1.html",
+          "blog/home-1-header-and-index.2.html",
+          "blog/home-1-header-and-index.older-1.html",
+          "blog/home-1-header-and-index.schema.html"
+        ],
+        "nextElement": {
+          "inPosts": 31,
+          "file": "blog/home-1-header-and-index.older-2.html",
+          "after": "blog/home-1-header-and-index.2.html",
+          "before": "blog/home-1-header-and-index.older-1.html"
+        },
+        "warning": "In 31 posts a new Custom Code element is needed between blog/home-1-header-and-index.2.html and blog/home-1-header-and-index.older-1.html: add blog/home-1-header-and-index.older-2.html to the unpublished template draft before publishing all changed blocks together."
+      },
       "asOneBlockWhenDated": 94110,
       "withoutPageDataWhenDated": 84483,
       "hostedAddresses": 154,
@@ -1441,9 +1473,15 @@
         },
         {
           "file": "blog/home-1-header-and-index.2.html",
-          "chars": 64284,
-          "charsWhenDated": 64284,
-          "bytes": 64284
+          "chars": 24140,
+          "charsWhenDated": 24140,
+          "bytes": 24140
+        },
+        {
+          "file": "blog/home-1-header-and-index.older-1.html",
+          "chars": 40660,
+          "charsWhenDated": 40660,
+          "bytes": 40660
         },
         {
           "file": "blog/home-1-header-and-index.schema.html",

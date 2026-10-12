@@ -1,6 +1,6 @@
 {
   "profile": "production",
-  "generated": "2026-10-12T19:41:09.010Z",
+  "generated": "2026-10-12T22:24:10.440Z",
   "pages": [
     {
       "slug": "about",
@@ -1586,7 +1586,8 @@
       "robotsFromBuild": "none",
       "pasteBodyBlocks": [
         "blog/home-1-header-and-index.1.html",
-        "blog/home-1-header-and-index.2.html"
+        "blog/home-1-header-and-index.2.html",
+        "blog/home-1-header-and-index.older-1.html"
       ],
       "splitInTwo": true,
       "linksToThisPageGoTo": "https://blog.itspurgepros.com/",
@@ -1606,6 +1607,7 @@
       "bodyBlocks": [
         "blog/home-1-header-and-index.1.html",
         "blog/home-1-header-and-index.2.html",
+        "blog/home-1-header-and-index.older-1.html",
         "blog/home-1-header-and-index.schema.html"
       ],
       "ownHeaderAndFooter": false,

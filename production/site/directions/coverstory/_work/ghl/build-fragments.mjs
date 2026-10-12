@@ -46,6 +46,9 @@ import { HERE, ROOT, RELEASE, OUT, posix, read, sha256, sha1, bytes, write, load
   openTagOfRaw, topLevel, hasClass, discoverPages, fileInfo, listFiles, siteSettings, settingsProblems, TOKEN_GUARD, pageAddress, PREVIEW_BASE } from "./lib.mjs";
 import { BRIDGE, addBridge, bridgeRun } from "./bridge.mjs";
 
+// GHL's configured blockLimit is 65,000. Keep a 5,000-character margin on every index element.
+export const GUIDE_BLOCK_LIMIT = 60000, GUIDE_CHUNK_SIZE = 36, GUIDE_MIN_NEWEST = 8;
+import { GUIDE_BASE, splitGuide } from "./split-guide.mjs";
 const ASSET_EXT = /\.(?:webp|png|jpe?g|gif|svg|avif|ico|css|js|mjs|json|woff2?|ttf|otf|mp4|webm|pdf|txt|xml)$/i;
 const isRelative = (v) => v !== "" && !/^(?:[a-z][a-z0-9+.-]*:|\/|#|\?)/i.test(v);
 const splitTail = (v) => { const m = /^([^?#]*)([?#].*)?$/.exec(v); return [m[1], m[2] || ""]; };
@@ -372,8 +375,9 @@ list.forEach(function(u){var s=d.createElement("script");s.src=u;s.async=false;s
     const dataFile = () => [`${base}.schema.html`, [head(what + ": PAGE DATA for the page's own schema or tracking-code field"), data].join("\n")];
     const ownFile = Boolean(data) && (cfg.pageDataInOwnFile || []).includes(record.page);   // by setting, not by length
     if (data && (ownFile || (forced ? forced.level >= 1 : measure(out[0][1]) > cfg.blockLimit))) { level = 1; out = [[`${base}.html`, one(false)], dataFile()]; }
-    if (forced ? forced.level >= 2 : measure(out[0][1]) > cfg.blockLimit) {
-      if (forced) k = forced.k;
+    if (base === GUIDE_BASE || (forced ? forced.level >= 2 : measure(out[0][1]) > cfg.blockLimit)) {
+      if (base === GUIDE_BASE) k = sections.findIndex(s => /\bid="library"/.test(s));
+      else if (forced) k = forced.k;
       else {
         let best = null;
         for (let i = 1; i < sections.length; i += 1) { const c = cut(i), worst = Math.max(measure(c.first), measure(c.second)); if (!best || worst < best.worst) best = { worst, i }; }
@@ -381,9 +385,18 @@ list.forEach(function(u){var s=d.createElement("script");s.src=u;s.async=false;s
       }
       if (k > 0 && k < sections.length) { const c = cut(k); level = 2; out = [[`${base}.1.html`, c.first], [`${base}.2.html`, c.second], ...(data ? [dataFile()] : [])]; }
     }
+    let guide = null;
+    if (base === GUIDE_BASE) {
+      if (level !== 2 || !data) throw new Error("Yard Guide needs its existing header, library and schema; inspect the source before pasting.");
+      if (cfg.scriptsPlacement !== "footer") throw new Error("Yard Guide joiners require the footer script loader after every index element; restore scriptsPlacement: footer before building.");
+      const split = splitGuide(out[1][1], GUIDE_CHUNK_SIZE, GUIDE_MIN_NEWEST);
+      guide = split.plan;
+      out = [out[0], [out[1][0], split.newest], ...split.older, ...out.slice(2)];
+      warn(guide.warning);
+    }
     const remedy = level === 0 ? "none" : level === 1 ? "a: page data in its own file" : (data ? "a + " : "") + "b: body split in two blocks";
     for (const [rel, text] of out) put(rel, text, { ...record, remedy, part: rel.endsWith(".schema.html") ? "page data" : "body" });
-    sizes.push({ block: base, level, k, remedy, asOneBlockWhenDated: measure(one(true)), withoutPageDataWhenDated: measure(one(false)), hostedAddresses: one(true).split(profile.assetsBase).length - 1, files: out.map(([rel, text]) => ({ file: rel, chars: text.length + 1, charsWhenDated: measure(text), bytes: bytes(text) + 1 })) });
+    sizes.push({ block: base, level, k, remedy, ...(guide ? { guide } : {}), asOneBlockWhenDated: measure(one(true)), withoutPageDataWhenDated: measure(one(false)), hostedAddresses: one(true).split(profile.assetsBase).length - 1, files: out.map(([rel, text]) => ({ file: rel, chars: text.length + 1, charsWhenDated: measure(text), bytes: bytes(text) + 1 })) });
   }
   const sectionsOf = (html, kind, from) => topLevel(html).filter((n) => n.kind === "element" || n.kind === "raw").map((n) => rewrite(n.html, kind, from));
 
@@ -509,7 +522,7 @@ list.forEach(function(u){var s=d.createElement("script");s.src=u;s.async=false;s
   for (const rel of [...refs.keys()]) follow(rel);
   const fileList = [...refs.keys()].sort().map((rel) => ({ ...fileInfo(rel), address: `${profile.assetsBase}/${rel}`, askedForBy: [...refs.get(rel)].sort().slice(0, 6), askedForByCount: refs.get(rel).size }));
 
-  const blockList = blocks.map((b) => { const text = files.get(b.file), dated = measureBlock(cfg, profile, text); return { ...b, chars: text.length, charsWhenDated: dated, bytes: bytes(text), sha256: sha256(text), overLimit: dated > cfg.blockLimit && !["site-head", "site-body"].includes(b.role) ? true : undefined }; });
+  const blockList = blocks.map((b) => { const text = files.get(b.file), dated = measureBlock(cfg, profile, text); return { ...b, chars: text.length, charsWhenDated: dated, bytes: bytes(text), sha256: sha256(text), overLimit: dated > (b.file.startsWith(GUIDE_BASE + ".") ? GUIDE_BLOCK_LIMIT : cfg.blockLimit) && !["site-head", "site-body"].includes(b.role) ? true : undefined }; });
   const onDisk = pages.filter((p) => p.reviewBuildOnDisk).length;
   notes.push(onDisk ? `The pages on disk are a REVIEW build (${onDisk} of ${pages.length} carry the footer's "Review build" line). The blocks were made from their rollout form, which is the same page without that one line (lib.mjs rolloutForm; proven equal to a real rollout build by _work/ghl/prove-rollout-form.mjs). No block carries the line.` : `The pages on disk are a ROLLOUT build: no page carries the footer's "Review build" line, and no block does.`);
   return { cfg, profile, site, files, blocks: blockList, sizes, fields, fileList, warnings, notes, blog, placeholders: placeholders(cfg, profile), settings: siteSettings(cfg, profile) };
@@ -625,7 +638,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     console.log("  largest blocks: " + [...body].sort((a, b) => b.chars - a.chars).slice(0, 5).map((b) => `${b.file} ${b.chars}${b.charsWhenDated !== b.chars ? " (" + b.charsWhenDated + " dated)" : ""}`).join(" · "));
     const remedied = result.sizes.filter((s) => s.remedy !== "none");
     console.log(`  remedies: ${remedied.length ? remedied.map((s) => `${s.block} (${s.remedy})`).join("; ") : "none needed"}`);
+    const guide = result.sizes.find(s => s.block === GUIDE_BASE)?.guide;
+    if (guide) console.log("  REQUIRED TEMPLATE ORDER (verify elements before any paste): " + guide.templateOrder.join(" -> "));
     const over = result.blocks.filter((b) => b.overLimit);
+    if (over.some(b => b.file.startsWith(GUIDE_BASE + "."))) {
+      console.error("STOP: a Yard Guide block exceeds 60,000 characters. Do not paste; reduce the named chunk-size setting or arrange another content split, rebuild BOTH profiles and rerun the checks.");
+      process.exitCode = 1;
+    }
     if (over.length) console.log("  STILL OVER THE LIMIT: " + over.map((b) => `${b.file} ${b.chars}`).join(", "));
     console.log(`  upload list: ${manifest.uploadList.count} files, ${(manifest.uploadList.bytes / 1048576).toFixed(1)} MB${manifest.uploadList.missing.length ? "; MISSING on disk: " + manifest.uploadList.missing.join(", ") : "; none missing"}`);
     if (result.placeholders.length) console.log("  placeholders still in use: " + result.placeholders.join("; "));
