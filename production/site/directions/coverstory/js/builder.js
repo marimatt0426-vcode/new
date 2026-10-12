@@ -22,7 +22,8 @@
 
    ONE rule for where the builder lives, on every device: the hero card asks the first question only; every later
    step runs in the panel, which opens in place over the page. With a price under way and the panel closed, the hero
-   card shows the summary (answers, price so far, Continue, Start over).
+   card shows the summary (answers, price so far, Continue, Start over). The panel has the same Start over at the end
+   of its question row, on the plan questions and the price, once something is answered (2026-10-12).
 
    The stage holds still: the card is never rebuilt. A step's panel is built the first time it is shown and
    kept; a change only touches what the engine says changed. See BUILDER-NOTES.md for selectors and how to add a step. */
@@ -119,7 +120,9 @@
       servedSub: function (zip) { return "ZIP " + zip + " is on our routes."; },
       /* a city page whose community has several accepted ZIPs: its ZIPs as one-tap choices above the field (see CITY) */
       pick: function (n) { return n === 1 ? "Tap it, or type a different one." : "Tap yours, or type a different one."; }, other: "A different ZIP? Type it here",
-      city: function (community, n) { return n === 1 ? "The " + community + " ZIP we cover" : community + " ZIPs we cover"; } },
+      city: function (community, n) { return n === 1 ? "The " + community + " ZIP we cover" : community + " ZIPs we cover"; },
+      /* after Start over: the ZIP that a link or a ZIP button of the page handed over is offered again as ONE one-tap choice (startOver) */
+      again: "The ZIP you picked" },
     yard: { q: "How big is the yard?", need: "Pick the closest size.", ok: "Tap another to change it.",
       most: function (label) { return "Most customers pick " + lowerFirst(label); }, guide: "Not sure?", guideLabel: "Not sure? Open the yard size guide" },   // starts with the words on the link (m10)
     areas: { q: "Which areas?", need: "Tick at least one area.", ok: "Tap again to remove one.", note: "Tick every area the dogs use. Tap a ticked one again to remove it." },
@@ -330,10 +333,11 @@
 
   /* hero: what the inline mount shows ("stage" = the first question, "summary" = the price so far, "away" = the builder is open in front).
      prefer: the plan of the button that opened the builder (memory only). carried: answers came from an earlier page or a reload and
-     nothing has been touched here yet. kept: the price screen was reached by that route. auto: the pending move-on after a one-tap answer. */
+     nothing has been touched here yet. kept: the price screen was reached by that route. auto: the pending move-on after a one-tap answer.
+     again: the ZIP a page's link handed over before Start over was pressed; the ZIP question offers it as a one-tap choice (startOver). */
   var ui = { step: "", mode: "inline", moreOpen: false, blocked: false, flash: "", notice: null, noticeOff: "", said: "", priceKey: "", barKey: "",
     opener: null, sheetOpen: false, inView: false, atEnd: false, locks: 0, panels: {}, segs: [], rsegs: [], pops: {},
-    hero: "", prefer: "", picked: "", carried: false, kept: false, auto: 0, way: null, owed: false };
+    hero: "", prefer: "", picked: "", carried: false, kept: false, auto: 0, way: null, owed: false, again: "" };
   var el = {};
   var steps = {};
   var noticeOwners = {};
@@ -372,7 +376,13 @@
     // what a screen must keep in view with its button (the promise and the terms box on the confirm screen): it sits
     // directly above the foot, outside the part that scrolls, and takes its height from the options area
     el.pin = h("div", { class: "ppb-pin", "data-ppb-pin": true, hidden: true });
-    el.body = h("div", { class: "ppb-body" }, h("div", { class: "ppb-qrow" }, el.q, el.hint, el.qico), el.optwrap, el.pin);
+    /* START OVER IN THE PANEL (2026-10-12). The hero card's summary has had "Start over" since the fix pass; the panel had none, so a
+       visitor who came in by a ZIP button, or by a launcher far from the card, found no way to begin again. The same quiet button
+       stands at the end of the question row (where a later screen shows its icon), on the plan questions and the price, once
+       something is answered: renderFrame() shows and hides it, placeOver() says on which line of the row it stands, and
+       startOver() is the one function behind both buttons. */
+    el.over = h("button", { class: "ppb-over ppb-over--panel", type: "button", "data-ppb-over": true, "aria-label": COPY.sum.overLabel, text: COPY.sum.over, hidden: true, onclick: startOver });
+    el.body = h("div", { class: "ppb-body" }, h("div", { class: "ppb-qrow" }, el.q, el.hint, el.qico, el.over), el.optwrap, el.pin);
     el.back = h("button", { class: "ppb-back", type: "button", "data-ppb-back": true, text: COPY.back, onclick: pressBack });
     el.priceLabel = h("span", { class: "ppb-price__label" });
     el.priceAmt = h("strong", { class: "ppb-price__amt" });
@@ -550,6 +560,12 @@
     el.next.classList.toggle("is-plain", Boolean(foot && foot.arrow === false));
     el.next.setAttribute("aria-disabled", String(foot ? Boolean(foot.busy) : Boolean(flow.disablePrimary)));
     if (el.close) el.close.disabled = Boolean(state.submitting);       // a request being sent is never hidden
+    // Start over, in the panel only: once something is answered, on the plan questions and the price (a later screen has its icon there, and Back to the price)
+    var over = ui.mode === "dialog" && hasProgress(state) && !isLater(state.step) && !frozen;
+    el.over.hidden = !over;
+    if (!over) el.stage.removeAttribute("data-ppb-has-over");
+    else if (!el.stage.hasAttribute("data-ppb-has-over")) el.stage.setAttribute("data-ppb-has-over", "");
+    placeOver();
     var bar = store.priceBar(), parts = priceParts(bar);
     renderPrice(bar, parts);
     renderBar(bar, parts);
@@ -750,6 +766,20 @@
     var needsStop = box.scrollHeight > box.clientHeight + 2 && !(panel && panel.querySelector("button:not([disabled]):not([hidden]), input:not([disabled]), textarea, a[href]"));
     if (needsStop) { box.tabIndex = 0; box.setAttribute("role", "group"); box.setAttribute("aria-label", COPY.scrollLabel); }
     else { box.removeAttribute("tabindex"); box.removeAttribute("role"); box.removeAttribute("aria-label"); }
+    placeOver();                                    // the window was resized or turned, or the site's typeface has arrived
+  }
+  /* ON WHICH LINE the panel's Start over stands (2026-10-12). At the end of the question's own line. When the question's words
+     reach that far (the one long question, "This one gets a custom quote", on a phone; any question while a wider stand-in
+     typeface is on show because the site's own has not loaded), it stands one line lower, at the end of the hint's line, and the
+     hint keeps clear of it (builder.css, data-ppb-has-over="low"). So the question never wraps or moves because of the button.
+     Measured in the panel's own pixels: while the panel grows out of the card it is drawn smaller, and the words with it. */
+  function placeOver() {
+    if (el.over.hidden || !doc.contains(el.stage)) return;
+    var drawn = el.stage.getBoundingClientRect().width, own = el.stage.offsetWidth;
+    if (!drawn || !own) return;
+    var words = doc.createRange(); words.selectNodeContents(el.q);
+    var low = words.getBoundingClientRect().width * own / drawn > el.over.offsetLeft - 8 ? "low" : "";
+    if (el.stage.getAttribute("data-ppb-has-over") !== low) el.stage.setAttribute("data-ppb-has-over", low);
   }
 
   /* ---------------------------------------------------------------- 6 the steps */
@@ -813,7 +843,7 @@
     q: function () { return COPY.zip.q; },
     hint: function () {
       var status = store.checkZip().status;
-      return status === "in_area" ? COPY.zip.ok : status === "out_of_area" ? COPY.zip.out : status === "empty" && CITY.zips.length ? COPY.zip.pick(CITY.zips.length) : COPY.zip.need;
+      return status === "in_area" ? COPY.zip.ok : status === "out_of_area" ? COPY.zip.out : status === "empty" && (CITY.zips.length || this.againZip()) ? COPY.zip.pick(CITY.zips.length || 1) : COPY.zip.need;
     },
     say: SAY.zip,
     build: function () {
@@ -831,6 +861,14 @@
           self.chips.push(chip);
           return chip;
         }))) : null;
+      /* AFTER START OVER (2026-10-12): the ZIP that a link or a ZIP button of the page handed over is offered again here as ONE one-tap
+         choice (ui.again, set by startOver), with the field under it for a different ZIP. It is never kept silently and never lost.
+         Only on a page that offers no ZIPs of its own (there the page's ZIP buttons are these same choices). update() shows it. */
+      self.againChip = offered ? null : h("button", { class: "ppb-zipchip", type: "button", "aria-pressed": "false", "data-ppb-zip-again": true,
+        onclick: function () { if (self.againZip()) tapAnswer("zip", { zip: ui.again }); } });
+      self.again = offered ? null : h("div", { class: "ppb-zippick", role: "group", "aria-labelledby": "ppb-zipagain-label", "data-ppb-zip-again-box": true, hidden: true },
+        h("p", { class: "ppb-zippick__label", id: "ppb-zipagain-label", text: COPY.zip.again }),
+        h("div", { class: "ppb-zippick__grid", style: "--ppb-zips:2;--ppb-zips-wide:2" }, self.againChip));
       self.input = h("input", { class: "field__input ppb-zip__input", id: "ppb-zip", name: "zip", type: "text", inputmode: "numeric", pattern: "[0-9]*", autocomplete: "postal-code",
         maxlength: "5", placeholder: offered ? COPY.zip.other : COPY.zip.placeholder, "aria-labelledby": "ppb-q", "aria-describedby": "ppb-zip-msg", "aria-required": "true", "data-ppb-zip": true,
         oninput: function () {
@@ -868,13 +906,24 @@
         h("div", { class: "ppb-ooa__copy ppb-ooa__edge" }, edgeText));
       // in the panel he stands on the ground line and presents the question (not on the gloved pages, and not where the ZIP choices need the room; the out-of-area answer has its own pose)
       self.scene = GLOVED_PAGE || offered ? null : h("div", { class: "ppb-zip__scene", "aria-hidden": "true" }, h("span", { class: "stand stand--mound ppb-zip__pose" }, pic(ICON.present, 598, null, 900)));
-      return h("div", { class: "ppb-zip" + (offered ? " ppb-zip--picks" : "") }, self.picks,
+      self.root = h("div", { class: "ppb-zip" + (offered ? " ppb-zip--picks" : "") }, self.picks, self.again,
         h("div", { class: "ppb-zip__field" }, pic(ICON.pin, 256, "ppb-zip__ico", 239), self.input), self.msg, self.ooa, self.scene);
+      return self.root;
     },
+    /* the ZIP to offer again after Start over, or "": only once the panel is built, only an accepted ZIP */
+    againZip: function () { return this.again && ui.again && C.checkZip(ui.again).inArea ? ui.again : ""; },
     update: function (state) {
       var self = this, check = store.checkZip(), was = self.status;
       if (self.input.value !== state.zip) self.input.value = state.zip;
       self.chips.forEach(function (chip) { press(chip, chip.getAttribute("data-ppb-zip-pick") === state.zip); });   // the chip of the ZIP in hand, however it got there
+      var again = self.againZip();                   // after Start over: the handed-over ZIP as one choice above the field
+      if (self.again) {
+        self.again.hidden = !again;
+        if (again) { setText(self.againChip, again); press(self.againChip, again === state.zip); }
+        self.root.classList.toggle("ppb-zip--picks", Boolean(again));
+        var hold = again ? COPY.zip.other : COPY.zip.placeholder;
+        if (self.input.getAttribute("placeholder") !== hold) self.input.setAttribute("placeholder", hold);
+      }
       if (check.status === "in_area" || check.status === "empty") self.tried = false;
       self.status = check.status;
       var out = check.status === "out_of_area", bad = out || (self.tried && check.status === "incomplete");
@@ -882,7 +931,7 @@
       self.input.setAttribute("aria-describedby", out ? "ppb-zip-msg ppb-zip-ooa" : "ppb-zip-msg");
       self.ooa.id = "ppb-zip-ooa";
       self.ooa.hidden = !out;
-      if (self.scene) self.scene.hidden = out;
+      if (self.scene) self.scene.hidden = out || Boolean(again);   // the choice needs the room, as the city pages' choices do
       self.msg.hidden = out;
       self.msg.className = "ppb-zip__msg" + (check.status === "in_area" ? " is-ok" : bad ? " is-bad" : "");
       if (check.status === "in_area") {
@@ -897,7 +946,7 @@
     },
     focus: function () {
       if (store.checkZip().status === "out_of_area") return this.ooa;
-      if (this.chips.length) return null;          // the one-tap choices come first: the question takes focus and the first Tab stop is the first chip
+      if (this.chips.length || this.againZip()) return null;   // the one-tap choices come first: the question takes focus and the first Tab stop is the first chip
       return FINE_POINTER ? this.input : null;     // never push a phone keyboard up over the card
     },
     blocked: function () {
@@ -1913,6 +1962,7 @@
           h("div", { class: "ppb-pop__foot" }, h("button", { class: "btn btn--secondary btn--sm", type: "button", "data-ppb-pop-close": true, text: COPY.guide.done, onclick: shut }))));
       pop.node.addEventListener("cancel", function (event) { event.preventDefault(); shut(); });
       keepFocusIn(pop.node);
+      watchFit();                                   // 2026-10-12: a pop-up follows what can be seen, as the panel does (fitSheet)
       pop.node.addEventListener("pointerdown", function (event) { pop.outside = event.target === pop.node; });
       pop.node.addEventListener("click", function (event) { if (event.target === pop.node && pop.outside) shut(); });
       doc.body.append(pop.node);
@@ -1921,6 +1971,7 @@
     pop.body.replaceChildren.apply(pop.body, parts.body || []);
     pop.opener = opener || null;
     if (!pop.node.open) { lockPage(true); pop.node.showModal(); }
+    fitSheet();                                     // 2026-10-12: a strip that is already there when the pop-up opens
     pop.node.querySelector(".ppb-pop__panel").scrollTop = 0;
     pop.title.focus({ preventScroll: true });
   }
@@ -1928,6 +1979,7 @@
     var pop = ui.pops[id];
     if (!pop || !pop.node.open) return;
     pop.node.close(); lockPage(false);
+    fitSheet();                                     // 2026-10-12: closed, so both properties go from it
     if (pop.opener && doc.contains(pop.opener)) pop.opener.focus({ preventScroll: true });
   }
 
@@ -2139,9 +2191,19 @@
     ui.way = null;
     if (went && !went.ok && went.reason) flashHint(went.reason);
   }
+  /* START OVER: the summary's button and the panel's (el.over, 2026-10-12). The engine clears every answer, everything typed for a
+     request and the saved progress, and starts again at the first question (store.reset; it refuses while a request is being sent
+     and after a locked reply). A ZIP that a link or a ZIP button of the page handed over goes with the rest, as any answer does, and
+     is OFFERED again on the ZIP question as a one-tap choice (ui.again; the ZIP step draws it): neither kept silently nor lost. A
+     ZIP the visitor has typed since then is their own answer and replaces it: nothing is offered. A city page's own ZIP (data-zip)
+     is the engine's to put back, exactly as on arrival. With the panel open it stays open, on the first question, which takes focus. */
   function startOver() {
-    if (store.reset() === false) return;
-    if (doc.contains(el.stage)) el.q.focus({ preventScroll: true });   // the first question is back in the card
+    var was = store.getState(), again = ui.again;
+    if (was.zipSource === "open" || was.zipSource === "url") ui.again = C.checkZip(was.zip).inArea ? was.zip : "";
+    else if (was.zip && was.zip !== ui.again) ui.again = "";
+    if (store.reset() === false) { ui.again = again; return; }
+    if (ui.again && store.getState().zip === ui.again) ui.again = "";   // the page's own ZIP: the engine has put it back and its question is skipped
+    if (doc.contains(el.stage)) el.q.focus({ preventScroll: true });   // the first question is back: in the card, or in the open panel
   }
 
   /* ---- what only this interface can see is REPORTED to the engine: store.trackUi() (CORE-API.md section 6.6) ----
@@ -2222,6 +2284,42 @@
   }
 
   /* ---- the panel: the same builder, same state, as a sheet (phone) or a dialog (larger screens) ---- */
+  /* FIX 2026-10-11 (the owner's phone, Chrome on Android). The keyboard went at the fifth ZIP digit, but Chrome's own strip
+     (the grey bar for saved passwords that rides on the keyboard) stayed at the foot of the screen. The panel is as tall as
+     the layout viewport and the strip shortens only what can be seen (visualViewport), so the foot, with the price and Next,
+     lay under it. While the panel is open it follows what can be seen: --ppb-cut is the height hidden at the foot and
+     --ppb-top where the seen part starts (builder.css reads both, 0px when unset). They are set only for a strip: 24px or
+     more hidden, under 140px (never a keyboard) and at most 45% of the height; never while pinch-zoomed. In every other
+     case both are removed, so the panel under a keyboard, and while a keyboard is on its way out, is exactly as it was tested.
+     2026-10-12: THE POP-UPS TOO (yard guide, "How this works", the terms). Each is a dialog of its own in front of the panel, sized by
+     the same lines of builder.css, so with the strip there its foot ("Got it") lay under the strip as the panel's foot had. The same
+     rule now writes the same two properties on every pop-up that is open, and takes them off when it closes. The rule itself and
+     what it does to the panel are unchanged. */
+  var fitQueued = false, fitWatched = false;
+  function fitSheet() {
+    fitQueued = false;
+    var pops = Object.keys(ui.pops).map(function (id) { return ui.pops[id].node; });
+    var showing = ui.sheetOpen || pops.some(function (node) { return node.open; });
+    var vv = win.visualViewport, cut = 0, top = 0;
+    if (showing && vv && Math.abs(vv.scale - 1) <= .01) {
+      var hidden = Math.round(win.innerHeight - vv.height);
+      if (hidden >= 24 && hidden < 140 && hidden <= win.innerHeight * .45) { cut = hidden; top = Math.max(0, Math.min(hidden, Math.round(vv.offsetTop))); }
+    }
+    (el.sheet ? [el.sheet] : []).concat(pops).forEach(function (node) {
+      var on = cut && (node === el.sheet ? ui.sheetOpen : node.open);
+      setFit(node, "--ppb-cut", on ? cut + "px" : ""); setFit(node, "--ppb-top", on ? top + "px" : "");
+    });
+  }
+  function setFit(node, name, value) {            // written only when it changes
+    if (node.style.getPropertyValue(name) === value) return;
+    if (value) node.style.setProperty(name, value); else node.style.removeProperty(name);
+  }
+  function queueFit() { if (fitQueued) return; fitQueued = true; win.requestAnimationFrame(fitSheet); }
+  function watchFit() {                           // ONE resize and ONE scroll listener, whichever of the panel and a pop-up is built first
+    if (fitWatched || !win.visualViewport) return;
+    fitWatched = true;
+    win.visualViewport.addEventListener("resize", queueFit); win.visualViewport.addEventListener("scroll", queueFit);
+  }
   function buildSheet() {
     el.close = h("button", { class: "ppb-close", type: "button", "data-ppb-close": true, "aria-label": COPY.closeBuilder, onclick: function () { hooks.close(); } }, pic(ICON.close, 18));
     el.sheetRoot = h("div", { class: "ppb ppb--dialog" }, el.close);
@@ -2232,6 +2330,7 @@
     el.sheet.addEventListener("click", function (event) { if (event.target === el.sheet && outside) hooks.close(); });
     el.sheet.addEventListener("close", function () { if (ui.sheetOpen) stowSheet(); });
     keepFocusIn(el.sheet);
+    watchFit();                                   // FIX 2026-10-11 (fitSheet)
     doc.body.append(el.sheet);
   }
   /* where the hero card is right now, if enough of it is on screen for the panel to grow out of it */
@@ -2262,6 +2361,7 @@
     syncHero();                                   // the card behind shows the summary (or the placeholder): same outer size, the page does not move
     lockPage(true);
     el.sheet.showModal();
+    fitSheet();                                   // FIX 2026-10-11: a strip that is already there when the panel opens
     ui.owed = !way;                               // no way in yet (a launcher's own ZIP moved the engine on): onOpen names it in a moment
     if (way) store.trackUi("builder_opened", way);
     growFrom(from);
@@ -2276,6 +2376,7 @@
     cancelAuto();                                 // a tile tapped a moment before closing does not reopen the panel by moving on
     if (ui.prefer && !hasProgress(store.getState())) { ui.prefer = ""; ui.picked = ""; }   // closed with nothing answered: the plan button's preference goes with it
     ui.sheetOpen = false;
+    fitSheet();                                   // FIX 2026-10-11: closed, so both properties go
     if (el.sheet.open) el.sheet.close();
     lockPage(false);
     el.stage.remove();
@@ -2410,6 +2511,13 @@
       var moved = has(info.changed, "step"), pressed = doc.activeElement;
       ui.carried = false;
       if (info.reason === "reset") { ui.prefer = ""; ui.picked = ""; ui.kept = false; cancelAuto(); }
+      /* 2026-10-12. A new quote counts its own questions. countText() remembers for the visit which question was answered for the
+         visitor when the page loaded. A ZIP that came in the address (?zip=) is gone after Start over (and after a finished request):
+         its question is asked again and must be counted ("Step 2 of 6"), where it read "Changing an answer". A city page's own ZIP
+         comes back with the reset and stays out of the count. */
+      if (info.reason === "reset" || info.reason === "close") ui.countSkip = null;
+      if (now.zipSource === "open" || now.zipSource === "url") ui.again = "";   // a ZIP has been handed over anew: the engine holds it, nothing is offered beside it
+      if (info.reason === "close" || (info.reason === "set" && has(info.changed, "zip") && now.zip !== ui.again)) ui.again = "";   // a finished request or the visitor's replacement (even empty) ends the offer
       if (now.frequency) ui.prefer = "";
       takeNotices(now, info);
       if (moved) showStep(now, false);
@@ -2424,6 +2532,7 @@
 
     win.addEventListener("scroll", watchView, { passive: true });
     win.addEventListener("resize", function () { watchView(); ui.floor = false; syncPin(store.getState()); scheduleMore(); });   // syncPin: a window that became short, or tall again (M4)
+    if (doc.fonts && doc.fonts.addEventListener) doc.fonts.addEventListener("loadingdone", scheduleMore);   // 2026-10-12: words change width when the site's typeface arrives (placeOver)
     watchView();
 
     // [data-purge-quote], a[href="#quote"], a[href="#get-quote"], <form data-pp-zip-form>, ?open_quote=1, window.PurgeProsQuote.open({ zip })
@@ -2492,7 +2601,7 @@
   }
 
   win.PPBuilder = {
-    version: "2026-10-10a", store: store, hooks: null, ui: ui, el: el, api: api, COPY: COPY, SAY: SAY, steps: steps, city: CITY, town: TOWN,
+    version: "2026-10-12b", store: store, hooks: null, ui: ui, el: el, api: api, COPY: COPY, SAY: SAY, steps: steps, city: CITY, town: TOWN,
     registerStep: registerStep, refresh: refresh, openPop: openPop, closePop: closePop,
     open: function (openOptions) { return hooks.open(openOptions || {}, null); },
     close: function () { return hooks.close(); },

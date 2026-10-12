@@ -62,6 +62,7 @@ const CASES = [
   ["a price-list row for a combination the engine does not sell", SERVICE, sub('data-min="1" data-max="1" data-price="twice:1"', 'data-min="9" data-max="9" data-price="twice:9"'), "price list:"],
   ["two receipts with the sanitized-tools caption", SERVICE, (h) => h.replace(/<p class="receipt__text">[^<]*<\/p>/g, '<p class="receipt__text">Tools and footwear are sanitized between yards.</p>'), "say the same thing: tools are sanitized"],
   ["a review build whose footer lost its review-build line", PLAIN, (h) => h.replace(/[ \t]*<p class="foot__review">[^\n]*\n/, ""), "no review-build line"],
+  ["a header whose Text button disagrees with the site setting (taken out when it is on, marked in when it is off)", PLAIN, (h) => (/<header class="hdr hdr--text"/.test(h) ? h.replace(/[ \t]*<a class="[^"]*\bhdr__text\b[^"]*"[^>]*>[^\n]*\n/, "") : h.replace('<header class="hdr" data-hdr>', '<header class="hdr hdr--text" data-hdr>')), "Text button of the phone top bar"],
   ["a footer without its id", PLAIN, sub(' id="site-footer"', ""), 'no id="site-footer"'],
   ["a section with no accessible name", PLAIN, sub(' id="yard-guide" aria-labelledby="guide-title"', ' id="yard-guide"'), "neither aria-labelledby nor aria-label"],
   ["a gloved hero without data-mascot on the body", CITY, sub('<body data-mascot="gloved">', "<body>"), 'needs data-mascot="gloved"'],

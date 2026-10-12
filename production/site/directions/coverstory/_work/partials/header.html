@@ -19,11 +19,18 @@
       opened it, removing the class closes it (staging gate, October 9: a menu opened by its address before js/site.js
       arrived could not be closed). The inline script also notes in window.PPEarly whether the reader moved the page
       before js/site.js arrived; js/site.js reads it before it settles a page that was opened at a section.
+      THE TEXT BUTTON OF THE PHONE BAR (owner request, October 12): a.hdr__text, a navy pill that says "Text", straight
+      before the gold button. It is the same sms: link as every other Text link of the site and carries no attribute
+      of its own: js/site.js counts a press by the link's scheme and by where the link sits (inside data-hdr: "header").
+      It is in the bar only when ONE build setting says so: "headerText" in _work/partials/site.json (PP_HEADER_TEXT=1
+      or 0 sets it for one build). The same slot gives the header the class hdr--text, and every rule that makes room
+      for the pill hangs on that class (css/site.css, section 9b), so a header built without it is the header as it
+      was, byte for byte. From 1180px the bar's own "Text or call" control is there and the pill is not shown.
       After editing: node _work/build-site.mjs, then node _work/sync-kit.mjs so kit.html shows the same header. -->
 <a class="skip" href="#main">Skip to main content</a>
 
 <!-- HEADER -->
-<header class="hdr" data-hdr>
+<header class="hdr{{#headerText}} hdr--text{{/headerText}}" data-hdr>
   <div class="hdr__bar">
     <div class="wrap hdr__in">
       <a class="logo" href="index.html" aria-label="Purge Pros, pet waste removal. Home.">
@@ -75,6 +82,9 @@
           </div>
         </div>
       </div>
+{{#headerText}}
+      <a class="btn btn--secondary btn--sm hdr__text" href="sms:+13179615865">Text<span class="vh"> (317) 961-5865</span></a>
+{{/headerText}}
 {{#visitor}}
       <a class="btn btn--primary btn--sm hdr__cta" href="#quote" data-purge-quote>Get my price</a>
 {{/visitor}}

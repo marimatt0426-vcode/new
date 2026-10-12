@@ -161,6 +161,12 @@ export function fileSha1(file) {
 //                                                        exact value true turns it on, so a production build never
 //                                                        carries it by accident
 // PP_REVIEW=1 or PP_REVIEW=0 in the environment sets it for one build (and one check) without editing the file.
+//   "headerText": true                                   the phone top bar (under 1180px wide) carries a Text button straight
+//                                                        before the gold button: a.hdr__text in _work/partials/header.html,
+//                                                        and the header gets the class hdr--text (owner request, October 12)
+//   "headerText": false, or the line left out            the header without it, byte for byte as it was. Only the exact
+//                                                        value true turns it on
+// PP_HEADER_TEXT=1 or PP_HEADER_TEXT=0 in the environment sets it for one build (and one check) without editing the file.
 export function siteSettings() {
   const file = path.join(PARTIALS_DIR, "site.json");
   const json = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : {};
@@ -170,7 +176,10 @@ export function siteSettings() {
   const env = process.env.PP_REVIEW;
   if (env !== undefined && !/^[01]$/.test(env)) throw new Error(`PP_REVIEW must be 1 (a review build) or 0 (a rollout build). It is "${env}".`);
   if (json.review !== undefined && typeof json.review !== "boolean") throw new Error('_work/partials/site.json: "review" must be true (the review build) or false (rollout).');
-  return { assetsBase: base, review: env !== undefined ? env === "1" : json.review === true };
+  const text = process.env.PP_HEADER_TEXT;
+  if (text !== undefined && !/^[01]$/.test(text)) throw new Error(`PP_HEADER_TEXT must be 1 (the phone top bar carries the Text button) or 0 (it does not). It is "${text}".`);
+  if (json.headerText !== undefined && typeof json.headerText !== "boolean") throw new Error('_work/partials/site.json: "headerText" must be true (the phone top bar carries the Text button) or false (it does not).');
+  return { assetsBase: base, review: env !== undefined ? env === "1" : json.review === true, headerText: text !== undefined ? text === "1" : json.headerText === true };
 }
 
 // ---- derived pictures: assets/derived/manifest.json, written by _work/perf/derive-images.mjs ---------------------

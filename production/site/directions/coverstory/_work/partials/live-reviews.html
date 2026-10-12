@@ -1,0 +1,7 @@
+<!--# The loader of the live Google reviews feed (Trustindex), page token {{LIVE_REVIEWS}}. Added October 12, 2026: it is the
+      tag that went onto the live Reviews page on October 11 (backups/2026-10-11-log/SWITCH-LOG.md, 10:16 PM), word for word
+      as on the old site. Put the token INSIDE the element marked data-pp-live-reviews, on the same line straight before
+      its <noscript>: the widget fills the mount and the stylesheet then hides the waiting card (css/family-company.css,
+      .company-feed__mount:has(...)). The loader waits for a real mouse move or touch and for the section to be scrolled to.
+      One tag a page. A page source may not hold a <script> of its own; this file is the one place the tag is written. -->
+<script defer async src="https://cdn.trustindex.io/loader.js?85189da54a97341aff367d32a1c"></script>

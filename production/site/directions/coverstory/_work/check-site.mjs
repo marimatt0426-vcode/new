@@ -51,7 +51,7 @@ const policyPart = (from, to) => { const a = policy.indexOf(from); if (a < 0) th
 const POLICY = {
   lead: plain(policyPart("**Lead under the heading:**", "\n")),
   small: plain(policyPart("**Small print under the explainer:**", "\n")),
-  items: [...policyPart('**"How the no-start-up fee works"', "**Small print under the explainer:**").matchAll(/^- \*\*(.+?)\*\* (.+)$/gm)].map((m) => [plain(m[1]), plain(m[2])]),
+  items: [...policyPart('**"How no start-up fee works"', "**Small print under the explainer:**").matchAll(/^- \*\*(.+?)\*\* (.+)$/gm)].map((m) => [plain(m[1]), plain(m[2])]),
   short: [...policyPart("**Short forms for tight places", "\n").matchAll(/"([^"]+)"/g)].map((m) => m[1]),
 };
 if (POLICY.items.length !== 6) throw new Error("POLICY-WORDING.md: expected six explainer items, found " + POLICY.items.length);
@@ -91,6 +91,13 @@ function elementsWithAttr(html, name) {
 // ================================================================================================================
 function checkStructure(p, r) {
   const { html } = p;
+  // HOME FEED A: Reviews and Home each carry the shared loader exactly once.
+  if (p.slug === "index" || p.slug === "reviews") {
+    const loader = fs.readFileSync(path.join(PARTIALS_DIR, "live-reviews.html"), "utf8").match(/<script[^>]*src="https:\/\/cdn\.trustindex\.io\/loader\.js\?[^"]+"[^>]*><\/script>/);
+    const n = loader ? html.split(loader[0]).length - 1 : 0;
+    if (n !== 1) r.fail("Google reviews loader: expected once on " + p.slug + ", found " + n);
+    if (p.slug === "index" && !html.includes('class="rfeed__src"')) r.fail("Home Google reviews source line missing");
+  }
   const heads = [...html.matchAll(/<h([1-6])\b/g)].map((m) => Number(m[1]));
   const h1 = heads.filter((h) => h === 1).length;
   if (h1 !== 1) r.fail(`the page has ${h1} h1 headings; it must have exactly one (the hero's headline)`);
@@ -128,6 +135,15 @@ function checkStructure(p, r) {
     const review = siteSettings().review, line = /class="foot__review"|Review build\./.test(html);
     if (!review && line) r.fail('the page carries the review-build line ("Review build. Nothing on this page is sent anywhere...") but the site setting "review" (_work/partials/site.json) is not true; a rollout page never prints it. Build the page again');
     if (review && !line && /\sid="site-footer"/.test(html)) r.fail('the footer has no review-build line although "review" is true in _work/partials/site.json; build the page again');
+  }
+  // The Text button of the phone top bar is in every header or in none ("headerText": true in _work/partials/site.json).
+  // With it the header carries the class hdr--text and ONE a.hdr__text: the site's text link, straight before the gold button.
+  {
+    const want = siteSettings().headerText, head = (/<header class="hdr[^"]*" data-hdr>[\s\S]*?<\/header>/.exec(html) || [""])[0];
+    const pills = head.match(/<a\b[^>]*\bclass="[^"]*\bhdr__text\b[^"]*"[^>]*>/g) || [], marked = /<header class="hdr[^"]*\bhdr--text\b/.test(head);
+    if (head && !want && (pills.length || marked)) r.fail('the header carries the Text button of the phone top bar (hdr__text, hdr--text) but the site setting "headerText" (_work/partials/site.json) is not true; build the page again');
+    if (head && want && (pills.length !== 1 || !marked)) r.fail('"headerText" is true in _work/partials/site.json but the header does not carry the Text button of the phone top bar (one a.hdr__text, and the class hdr--text on the header); build the page again');
+    if (head && want && pills.length === 1 && (!/\shref="sms:\+13179615865"/.test(pills[0]) || !/<a\b[^>]*\bhdr__text\b[^>]*>Text<span class="vh"> \(317\) 961-5865<\/span><\/a>\s*<a\b[^>]*\bhdr__cta\b/.test(head))) r.fail('the Text button of the phone top bar must be the site\'s text link (sms:+13179615865), read "Text" with the number for screen readers, and stand straight before the gold button (partials/header.html)');
   }
   const ids = idsOf(html), dup = [...new Set(ids.filter((v, i) => ids.indexOf(v) !== i))];
   if (dup.length) r.fail("the same id is used twice: " + dup.join(", "));
@@ -435,7 +451,7 @@ function checkWording(p, r) {
       if (got[1] !== want[1]) r.fail(`explainer item ${i + 1} differs from POLICY-WORDING.md: "${got[1]}"`);
     });
     if (/<h3|faq__/.test(block[0])) r.fail("the explainer must not be an FAQ entry");
-    if (!text.includes("How the no-start-up fee works")) r.fail("the explainer title is missing");
+    if (!text.includes("How no start-up fee works")) r.fail("the explainer title is missing");
     if (!text.includes(POLICY.short[1])) r.fail(`the explainer sub-line is missing: "${POLICY.short[1]}"`);
     for (const must of ["$89.99", "first 30 minutes", "$1 per minute", "two hours (120 minutes)", "when we text that we are on the way"]) if (!text.includes(must)) r.fail("a figure or timing of the rule is missing beside the explainer: " + must);
   }
@@ -618,7 +634,7 @@ async function browserPass(results) {
   const jobs = results.flatMap((res) => SIZES.map(([name, flags]) => ({ res, name, flags })));
   let next = 0;
   const worker = async () => { while (next < jobs.length) { const job = jobs[next]; next += 1; job.out = await loadInBrowser(job.res.p, job.name, job.flags); } };
-  await Promise.all(Array.from({ length: Math.min(4, jobs.length) }, worker));
+  await Promise.all(Array.from({ length: Math.min(1, jobs.length) }, worker));
   for (const res of results) res.info.browser = jobs.filter((j) => j.res === res).map((j) => readBrowserReport(res.r, j.out)).filter(Boolean).join(", ");
 }
 

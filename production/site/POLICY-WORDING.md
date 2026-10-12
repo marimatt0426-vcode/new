@@ -20,11 +20,11 @@ Public edition: the rule and the approved wording, word for word. The engine tes
 
 **Lead under the heading:** New recurring customers pay no start-up fee. Your first cleanup costs the same as every visit after it, even when the yard has built up.
 
-**"How the no-start-up fee works" (the titled explainer; never an FAQ entry):**
+**"How no start-up fee works" (the titled explainer; never an FAQ entry):**
 
 - **Starting recurring service?** Your first cleanup is billed at your regular per-visit price, with up to two hours (120 minutes) of cleanup included. Every scheduled visit after that is the same price.
-- **What if my yard needs more than two hours?** Very few do. If yours looks like it will, we tell you before we start and agree the extra time with you first, at $1 per minute. Nothing extra is billed without your OK.
-- **Coming back after a break?** The no-start-up-fee first cleanup is for households new to Purge Pros. A restart cleanup is your regular visit price for the first 30 minutes, then $1 per minute. We confirm it with you before you approve anything.
+- **What if my yard needs more than two hours?** Very few do. If yours looks like it will, we tell you before we start and agree on the extra time with you first, at $1 per minute. Nothing extra is billed without your OK.
+- **Coming back after a break?** No start-up fee is for households new to Purge Pros. A restart cleanup is your regular visit price for the first 30 minutes, then $1 per minute. We confirm it with you before you approve anything.
 - **One-time cleanup?** $89.99 covers the first 30 minutes, then $1 per minute.
 - **When you pay.** Your card is charged when we text that we are on the way. Any extra minutes are invoiced after the visit. Regular scheduled visits are never charged by the minute.
 - **Stopping.** No minimum number of visits, no cancellation fee, nothing to pay back. Full details are in the Terms & Conditions.

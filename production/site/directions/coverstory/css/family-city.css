@@ -127,7 +127,8 @@
 .city-also { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 15px; line-height: 1.45; color: var(--ink-700); }
 .city-also img { width: 30px; height: 30px; flex: none; }
 .city-near--hub .city-chips { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-.city-near--hub .city-chips > li:last-child { grid-column: 1 / -1; }   /* "You are here" and 20 towns are seven rows of three; "All service areas" closes the board on its own row */
+.city-near--hub .city-chips > li:first-child { grid-column: span 2; }   /* "You are here" takes two cells: with the 25 towns that is nine full rows of three */
+.city-near--hub .city-chips > li:last-child { grid-column: 1 / -1; }   /* "All service areas" closes the board on its own row */
 .city-near--hub .chip { justify-content: center; padding: 6px 6px; font-size: 14px; text-align: center; }
 .city-near--hub .chip img { display: none; }
 .city-chip--here { background: var(--gold); box-shadow: none; font-weight: 700; }

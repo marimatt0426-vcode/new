@@ -597,6 +597,46 @@ img[src*="-icons/"] { object-fit: contain; }
   .hdr__tel span small { display: none; }
   .hdr__tel .caret { display: none; }
 }
+/* 9b. THE TEXT BUTTON OF THE PHONE BAR (owner request, October 12) ---------- */
+/* One build setting puts it in: "headerText" in _work/partials/site.json. The header then carries the class hdr--text
+   and, straight before the gold button, a navy pill that says "Text" (a.hdr__text: the site's sms: link; the number
+   is read out, not shown). Navy, because Text is the navy one of every Text and Call pair on the site; the price
+   button stays the only gold thing in the bar. From 1180px the bar's own "Text or call" control is there and the
+   pill is not. EVERY rule here hangs on .hdr--text, so a header built without the button is drawn as before.
+   Room. A phone's bar was full, so the lockup and the price button pay for the pill, and nothing is ever cut:
+     444px and wider   everything at its own size (the lockup 44px with its tagline, the price button as it was)
+     430 to 443px      the two buttons tighten (16px type); the lockup is still whole
+     360 to 429px      the buttons tighten once more (15.5px type, 6px between the controls) and the lockup takes
+                       exactly the width that is left: its height follows the window, 30px at 360 to 44px from 417
+                       (4.13 is the lockup's width for 1px of its height, 234.5px what the rest of the bar needs).
+                       The tagline is set to the wordmark's width by its tracking and shows from 390px; under that
+                       the lockup is the mark and the wordmark, as it already was on the narrowest phones
+     under 360px       the mark alone, at its full 44px: no size of the wordmark that can be read fits beside
+                       three controls (the link keeps its name for screen readers) */
+.hdr--text .hdr__text.btn { flex: none; min-width: 44px; min-height: 44px; padding-inline: 10px; font-size: 17px; }
+@media (max-width: 443.98px) {
+  .hdr--text .hdr__cta.btn { padding-inline: 9px; font-size: 16px; }
+  .hdr--text .hdr__text.btn { padding-inline: 8px; font-size: 16px; }
+}
+@media (max-width: 429.98px) {
+  .hdr--text .hdr__in { --hdr-gap: 6px; }
+  .hdr--text .logo {
+    --logo-h: clamp(30px, calc((100vw - 234.5px) / 4.13), 44px);
+    --logo-tag-ls: min(.145em, calc((var(--logo-h) * 3.0239 - 107px) / 17));
+    gap: calc(var(--logo-h) * .16);
+  }
+  .hdr--text .hdr__cta.btn { padding-inline: 8px; font-size: 15.5px; }
+  .hdr--text .hdr__text.btn { padding-inline: 7.5px; font-size: 15.5px; }
+}
+@media (max-width: 389.98px) { .hdr--text .logo__tag { display: none; } }
+@media (max-width: 359.98px) {
+  .hdr--text .hdr__in { --hdr-gap: 8px; }
+  .hdr--text .logo { --logo-h: 44px; }
+  .hdr--text .logo__text { display: none; }
+  .hdr--text .hdr__cta.btn, .hdr--text .hdr__text.btn { padding-inline: 10px; font-size: 16px; }
+}
+@media (min-width: 700px) { .hdr--text .hdr__text.btn { min-height: 48px; padding-inline: 18px; font-size: 20px; } }
+@media (min-width: 1180px) { .hdr--text .hdr__text { display: none; } }
 /* static copies for the kit */
 .hdr--demo { position: relative; z-index: 1; }
 .hdr--demo .hdr__bar { position: relative; box-shadow: var(--sh-1); border-radius: 14px; }
@@ -1591,6 +1631,44 @@ a.chip u { text-decoration-color: var(--cyan); text-decoration-thickness: 2px; t
   .rfeed--empty .rfeed__themes { padding: 30px 32px 32px; }
   .rfeed--empty .rfeed__themes .ilist { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 26px; }
 }
+
+/* HOME FEED A: three across, only after review cards arrive. */
+.rfeed__feed { position: relative; }
+.rfeed__feed > .ti-widget:not(:has(.ti-review-item)) { position: absolute; top: 0; left: 0; width: 100%; visibility: hidden; pointer-events: none; }
+/* the stand-in (badge, stars, one line) steps aside when the feed has arrived; until then, and if the feed never
+   comes, the frame is exactly the frame that is live today */
+.rfeed__feed:has(> .ti-widget .ti-review-item) > .rfeed__empty { display: none; }
+.rfeed__src { display: none; font-size: 14px; line-height: 1.5; color: var(--ink-500); text-align: center; }
+.rfeed:has(.ti-widget .ti-review-item) .rfeed__src { display: block; }
+.rfeed:has(.ti-widget .ti-review-item) .rfeed__main { justify-items: stretch; align-content: start; }
+.rfeed:has(.ti-widget .ti-review-item) .rfeed__feed { min-height: 0; }
+
+.rfeed:has(.ti-widget .ti-review-item) { grid-template-columns: minmax(0, 1fr); }
+.rfeed:has(.ti-widget .ti-review-item) .rfeed__themes { border-radius: 0 0 28px 28px; }
+@media (min-width: 700px) {
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__main { grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 24px; }
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__say, .rfeed:has(.ti-widget .ti-review-item) .rfeed__feed { grid-column: 1 / -1; }
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__src { text-align: left; }
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__more { justify-self: end; }
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__themes .ilist { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
+}
+@media (min-width: 900px) {
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__main { padding: 34px 36px 30px; row-gap: 18px; }
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__themes { padding: 30px 36px 34px; }
+}
+@media (min-width: 1100px) {   /* the four themes share one row, icon above, as on the Reviews page */
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__themes .ilist { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+  .rfeed:has(.ti-widget .ti-review-item) .rfeed__themes .ilist li { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+}
+
+.rfeed .ti-widget .ti-widget-container:not(.ti-col-1) .ti-column > .ti-review-item:nth-child(n+2),
+.rfeed .ti-widget .ti-widget-container.ti-col-1 .ti-column > .ti-review-item:nth-child(n+3) { display: none !important; }
+.rfeed .ti-widget .ti-load-more-reviews-container { display: none !important; }
+.rfeed .ti-widget .ti-reviews-container-wrapper { align-items: stretch; }
+.rfeed .ti-widget .ti-column { display: flex; flex-direction: column; }
+.rfeed .ti-widget .ti-column > .ti-review-item { display: flex; flex: 1 1 auto; }
+.rfeed .ti-widget .ti-widget-container.ti-col-1 .ti-column > .ti-review-item { flex: 0 0 auto; }
+.rfeed .ti-widget .ti-column > .ti-review-item > .ti-inner { flex: 1 1 auto; }
 
 /* 33. PRICE BOARD ADDITIONS: the dog picker, phone "pick and see", reasons, adders, worked example */
 /* The rail rows are buttons. Desktop: the ladder at the left; a click lights that row across the three plans.

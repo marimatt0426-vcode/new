@@ -1,5 +1,5 @@
 {
- "note": "All 46 Yard Guide posts, in live index order. cover = full size (1536x1024) for an article page or a large feature; thumb = 720x480 for cards and grids (use thumbs wherever a cover is shown smaller than 720 CSS px wide). categoryOrder is the live filter order.",
+ "note": "All 49 Yard Guide posts, in live index order. cover = full size (1536x1024) for an article page or a large feature; thumb = 720x480 for cards and grids (use thumbs wherever a cover is shown smaller than 720 CSS px wide). categoryOrder is the live filter order.",
  "categoryOrder": [
   "Yard Care",
   "Property Guides",
@@ -7,6 +7,39 @@
   "Seasonal Yard Care"
  ],
  "posts": [
+  {
+   "slug": "wet-lawn-irrigation-timing-dog-waste-cleanup",
+   "title": "Wet Lawn, Working Sprinklers: Coordinate Yard Access Without Promising a Dry Visit",
+   "category": "Yard Care",
+   "description": "Coordinate sprinkler cycles, wet paths, and dog-waste pickup access without promising that a yard will be dry by service time.",
+   "alt": "A backyard seen from above with two sprinklers running, a clock, a dotted path to the gate, and the Purge Pros mascot checking a clipboard.",
+   "publicUrl": "https://blog.itspurgepros.com/post/wet-lawn-irrigation-timing-dog-waste-cleanup",
+   "cover": "assets/covers/by-slug/wet-lawn-irrigation-timing-dog-waste-cleanup.jpg",
+   "exists": true,
+   "thumb": "assets/covers/thumbs/wet-lawn-irrigation-timing-dog-waste-cleanup.jpg"
+  },
+  {
+   "slug": "construction-debris-vs-dog-waste-cleanup-scope",
+   "title": "Construction Debris or Dog Waste? Set the Cleanup Scope Before Service",
+   "category": "Property Guides",
+   "description": "Separate dog-waste pickup from construction debris, landscaping materials, and project access before a cleanup visit.",
+   "alt": "Purge Pros mascot holding a paw-print flag on a lawn, with a dashed line dividing the lawn from lumber, soil, mulch bags and a wheelbarrow.",
+   "publicUrl": "https://blog.itspurgepros.com/post/construction-debris-vs-dog-waste-cleanup-scope",
+   "cover": "assets/covers/by-slug/construction-debris-vs-dog-waste-cleanup-scope.jpg",
+   "exists": true,
+   "thumb": "assets/covers/thumbs/construction-debris-vs-dog-waste-cleanup-scope.jpg"
+  },
+  {
+   "slug": "narrow-side-yards-separate-dog-use-zones",
+   "title": "Narrow Side Yards and Separate Dog Zones: Describe the Scope Clearly",
+   "category": "Property Guides",
+   "description": "Explain narrow side yards and separate dog-use zones with practical scope notes for surfaces, gates, measurements and included sections.",
+   "alt": "Purge Pros mascot holding a yard map beside a side yard, a dog run and a lawn marked with blue check marks, and a planting bed marked with a red X.",
+   "publicUrl": "https://blog.itspurgepros.com/post/narrow-side-yards-separate-dog-use-zones",
+   "cover": "assets/covers/by-slug/narrow-side-yards-separate-dog-use-zones.jpg",
+   "exists": true,
+   "thumb": "assets/covers/thumbs/narrow-side-yards-separate-dog-use-zones.jpg"
+  },
   {
    "slug": "compare-per-visit-monthly-dog-waste-quotes",
    "title": "Per-Visit or Monthly Quote? How to Compare the Math Fairly",

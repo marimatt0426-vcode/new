@@ -410,7 +410,7 @@ function guideCards(page, list) {
     if (!fs.existsSync(file)) throw new PageError(page.slug, `{{GUIDE_CARDS}}: the cover ${cover} for "${slug}" does not exist.`);
     const size = imageSize(file);
     return render(block("guide-cards", "card"), { url: post.publicUrl, ribbonClass: ["", " ribbon--cyan", " ribbon--navy"][i], ribbon: esc(o.ribbon || sentenceCase(post.category)),
-      cover, w: size.width, h: size.height, alt: esc(o.alt || post.alt), title: esc(o.title || post.title), text: esc(o.text || (GUIDE_WORDING[slug] || {}).text || post.description), more: esc(o.more || "Read the guide") }, where);
+      cover, w: size.width, h: size.height, alt: esc(o.alt || (GUIDE_WORDING[slug] || {}).alt || post.alt), title: esc(o.title || post.title), text: esc(o.text || (GUIDE_WORDING[slug] || {}).text || post.description), more: esc(o.more || "Read the guide") }, where);
   });
   return render(block("guide-cards", "grid"), { cards: cards.join("\n") }, where);
 }
@@ -429,6 +429,7 @@ const TOKENS = {
   EXPLAIN_OPEN: () => partial("explain").replace("{{OPEN}}", () => " open"),
   MAP: () => partial("map"),
   AREA_CHIPS: () => partial("area-chips"),
+  LIVE_REVIEWS: () => partial("live-reviews"),   // the loader tag of the live Google reviews feed; inside the element marked data-pp-live-reviews (October 12, 2026)
   GUIDE_CARDS: (page, arg) => guideCards(page, arg || ""),
   BUILDER_MOUNT: (page) => {
     if (WITH_BUILDER.includes(page.meta.hero.recipe)) throw new PageError(page.slug, `{{BUILDER_MOUNT}}: the "${page.meta.hero.recipe}" hero already carries the price builder; a page has one mount.`);
@@ -654,6 +655,7 @@ function buildPage(page) {
     canonical: noindex ? "" : `<link rel="canonical" href="${canonicalOf(page)}">`,   // a page kept out of search names no canonical
     social, visitor: customer ? "" : "1", customer: customer ? "1" : "", portal: PORTAL_HREF, standinAsOf: STANDIN ? esc(STANDIN.asOf || "") : "",
     reviewBuild: SETTINGS.review ? "1" : "",                  // the footer's "Review build." line: only when site.json says "review": true
+    headerText: SETTINGS.headerText ? "1" : "",               // the Text button of the phone top bar: only when site.json says "headerText": true
     robots: robots ? `<meta name="robots" content="${esc(robots)}">` : "",
     preloads, stylesheets: (meta.css || []).map((f) => `<link rel="stylesheet" href="${f}">`).join("\n"),
     scripts: (meta.scripts || []).map((f) => `<script src="${f}" defer></script>`).join("\n"),
@@ -810,6 +812,9 @@ if (rows.length) console.log(SETTINGS.assetsBase
 if (rows.length) console.log(SETTINGS.review
   ? `Review build: every footer ends with the line "Review build. Nothing on this page is sent anywhere." ("review": true in _work/partials/site.json). For rollout set it to false and build again.`
   : `ROLLOUT build: no page carries the "Review build." line ("review" is not true in _work/partials/site.json).`);
+if (rows.length) console.log(SETTINGS.headerText
+  ? `Phone top bar: WITH the Text button ("headerText": true in _work/partials/site.json, or PP_HEADER_TEXT=1). Build every page with the same setting before packaging.`
+  : `Phone top bar: without the Text button ("headerText" is not true in _work/partials/site.json).`);
 if (args.includes("--min") && !mine.length) {
   const made = writeMinified(), kb = (n) => (n / 1024).toFixed(1).padStart(7) + " KB", sum = (k, kind) => made.filter((r) => !kind || r.kind === kind).reduce((n, r) => n + r[k], 0);
   console.log("\nMinified copies for rollout, in assets/derived/min/ (whitespace and comments only; nothing renamed):\n" + made.map((r) => `  ${r.name.padEnd(24)} ${kb(r.before)}  ->  ${kb(r.after)}   ${String(Math.round(100 - 100 * r.after / r.before)).padStart(2)}% smaller   ${r.written ? "written" : "unchanged"}`).join("\n"));

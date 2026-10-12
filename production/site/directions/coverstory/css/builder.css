@@ -537,15 +537,22 @@
 /* the same builder as a sheet (phone) or dialog (desktop), opened by any [data-purge-quote] control.
    A native <dialog>: top layer, the page behind inert, Escape handled, focus kept inside. */
 dialog.ppb-sheet, dialog.ppb-pop {
-  position: fixed; inset: 0; width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden;
+  position: fixed; inset: var(--ppb-top, 0px) 0 calc(var(--ppb-cut, 0px) - var(--ppb-top, 0px)) 0; width: 100vw; max-width: none; height: calc(100dvh - var(--ppb-cut, 0px)); max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden;
   background: rgba(1, 20, 36, .62); color: inherit;
 }
+/* FIX 2026-10-11. Chrome on Android can leave its own strip (saved passwords) at the foot of the screen after the keyboard has
+   gone. It shortens only what can be seen, so the foot of the panel, with the price and Next, lay under it. builder.js (fitSheet)
+   sets --ppb-cut (the height hidden at the foot) and --ppb-top (where the seen part starts) on the open panel, and the panel is
+   then exactly as tall as what can be seen. Both are unset in every other case: 0px, and every size here is what it was.
+   2026-10-12: a pop-up (yard guide, "How this works", the terms) is a dialog of its own in front of the panel and is sized by the
+   rule above, so fitSheet now writes the same two properties on an open pop-up, and .ppb-pop__panel takes --ppb-cut off its
+   greatest height: "Got it" stays above the strip. Unset, as everywhere but under a strip, the pop-up is what it was. */
 dialog.ppb-sheet::backdrop, dialog.ppb-pop::backdrop { background: transparent; }
 dialog.ppb-sheet:not([open]), dialog.ppb-pop:not([open]) { display: none; }
 dialog.ppb-sheet[open], dialog.ppb-pop[open] { display: flex; align-items: flex-end; justify-content: center; }
 .ppb-sheet { position: fixed; inset: 0; z-index: 95; display: none; align-items: flex-end; justify-content: center; background: rgba(1, 20, 36, .62); }
 .ppb-sheet.is-open { display: flex; }
-.ppb-sheet .ppb { width: 100%; --ppb-h: calc(100dvh - 12px); --ppb-head-clear: 44px; }
+.ppb-sheet .ppb { width: 100%; --ppb-h: calc(100dvh - 12px - var(--ppb-cut, 0px)); --ppb-head-clear: 44px; }
 .ppb-sheet .ppb-stage { border-radius: 26px 26px 0 0; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
 @keyframes ppb-rise { from { transform: translateY(28px); } to { transform: none; } }
 dialog.ppb-sheet[open] .ppb, dialog.ppb-pop[open] .ppb-pop__panel { animation: ppb-rise .26s var(--ease); }
@@ -557,7 +564,7 @@ dialog.ppb-sheet[open] .ppb, dialog.ppb-pop[open] .ppb-pop__panel { animation: p
 @media (hover: hover) { .ppb-close:hover { background: var(--cyan-050); } }
 @media (min-width: 700px) {
   .ppb-sheet, dialog.ppb-sheet[open], dialog.ppb-pop[open] { align-items: center; padding: 24px; }
-  .ppb-sheet .ppb { width: 560px; --ppb-h: min(780px, calc(100dvh - 48px)); --ppb-head-clear: 46px; }
+  .ppb-sheet .ppb { width: 560px; --ppb-h: min(780px, calc(100dvh - 48px - var(--ppb-cut, 0px))); --ppb-head-clear: 46px; }
   .ppb-sheet .ppb-stage { border-radius: 28px; padding-bottom: 18px; }
   .ppb-close { right: 14px; top: 14px; }
 }
@@ -668,7 +675,7 @@ html.ppb-lock body { padding-right: var(--ppb-sbw, 0px); }
 
 /* pop-ups: the yard guide and "How this works" -------------------------------- */
 .ppb-pop__panel {
-  position: relative; width: 100%; max-height: calc(100dvh - 20px); overflow-y: auto; overscroll-behavior: contain; padding: 20px 16px calc(16px + env(safe-area-inset-bottom));
+  position: relative; width: 100%; max-height: calc(100dvh - 20px - var(--ppb-cut, 0px)); overflow-y: auto; overscroll-behavior: contain; padding: 20px 16px calc(16px + env(safe-area-inset-bottom));
   border-radius: 26px 26px 0 0; background: #fff; color: var(--ink-700); box-shadow: var(--sh-3); font-family: var(--f-text); text-align: left;
 }
 .ppb-pop__kicker { font: 700 13px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700); padding-right: 48px; }
@@ -693,7 +700,7 @@ html.ppb-lock body { padding-right: var(--ppb-sbw, 0px); }
 .ppb-guide__table tr.is-selected { background: var(--cyan-050); }
 .ppb-guide__table tr.is-selected th { box-shadow: inset 4px 0 0 var(--cyan); }
 @media (min-width: 700px) {
-  .ppb-pop__panel { width: 560px; max-height: calc(100dvh - 48px); padding: 26px 28px 24px; border-radius: 28px; }
+  .ppb-pop__panel { width: 560px; max-height: calc(100dvh - 48px - var(--ppb-cut, 0px)); padding: 26px 28px 24px; border-radius: 28px; }
   .ppb-pop__title { font-size: 34px; }
   .ppb-pop__body { font-size: 16px; }
 }
@@ -1051,6 +1058,30 @@ html.ppb-lock body { padding-right: var(--ppb-sbw, 0px); }
 }
 @media (hover: hover) { .ppb-over:hover { color: var(--navy); text-decoration-color: var(--cyan); } }
 .ppb-over:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 2px; border-radius: 8px; }
+/* START OVER IN THE PANEL (2026-10-12). The same quiet button as the summary's, at the end of the question row on the plan questions
+   and the price, where a later screen shows its icon. It is out of the row's flow, so no question, hint or answer moves by a pixel.
+   Its 44px of touch height starts at the row's top edge (clear of the chips above) and its words sit level with the question.
+   When the question's words reach that far, builder.js (placeOver) marks the stage data-ppb-has-over="low": the button then stands
+   at the foot of the row, its words level with the hint, and the hint keeps clear of it. The question itself is never narrowed.
+   Never in the hero card: that card has the summary's own button. */
+.ppb-over--panel { position: absolute; z-index: 2; right: -4px; top: 0; display: inline-flex; align-items: flex-start; padding-top: 6px; }
+.ppb-over--panel[hidden], .ppb:not(.ppb--dialog) .ppb-over--panel { display: none; }
+[data-ppb-has-over="low"] .ppb-over--panel { top: auto; bottom: 0; align-items: flex-end; padding-top: 0; }
+.ppb--dialog [data-ppb-has-over="low"] .ppb-hint { padding-right: 84px; }
+@media (min-width: 700px) {
+  .ppb-over--panel { padding-top: 13px; }
+  .ppb--dialog [data-ppb-has-over="low"] .ppb-hint { padding-right: 96px; }
+}
+/* a phone on its side: the question and its hint share one 27px line there, so the button's 44px reach 9px above the line (never
+   over a chip: the chips are at the other end of the band) and stop short of the answers; the whole row keeps clear of it. Its
+   words start 7px under the row's top edge, which is where a heads-up note ends in this layout. */
+@media (min-width: 700px) and (max-height: 600px) {
+  .ppb-over--panel, [data-ppb-has-over="low"] .ppb-over--panel { top: -9px; bottom: auto; align-items: flex-start; padding-top: 16px; }
+  .ppb--dialog [data-ppb-has-over] .ppb-qrow { padding-right: 96px; }
+  .ppb--dialog [data-ppb-has-over="low"] .ppb-hint { padding-right: 0; }
+  /* a heads-up note reaches down to this line in this layout: the button waits until "Got it" has put the head back */
+  .ppb--dialog .ppb-stage:has(.ppb-headsup:not([hidden])) .ppb-over--panel { display: none; }
+}
 .ppb-hero .ppb-next { min-width: 132px; }
 @media (min-width: 700px) {
   .ppb-hero__body { gap: 13px; padding-top: 24px; }      /* clears the names under the bars */
@@ -1267,7 +1298,7 @@ dialog.ppb-sheet:focus, dialog.ppb-sheet:focus-visible { outline: none; }
    options area keeps a usable height. The questions scroll inside it there; no window this short can show them whole. ---- */
 @media (min-width: 700px) and (max-height: 600px) {
   .ppb-sheet, dialog.ppb-sheet[open], dialog.ppb-pop[open] { padding: 6px; }
-  .ppb-sheet .ppb { width: min(760px, calc(100vw - 12px)); --ppb-h: calc(100dvh - 12px); }
+  .ppb-sheet .ppb { width: min(760px, calc(100vw - 12px)); --ppb-h: calc(100dvh - 12px - var(--ppb-cut, 0px)); }
   .ppb-sheet .ppb-stage { padding: 10px 16px 10px; border-radius: 22px; }
   .ppb--dialog .ppb-stage::before { height: 66px; }
   .ppb--dialog .ppb-head { min-height: 44px; gap: 12px; }
