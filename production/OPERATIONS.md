@@ -25,11 +25,13 @@ The blocks are the **production profile**: live mode, the live quote Worker's ad
 
 ### The hosted files' folder and the switch day
 
-Every hosted address in the blocks reads `https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-20261012/...`.
+Every hosted address in the blocks reads `https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-20261013/...`.
 
 The first folder, `v5-20261011`, carried the switch day, October 11, 2026, and went live that day. The day was set on the evening of October 10, 2026 in the owner's private workspace, where the picture masters and the legal-text tools are, together with the two other things that waited for it: the Terms version label a service request records (`site/shared/terms-version.json`: `2026-10-11-no-start-up-fee`, `switchDay` `2026-10-11`) and the publication date line of the Terms and the Privacy Policy. Both are unchanged since.
 
 On October 12, 2026 a corrected set of hosted files was uploaded beside the first as `v5-20261012` (441 files: the price builder with "Start over", two stylesheets and three Yard Guide thumbnails are new or changed, everything else is byte for byte the first folder), and the blocks that changed were pasted, published and checked on the public pages. One file of the new folder, the price builder's script, was replaced about ninety minutes after the upload, before any public page named the folder. Twelve blocks differ from the October 11 set in the folder name only and were not pasted again; the live website serves their October 11 text, which loads the same bytes from `v5-20261011`: `pages/page-not-found.html`, `privacy-policy.html`, `terms-conditions.html`, the page-data files of `additional`, `dog-waste-removal` and `indianapolis`, `shared/site-head.html`, `site-body.html`, the two bridge files, and the blog's own head and body code. Both folders stay on the file host. The result was copied here again, the manifest updated and the tests run.
+
+On October 13, 2026 a third folder, `v5-20261013`, was uploaded beside the two (452 files: the price builder `2026-10-13c`, the price engine, two stylesheets and eleven thumbnails of scheduled Yard Guide posts are new or changed), the quote Worker of this tree was deployed first, and then the 20 blocks that changed or that load a changed file were pasted, published and checked on the public pages: the shared header and footer, Welcome with its own header and footer, Carmel, Indianapolis, About, Additional, Dog Waste Removal, FAQ, and both blog templates. The other 44 blocks differ from the live ones in the folder name only and were not pasted again; the live website serves their earlier text, which loads the same bytes from `v5-20261012` or `v5-20261011`. All three folders stay on the file host.
 
 Before the day was set the folder read `v5-DATE`, a placeholder and not a real address. **A block that says `v5-DATE` must not be pasted**; `npm test` prints the placeholder whenever one is in use. A folder that is on the file host is never overwritten: a corrected set of hosted files gets a new name, with a letter after the day.
 
@@ -64,13 +66,13 @@ The hosted files are uploaded beside the files already live, never in place of t
 
 `website/blog/prepared/`, `published-cards.json` and `refresh-index.mjs` make the September index. After the switch the index is the Yard Guide page of the rebuilt site (`website/blog/blocks/`, made from `site/directions/coverstory/yard-guide.html` and `site/assets/covers/covers.json`), and the September index must not be pasted again. The September tools stay in the tree until the owner retires them. `validate-prep.mjs` no longer requires the blog head code to load `purge-quote.js`.
 
-## Optional referral request detail (prepared; not deployed)
+## Optional referral request detail (live since October 13, 2026)
 
 The compatible Worker forwards a nonempty string `referredBy` after removing C0/C1 controls and line separators, trimming and cutting to 60 UTF-16 units. Absent, blank and non-string values add no key and never invalidate an otherwise valid request. Existing validation, pricing, fingerprint/ledger, saved plans, attribution and Meta are unchanged. The previous Worker accepts but drops unknown keys, so deploy this Worker before builder 2026-10-13a. The team sees the name without any workflow change: when a name was given, the Worker's team summary (`quoteSummary`, which the intake workflow already prints in the contact note, the owner text and the tasks) gains one line under the customer history line, `Who sent them (as typed by the customer, not verified): <name>`; without a name the summary is byte for byte as before. A contact field for the value is optional and would be mapped from the top-level key. No live workflow is changed by this source patch. The current regression pins the exact approved forward-source additions and compares all old keys and Meta outputs; manifest provenance must be refreshed with production/update-manifest.mjs after npm run build.
 
 ## Quote build
 
-State of the checked-in bundle: a prepared candidate, locally tested, not deployed. The live Worker is still the October 5 release until the owner approves a deployment; that release is kept byte for byte as `quote/tests/fixtures/2026-10-05-live-worker.mjs` (SHA-256 `113ce3be...a95c`).
+State of the checked-in bundle: deployed on October 13, 2026 with the owner's approval (ZIP 46290, the optional referral detail, the read-only request status); before it the October 11 candidate was live. The October 5 release stays in the tree as the regression reference, byte for byte, as `quote/tests/fixtures/2026-10-05-live-worker.mjs` (SHA-256 `113ce3be...a95c`).
 
 `quote/build.mjs` inserts `quote/src/launcher.js` into the Worker template as a JSON string literal. The candidate carries the owner decisions of October 5 to 9, 2026:
 
