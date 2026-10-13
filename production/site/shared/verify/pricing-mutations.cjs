@@ -10,7 +10,7 @@ module.exports = [
   ["custom sticks after its reason has gone", "if (customNeededBefore && !customNeededNow) {", "if (false) {"],
   ["reconciliation notices dropped", "if (reconciled.notice) result.notices.push(reconciled.notice);", ""],
   ["a ZIP removed from the list", '"46016", "46032", "46033", "46034",', '"46016", "46033", "46034",'],
-  ["a ZIP added to the list", '"46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280"\n  ];', '"46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280", "46201"\n  ];'],
+  ["a ZIP added to the list", '"46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280", "46290"\n  ];', '"46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280", "46290", "46201"\n  ];'],
   ["ZIP not checked in the plan", 'if (!zip.inArea) {\n      errors.push({ field: "zip", step: "zip"', 'if (false) {\n      errors.push({ field: "zip", step: "zip"'],
   ["save link allowed for an incomplete plan", "const problems = planErrors(state, labels);\n      if (problems.length) {\n        // Never a save link", "const problems = planErrors(state, labels);\n      if (false) {\n        // Never a save link"],
   ["teaser shown for 6 dogs", "if (Number(state.dogCount) >= 6) return null;", "if (Number(state.dogCount) >= 7) return null;"],

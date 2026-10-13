@@ -104,6 +104,7 @@
     "https://purge-quote.purgepros.workers.dev"
   ];
 
+  const REQUEST_STATUS_TIMEOUT_MS = 4000; // One optional check; sending continues on failure.
   const SUBMIT_TIMEOUT_MS = 15000; // spec 4.5.2 step 6
   const SAVE_LINK_TIMEOUT_MS = 12000; // spec 8.1
 
@@ -314,7 +315,7 @@
 
   /* ======================================================================
    * 4. SERVICE AREA
-   *    The 53 accepted ZIPs (spec 5.1). This list must stay identical to
+   *    The 54 accepted ZIPs (spec 5.1). This list must stay identical to
    *    CONFIG.serviceZips in the live widget and SERVICE_ZIPS in the Worker;
    *    the tests compare all three. No request and no save link is ever made
    *    for a ZIP outside it (spec 17.1 item 6).
@@ -326,7 +327,7 @@
     "46064", "46074", "46075", "46077", "46112", "46113", "46122", "46123", "46140",
     "46142", "46143", "46158", "46163", "46167", "46168", "46214", "46216", "46217",
     "46220", "46221", "46227", "46228", "46231", "46234", "46236", "46237", "46239",
-    "46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280"
+    "46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280", "46290"
   ];
 
   // ZIP to community. Neither the live widget nor the Worker has such a table.
@@ -351,7 +352,7 @@
     { name: "Fortville", page: "/fortville", zips: ["46040"] },
     { name: "Greenfield", page: "/greenfield", zips: ["46140"] },
     { name: "Greenwood", page: "/greenwood", zips: ["46142", "46143"] },
-    { name: "Indianapolis", page: "/indianapolis", zips: ["46214", "46217", "46220", "46221", "46227", "46228", "46231", "46234", "46237", "46239", "46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280"] },
+    { name: "Indianapolis", page: "/indianapolis", zips: ["46214", "46217", "46220", "46221", "46227", "46228", "46231", "46234", "46237", "46239", "46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280", "46290"] },
     { name: "Ingalls", page: "/ingalls", zips: ["46048"] },
     { name: "Lapel", page: null, zips: ["46051"] },
     { name: "Lawrence", page: "/lawrence", zips: ["46216", "46236"] },
@@ -382,7 +383,8 @@
     "46062": { alsoCovers: ["Westfield"] },
     "46216": { mailingCity: "Indianapolis" },
     "46236": { mailingCity: "Indianapolis" },
-    "46280": { alsoCovers: ["Carmel"] }
+    "46280": { alsoCovers: ["Carmel"] },
+    "46290": { alsoCovers: ["Carmel"] }
   };
 
   // Built once from the two tables above: ZIP -> { zip, community, city, alternates, page, poBox }.
@@ -1004,6 +1006,7 @@
         hint: "No start-up fee is for households new to Purge Pros, once per household. If you have had service before or are not sure, we check and confirm your first-visit price before anything is scheduled.",
         options: CUSTOMER_STATUS_OPTIONS
       },
+      { key: "referredBy", shown: service && state.customerStatus === "new", required: false, control: "text", label: "Who sent you? (optional)", hint: "A neighbor's name, or a code from a flyer.", autocomplete: "off", maxLength: 60 },
       { key: "firstName", shown: true, required: true, control: "text", label: "First name", autocomplete: "given-name", maxLength: FIELD_MAX_LENGTH.firstName },
       { key: "lastName", shown: service, required: service, control: "text", label: "Last name", autocomplete: "family-name", maxLength: FIELD_MAX_LENGTH.lastName },
       {
@@ -1126,7 +1129,7 @@
     if (intent === "question") question = String(state.question).trim();
     if (intent === "quote_delivery") question = "Quote delivery requested by " + state.preferredContact + ".";
 
-    return {
+    const payload = {
       schemaVersion: VERSIONS.schemaVersion,
       requestId: context.requestId,
       eventId: context.requestId + ":" + stage,
@@ -1185,6 +1188,8 @@
       // A trap for bots. Never shown to people, always empty (spec 17.1 item 12).
       website: ""
     };
+    if (service && state.customerStatus === "new" && String(state.referredBy || "").trim()) payload.referredBy = String(state.referredBy).trim();
+    return payload;
   }
 
   // The fields that make two attempts "the same request" (spec 12.4). Not
@@ -1199,10 +1204,13 @@
   ];
 
   function submissionFingerprint(payload) {
-    return JSON.stringify(FINGERPRINT_FIELDS.map(function (field) {
+    const material = FINGERPRINT_FIELDS.map(function (field) {
       const value = payload[field];
       return (field === "areaIds" || field === "customReasons") && Array.isArray(value) ? value.slice().sort() : value;
-    }));
+    });
+    // A supplied referral is an ordinary request detail. Omission preserves every legacy byte.
+    if (payload.referredBy) material.push(payload.referredBy);
+    return JSON.stringify(material);
   }
 
   // The save-link body: exactly six keys, nothing personal (spec 8.1).
@@ -1352,11 +1360,12 @@
     uncertain: "Your request may already be with our team. Please call (317) 961-5865 to confirm before submitting again. Your reference is {requestId}. Nothing has been scheduled or charged by this form.",
     conflict: "We could not safely submit the changed details. Please call (317) 961-5865 and mention reference {requestId}.",
     lockedFallback: "Please call Purge Pros to confirm your request before submitting again.",
-    unavailable: "We could not connect to save your request. Please try again or call (317) 961-5865.",
+    unavailable: "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.",
+    noReceipt: "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.",
     invalid: "Please check the highlighted form details.",
-    timeout: "This is taking longer than expected. Please try again or call (317) 961-5865.",
-    network: "We could not send this request. Please try again or call (317) 961-5865.",
-    rejected: "We could not save your request. Please try again.",
+    timeout: "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.",
+    network: "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.",
+    rejected: "We could not save your request. Please try again. Or text us at (317) 961-5865.",
     blockedLive: "This page cannot send requests. Please call (317) 961-5865.",
     blockedDemo: "This is a preview. Nothing can be sent from here. Please call (317) 961-5865.",
     sending: "Sending your request. Please wait a moment before closing."
@@ -1552,7 +1561,7 @@
   const LEGACY_STEP_NUMBER = { price: 3, request: 4, confirm: 5, done: 6 };
 
   // Never allowed into any analytics event (spec 17.2 item 12).
-  const FORBIDDEN_EVENT_PARAMS = ["zip", "firstName", "lastName", "name", "phone", "email", "address", "street", "city", "question"];
+  const FORBIDDEN_EVENT_PARAMS = ["referredBy", "zip", "firstName", "lastName", "name", "phone", "email", "address", "street", "city", "question"];
 
   /* ======================================================================
    * 13. THE STORE
@@ -1709,6 +1718,7 @@
         // the request (memory only; never stored)
         intent: "service_request",
         customerStatus: "",
+        referredBy: "", // request memory only; never persisted
         firstName: "",
         lastName: "",
         phone: "",
@@ -1740,6 +1750,9 @@
 
     // Memory only. A reload starts a new request (spec 9.3).
     let pendingSubmission = null; // { fingerprint, payload }
+    // Page memory only; editing and saved-plan opening retain an unanswered send. Start over clears it.
+    let unresolvedSubmission = null; // { fingerprint, payload, quote }
+    const completionsShown = {}; // request id -> true, retained across reset
     let savedLink = null; // { fingerprint, url, expiresAt }
     const demoSavedPlans = {}; // token -> plan, for links this page created in demo mode
     let resumeSequence = 0;
@@ -2576,7 +2589,7 @@
 
     const SETTABLE_FIELDS = [
       "zip", "dogCount", "yardSize", "areas", "frequency", "intent", "customerStatus",
-      "firstName", "lastName", "phone", "email", "preferredContact", "smsConsent",
+      "referredBy", "firstName", "lastName", "phone", "email", "preferredContact", "smsConsent",
       "address", "city", "startTiming", "lastCleaned", "question", "termsAccepted"
     ];
 
@@ -2719,6 +2732,8 @@
         if (hasOwn(input, field)) state[field] = String(input[field] == null ? "" : input[field]).slice(0, FIELD_MAX_LENGTH[field]);
       });
       if (hasOwn(input, "phone")) state.phone = formatPhone(input.phone);
+      if (hasOwn(input, "referredBy")) state.referredBy = String(input.referredBy == null ? "" : input.referredBy).replace(/[\r\n\u2028\u2029]/g, "").slice(0, 60);
+      if (state.customerStatus !== "new" || state.intent !== "service_request") state.referredBy = "";
 
       // 10. City: pre-filled from the ZIP until the visitor types one.
       if (hasOwn(input, "zip")) syncCityWithZip();
@@ -3475,8 +3490,9 @@
       const service = forIntent === "service_request";
       const contact = findById(CONTACT_METHODS, state.preferredContact);
       const status = findById(CUSTOMER_STATUS_OPTIONS, state.customerStatus);
-      return {
-        intent: forIntent,
+      const summary = { intent: forIntent };
+      if (service && state.customerStatus === "new" && state.referredBy.trim()) summary.referredBy = state.referredBy.trim();
+      return Object.assign(summary, {
         name: (state.firstName.trim() + " " + (service ? state.lastName.trim() : "")).trim(),
         replyBy: contact ? contact.label : "",
         phone: state.phone,
@@ -3487,7 +3503,7 @@
         customerStatus: status ? status.label : "",
         question: forIntent === "question" ? state.question.trim() : "",
         textConsentGiven: state.preferredContact === "text" && state.smsConsent === true
-      };
+      });
     }
 
     // Which offer note applies, in the live order (spec 6.1 and 6.3):
@@ -3622,6 +3638,9 @@
         // Same request as the last attempt: same id, same timestamps, same consent evidence.
         return { ok: true, payload: JSON.parse(JSON.stringify(pendingSubmission.payload)), reused: true };
       }
+      if (unresolvedSubmission && unresolvedSubmission.fingerprint === fingerprint) {
+        return { ok: true, payload: JSON.parse(JSON.stringify(unresolvedSubmission.payload)), reused: true };
+      }
       // A new request: a new id.
       return { ok: true, payload: payloadFromState(state, sending, payloadContext(env.uuid())), reused: false };
     }
@@ -3646,31 +3665,25 @@
     // Turns a server reply into a result (spec 4.5.2). `reply` is
     // { httpStatus, body } where body is the parsed JSON (or {}).
     function interpretSubmitReply(reply, payload) {
-      const body = reply.body && typeof reply.body === "object" ? reply.body : {};
-      const requestId = typeof body.requestId === "string" && body.requestId ? body.requestId : payload.requestId;
+      const body = reply.body && typeof reply.body === "object" && !Array.isArray(reply.body) ? reply.body : {};
+      const requestId = payload.requestId;
       const serverMessage = typeof body.message === "string" ? body.message : "";
-
-      // Uncertain, or the same id with different details: lock. No further
-      // editing or resubmitting; the visitor is asked to call (spec 17.1 item 14).
-      if (body.code === "SUBMISSION_UNCERTAIN" || body.code === "REQUEST_ID_CONFLICT" || reply.httpStatus === 409) {
-        const code = body.code === "REQUEST_ID_CONFLICT" ? "REQUEST_ID_CONFLICT" : "SUBMISSION_UNCERTAIN";
-        return failure("locked", serverMessage || SUBMIT_MESSAGES.lockedFallback, { locked: true, code: code, requestId: requestId, httpStatus: reply.httpStatus });
+      // Only the actual matching receipt proves acceptance. Check it before anything fallible.
+      if (reply.httpStatus >= 200 && reply.httpStatus < 300 && body.accepted === true && body.requestId === requestId) {
+        return { ok: true, status: "success", requestId: requestId, reference: requestId, httpStatus: reply.httpStatus, demo: mode === "demo" };
       }
-      const accepted = reply.httpStatus >= 200 && reply.httpStatus < 300 && body.accepted !== false;
-      if (accepted) return { ok: true, status: "success", requestId: requestId, reference: requestId, httpStatus: reply.httpStatus, demo: mode === "demo" };
-
-      // Server-side validation: highlight the fields it names (the live tool does not).
-      if (reply.httpStatus === 400 && Array.isArray(body.fields)) {
+      if (reply.httpStatus === 409 && body.accepted === false && (body.code === "SUBMISSION_UNCERTAIN" || body.code === "REQUEST_ID_CONFLICT")) {
+        return failure("locked", serverMessage || SUBMIT_MESSAGES.lockedFallback, { locked: true, definite: true, code: body.code, requestId: typeof body.requestId === "string" && body.requestId ? body.requestId : requestId, httpStatus: reply.httpStatus });
+      }
+      if (reply.httpStatus === 400 && body.accepted === false && Array.isArray(body.fields)) {
         const mapped = mapServerFields(body.fields);
-        return failure("server_invalid", serverMessage || SUBMIT_MESSAGES.invalid, { retryAllowed: true, fieldErrors: mapped.fieldErrors, formErrors: mapped.formErrors, serverFields: body.fields.slice(), requestId: requestId, httpStatus: 400 });
+        return failure("server_invalid", serverMessage || SUBMIT_MESSAGES.invalid, { retryAllowed: true, definite: true, fieldErrors: mapped.fieldErrors, formErrors: mapped.formErrors, serverFields: body.fields.slice(), requestId: requestId, httpStatus: 400 });
       }
-      if (body.code === "SUBMISSION_UNAVAILABLE" || reply.httpStatus === 503) {
-        return failure("unavailable", serverMessage || SUBMIT_MESSAGES.unavailable, { retryAllowed: true, code: "SUBMISSION_UNAVAILABLE", requestId: requestId, httpStatus: reply.httpStatus });
+      const refusals = { 400: ["Bad JSON", "Invalid request", "Unsupported widget version", "Invalid legacy lead"], 403: ["Forbidden"], 405: ["Method not allowed"], 413: ["Payload too large"], 415: ["JSON required"] };
+      if (body.accepted === false && refusals[reply.httpStatus] && refusals[reply.httpStatus].indexOf(serverMessage) >= 0) {
+        return failure("rejected", SUBMIT_MESSAGES.rejected, { retryAllowed: true, definite: true, serverMessage: serverMessage, requestId: requestId, httpStatus: reply.httpStatus });
       }
-      // Anything else (403 Forbidden, 413, 415, 500...): a plain message for the
-      // visitor. The server's own text is kept for debugging, not for display
-      // (the live tool shows raw text such as "Forbidden": spec 13 item 11).
-      return failure("rejected", SUBMIT_MESSAGES.rejected, { retryAllowed: true, serverMessage: serverMessage, requestId: requestId, httpStatus: reply.httpStatus });
+      return failure(reply.httpStatus === 503 ? "unavailable" : "no_receipt", SUBMIT_MESSAGES.noReceipt, { retryAllowed: true, serverMessage: serverMessage, requestId: requestId, httpStatus: reply.httpStatus });
     }
 
     // The canned replies demo mode plays back. Wording is the Worker's.
@@ -3684,10 +3697,17 @@
       return { httpStatus: 202, body: { accepted: true, requestId: id } };
     }
 
+    // Referral text belongs only to the request, including in a review build.
+    function loggedPayload(payload) {
+      const safe = JSON.parse(JSON.stringify(payload));
+      delete safe.referredBy;
+      return safe;
+    }
+
     // Demo: no network at all. Waits briefly, then plays the chosen outcome.
     function sendDemo(payload) {
       const outcome = demo.submit;
-      log("info", "Purge Pros demo submission", payload);
+      log("info", "Purge Pros demo submission", loggedPayload(payload));
       const delay = outcome === "slow" ? Math.max(demo.delayMs, 4000) : demo.delayMs;
       return env.wait(delay).then(function () {
         if (outcome === "timeout") return failure("timeout", SUBMIT_MESSAGES.timeout, { retryAllowed: true, requestId: payload.requestId });
@@ -3743,106 +3763,129 @@
         if (answer.timedOut) return failure("timeout", SUBMIT_MESSAGES.timeout, { retryAllowed: true, requestId: payload.requestId });
         // Never show the browser's own text ("Failed to fetch") to a visitor.
         if (answer.failed) return failure("network", SUBMIT_MESSAGES.network, { retryAllowed: true, requestId: payload.requestId, serverMessage: answer.errorText });
-        // An empty or unreadable body counts as the HTTP status says (as the live tool does).
-        let body = { accepted: answer.ok, requestId: payload.requestId };
-        if (answer.text) {
-          try { body = JSON.parse(answer.text); } catch (_) { body = { accepted: answer.ok, requestId: payload.requestId }; }
-        }
+        // Empty, unreadable and incomplete replies are not receipts.
+        let body = null;
+        try { body = JSON.parse(answer.text); } catch (_) {}
         return interpretSubmitReply({ httpStatus: answer.httpStatus, body: body }, payload);
       });
     }
 
-    // submit(intent) -> a promise of ONE result object. It never rejects.
-    //   { ok: true,  status: "success", requestId, reference, payload, demo }
-    //   { ok: false, status, message, retryAllowed, locked, fieldErrors, formErrors, ... }
-    // status is one of: "busy", "locked", "invalid", "blocked", "server_invalid",
-    // "unavailable", "rejected", "timeout", "network".
-    // While sending, state.submitting is true: disable every control and the
-    // close button, and show and announce SUBMIT_MESSAGES.sending (spec 4.5.2 step 5).
+    // One read-only check, only before sending a changed unresolved request.
+    function checkPending(attempt) {
+      if (!sends) return Promise.resolve({ status: "unknown" });
+      // Today's no-Crypto fallback IDs are not UUIDs. Keep those browsers sending;
+      // the read-only operation deliberately refuses non-UUID input (R4).
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(attempt.payload.requestId)) return Promise.resolve({ status: "unsupported" });
+      return postJson(endpoint + "?operation=request-status", { requestId: attempt.payload.requestId }, REQUEST_STATUS_TIMEOUT_MS,
+        { cache: "no-store", referrerPolicy: "no-referrer", redirect: "error" }, "request-status").then(function (answer) {
+        if (answer.httpStatus === 404 || answer.httpStatus === 405) return { status: "unsupported" };
+        let body = null;
+        try { body = JSON.parse(answer.text); } catch (_) {}
+        // Today's Worker ignores the query and refuses the version, with usable CORS headers.
+        if (answer.httpStatus === 400 && body && body.accepted === false && body.message === "Unsupported widget version" && Object.keys(body).length === 2) return { status: "unsupported" };
+        if (answer.httpStatus === 200 && body && typeof body === "object" && !Array.isArray(body) && Object.keys(body).length === 2 &&
+            body.requestId === attempt.payload.requestId && ["accepted", "in_progress", "uncertain", "unknown"].indexOf(body.status) >= 0) return { status: body.status };
+        return { status: "failed" };
+      }).catch(function () { return { status: "failed" }; });
+    }
+
+    function finishReceipt(result, payload, originalQuote, before) {
+      const current = originalQuote;
+      state.submitting = false;
+      state.receipt = {
+        requestId: result.requestId,
+        intent: payload.intent,
+        stage: payload.stage,
+        custom: current.custom,
+        oneTime: current.oneTime !== null,
+        priceCents: current.priceCents,
+        priceText: current.priceText,
+        frequencyId: payload.frequencyId,
+        preferredContact: payload.preferredContact
+      };
+      if (payload.referredBy) state.receipt.hasReferral = true;
+      state.receipt.replyWhere = findById(CONTACT_METHODS, payload.preferredContact).successWhere;
+      if (result.alreadyReached) state.receipt.alreadyReached = true;
+      // Acceptance is terminal before tracking, storage or subscriber work.
+      pendingSubmission = null;
+      unresolvedSubmission = null;
+      savedLink = null;
+      state.editReturn = "";
+      state.resumeNotice = "";
+      state.step = "done";
+      cachedSnapshot = null;
+      if (!completionsShown[result.requestId]) {
+        completionsShown[result.requestId] = true;
+        try { trackSuccess(payload, result.requestId); } catch (_) {}
+      }
+      try { clearProgress(); } catch (_) {}
+      try { stepShown("done"); } catch (_) {}
+      try { commit("submitted", before, [], "done"); } catch (_) {}
+      return result;
+    }
+
+    // submit(intent) always resolves. Existing editing/validation and busy behavior are unchanged.
     function submit(intent) {
-      // 1. One request at a time.
       if (state.submitting) return Promise.resolve(failure("busy", SUBMIT_MESSAGES.sending));
-      // 2. After an uncertain reply the form stays locked until the page reloads.
       if (state.locked) return Promise.resolve(failure("locked", state.locked.message, { locked: true, code: state.locked.code, requestId: state.locked.requestId }));
       if (state.step === "done") return Promise.resolve(failure("busy", "This request is complete. Call reset() to start a new one."));
-
-      // 3. Make the intent current, then check everything again.
       const sending = chosenIntent(intent);
       if (sending !== state.intent) set({ intent: sending });
-      // An out-of-area ZIP, an incomplete plan or form, or an unticked terms
-      // box all stop here: nothing is built and nothing is sent.
       const built = buildPayload(sending);
       if (!built.ok) {
-        reportValidationFailed(errorFields(built.errors), "form", ""); // a refused Send (T20)
+        reportValidationFailed(errorFields(built.errors), "form", "");
         return Promise.resolve(failure("invalid", built.errors[0].message, { fieldErrors: built.errors }));
       }
-      // The request is complete and on its way: an areas answer changed on
-      // this very screen, and not counted yet, is settled now (T17).
       reportAreasChoice();
-
-      // 4. Refuse to pretend. Live mode only from an allowed https origin;
-      //    demo mode never on a real Purge Pros origin.
       const blockedReason = sendBlockedReason();
       if (blockedReason) {
         log("warn", "[PPQuoteCore] submit refused: " + blockedReason);
         return Promise.resolve(failure("blocked", sends ? SUBMIT_MESSAGES.blockedLive : SUBMIT_MESSAGES.blockedDemo, { reason: blockedReason }));
       }
-
-      // 5. Remember this attempt (memory only) so a retry reuses the same id.
-      const payload = built.payload;
-      pendingSubmission = { fingerprint: submissionFingerprint(payload), payload: JSON.parse(JSON.stringify(payload)) };
-      // The inspectable log keeps the whole payload in demo mode only. In live
-      // mode it keeps just the request id: no second copy of contact details.
-      if (mode === "demo") submissionLog.push({ at: nowIso(), demo: true, outcome: demo.submit, payload: JSON.parse(JSON.stringify(payload)) });
-      else submissionLog.push({ at: nowIso(), demo: false, outcome: mode, requestId: payload.requestId });
-
+      let payload = built.payload;
+      let originalQuote = quote();
+      const previous = unresolvedSubmission;
+      const changedPending = previous && previous.fingerprint !== submissionFingerprint(payload);
       const beforeSending = stateBefore();
       state.submitting = true;
       commit("submitting", beforeSending, [], null);
 
-      const sent = sends ? sendLive(payload) : sendDemo(payload);
+      function dispatch() {
+        pendingSubmission = { fingerprint: submissionFingerprint(payload), payload: JSON.parse(JSON.stringify(payload)) };
+        unresolvedSubmission = { fingerprint: pendingSubmission.fingerprint, payload: pendingSubmission.payload, quote: originalQuote };
+        if (mode === "demo") submissionLog.push({ at: nowIso(), demo: true, outcome: demo.submit, payload: loggedPayload(payload) });
+        else submissionLog.push({ at: nowIso(), demo: false, outcome: mode, requestId: payload.requestId });
+        return sends ? sendLive(payload) : sendDemo(payload);
+      }
+      const sent = changedPending ? checkPending(previous).then(function (answer) {
+        if (answer.status === "accepted" || answer.status === "in_progress") {
+          payload = previous.payload;
+          originalQuote = previous.quote;
+          return { ok: true, status: "success", requestId: payload.requestId, reference: payload.requestId, alreadyReached: true, httpStatus: 200, demo: mode === "demo" };
+        }
+        if (answer.status === "uncertain") return failure("locked", SUBMIT_MESSAGES.uncertain.replace("{requestId}", previous.payload.requestId), { locked: true, code: "SUBMISSION_UNCERTAIN", requestId: previous.payload.requestId });
+        // An optional check must never prevent today's send without a positive ledger answer.
+        return dispatch();
+      }) : dispatch();
       return sent.then(function (result) {
         const beforeReply = stateBefore();
         state.submitting = false;
         result.payload = payload;
-        if (result.ok) {
-          const current = quote();
-          state.receipt = {
-            requestId: result.requestId,
-            intent: payload.intent,
-            stage: payload.stage,
-            custom: current.custom,
-            oneTime: current.oneTime !== null,
-            priceCents: current.priceCents,
-            priceText: current.priceText,
-            frequencyId: payload.frequencyId,
-            preferredContact: payload.preferredContact,
-            replyWhere: findById(CONTACT_METHODS, payload.preferredContact).successWhere
-          };
-          trackSuccess(payload, result.requestId);
-          clearProgress();
-          pendingSubmission = null;
-          savedLink = null;
-          state.editReturn = "";
-          state.resumeNotice = "";
-          state.step = "done";
-          stepShown("done");
-          commit("submitted", beforeReply, [], "done");
-          return result;
-        }
+        if (result.ok) return finishReceipt(result, payload, originalQuote, beforeReply);
+        if (result.definite && unresolvedSubmission && unresolvedSubmission.payload.requestId === payload.requestId) unresolvedSubmission = null;
         if (result.locked) state.locked = { code: result.code, message: result.message, requestId: result.requestId };
         commit("submit_failed", beforeReply, [], null);
-        // The server refused fields the form had accepted (T20).
         if (result.status === "server_invalid") reportValidationFailed(errorFields(result.fieldErrors), "server", "");
         return result;
-      }).catch(function (error) {
-        // Should be unreachable. If anything above throws, the form must not
-        // be left stuck in its sending state.
-        log("warn", "[PPQuoteCore] submit failed unexpectedly", error);
+      }).catch(function () {
+        // Never turn a known acceptance into a failure, even after optional work throws.
+        if (state.receipt && state.receipt.requestId === payload.requestId && state.step === "done") {
+          return { ok: true, status: "success", requestId: payload.requestId, reference: payload.requestId, payload: payload, demo: mode === "demo" };
+        }
         const beforeRecovery = stateBefore();
         state.submitting = false;
-        commit("submit_failed", beforeRecovery, [], null);
-        return failure("rejected", SUBMIT_MESSAGES.rejected, { retryAllowed: true, requestId: payload.requestId, payload: payload });
+        try { commit("submit_failed", beforeRecovery, [], null); } catch (_) {}
+        return failure("no_receipt", SUBMIT_MESSAGES.noReceipt, { retryAllowed: true, requestId: payload.requestId, payload: payload });
       });
     }
 
@@ -4111,6 +4154,7 @@
     // Clears every answer, the saved progress and anything remembered about a
     // request, and starts again at the first question. The caller commits.
     function startOver() {
+      unresolvedSubmission = null;
       resumeSequence += 1;
       pendingSubmission = null;
       savedLink = null;
@@ -4601,6 +4645,7 @@
     LIVE_ALLOWED_ORIGINS: LIVE_ALLOWED_ORIGINS,
     siteOptions: siteOptions,
     LIVE_GOOGLE_ADS_SEND_TO: LIVE_GOOGLE_ADS_SEND_TO,
+    REQUEST_STATUS_TIMEOUT_MS: REQUEST_STATUS_TIMEOUT_MS,
     SUBMIT_TIMEOUT_MS: SUBMIT_TIMEOUT_MS,
     SAVE_LINK_TIMEOUT_MS: SAVE_LINK_TIMEOUT_MS,
 

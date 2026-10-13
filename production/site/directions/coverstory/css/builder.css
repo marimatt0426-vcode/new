@@ -1211,6 +1211,15 @@ dialog.ppb-sheet:focus, dialog.ppb-sheet:focus-visible { outline: none; }
 .ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__scene { grid-column: 1; grid-row: 4; margin: 0 -10px -4px; padding: 0; }
 .ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__pose { max-height: 240px; }
 .ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__scene[data-pose="relax"] .ppb-done__pose { max-height: 200px; }
+/* the optional sentences above the list (the first request had already reached us; who sent you): the full width, each
+   in a row of its own, so the row that stretches stays the list's and he stays beside the list */
+.ppb--dialog .ppb-done__main > .ppb-done__referral { grid-column: 1 / -1; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden])) { grid-template-rows: auto auto auto auto minmax(0, 1fr) auto; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden])) .ppb-done__scene { grid-row: 5 / span 2; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden])) .ppb-done__main > .ppb-review { grid-row: 6; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden]) ~ .ppb-done__referral:not([hidden])) { grid-template-rows: auto auto auto auto auto minmax(0, 1fr) auto; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden]) ~ .ppb-done__referral:not([hidden])) .ppb-done__scene { grid-row: 6 / span 2; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden]) ~ .ppb-done__referral:not([hidden])) .ppb-done__main > .ppb-review { grid-row: 7; }
 @media (min-width: 700px) {
   .ppb--dialog .ppb-done.ppb-panel { grid-template-columns: minmax(0, 1fr) 196px; column-gap: 16px; row-gap: 12px; }
   .ppb--dialog .ppb-done__scene { margin-left: -70px; padding-left: 60px; }
@@ -1488,3 +1497,7 @@ dialog.ppb-sheet:focus, dialog.ppb-sheet:focus-visible { outline: none; }
   .ppb-sheet .ppb, .ppb-pop__panel { max-width: 100%; }
 }
 .ppb-bar { left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); }
+
+/* Optional referral: existing field typography and one full-width row. */
+.ppb-field--referredBy { grid-column: 1 / -1; min-width: 0; }
+.ppb-done__referral { margin: 0; color: var(--ink-700); overflow-wrap: anywhere; }

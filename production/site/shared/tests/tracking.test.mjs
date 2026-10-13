@@ -337,7 +337,7 @@ test("live mode: gtag when present, dataLayer otherwise, fbq for the pixel", asy
     options: {
       mode: "live", endpoint: "https://purge-lead-relay.purgepros.workers.dev/submit",
       sinks: { gtag: (...args) => gtagCalls.push(args), dataLayer: [], fbq: (...args) => fbqCalls.push(args) },
-      fetch: async () => ({ ok: true, status: 202, text: async () => JSON.stringify({ accepted: true, requestId: "srv-1" }) })
+      fetch: async (url,init) => ({ ok: true, status: 202, text: async () => JSON.stringify({ accepted: true, requestId:JSON.parse(init.body).requestId }) })
     }
   }).store;
   toConfirm(live);
@@ -346,10 +346,10 @@ test("live mode: gtag when present, dataLayer otherwise, fbq for the pixel", asy
   assert.ok(live.trackLog.every((entry) => entry.sent === true && entry.demo === false));
   const result = await live.submit();
   assert.equal(result.ok, true);
-  assert.equal(result.requestId, "srv-1");
+  assert.equal(result.requestId, "test-id-0001");
   const sentNames = gtagCalls.map((call) => call[1]);
   assert.deepEqual(sentNames.slice(-4), ["service_requested", "generate_lead", "conversion", "funnel_step_viewed"]);
-  assert.deepEqual(fbqCalls[fbqCalls.length - 1], ["track", "Lead", { currency: "USD", value: 28.99 }, { eventID: "srv-1:service_requested" }]);
+  assert.deepEqual(fbqCalls[fbqCalls.length - 1], ["track", "Lead", { currency: "USD", value: 28.99 }, { eventID: "test-id-0001:service_requested" }]);
 
   // No gtag: events go to dataLayer; "conversion" is gtag-only, as in the live tool.
   const dataLayer = [];
@@ -358,7 +358,7 @@ test("live mode: gtag when present, dataLayer otherwise, fbq for the pixel", asy
     options: {
       mode: "live", endpoint: "https://purge-lead-relay.purgepros.workers.dev/submit",
       sinks: { dataLayer },
-      fetch: async () => ({ ok: true, status: 202, text: async () => "" })
+      fetch: async (url,init) => ({ ok: true, status: 202, text: async () => JSON.stringify({accepted:true,requestId:JSON.parse(init.body).requestId}) })
     }
   }).store;
   toConfirm(layered);

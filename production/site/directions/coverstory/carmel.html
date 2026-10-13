@@ -233,7 +233,7 @@
   <div class="cover__builder" id="quote">
     <!-- PRICE BUILDER: the first question as plain links. js/builder.js replaces this with the live builder (same size,
          same look). If the script never runs, every control still goes somewhere: the standalone quote page. -->
-    <div id="pp-builder" class="ppb" data-pp-builder data-mode="inline" data-step="dogs" data-city="Carmel" data-zips-also="46280">
+    <div id="pp-builder" class="ppb" data-pp-builder data-mode="inline" data-step="dogs" data-city="Carmel" data-zips-also="46280 46290">
       <div class="ppb-stage">
         <div class="ppb-head">
           <span class="ppb-avatar"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" alt=""></span>
@@ -304,8 +304,8 @@
       </li>
       <li class="fact">
         <img class="fact__ico stk stk--r" src="../../assets/brand-icons/pp-local-area.webp" width="64" height="64" alt="">
-        <span class="fact__val">3 ZIP codes</span>
-        <span class="fact__lbl">46032 and 46033, plus 46280 on the south edge</span>
+        <span class="fact__val">4 ZIP codes</span>
+        <span class="fact__lbl">46032 and 46033, plus 46280 and 46290 on the south edge</span>
       </li>
     </ul>
     <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="index.html">Home</a></li><li><a href="additional.html">Service Areas</a></li><li aria-current="page">Carmel</li></ol></nav>
@@ -445,14 +445,15 @@
       <h2 class="sh__title" id="route-title">A Carmel price spells out the job.<br><span class="pop">The route review confirms it.</span></h2>
       <p class="sh__intro lead">Before we name a day, we check that we can do that work week after week at your exact address.</p>
     </div>
-    <div class="city-zips">
+    <div class="city-zips city-zips--four">
       <img class="city-zips__ico" src="../../assets/step-icons/pin.webp" width="72" height="72" loading="lazy" alt="">
       <h3 class="city-zips__title">The ZIP codes we cover in Carmel</h3>
-      <p class="city-zips__text">Tap yours and your price starts with that ZIP answered. 46280 covers Carmel&rsquo;s south edge and carries an Indianapolis mailing address.</p>
+      <p class="city-zips__text">Tap yours and your price starts with that ZIP answered. 46280 and 46290 cover Carmel&rsquo;s south edge and carry Indianapolis mailing addresses.</p>
       <ul class="city-zips__list" aria-label="ZIP codes we cover in Carmel">
         <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46032"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46032">46032</button></form></li>
         <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46033"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46033">46033</button></form></li>
         <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46280"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46280, the south edge of Carmel">46280</button></form></li>
+        <li><form class="city-zip" data-pp-zip-form action="quote.html" method="get"><input type="hidden" name="zip" value="46290"><button class="city-zip__btn" type="submit" aria-label="Start my price with ZIP 46290, the south edge of Carmel">46290</button></form></li>
       </ul>
       <p class="city-zips__cta"><a class="btn btn--primary" href="#quote" data-purge-quote>See my Carmel price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
     </div>

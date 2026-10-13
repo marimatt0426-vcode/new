@@ -246,11 +246,11 @@ async function workerFingerprintOf(payload) {
 
 group("A. Constants the Worker checks");
 
-await check("schema, pricing versions and the 53 ZIPs equal the Worker's own values", () => {
+await check("schema, pricing versions and the 54 ZIPs equal the Worker's own values", () => {
   assert.equal(C.VERSIONS.schemaVersion, W.SCHEMA_VERSION);
   assert.equal(C.VERSIONS.pricingVersion, W.PRICING_VERSION);
   assert.deepEqual(C.SERVICE_ZIPS.slice().sort(), [...W.SERVICE_ZIPS].sort());
-  assert.equal(C.SERVICE_ZIPS.length, 53);
+  assert.equal(C.SERVICE_ZIPS.length, 54);
 });
 
 await check("last-cleanup and start-timing strings equal the Worker's sets, character for character (en dashes)", () => {
@@ -300,7 +300,8 @@ await check("canned demo replies use the Worker's real wording (409 uncertain, 4
   let reply = await worker.call("/submit", { body: payload });
   worker.holder.env = full;
   assert.equal(reply.status, 503);
-  assert.equal(reply.json.message, C.SUBMIT_MESSAGES.unavailable);
+  assert.equal(reply.json.message, "We could not connect to save your request. Please try again or call (317) 961-5865.");
+  assert.equal(C.SUBMIT_MESSAGES.unavailable, C.SUBMIT_MESSAGES.noReceipt);
   // 409 uncertain: the team's system fails after dispatch
   worker.upstream.mode = "throw";
   reply = await worker.call("/submit", { body: payload });
@@ -921,7 +922,7 @@ await check("503 then retry: same requestId, same eventId, byte-identical payloa
   assert.equal(first.httpStatus, 503);
   assert.equal(first.retryAllowed, true);
   assert.equal(first.locked, false);
-  assert.equal(first.message, "We could not connect to save your request. Please try again or call (317) 961-5865.");
+  assert.equal(first.message, "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.");
   assert.equal(made.store.getState().locked, null);
   assert.equal(made.store.getState().submitting, false);
   assert.equal(worker.upstream.received.length, 0);
@@ -956,7 +957,7 @@ await check("reply lost after the Worker accepted (15 s timeout): the exact time
   made.fireTimers();
   const first = await pending;
   assert.equal(first.status, "timeout");
-  assert.equal(first.message, "This is taking longer than expected. Please try again or call (317) 961-5865.");
+  assert.equal(first.message, "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.");
   assert.equal(first.retryAllowed, true);
   assert.equal(made.store.getState().locked, null);
   assert.equal(made.store.getState().step !== "done", true);
@@ -986,7 +987,7 @@ await check("network failure before the Worker is reached: plain message (never 
   made.bridge.mode = "network-fail";
   const first = await made.store.submit();
   assert.equal(first.status, "network");
-  assert.equal(first.message, "We could not send this request. Please try again or call (317) 961-5865.");
+  assert.equal(first.message, "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.");
   assert.ok(!/Failed to fetch/.test(first.message));
   assert.equal(first.retryAllowed, true);
   assert.equal(worker.upstream.received.length, 0);
@@ -1454,7 +1455,7 @@ await check("real Worker 409 REQUEST_ID_CONFLICT (same id, different details): l
   assert.equal(worker.upstream.received.length, 1);
 });
 
-await check("a 409 with no message uses the fallback wording and still locks", async () => {
+await check("a bare 409 proves neither receipt nor refusal and stays retryable", async () => {
   const made = makeStore({ worker: makeWorker() });
   fillPlan(made.store, PLANS.weekly);
   fillRequest(made, { intent: "service_request", contact: "text", status: "new" });
@@ -1465,10 +1466,10 @@ await check("a 409 with no message uses the fallback wording and still locks", a
   fillPlan(stub, PLANS.weekly);
   fillRequest({ store: stub, clock: { t: T0 } }, { intent: "service_request", contact: "text", status: "new" });
   const result = await stub.submit();
-  assert.equal(result.status, "locked");
-  assert.equal(result.message, "Please call Purge Pros to confirm your request before submitting again.");
-  assert.ok(stub.getState().locked);
-  assert.equal((await stub.submit()).status, "locked");
+  assert.equal(result.status, "no_receipt");
+  assert.equal(result.message, C.SUBMIT_MESSAGES.noReceipt);
+  assert.equal(stub.getState().locked, null);
+  assert.equal((await stub.submit()).status, "no_receipt");
 });
 
 await check("only a reload clears the lock: a new store on the same storage is not locked and gets a new id", async () => {
@@ -1495,7 +1496,7 @@ await check("other refusals from the real Worker allow a retry and never lock: 4
   assert.equal(result.status, "rejected");
   assert.equal(result.httpStatus, 403);
   assert.equal(result.serverMessage, "Forbidden");
-  assert.equal(result.message, "We could not save your request. Please try again.");
+  assert.equal(result.message, "We could not save your request. Please try again. Or text us at (317) 961-5865.");
   assert.equal(result.retryAllowed, true);
   assert.equal(made.store.getState().locked, null);
   // 500: relay not configured
@@ -1504,7 +1505,7 @@ await check("other refusals from the real Worker allow a retry and never lock: 4
   worker.holder.env = { QUOTE_REQUESTS: full.QUOTE_REQUESTS };
   result = await made.store.submit();
   worker.holder.env = full;
-  assert.equal(result.status, "rejected");
+  assert.equal(result.status, "no_receipt");
   assert.equal(result.httpStatus, 500);
   assert.equal(result.retryAllowed, true);
   assert.equal(made.store.getState().locked, null);
@@ -2215,10 +2216,10 @@ await check("every simulated submit reply x intent x reply method in demo: resul
       // the retryable failures
       const expected = {
         invalid: ["server_invalid", "Please check the highlighted form details."],
-        unavailable: ["unavailable", "We could not connect to save your request. Please try again or call (317) 961-5865."],
-        timeout: ["timeout", "This is taking longer than expected. Please try again or call (317) 961-5865."],
-        network: ["network", "We could not send this request. Please try again or call (317) 961-5865."],
-        forbidden: ["rejected", "We could not save your request. Please try again."]
+        unavailable: ["unavailable", "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865."],
+        timeout: ["timeout", "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865."],
+        network: ["network", "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865."],
+        forbidden: ["rejected", "We could not save your request. Please try again. Or text us at (317) 961-5865."]
       }[outcome];
       if (result.status !== expected[0] || result.message !== expected[1]) bad.add(label + ": " + result.status + " / " + JSON.stringify(result.message));
       if (result.retryAllowed !== true || result.locked !== false || state.locked !== null) bad.add(label + ": retry not allowed or locked");
@@ -2362,12 +2363,12 @@ await check("the proof: across every demo path above, zero fetch / XHR / beacon 
   return networkTouches(calls) + " network or tag calls; " + storage.writes.length + " sessionStorage writes, all plan or attribution";
 });
 
-await check("static scan of the engine source: one network call site (env.fetch inside postJson), reachable only through sendLive and resumeFetch, each behind `sends` (live or staging mode, never demo); a tag is called only in live mode; no XHR, beacon, sockets, script or image creation, dynamic import or cookie writing; localStorage is looked up in one place and used under one key", () => {
+await check("static scan of the engine source: one network call site (env.fetch inside postJson), reachable only through sendLive, resumeFetch and checkPending, each behind `sends` (live or staging mode, never demo); a tag is called only in live mode; no XHR, beacon, sockets, script or image creation, dynamic import or cookie writing; localStorage is looked up in one place and used under one key", () => {
   const code = engineSource.replace(/\/\*[\s\S]*?\*\//g, "").split("\n").map((line) => line.replace(/^\s*\/\/.*$/, "")).join("\n");
   const count = (pattern) => (code.match(pattern) || []).length;
   assert.equal(count(/\bfetch\s*\(/g), 2, "fetch( call sites"); // the window.fetch wrapper and env.fetch in postJson
   assert.equal(count(/env\.fetch\s*\(/g), 1);
-  assert.equal(count(/\bpostJson\s*\(/g), 3); // definition, sendLive, resumeFetch
+  assert.equal(count(/\bpostJson\s*\(/g), 4); // definition, sendLive, resumeFetch, read-only status
   assert.equal(count(/\bsendLive\s*\(/g), 2); // definition and the guarded call
   // Since engine 1.5.0 (the send switch) the guard is `sends`: true in live and staging mode, false in demo, and set in
   // exactly one place. Demo is whatever is not asked for by name. Each sending call is behind it, and behind the page
@@ -2375,7 +2376,8 @@ await check("static scan of the engine source: one network call site (env.fetch 
   assert.ok(code.includes('const mode = settings.mode === "live" ? "live" : settings.mode === "staging" ? "staging" : "demo";'));
   assert.ok(code.includes('const sends = mode !== "demo";'));
   assert.equal(count(/\bsends\s*=[^=]/g), 1, "sends is assigned once");
-  assert.ok(code.includes('const sent = sends ? sendLive(payload) : sendDemo(payload);'));
+  assert.ok(code.includes('return sends ? sendLive(payload) : sendDemo(payload);'));
+  assert.ok(code.includes('if (!sends) return Promise.resolve({ status: "unknown" });'));
   assert.equal(count(/\bresumeFetch\s*\(/g), 3); // definition and two guarded calls
   assert.equal(count(/sends \? resumeFetch\(/g), 2);
   // A tag is called only in live mode: every gtag, dataLayer and fbq call sits inside `if (mode === "live")`.

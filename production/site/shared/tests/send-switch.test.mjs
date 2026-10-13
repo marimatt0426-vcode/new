@@ -35,7 +35,7 @@ function siteStore(site, pageUrl, fetchImpl) {
   const tags = { gtag: [], dataLayer: [], fbq: [] };
   const options = Object.assign({ frequencyLabels: { twice: "Twice a week", custom: "Custom quote" }, presentation: "inline" }, core.siteOptions(site, TRUSTED), {
     sinks: { gtag: (...args) => tags.gtag.push(args), dataLayer: tags.dataLayer, fbq: (...args) => tags.fbq.push(args) },
-    fetch: (url, init) => { calls.push({ url, init }); return (fetchImpl || (async () => reply(202, { accepted: true })))(url, init, calls.length); }
+    fetch: (url, init) => { calls.push({ url, init }); return (fetchImpl || (async (url,init) => reply(202, { accepted: true, requestId:JSON.parse(init.body).requestId })))(url, init, calls.length); }
   });
   const made = makeStore({ url: pageUrl, options });
   made.calls = calls;
@@ -295,7 +295,7 @@ test("create() itself: staging calls no tag even when handed live tracking setti
     options: {
       mode: "staging", endpoint: STAGING_ENDPOINT, allowedOrigins: [STAGING_ORIGIN], firePixelEvents: true, googleAdsSendTo: "AW-17767139897/g9smCM7pkL4cELmUhJhC",
       sinks: { gtag: (...args) => tags.push(args), dataLayer: tags, fbq: (...args) => tags.push(args) },
-      fetch: async () => reply(202, { accepted: true })
+      fetch: async (url,init) => reply(202, { accepted: true, requestId:JSON.parse(init.body).requestId })
     }
   });
   fillPlan(store);

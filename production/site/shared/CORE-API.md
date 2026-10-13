@@ -216,6 +216,11 @@ So the order of precedence is: the visitor's own saved ZIP, then `?zip=`, then `
 
 ## 5. State
 
+### Who sent you: optional request detail
+
+`state.referredBy` is a single-line, 60 UTF-16-unit optional service-request detail, shown only for customerStatus `new`. The flat request appends `referredBy` only when its trimmed value is nonempty. Returning/unsure or a different intent drops it. It is page memory only (including unfinished close/reopen), cleared on Start over, closing Done or reload, and excluded from progress storage, saved plans/links, attribution, analytics and demo logs. Confirm uses plain text; Done uses a receipt boolean. Existing consent and Terms behavior, pricing and retry fingerprint are unchanged; a retry of the same request keeps its first attempted optional note. Deploy the compatible Worker first: the previous Worker silently drops unknown keys. Native maxlength prevents longer typing; engine set() also cuts to 60. See job 7 DESIGN/NOTES for offline and browser evidence.
+
+
 `store.getState()` returns a frozen snapshot. The same object is returned until something changes.
 
 | Field | Values | Notes |
@@ -249,7 +254,7 @@ These are all the field names that can appear in `changed` lists.
 
 ### 6.1 Changing answers
 
-**`store.set(patch)`** is the one way answers change. `patch` may hold any of: `zip`, `dogCount`, `yardSize`, `areas`, `frequency`, `intent`, `customerStatus`, `firstName`, `lastName`, `phone`, `email`, `preferredContact`, `smsConsent`, `address`, `city`, `startTiming`, `lastCleaned`, `question`, `termsAccepted`.
+**`store.set(patch)`** is the one way answers change. `patch` may hold any of: `zip`, `dogCount`, `yardSize`, `areas`, `frequency`, `intent`, `customerStatus`, `referredBy`, `firstName`, `lastName`, `phone`, `email`, `preferredContact`, `smsConsent`, `address`, `city`, `startTiming`, `lastCleaned`, `question`, `termsAccepted`.
 
 Returns `{ ok, changed, notices, rejected, movedTo, state }`.
 
@@ -435,7 +440,7 @@ store.fieldRules("service_request").find((rule) => rule.key === "startTiming").c
 // { value: "As soon as possible", label: "As soon as possible", selected: false }
 ```
 
-Keys, in order: `customerStatus`, `firstName`, `lastName`, `preferredContact`, `phone`, `email`, `smsConsent`, `address`, `city`, `zip`, `startTiming`, `lastCleaned`, `question`, `termsAccepted`. `control` is `text`, `tel`, `email`, `zip`, `textarea`, `choice` or `checkbox`. Mark every field where `required` is true. You may order and group the fields differently.
+Keys, in order: `customerStatus`, `referredBy` (optional, new service households only), `firstName`, `lastName`, `preferredContact`, `phone`, `email`, `smsConsent`, `address`, `city`, `zip`, `startTiming`, `lastCleaned`, `question`, `termsAccepted`. `control` is `text`, `tel`, `email`, `zip`, `textarea`, `choice` or `checkbox`. Mark every field where `required` is true. You may order and group the fields differently.
 
 Every choice field carries **`choices`**, one shape for all four of them: `[{ value, label, selected }]`. Render `label`, and on press call `store.set({ [rule.key]: choice.value })`. The raw list is also there as `options`, and its shape differs: `{ id, label }` objects for `customerStatus` and `preferredContact`, plain strings for `startTiming` and `lastCleaned` (the string is both the label and the value). Use `choices`.
 
@@ -790,7 +795,7 @@ What open and close do in each situation:
 
 ## 12. ZIP codes and cities
 
-`PPQuoteCore.SERVICE_ZIPS` is the 53 accepted ZIPs, identical to the live widget and the Worker (a test compares all three).
+`PPQuoteCore.SERVICE_ZIPS` is the 54 accepted ZIPs, the historical 53 plus the owner-approved 46290 addition. Tests explicitly apply only that list delta to the pinned historical sources; the actual new Worker candidate is checked separately.
 
 `PPQuoteCore.cityForZip(zip)` returns `{ zip, community, city, alternates, page, poBox }` or `null`. `PPQuoteCore.COMMUNITIES` lists the 26 communities with their ZIPs and page paths.
 
@@ -799,7 +804,7 @@ What open and close do in each situation:
 Points where a community could not be established with full confidence:
 
 - **46216 and 46236** are listed under Lawrence, but their USPS city name is Indianapolis. The engine pre-fills **Indianapolis** and offers Lawrence as an alternate. On the Lawrence page pass `pageCity: "Lawrence"` and it pre-fills Lawrence.
-- **46280** is listed under Indianapolis and also reaches the south edge of Carmel. **46062** is listed under Noblesville and also receives mail for parts of Westfield. Both carry the other name in `alternates`.
+- **46280 and 46290** are listed under Indianapolis and also reach the south edge of Carmel. **46062** is listed under Noblesville and also receives mail for parts of Westfield. Both carry the other name in `alternates`.
 - **46014, 46015 (Anderson) and 46061 (Noblesville)** are PO Box ZIPs according to the coverage audit (`poBox: true`). The Worker accepts them, so the engine does too. Do not offer them as one-tap choices.
 - **46113 (Camby)** spans Marion and Morgan counties. No alternate name is given because none is established in the sources.
 - Other overlaps may exist. The City field must stay editable.
@@ -915,7 +920,7 @@ Render these; never retype them. `{zip}`, `{requestId}`, `{privacy}` and `{terms
 | `CONSENT` | `version`, `lead`, `body`, `alternativeWithCall`, `alternativeWithoutCall`, `privacyLinkText`, `termsLinkText`, `phoneHintService`, `phoneHintOther`, `errorWithCall`, `errorWithoutCall` | The text-consent box. Render `lead` and `body`; get the alternative line with its links from `wording.consentAlternativeParts()`. The hints and errors already arrive through `fieldRules()` and validation. |
 | `TERMS` | `version`, `recurring`, `oneTime`, `termsLinkText`, `privacyLinkText`, `otherIntents`, `error` | The terms box. Use `wording.termsParts(isOneTime)` and `wording.otherIntentsParts()`, which return `[{ text }, { text, href }, ...]`. |
 | `MESSAGES` | `customerStatus`, `firstName`, `lastName`, `preferredContact`, `callNotOffered`, `phone`, `email`, `address`, `city`, `startTiming`, `lastCleaned`, `question`, `intent`, `customNeedsServiceRequest`, `stale` | Field messages. They already arrive in validation errors; you rarely read them directly. |
-| `SUBMIT_MESSAGES` | `sending` (show and announce while `state.submitting`), `uncertain`, `conflict`, `lockedFallback`, `unavailable`, `invalid`, `timeout`, `network`, `rejected`, `blockedLive`, `blockedDemo` | All but `sending` already arrive as `sent.message`. |
+| `SUBMIT_MESSAGES` | `noReceipt`, `checkFailed`, `sending` (show and announce while `state.submitting`), `uncertain`, `conflict`, `lockedFallback`, `unavailable`, `invalid`, `timeout`, `network`, `rejected`, `blockedLive`, `blockedDemo` | All but `sending` already arrive as `sent.message`. |
 | `SAVE_LINK_MESSAGES` | `idle` (the line under the save-link button before it is pressed), `working` (while the link is being made), `created`, `copied` (after your clipboard copy succeeds), `copyManually` (when the clipboard is unavailable: show the link for the visitor to copy), `timeout`, `rateLimited`, `unavailable`, `rejected`, `badLink`, `fallback`, `notReady`, `blocked` | The save-link card. `createSaveLink()` returns the right one as `message` for every outcome; `idle`, `working`, `copied` and `copyManually` are yours to show. |
 | `RESUME_MESSAGES` | `loadingTitle` and `loadingDetail` (show both while `state.resumeLoading`), `ready`, `pricingChanged`, `invalidToken`, `expired`, `planUnavailable`, `localCheckFailed`, `priceMismatch`, `timeout`, `fallback` | Opening a saved plan. Every outcome arrives as `state.resumeNotice`. |
 
@@ -987,3 +992,16 @@ Moved here from the top of the guide on October 9, 2026 to keep the opening shor
 
 - **Changed 2026-10-09, engine 1.3.0: the owner's tracking decisions.** The twelve tracking differences from the live tool (T1 to T12) are approved, and three measurement events are added and approved (T13 to T15, section 8): the pixel custom event for an accepted quote delivery (`QuoteSent` since 1.4.0; it was named `QuoteTexted` in 1.3.0), `quote_link_saved` with the pixel custom event `QuoteLinkSaved` for a created save link, and `price_choice_selected { choice }` for the way forward chosen on the price step. The engine fires all three itself, so an interface changes nothing. A completed service request stays the only conversion: `Lead`, `generate_lead` and `conversion` are unchanged in name, timing, parameters and once-only behaviour, and any value sent is still the per-visit price. No payload field, price, option id or wording changed. Approved is not live: nothing is deployed, and no event has been received by Google or Meta.
 - **Changed 2026-10-08, engine 1.2.0: the first-cleanup rule is decided, and its wording now comes from the engine.** `store.offerNote()` (all four kinds) and the hint under "Have you used Purge Pros before?" return the owner's wording from `POLICY-WORDING.md` (release root, the single source). The "No start-up fee" note has three real paragraphs, `draftWording: false` and `facts.firstCleanupMinutesAllowance: 120`. Restart and one-time numbers and timings are unchanged. Nothing that is sent changed: payload fields, version constants, option ids and strings, consent and terms wording are as they were. Details in section 6.3; what must change elsewhere before this wording goes live is in section 17.
+
+
+## Job 9: ordinary referral retry identity
+
+Builder 2026-10-13b: a nonempty referredBy participates in retry identity like an ordinary typed detail; edits/clears use a new request ID, including after a timeout. An unchanged request reuses its original payload. When omitted, fingerprint bytes are unchanged. This supersedes job 7's excluded-referral retry description above. Prepared offline, not deployed.
+
+## Receipts and one check (builder 2026-10-13c)
+
+Acceptance requires a successful HTTP status, valid JSON, accepted === true and the exact request ID. SUBMIT_MESSAGES.noReceipt supplies the neutral no-receipt message. There is no check-failed state. Unexpected replies have status no_receipt; 503 keeps status unavailable, and transport timeout/network keep their existing statuses. None is a definite refusal. Valid acceptance is terminal before tracking and cleanup.
+
+Unresolved payloads remain in page memory across editing and saved-plan resume. Start over clears them. A changed valid Send checks POST /submit?operation=request-status with {requestId}. Only a flat JSON object with exactly requestId and status, with requestId exactly equal to the pending ID asked about, is a valid status answer. Status accepted/in_progress shows Done for the original payload (receipt.alreadyReached); uncertain uses the existing contact-only lock; Every other answer, including unknown, all error statuses, malformed/empty bodies, network failure and the old Worker's reply, sends the changed payload normally. The status fetch uses redirect: "error"; a redirect is a failed check and sends normally. REQUEST_STATUS_TIMEOUT_MS bounds the optional check at 4000 ms, including its response body, in the existing Sending state. No new storage or browser capability. The same fingerprint reuses the same bytes/ID. Completion calls remain guarded per ID for the page lifetime. Reload/other tabs and a late original arriving after an unknown read remain outside the guarantee.
+
+Non-UUID fallback IDs (Web Crypto absent) bypass lookup to preserve sending: R4 refuses those IDs, and changing the ID bytes would violate compatibility.

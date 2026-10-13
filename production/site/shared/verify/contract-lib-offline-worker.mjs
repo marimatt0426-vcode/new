@@ -18,6 +18,7 @@
 // The production files are only READ. Nothing is sent anywhere: every host
 // name used here is under the reserved .test TLD and never leaves the process.
 import fs from "node:fs";
+import { approvedZipSource } from "../approved-service-zips.mjs";
 import path from "node:path";
 import vm from "node:vm";
 import net from "node:net";
@@ -58,8 +59,8 @@ import { PRODUCTION_SRC as PINNED_OR_GIVEN } from "./pinned-live-source.mjs";
 export const PRODUCTION_SRC = PINNED_OR_GIVEN; // the pinned October 5 live source, or PP_PRODUCTION_SRC
 export const workerSourcePath = path.join(PRODUCTION_SRC, "worker.template.mjs");
 export const widgetSourcePath = path.join(PRODUCTION_SRC, "widget.js");
-export const workerSource = fs.readFileSync(workerSourcePath, "utf8");
-export const widgetSource = fs.readFileSync(widgetSourcePath, "utf8");
+export const workerSource = approvedZipSource(fs.readFileSync(workerSourcePath, "utf8"), "worker");
+export const widgetSource = approvedZipSource(fs.readFileSync(widgetSourcePath, "utf8"), "widget");
 
 const IMPORT_LINE = 'import { DurableObject } from "cloudflare:workers";';
 function loadWorker(upstreamFetch) {

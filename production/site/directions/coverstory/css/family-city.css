@@ -51,6 +51,11 @@
 .city-zips__list > li:only-child .city-zip__btn { font-size: 64px; padding-block: 15px 12px; }
 /* exactly three stamps (Anderson): a size of their own, so 5 digits fit a third of a phone ticket */
 .city-zips__list > li:first-child:nth-last-child(3) .city-zip__btn, .city-zips__list > li:first-child:nth-last-child(3) ~ li .city-zip__btn { font-size: 33px; padding-inline: 4px; }
+/* exactly four stamps (Carmel, with the 46290 stamp of October 13): two rows of two on a phone. From 800px the four stand in
+   one row of their own under the words and the button under them: in the words' row four stamps squeeze the words to a
+   ribbon. The ticket carries .city-zips--four (the page source and _work/city-map.mjs write it). */
+.city-zips--four .city-zips__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.city-zips--four .city-zip__btn { font-size: clamp(34px, 11vw, 44px); padding-inline: 6px; }
 .city-zips--many { container-type: inline-size; }
 .city-zips__list--many { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .city-zips__list--many .city-zip__btn { font-size: 27px; padding: 12px 4px 9px; border-radius: 12px; }
@@ -90,6 +95,13 @@
   .city-zips:not(.city-zips--many) .city-zips__title, .city-zips:not(.city-zips--many) .city-zips__text { grid-column: 2; }
   .city-zips:not(.city-zips--many) .city-zips__list { grid-column: 3; grid-row: 1 / span 2; margin-top: 0; padding-left: 26px; border-left: 3px dotted rgba(6, 38, 68, .3); }
   .city-zips:not(.city-zips--many) .city-zips__cta { grid-column: 4; grid-row: 1 / span 2; margin-top: 0; }
+}
+@media (min-width: 800px) {
+  .city-zips.city-zips--four { grid-template-columns: 72px minmax(0, 1fr); }
+  .city-zips.city-zips--four .city-zips__title, .city-zips.city-zips--four .city-zips__text { grid-column: 2; }
+  .city-zips.city-zips--four .city-zips__list { grid-column: 1 / -1; grid-row: 3; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; padding: 18px 0 0; border-left: 0; border-top: 3px dotted rgba(6, 38, 68, .3); }
+  .city-zips.city-zips--four .city-zips__list > li { flex: initial; }
+  .city-zips.city-zips--four .city-zips__cta { grid-column: 1 / -1; grid-row: 4; justify-self: center; margin-top: 14px; }
 }
 
 /* C3. STARTING PRICES --------------------------------------------------------------------------------------------

@@ -566,7 +566,15 @@
     if (!over) el.stage.removeAttribute("data-ppb-has-over");
     else if (!el.stage.hasAttribute("data-ppb-has-over")) el.stage.setAttribute("data-ppb-has-over", "");
     placeOver();
-    var bar = store.priceBar(), parts = priceParts(bar);
+    var bar = store.priceBar();
+    if (state.step === "done" && state.receipt && state.receipt.alreadyReached) {
+      var receipt = state.receipt, frequency = frequencyOption(receipt.frequencyId);
+      bar.kind = receipt.custom ? "custom" : "exact";
+      bar.headline = receipt.priceText;
+      bar.priceLabel = receipt.custom ? "" : C.formatMoney(receipt.priceCents);
+      bar.unit = frequency ? frequency.unit || "" : "";
+    }
+    var parts = priceParts(bar);
     renderPrice(bar, parts);
     renderBar(bar, parts);
     syncPin(state);
@@ -1176,7 +1184,8 @@
     submit: { service_request: "Send my request", quote_delivery: "Send my quote", question: "Send my question" },
     sending: "Sending…", retry: "Try again",
     fail: {
-      timeout: "That took too long.", network: "We could not get through.", unavailable: "We could not get through.",
+      timeout: "We are not sure that went through.", network: "We are not sure that went through.", unavailable: "We are not sure that went through.",
+      no_receipt: "We are not sure that went through.",
       rejected: "That did not go through.", blocked: "This page cannot send requests.",
       server_invalid: "A detail needs another look.", invalid: "A detail needs another look.",
       kept: "Everything you entered is still here."
@@ -1223,7 +1232,7 @@
   SAY.confirm = function (state) {
     if (state.locked) return "Let’s sort this one out by text or phone.";
     if (state.submitting) return "Sending it over…";
-    if (steps.confirm.failed) return "Hmm. That one didn’t go through.";
+    if (steps.confirm.failed) return ["timeout", "network", "unavailable", "no_receipt"].indexOf(steps.confirm.failed.status) >= 0 ? "Hmm. I did not hear back on that one." : "Hmm. That one didn’t go through.";
     return "One last look. Then it’s over to me.";
   };
   SAY.done = function (state) {
@@ -1450,7 +1459,7 @@
       store.fieldRules("service_request").forEach(function (rule) { rules[rule.key] = rule; });
       self.fields = [];
       var make = function (screen, key) { var f = makeField(self, screen, rules[key]); self.fields.push(f); return f; };
-      var who = { question: make("who", "question"), firstName: make("who", "firstName"), lastName: make("who", "lastName"), customerStatus: make("who", "customerStatus"), lastCleaned: make("who", "lastCleaned") };
+      var who = { question: make("who", "question"), firstName: make("who", "firstName"), lastName: make("who", "lastName"), customerStatus: make("who", "customerStatus"), referredBy: make("who", "referredBy"), lastCleaned: make("who", "lastCleaned") };
       var reach = { preferredContact: make("reach", "preferredContact"), phone: make("reach", "phone"), email: make("reach", "email"), smsConsent: make("reach", "smsConsent") };
       var where = { address: make("where", "address"), city: make("where", "city"), zip: make("where", "zip"), startTiming: make("where", "startTiming"), lastCleaned: make("where", "lastCleaned") };
       self.method = reach.preferredContact;
@@ -1467,7 +1476,7 @@
       self.errors = h("div", { class: "ppb-errors", role: "alert", tabindex: "-1", "data-ppb-errors": true, hidden: true },
         h("p", { class: "ppb-errors__title" }, pic(ICON.alert, 18), COPY.form.errorsTitle), self.errorList);
       self.box = {
-        who: h("div", { class: "ppb-form", "data-ppb-screen": "who" }, who.question.node, self.nameRow, who.customerStatus.node, self.restart, who.lastCleaned.node),
+        who: h("div", { class: "ppb-form", "data-ppb-screen": "who" }, who.question.node, self.nameRow, who.customerStatus.node, who.referredBy.node, self.restart, who.lastCleaned.node),
         reach: h("div", { class: "ppb-form", "data-ppb-screen": "reach" }, reach.preferredContact.node, self.reachRow, reach.smsConsent.node),
         where: h("div", { class: "ppb-form", "data-ppb-screen": "where" }, where.address.node, self.zipRow, where.startTiming.node, where.lastCleaned.node)
       };
@@ -1750,14 +1759,14 @@
       var cleaned = sum.lastCleaned ? c.lastCleaned(sum.lastCleaned) : "";       // asked with the yard for a service request, with the name otherwise
       var lines = {
         question: [sum.question],
-        who: [sum.name, service ? sum.customerStatus : cleaned],
+        who: [sum.name, service ? sum.customerStatus : cleaned, sum.referredBy ? "Sent by: " + sum.referredBy : ""],
         reach: [sum.replyBy, sum.phone, sum.email],
         where: service ? [sum.serviceAddress, sum.startTiming, cleaned] : []
       };
       Object.keys(self.rows).forEach(function (id) {
         var one = self.rows[id], text = lines[id].filter(Boolean), key = text.join("\n");
         one.node.hidden = !text.length;
-        if (one.key !== key) { one.key = key; fill(one.value, text.map(function (line) { return h("span", { text: line }); })); }
+        if (one.key !== key) { one.key = key; fill(one.value, text.map(function (line, index) { return h("span", { text: line, "data-ppb-referral-text": id === "who" && index === 2 ? true : null }); })); }
         one.edit.disabled = frozen;
         one.node.classList.toggle("is-flagged", Boolean(self.failed && self.failed.rows[id]));
       });
@@ -1866,6 +1875,7 @@
       // sentence used as the heading here, so the box said it twice. The heading is not repeated under itself.
       var failTitle = c.fail[sent.status] || c.fail.rejected, failMessage = sent.message || "";
       if (failMessage.indexOf(failTitle) === 0) failMessage = failMessage.slice(failTitle.length).replace(/^\s+/, "");
+      if (failMessage.indexOf(C.BRAND.phoneDisplay) < 0) failMessage += " Or text us at " + C.BRAND.phoneDisplay + ".";
       self.failed = { status: sent.status, title: failTitle, message: failMessage, retry: Boolean(sent.retryAllowed) && !errors.length, other: other, lines: other, rows: {}, fields: errors.length > 0 };
       self.update(state, null);
       renderFrame(state);
@@ -1899,6 +1909,8 @@
     next: function () { if (ui.sheetOpen) hooks.close(); else store.reset(); },   // closing from here starts a new quote (engine)
     build: function () {
       var self = this, d = COPY.done;
+      self.alreadyReached = h("p", { class: "ppb-done__referral", "data-ppb-already-reached": true, hidden: true }, withReachLinks("Your first request had already reached us, so nothing was sent twice. To change a detail, text us at (317) 961-5865."));
+      self.referral = h("p", { class: "ppb-done__referral", "data-ppb-done-referral": true, hidden: true, text: "We will confirm who sent you when we reply." });
       self.watch = h("b");
       self.lead = h("span");
       self.ref = h("code", { "data-ppb-ref": true });
@@ -1913,7 +1925,7 @@
           h("p", { class: "ppb-done__lead" }, self.watch, " ", self.lead),
           h("p", { class: "ppb-ref" }, h("span", { text: d.ref }), self.ref),
           h("p", { class: "ppb-promise" }, pic(ICON.ok, 256), h("span", null, h("b", { text: COPY.confirm.promiseLead }), " " + C.PROMISES.requestNotBooking + " " + C.PROMISES.nothingCharged)),
-          self.nexts,
+          self.alreadyReached, self.referral, self.nexts,
           // a review build and a staging test each say so; a live request shows neither line
           h("p", { class: "ppb-review", "data-ppb-demo": true, text: d.demo, hidden: store.mode !== "demo" }),
           store.mode === "staging" ? h("p", { class: "ppb-review", "data-ppb-staging": true, text: d.staging }) : null),
@@ -1927,6 +1939,8 @@
       var leadKey = service ? kind : "other";
       if (leadKey !== self.leadKey) { self.leadKey = leadKey; fill(self.lead, service ? [d.lead[kind]] : withReachLinks(d.lead.other(C.BRAND.phoneDisplay))); }
       setText(self.ref, receipt.requestId);
+      self.referral.hidden = !(service && receipt.hasReferral);
+      self.alreadyReached.hidden = !receipt.alreadyReached;
       self.nexts.hidden = !service;
       if (service && self.nextsKey !== kind) {
         self.nextsKey = kind;
@@ -2511,6 +2525,12 @@
       var moved = has(info.changed, "step"), pressed = doc.activeElement;
       ui.carried = false;
       if (info.reason === "reset") { ui.prefer = ""; ui.picked = ""; ui.kept = false; cancelAuto(); }
+      if (!now.referredBy && (has(info.changed, "referredBy") || info.reason === "reset" || info.reason === "close")) {
+        if (steps.request.fields) steps.request.fields.forEach(function (field) { if (field.key === "referredBy") field.input.value = ""; });
+        each(el.stage, "[data-ppb-referral-text]", function (node) { node.remove(); });
+        if (steps.confirm.rows && steps.confirm.rows.who) steps.confirm.rows.who.key = null;
+        if (steps.done.referral) steps.done.referral.hidden = true;
+      }
       /* 2026-10-12. A new quote counts its own questions. countText() remembers for the visit which question was answered for the
          visitor when the page loaded. A ZIP that came in the address (?zip=) is gone after Start over (and after a finished request):
          its question is asked again and must be counted ("Step 2 of 6"), where it read "Changing an answer". A city page's own ZIP
@@ -2601,7 +2621,7 @@
   }
 
   win.PPBuilder = {
-    version: "2026-10-12b", store: store, hooks: null, ui: ui, el: el, api: api, COPY: COPY, SAY: SAY, steps: steps, city: CITY, town: TOWN,
+    version: "2026-10-13c", store: store, hooks: null, ui: ui, el: el, api: api, COPY: COPY, SAY: SAY, steps: steps, city: CITY, town: TOWN,
     registerStep: registerStep, refresh: refresh, openPop: openPop, closePop: closePop,
     open: function (openOptions) { return hooks.open(openOptions || {}, null); },
     close: function () { return hooks.close(); },

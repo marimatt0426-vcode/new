@@ -28,7 +28,7 @@ test("checkZip: empty, incomplete, in area (with city), out of area", () => {
   assert.equal(core.checkZip(46032).status, "in_area");
 });
 
-test("all 53 accepted ZIPs are in area with a community and a city; everything else is not", () => {
+test("all 54 accepted ZIPs are in area with a community and a city; everything else is not", () => {
   for (const zip of core.SERVICE_ZIPS) {
     const check = core.checkZip(zip);
     assert.equal(check.status, "in_area", zip);
@@ -39,9 +39,18 @@ test("all 53 accepted ZIPs are in area with a community and a city; everything e
   for (let number = 46000; number <= 46299; number += 1) {
     if (core.checkZip(String(number)).inArea) inArea += 1;
   }
-  assert.equal(inArea, 53);
+  assert.equal(inArea, 54);
   // ZIPs the city notes call out as NOT accepted.
   for (const zip of ["46012", "46017", "46226", "46235", "46201", "46204"]) assert.equal(core.checkZip(zip).status, "out_of_area", zip);
+});
+
+test("46290 matches its neighbouring ZIP prices and keeps Indianapolis mailing city", () => {
+  const a = makeStore().store, b = makeStore().store;
+  fillPlan(a); fillPlan(b); a.set({ zip: "46290" }); b.set({ zip: "46280" });
+  assert.equal(a.checkZip().inArea, true);
+  assert.equal(a.getState().city, "Indianapolis");
+  assert.deepEqual(a.checkZip().alternates, ["Carmel"]);
+  assert.deepEqual({ ...a.quote(), zip: "46280" }, b.quote());
 });
 
 test("typing a ZIP: digits only, five at most, and the answer is immediate", () => {
@@ -149,7 +158,7 @@ test("a city page can name its own city, used when it is right for the ZIP", () 
   assert.equal(lawrence.getState().city, "Carmel");
 
   const carmelEdge = makeStore({ options: { pageCity: "carmel" } }).store;
-  carmelEdge.set({ zip: "46280" });
+  carmelEdge.set({ zip: "46290" });
   assert.equal(carmelEdge.getState().city, "Carmel", "matched without regard to case, shown in its proper form");
 });
 

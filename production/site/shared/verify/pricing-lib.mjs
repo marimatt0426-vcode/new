@@ -3,6 +3,7 @@
 // in a node:vm context that has no fetch; the engine is loaded with require().
 // Nothing in purge-pros-production is modified (read-only).
 import fs from "node:fs";
+import { approvedZipSource } from "../approved-service-zips.mjs";
 import path from "node:path";
 import vm from "node:vm";
 import nodeCrypto from "node:crypto";
@@ -35,7 +36,7 @@ export function sha256(file) {
 //   2. the two build-time bundle placeholders become empty strings
 //   3. the ES-module export block at the very end is removed
 export function loadWorker() {
-  let source = fs.readFileSync(WORKER_PATH, "utf8");
+  let source = approvedZipSource(fs.readFileSync(WORKER_PATH, "utf8"), "worker");
   const importLine = /^import\s*\{\s*DurableObject\s*\}\s*from\s*"cloudflare:workers";\s*$/m;
   if (!importLine.test(source)) throw new Error("Worker import line not found; loader needs review");
   source = source.replace(importLine, "class DurableObject { constructor(ctx, env) { this.ctx = ctx; this.env = env; } }");
@@ -117,7 +118,7 @@ export function loadEngine(transform) {
 
 // ---- the live widget's ZIP list, read as text (the widget is not executed).
 export function widgetZips() {
-  const source = fs.readFileSync(WIDGET_PATH, "utf8");
+  const source = approvedZipSource(fs.readFileSync(WIDGET_PATH, "utf8"), "widget");
   const match = source.match(/serviceZips:\s*\[([\s\S]*?)\]/);
   if (!match) throw new Error("widget serviceZips not found");
   return match[1].match(/\d{5}/g);

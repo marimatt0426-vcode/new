@@ -185,7 +185,7 @@ test("demo: 'unavailable' can be retried", async () => {
   const result = await store.submit();
   assert.equal(result.status, "unavailable");
   assert.equal(result.httpStatus, 503);
-  assert.equal(result.message, "We could not connect to save your request. Please try again or call (317) 961-5865.");
+  assert.equal(result.message, "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.");
   assert.equal(result.retryAllowed, true);
   assert.equal(store.getState().locked, null);
   store.demo.submit = "success";
@@ -196,13 +196,13 @@ test("demo: 'timeout' and 'network' give plain messages, never the browser's own
   const timeout = readyStore({ options: { demo: { submit: "timeout" } } }).store;
   const timedOut = await timeout.submit();
   assert.equal(timedOut.status, "timeout");
-  assert.equal(timedOut.message, "This is taking longer than expected. Please try again or call (317) 961-5865.");
+  assert.equal(timedOut.message, "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.");
   assert.equal(timedOut.retryAllowed, true);
 
   const network = readyStore({ options: { demo: { submit: "network" } } }).store;
   const failed = await network.submit();
   assert.equal(failed.status, "network");
-  assert.equal(failed.message, "We could not send this request. Please try again or call (317) 961-5865.");
+  assert.equal(failed.message, "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.");
   assert.equal(failed.retryAllowed, true);
   assert.equal(network.getState().submitting, false);
 });
@@ -212,7 +212,7 @@ test("demo: 'forbidden' (or any other rejection) shows a plain message and keeps
   const result = await store.submit();
   assert.equal(result.status, "rejected");
   assert.equal(result.httpStatus, 403);
-  assert.equal(result.message, "We could not save your request. Please try again.");
+  assert.equal(result.message, "We could not save your request. Please try again. Or text us at (317) 961-5865.");
   assert.equal(result.serverMessage, "Forbidden");
   assert.equal(result.retryAllowed, true);
 });
@@ -453,13 +453,14 @@ test("live: 409 replies lock the form with the server's message, or the fallback
   assert.equal((await silent.store.submit()).message, "Please call Purge Pros to confirm your request before submitting again.");
   const bare = liveStore(async () => reply(409, ""));
   const bareResult = await bare.store.submit();
-  assert.equal(bareResult.status, "locked");
-  assert.equal(bareResult.message, "Please call Purge Pros to confirm your request before submitting again.");
+  assert.equal(bareResult.status, "no_receipt");
+  assert.equal(bareResult.message, core.SUBMIT_MESSAGES.noReceipt);
+  assert.equal(bare.store.getState().locked, null);
 });
 
 test("live: 503 can be retried and the retry reuses the same requestId", async () => {
   const { store, calls } = liveStore(async (url, init, attempt) => attempt === 1
-    ? reply(503, { accepted: false, code: "SUBMISSION_UNAVAILABLE", requestId: "x", message: "We could not connect to save your request. Please try again or call (317) 961-5865." })
+    ? reply(503, { accepted: false, code: "SUBMISSION_UNAVAILABLE", requestId: "x", message: "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865." })
     : reply(202, { accepted: true, requestId: JSON.parse(init.body).requestId }));
   const first = await store.submit();
   assert.equal(first.status, "unavailable");
@@ -492,8 +493,8 @@ test("live: a 400 with fields highlights those fields; other rejections get a pl
     const { store } = liveStore(async () => reply(status, body));
     const result = await store.submit();
     assert.equal(result.ok, false, String(status));
-    assert.equal(result.status, "rejected", status + " " + JSON.stringify(body));
-    assert.equal(result.message, "We could not save your request. Please try again.", "a plain message, not the raw server text");
+    assert.equal(result.status, status >= 500 || status === 200 ? "no_receipt" : "rejected", status + " " + JSON.stringify(body));
+    assert.equal(result.message, status >= 500 || status === 200 ? core.SUBMIT_MESSAGES.noReceipt : core.SUBMIT_MESSAGES.rejected, "definite refusal or neutral uncertainty");
     assert.equal(result.serverMessage, raw);
     assert.equal(result.httpStatus, status);
     assert.equal(result.retryAllowed, true);
@@ -501,11 +502,13 @@ test("live: a 400 with fields highlights those fields; other rejections get a pl
   }
 });
 
-test("live: an accepted reply with an empty or unreadable body still succeeds with the request's own id", async () => {
+test("live: empty or unreadable bodies never prove acceptance", async () => {
   for (const body of ["", "not json"]) {
     const { store } = liveStore(async () => reply(202, body));
     const result = await store.submit();
-    assert.equal(result.ok, true, JSON.stringify(body));
+    assert.equal(result.ok, false, JSON.stringify(body));
+    assert.notEqual(store.getState().step, "done");
+    assert.equal(result.status, "no_receipt");
     assert.equal(result.requestId, "test-id-0001");
   }
 });
@@ -526,7 +529,7 @@ test("live: the request is aborted after 15 seconds and can be retried with the 
   const result = await pending;
   assert.equal(aborted, true, "the request itself is aborted");
   assert.equal(result.status, "timeout");
-  assert.equal(result.message, "This is taking longer than expected. Please try again or call (317) 961-5865.");
+  assert.equal(result.message, "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.");
   assert.equal(result.retryAllowed, true);
   assert.equal(store.getState().submitting, false);
   // The retry is recognisable by the server as the same request.
@@ -551,7 +554,7 @@ test("live: a network failure never shows the browser's own text", async () => {
   const { store } = liveStore(async () => { throw new TypeError("Failed to fetch"); });
   const result = await store.submit();
   assert.equal(result.status, "network");
-  assert.equal(result.message, "We could not send this request. Please try again or call (317) 961-5865.");
+  assert.equal(result.message, "We could not tell whether your request reached us. Send it again to check; it will not be counted twice. Or text us at (317) 961-5865.");
   assert.equal(result.serverMessage, "Failed to fetch");
   assert.equal(result.retryAllowed, true);
 });

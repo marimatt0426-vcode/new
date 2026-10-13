@@ -68,16 +68,16 @@ test("brand details match the live widget", () => {
   inWidget(core.BRAND.reviewsUrl, "reviews link");
 });
 
-test("the 53 accepted ZIPs are identical in the engine, the widget and the Worker", () => {
-  assert.equal(core.SERVICE_ZIPS.length, 53);
+test("the 54 accepted ZIPs are identical in the engine, the widget and the Worker", () => {
+  assert.equal(core.SERVICE_ZIPS.length, 54);
   assert.deepEqual(plain(core.SERVICE_ZIPS), plain(widget.CONFIG.serviceZips));
   assert.deepEqual(plain(core.SERVICE_ZIPS).sort(), Array.from(worker.SERVICE_ZIPS).sort());
-  assert.equal(new Set(core.SERVICE_ZIPS).size, 53, "no ZIP twice");
+  assert.equal(new Set(core.SERVICE_ZIPS).size, 54, "no ZIP twice");
 });
 
-test("the ZIP-to-community table covers exactly the 53 ZIPs, once each", () => {
+test("the ZIP-to-community table covers exactly the 54 ZIPs, once each", () => {
   const listed = core.COMMUNITIES.flatMap((community) => community.zips);
-  assert.equal(listed.length, 53);
+  assert.equal(listed.length, 54);
   assert.deepEqual(listed.slice().sort(), plain(core.SERVICE_ZIPS).sort());
   assert.equal(core.COMMUNITIES.length, 26, "26 communities");
   assert.deepEqual(Object.keys(core.ZIP_TO_COMMUNITY).sort(), plain(core.SERVICE_ZIPS).sort());
@@ -99,8 +99,9 @@ test("the ZIP-to-community table agrees with spec/cities.json and assets/map/com
   for (const community of map.communities) {
     for (const zip of community.zips) assert.equal(core.ZIP_TO_COMMUNITY[zip].community, community.name, zip + " in the map data");
   }
-  // The three overlaps stated in spec/CONTENT-CITIES.md section 5.
+  // The overlaps stated in spec/CONTENT-CITIES.md section 5.
   assert.deepEqual(plain(core.cityForZip("46280").alternates), ["Carmel"]);
+  assert.deepEqual(plain(core.cityForZip("46290")), { zip: "46290", community: "Indianapolis", city: "Indianapolis", alternates: ["Carmel"], page: "/indianapolis", poBox: false });
   assert.deepEqual(plain(core.cityForZip("46062").alternates), ["Westfield"]);
   assert.deepEqual(plain(core.cityForZip("46216")), { zip: "46216", community: "Lawrence", city: "Indianapolis", alternates: ["Lawrence"], page: "/lawrence", poBox: false });
   assert.equal(core.cityForZip("46201"), null);
@@ -296,15 +297,15 @@ test("server reply wording is the Worker's and the widget's own", () => {
   inWorker(uncertainEnd);
   const [conflictStart] = core.SUBMIT_MESSAGES.conflict.split("{requestId}");
   inWorker(conflictStart);
-  inWorker(core.SUBMIT_MESSAGES.unavailable);
+  assert.equal(core.SUBMIT_MESSAGES.unavailable, core.SUBMIT_MESSAGES.noReceipt);
   inWorker(core.SUBMIT_MESSAGES.invalid);
   inWidget(core.SUBMIT_MESSAGES.lockedFallback);
-  inWidget(core.SUBMIT_MESSAGES.rejected);
+  assert.equal(core.SUBMIT_MESSAGES.rejected, "We could not save your request. Please try again. Or text us at (317) 961-5865.");
   inWidget(core.SUBMIT_MESSAGES.sending);
   inWidget('"This is taking longer than expected. Please try again or call " + CONFIG.brand.phoneDisplay + "."');
-  assert.equal(core.SUBMIT_MESSAGES.timeout, "This is taking longer than expected. Please try again or call " + core.BRAND.phoneDisplay + ".");
+  assert.equal(core.SUBMIT_MESSAGES.timeout, core.SUBMIT_MESSAGES.noReceipt);
   inWidget('"We could not send this request. Please try again or call " + CONFIG.brand.phoneDisplay + "."');
-  assert.equal(core.SUBMIT_MESSAGES.network, "We could not send this request. Please try again or call " + core.BRAND.phoneDisplay + ".");
+  assert.equal(core.SUBMIT_MESSAGES.network, core.SUBMIT_MESSAGES.noReceipt);
 });
 
 test("save-link and resume messages are the live messages", () => {

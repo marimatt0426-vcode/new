@@ -102,7 +102,7 @@ test("the whole-payload console print on Send exists in demo only: live and stag
     const con = { info: (...a) => printed.push(a), warn: (...a) => printed.push(a), log: (...a) => printed.push(a) };
     const options = Object.assign({}, core.siteOptions(site, TRUSTED), {
       console: con, sinks: { gtag() {}, dataLayer: [], fbq() {} },
-      fetch: async () => ({ ok: true, status: 202, text: async () => JSON.stringify({ accepted: true }) })
+      fetch: async (url,init) => ({ ok: true, status: 202, text: async () => JSON.stringify({ accepted: true, requestId:JSON.parse(init.body).requestId }) })
     });
     const made = makeStore({ url, options });
     fillPlan(made.store); made.store.goTo("request"); fillDetails(made.store, "service_request", "text");

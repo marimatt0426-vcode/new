@@ -173,7 +173,11 @@ ${lateScript(headCode, bodyCode)}
 </html>
 `;
 }
-const bodyParts = (base) => (block(`${base}.html`) ? [block(`${base}.html`)] : [block(`${base}.1.html`), block(`${base}.2.html`)]);
+// A page cut over several code elements: .1, .2, then the Yard Guide's older-card blocks (.older-1, .older-2 ...) in
+// the order the template holds them (the packaging tool adds them when the index outgrows one element).
+const olderParts = (base) => [...result.files.keys()].filter((k) => k.startsWith(`${base}.older-`) && k.endsWith(".html"))
+  .sort((a, b) => parseInt(a.slice(`${base}.older-`.length), 10) - parseInt(b.slice(`${base}.older-`.length), 10)).map(block);
+const bodyParts = (base) => (block(`${base}.html`) ? [block(`${base}.html`)] : [block(`${base}.1.html`), block(`${base}.2.html`), ...olderParts(base)]);
 const written = [];
 for (const p of result.site.pages) {
   const name = simName(p), which = p.slug === "index" ? "home" : p.customer ? "welcome" : "carmel", s = shell(which);

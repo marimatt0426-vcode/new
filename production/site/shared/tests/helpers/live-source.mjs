@@ -10,6 +10,7 @@
 // Nothing here imports, runs or modifies the production files as programs,
 // and no network request is made.
 import fs from "node:fs";
+import { approvedZipSource } from "../../approved-service-zips.mjs";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
@@ -23,8 +24,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 export const PINNED_LIVE_SRC = path.resolve(here, "../fixtures/live-2026-10-05");
 export const PRODUCTION_SRC = process.env.PP_PRODUCTION_SRC || PINNED_LIVE_SRC;
 
-export const workerText = fs.readFileSync(path.join(PRODUCTION_SRC, "worker.template.mjs"), "utf8");
-export const widgetText = fs.readFileSync(path.join(PRODUCTION_SRC, "widget.js"), "utf8");
+export const workerText = approvedZipSource(fs.readFileSync(path.join(PRODUCTION_SRC, "worker.template.mjs"), "utf8"), "worker");
+export const widgetText = approvedZipSource(fs.readFileSync(path.join(PRODUCTION_SRC, "widget.js"), "utf8"), "widget");
 
 // The text from `start` up to (not including) `end`. Throws if either marker
 // has moved, so a change in the live source is noticed instead of ignored.

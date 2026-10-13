@@ -239,7 +239,7 @@ test("the example shows a locked reply and a failed reply", async () => {
   fill(failing);
   await failing.press("Send my request");
   await failing.settle();
-  assert.match(failing.app.words, /This is taking longer than expected\. Please try again or call \(317\) 961-5865\./);
+  assert.match(failing.app.words, /We could not tell whether your request reached us/);
   assert.ok(failing.button("Send my request"), "a timeout can be retried");
 });
 

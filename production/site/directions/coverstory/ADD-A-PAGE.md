@@ -1,5 +1,7 @@
 # Add a page to the Cover Story site
 
+> Next build, owner decision of October 12, 2026: 46290 is accepted, with Indianapolis as mailing city and Carmel as alternate, exactly like 46280. The current total is 54 accepted ZIPs (51 printed after excluding the same three PO Box ZIPs). Indianapolis lists 19; the Marion directory group lists 21; Carmel displays four choices: 46032, 46033, 46280, 46290. Its hero uses `"alsoZips": ["46280", "46290"]`. Earlier dated counts, screenshots and approval questions below are historical and superseded by this decision. Prepared source only; rollout and browser verification are separate.
+
 One source file per page. The builder supplies everything shared: head, header, hero, price-builder mount, facts strip, footer, structured data. `DESIGN.md` holds the design rules; this file is the mechanics. Run every command from `directions/coverstory`.
 
 **You write:** `_work/pages/<slug>.html`, and if your family needs a new component, `css/family-<name>.css` and `_work/pages/kit-<name>.html`.
