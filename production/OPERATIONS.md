@@ -64,6 +64,10 @@ The hosted files are uploaded beside the files already live, never in place of t
 
 `website/blog/prepared/`, `published-cards.json` and `refresh-index.mjs` make the September index. After the switch the index is the Yard Guide page of the rebuilt site (`website/blog/blocks/`, made from `site/directions/coverstory/yard-guide.html` and `site/assets/covers/covers.json`), and the September index must not be pasted again. The September tools stay in the tree until the owner retires them. `validate-prep.mjs` no longer requires the blog head code to load `purge-quote.js`.
 
+## Optional referral request detail (prepared; not deployed)
+
+The compatible Worker forwards a nonempty string `referredBy` after removing C0/C1 controls and line separators, trimming and cutting to 60 UTF-16 units. Absent, blank and non-string values add no key and never invalidate an otherwise valid request. Existing validation, pricing, fingerprint/ledger, saved plans, attribution and Meta are unchanged. The previous Worker accepts but drops unknown keys, so deploy this Worker before builder 2026-10-13a. The team sees the name without any workflow change: when a name was given, the Worker's team summary (`quoteSummary`, which the intake workflow already prints in the contact note, the owner text and the tasks) gains one line under the customer history line, `Who sent them (as typed by the customer, not verified): <name>`; without a name the summary is byte for byte as before. A contact field for the value is optional and would be mapped from the top-level key. No live workflow is changed by this source patch. The current regression pins the exact approved forward-source additions and compares all old keys and Meta outputs; manifest provenance must be refreshed with production/update-manifest.mjs after npm run build.
+
 ## Quote build
 
 State of the checked-in bundle: a prepared candidate, locally tested, not deployed. The live Worker is still the October 5 release until the owner approves a deployment; that release is kept byte for byte as `quote/tests/fixtures/2026-10-05-live-worker.mjs` (SHA-256 `113ce3be...a95c`).
@@ -126,3 +130,8 @@ If the public sitemap omits a published article, use the existing GHL blog XML s
 Keep existing immutable hashed assets available while adding new versions. The asset folder preserves installed historical hashes as well as current ones so older references continue resolving. Review/test routes and rejected mockups are excluded. GHL-hosted images remain referenced by their existing URLs.
 
 Full blog article records, scheduling and page metadata remain in GHL; public article snapshots and metadata are captured separately when available. The private workspace retains native record mappings and deployment receipts. No customer data or credentials belong in this public repository.
+
+
+## Job 9: ordinary referral retry identity
+
+A sanitized nonempty referredBy is part of the request fingerprint. Same-ID changes/clears conflict; same-ID unchanged accepted requests replay; uncertain dispatch stays uncertain. Requests without the line retain identical fingerprint and ledger bytes. Prepared offline, not deployed.

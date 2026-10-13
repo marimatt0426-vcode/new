@@ -257,7 +257,9 @@ assert.deepEqual(plain(candidate.__FREQUENCIES), plain(reference.__FREQUENCIES),
 assert.deepEqual(plain(candidate.__YARD_SIZES), plain(reference.__YARD_SIZES), 'Yard-size table changed');
 assert.deepEqual(plain(candidate.__AREA_ADDERS), plain(reference.__AREA_ADDERS), 'Area add-on table changed');
 const serviceZips = [...reference.__SERVICE_ZIPS];
-assert.deepEqual([...candidate.__SERVICE_ZIPS], serviceZips, 'ZIP list changed');
+assert.deepEqual([...candidate.__SERVICE_ZIPS], [...serviceZips, '46290'], 'Only approved ZIP 46290 may be added');
+assert.equal(candidate.__SERVICE_ZIPS.size, 54);
+assert.equal(reference.__SERVICE_ZIPS.has('46290'), false);
 assert.ok(serviceZips.length > 40 && serviceZips.every(zip => /^\d{5}$/.test(zip)));
 
 function slice(source, start, end, label) {
@@ -276,14 +278,18 @@ function ledgerBlock(source) {
 }
 const SAVED_LINK_OLD_LINE = 'url: "https://quote.itspurgepros.com/#resume=" + token,';
 const SAVED_LINK_NEW_LINE = 'url: savedLinkBase(env) + "#resume=" + token,';
+assert.equal(candidateSource.split("    if (new URL(request.url).pathname === \"/request-status\") return readRequestStatus(this, request);\n").length, 2, "one read-only ledger route");
+assert.equal(sha256(slice(candidateSource, "// Read-only receipt lookup.", "function replayReply(status, body) {", "read-only status helpers")), "5dc1dbf4ddc418ed1b4af4f849c0d19cab6f5053b6ead0eac47a907ca2880055", "reviewed read-only status helpers");
+assert.equal(candidateSource.split("    if (new URL(request.url).pathname === \"/request-status-limit\") return limitRequestStatus(this, request);\n").length, 2, "one memory-only limiter route");
 const protectedBlocks = {};
 function protect(label, before, after) {
   assert.equal(after, before, `${label} changed`);
   protectedBlocks[label] = sha256(after);
 }
-protect('request ledger, replies and request fingerprint', ledgerBlock(referenceSource), ledgerBlock(candidateSource));
+protectWithApprovedLines('request ledger, replies and request fingerprint (apart from the optional referral)',
+  ledgerBlock(referenceSource), ledgerBlock(candidateSource).replace("    if (new URL(request.url).pathname === \"/request-status-limit\") return limitRequestStatus(this, request);\n", "").replace("    if (new URL(request.url).pathname === \"/request-status\") return readRequestStatus(this, request);\n", ""), [["  if (forward.referredBy) material.push(forward.referredBy);\n", '']]);
 protect('versions, default origins, ZIP list, prices, option sets and voice tables',
-  slice(referenceSource, 'var SCHEMA_VERSION = ', 'function corsHeaders(', 'constants'), slice(candidateSource, 'var SCHEMA_VERSION = ', 'function corsHeaders(', 'constants'));
+  slice(referenceSource, 'var SCHEMA_VERSION = ', 'function corsHeaders(', 'constants'), slice(candidateSource, 'var SCHEMA_VERSION = ', 'function corsHeaders(', 'constants').replace('  "46280",\n  "46290"\n]);', '  "46280"\n]);'));
 protect('origin check, cleaning, price calculator and voice parsing',
   slice(referenceSource, 'function corsHeaders(', 'function voiceQuoteResponse(', 'calculator'), slice(candidateSource, 'function corsHeaders(', 'function voiceQuoteResponse(', 'calculator'));
 protect('voice handler, request validation and attribution capture',
@@ -325,6 +331,9 @@ protectWithApprovedLines('forward builder: consent, attribution, contact and eve
   slice(candidateSource, 'function buildV3Forward(', 'async function handleReviews(', 'forward builder'),
   [
     ['function buildV3Forward(lead, values, requestId, request, env) {', 'function buildV3Forward(lead, values, requestId, request) {'],
+    ["  const referredBy = typeof lead.referredBy === \"string\" ? lead.referredBy.replace(/[\\u0000-\\u001f\\u007f-\\u009f\\u2028\\u2029]/g, \"\").trim().slice(0, 60) : \"\";\n", ""],
+    ["    ...(referredBy ? { referredBy } : {}),\n", ""],
+    ["    referredBy ? `Who sent them (as typed by the customer, not verified): ${referredBy}` : \"\",\n", ""],
     ['  const termsCheck = termsVersionCheck(env, values.intent, termsVersion);\n', ''],
     ['  const newHousehold = !quote.custom && quote.frequencyId !== "onetime" && values.customerStatus === "new";\n', ''],
     [`  const firstVisit = quote.custom ? ${text(NEW_FIRST_VISIT.custom)} : quote.frequencyId === "onetime" ? ${text(NEW_FIRST_VISIT.onetime)} : newHousehold ? ${text(NEW_FIRST_VISIT.newHousehold)} : ${text(NEW_FIRST_VISIT.returning)};\n`, ''],
@@ -355,7 +364,7 @@ protectWithApprovedLines('request intake: origin, size, JSON, validation order a
   assert.equal(beforeHead.split(PAGES_START).length, 2);
   protectWithApprovedLines('router: saved-plan, voice and script addresses',
     beforeHead.slice(0, beforeHead.indexOf(PAGES_START)), after.slice(0, after.indexOf(ROUTER_TAIL)),
-    [['launcherScript(env)', 'widgetScript(request, env)'], [FORWARD_LINE, '']]);
+    [['launcherScript(env)', 'widgetScript(request, env)'], [FORWARD_LINE, ''], ["    if (url.pathname === \"/submit\" && url.search === \"?operation=request-status\") return handleRequestStatus(request, env);\n", '']]);
 }
 
 // The forward to the quote page is new code, so there is no October 5 text to compare it with.
@@ -974,6 +983,25 @@ const newBehaviour = {};
 async function once(vars, spec) { return send(makeWorld(candidate, vars), spec); }
 const get = (url, vars = PRODUCTION_LIKE) => once(vars, { method: 'GET', url, headers: {} });
 
+{ // Owner-approved ZIP addition: real handlers, in memory, no external calls.
+  const g=generator(46290);
+  const lead=makeLead(g,'recurring','service_request');
+  lead.zip='46290';
+  const submitted=await once(PRODUCTION_LIKE,submitSpec(lead));
+  assert.equal(submitted.status,202,'46290 service request accepted');
+  const plan=planBody(g,'recurring');plan.zip='46290';
+  const saved=await once(PRODUCTION_LIKE,resumeSpec('/quote-resume',plan,'192.0.2.90'));
+  assert.equal(saved.status,201,'46290 saved plan accepted');
+  const prices=[];
+  for(const zip of ['46280','46290']){
+    const response=await once(PRODUCTION_LIKE,voiceSpec({zip,serviceType:'recurring',propertyType:'residential',dogs:2,areas:['back'],yardSize:'s',frequency:'weekly'}));
+    const answer=JSON.parse(response.text);
+    assert.equal(response.status,200);assert.equal(answer.result,'standard_price');prices.push(answer.priceCents);
+  }
+  assert.equal(prices[0],prices[1]);
+  newBehaviour.approvedZip46290='54 ZIPs; submit 202, saved plan 201, voice price equals 46280 to the cent';
+}
+
 { // 1. The forward to the quote page.
   const full = '?open_quote=1&utm_source=google&utm_medium=cpc&utm_campaign=fall%20sale&utm_content=ad+1&utm_term=dog%2Bwaste&gclid=Cj0abc_123-x&gbraid=0AAAAA&wbraid=1BBBBB&fbclid=IwAR0xyz';
   for (const pathname of FORWARD_PATHS) {
@@ -1321,6 +1349,42 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
 }
 
 // ---------------------------------------------------------------------------
+// Optional referral: exercise the real handler, ledger and Meta stand-ins.
+{
+  const samples = [[undefined, undefined], ['', undefined], ['   ', undefined], ['  TEST-FLYER  ', 'TEST-FLYER'], ['X'.repeat(61), 'X'.repeat(60)], [' \u0000TEST\t-\r\nFLYER\u007f\u0085\u2028\u2029 ', 'TEST-FLYER'], [42, undefined], [{ code: 'TEST' }, undefined]];
+  for (const [input, expected] of samples) {
+    const lead = serviceLead();
+    const base = await once(PRODUCTION_LIKE, submitSpec(lead));
+    const note = { ...lead }; if (input !== undefined) note.referredBy = input;
+    const result = await once(PRODUCTION_LIKE, submitSpec(note));
+    assert.equal(result.status, 202);
+    assert.equal(result.text, base.text);
+    const forwarded = result.outgoing.find(call => call.url === HOOK_V3).body;
+    const original = base.outgoing.find(call => call.url === HOOK_V3).body;
+    assert.equal(forwarded.referredBy, expected);
+    const stripped = { ...forwarded }; delete stripped.referredBy;
+    // The team summary (contact note, owner text, tasks) names who sent them: one line, only when a name was given.
+    const teamLine = 'Who sent them (as typed by the customer, not verified): ' + expected;
+    const summaryLines = forwarded.quoteSummary.split('\n');
+    if (expected === undefined) assert.equal(forwarded.quoteSummary.includes('Who sent them'), false, 'no name, no team line');
+    else {
+      assert.equal(summaryLines.filter(line => line === teamLine).length, 1, 'the team summary names who sent them, once');
+      assert.equal(summaryLines[summaryLines.indexOf(teamLine) - 1].startsWith('Customer history (self-reported): '), true, 'under the customer history line');
+      stripped.quoteSummary = summaryLines.filter(line => line !== teamLine).join('\n');
+    }
+    assert.equal(JSON.stringify(stripped), JSON.stringify(original), 'all old forwarded bytes and order unchanged');
+    if (expected === undefined) assert.equal(JSON.stringify(result), JSON.stringify(base), 'absent/empty/malformed note is byte-identical');
+    assert.deepEqual(result.outgoing.filter(call => call.url !== HOOK_V3), base.outgoing.filter(call => call.url !== HOOK_V3), 'Meta receives no note');
+    assert.deepEqual(result.logs, base.logs, 'Worker logs receive no note');
+    assert.equal(JSON.stringify(result.logs).includes('TEST-FLYER'), false);
+  }
+  const lead = serviceLead(); lead.referredBy = 'TEST-FLYER';
+  const old = await send(makeWorld(reference, BARE), submitSpec(lead));
+  assert.equal(old.status, 202, 'old-style Worker accepts an unknown key');
+  assert.equal('referredBy' in old.outgoing.find(call => call.url === HOOK_V3).body, false, 'old-style Worker drops it');
+  newBehaviour.referredBy = '8 handler cases: absent, empty, whitespace, trimmed, 61 units, controls/line breaks, number, object; old Worker accepts/drops; all old forwarded bytes, Meta and logs unchanged';
+}
+
 // d. Word sweep of the candidate bundle (whole text: strings, comments and code)
 // ---------------------------------------------------------------------------
 const RETIRED_WORDS = [/promotion/i, /promotional/i, /promo\b/i, /waive/i, /waiving/i, /initial scoop/i, /surcharge/i, /new-customer offer/i, /first-cleanup offer/i, /introductory offer/i, /\boffers?\b/i, /\bfree\b/i, /unlimited/i, /no extra-time charge/i];
@@ -1370,7 +1434,8 @@ const result = {
   keptKeyNames: KEPT_KEY_NAMES,
   pricingCasesCompared: pricingCases,
   expectedPricingAssertions: 6,
-  serviceZipCount: serviceZips.length,
+  serviceZipCount: candidate.__SERVICE_ZIPS.size,
+  historicalServiceZipCount: serviceZips.length,
   protectedBlocksByteExact: protectedBlocks,
   newBehaviour,
   retiredWordsSwept: RETIRED_WORDS.map(String),

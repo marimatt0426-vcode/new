@@ -16,10 +16,10 @@ for (const file of manifest.files) {
 assert.equal(sha(fs.readFileSync(path.join(here, 'quote/tests/fixtures/2026-10-05-live-worker.mjs'))),
   '113ce3beee7ac937605d7da6eb7453052bfe03ee95c92e520e623396bffea95c',
   'Regression reference is not the October 5 pixel step release');
-// Prepared October 9, 2026 candidate: 120-minute first cleanup, widget retired. Not deployed.
+// Prepared next build: ZIP 46290, the optional "Who sent you?" name (forwarded key and one team-summary line), the read-only request status operation. No deployment by this edit.
 assert.equal(sha(fs.readFileSync(path.join(here, 'quote/dist/worker.mjs'))),
-  '218d647a6a1db88b18dcceae723ddbca90aebeded2b2d65626641749fd46fc14',
-  'Quote rebuild differs from the prepared October 9 candidate; run npm run build, or reconcile before updating this hash');
+  "235713cdca9d48e6f7da98dc5cd6f66b359267fcad96f39c12dbc2ead2cc2300",
+  'Quote rebuild differs from the prepared ZIP 46290 candidate; run npm run build, or reconcile before updating this hash');
 // The rebuilt website (v5): the paste-ready blocks, their field sheet and the hosted files they name.
 // Prepared and locally tested; not installed until the owner approves the switch (OPERATIONS.md).
 const fields = JSON.parse(fs.readFileSync(path.join(here, 'website/fields.json')));

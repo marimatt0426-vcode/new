@@ -3,6 +3,79 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 
 // dist/worker.mjs
 import { DurableObject } from "cloudflare:workers";
+// Read-only receipt lookup. Separate from submission and saved-plan mutation paths.
+const REQUEST_STATUS_BODY_TIMEOUT_MS = 2000;
+const REQUEST_STATUS_WINDOW_MS = 60000;
+const REQUEST_STATUS_MAX = 120;
+async function requestStatusBody(request) {
+  if (!(request.headers.get("Content-Type") || "").toLowerCase().startsWith("application/json")) throw { status: 415 };
+  if (Number(request.headers.get("Content-Length")) > 128) throw { status: 413 };
+  if (!request.body) throw { status: 400 };
+  const reader = request.body.getReader(), chunks = [];
+  let bytes = 0, timer;
+  const deadline = new Promise((_, reject) => { timer = setTimeout(() => reject({ status: 408 }), REQUEST_STATUS_BODY_TIMEOUT_MS); });
+  try {
+    while (true) {
+      const part = await Promise.race([reader.read(), deadline]);
+      if (part.done) break;
+      bytes += part.value.byteLength;
+      if (bytes > 128) throw { status: 413 };
+      chunks.push(part.value);
+    }
+  } catch (error) {
+    // A stream's cancel hook may also stall or throw; it cannot extend the deadline.
+    try { Promise.resolve(reader.cancel()).catch(() => {}); } catch (_) {}
+    throw error;
+  } finally { clearTimeout(timer); }
+  const all = new Uint8Array(bytes);
+  let offset = 0;
+  for (const chunk of chunks) { all.set(chunk, offset); offset += chunk.byteLength; }
+  let body;
+  try { body = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(all)); } catch (_) { throw { status: 400 }; }
+  if (!body || Array.isArray(body) || typeof body !== "object" || Object.keys(body).length !== 1 || typeof body.requestId !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.requestId)) throw { status: 400 };
+  return body;
+}
+// Same binding and hashed caller/window pattern as the saved-plan limiter, but no storage or alarm.
+// The counter lives only in this dedicated limiter instance; eviction/restart resets its allowance.
+function limitRequestStatus(ledger, request) {
+  if (request.method !== "GET") return replayReply(405, { accepted: false });
+  const bucket = Math.floor(Date.now() / REQUEST_STATUS_WINDOW_MS);
+  if (!ledger.requestStatusRate || ledger.requestStatusRate.bucket !== bucket) ledger.requestStatusRate = { bucket, count: 0 };
+  if (ledger.requestStatusRate.count >= REQUEST_STATUS_MAX) return replayReply(429, { accepted: false });
+  ledger.requestStatusRate.count++;
+  return replayReply(200, { accepted: true });
+}
+async function readRequestStatus(ledger, request) {
+  if (request.method !== "GET") return replayReply(405, { accepted: false });
+  try {
+    const record = await ledger.ctx.storage.get("request");
+    const status = !record ? "unknown" : record.status === "accepted" ? "accepted" : record.status === "dispatching" ? "in_progress" : "uncertain";
+    return replayReply(200, status);
+  } catch (_) { return replayReply(503, { accepted: false }); }
+}
+async function handleRequestStatus(request, env) {
+  const origin = request.headers.get("Origin"), allowed = originAllowed(origin, env, request.url);
+  const cors = corsHeaders(allowed ? origin : "null");
+  const reply = (status, body) => new Response(JSON.stringify(body), { status, headers: Object.assign({}, cors, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }) });
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (request.method !== "POST") return reply(405, { accepted: false });
+  if (!allowed) return reply(403, { accepted: false });
+  let body;
+  try { body = await requestStatusBody(request); } catch (error) { return reply(error.status || 400, { accepted: false }); }
+  if (!env.QUOTE_REQUESTS) return reply(503, { accepted: false });
+  try {
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    const bucket = Math.floor(Date.now() / REQUEST_STATUS_WINDOW_MS);
+    const limiter = await resumeStub(env, "request-status-limit", bucket + ":" + ip);
+    const permission = await limiter.fetch(new Request("https://quote-request.internal/request-status-limit", { method: "GET" }));
+    if (!permission.ok) return reply(permission.status === 429 ? 429 : 503, { accepted: false });
+    const key = await sha256Hex("purge-pros-quote-v3:" + body.requestId);
+    const stub = env.QUOTE_REQUESTS.get(env.QUOTE_REQUESTS.idFromName(key));
+    const response = await stub.fetch(new Request("https://quote-request.internal/request-status", { method: "GET" }));
+    if (response.status === 200) return reply(200, { requestId: body.requestId, status: await response.json() });
+    return new Response(response.body, { status: response.status, headers: Object.assign({}, cors, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }) });
+  } catch (_) { return reply(503, { accepted: false }); }
+}
 function replayReply(status, body) {
   return new Response(JSON.stringify(body), {
     status,
@@ -64,6 +137,7 @@ async function quoteRequestFingerprint(forward) {
     const value = forward[field];
     return (field === "areaIds" || field === "customReasons") && Array.isArray(value) ? value.slice().sort() : value;
   });
+  if (forward.referredBy) material.push(forward.referredBy);
   return sha256Hex(JSON.stringify(material));
 }
 __name(quoteRequestFingerprint, "quoteRequestFingerprint");
@@ -101,6 +175,8 @@ var QuoteRequestLedger = class extends DurableObject {
   }
   async alarm() { return expireResumeStorage(this); }
   async fetch(request) {
+    if (new URL(request.url).pathname === "/request-status-limit") return limitRequestStatus(this, request);
+    if (new URL(request.url).pathname === "/request-status") return readRequestStatus(this, request);
     if (new URL(request.url).pathname.startsWith("/resume/")) return handleResumeStorage(this, request);
     if (request.method !== "POST") return replayReply(405, { accepted: false });
     let forward;
@@ -302,7 +378,8 @@ var SERVICE_ZIPS = /* @__PURE__ */ new Set([
   "46260",
   "46268",
   "46278",
-  "46280"
+  "46280",
+  "46290"
 ]);
 var FREQUENCIES = {
   twice: { label: "Twice weekly", maxDogs: 9, prices: { 1: 1599, 2: 1749, 3: 1899, 4: 2049, 5: 2199, 6: 2349, 7: 2499, 8: 2649, 9: 2799 } },
@@ -976,6 +1053,7 @@ function cleanAttribution(value) {
 }
 __name(cleanAttribution, "cleanAttribution");
 function buildV3Forward(lead, values, requestId, request, env) {
+  const referredBy = typeof lead.referredBy === "string" ? lead.referredBy.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, "").trim().slice(0, 60) : "";
   const quote = values.quote;
   const acceptedAt = (/* @__PURE__ */ new Date()).toISOString();
   const attribution = cleanAttribution(lead.attribution);
@@ -999,6 +1077,7 @@ function buildV3Forward(lead, values, requestId, request, env) {
     `Yard size: ${quote.yard.label}`,
     `Last fully cleaned: ${values.lastCleaned}`,
     `Customer history (self-reported): ${values.customerStatus}`,
+    referredBy ? `Who sent them (as typed by the customer, not verified): ${referredBy}` : "",
     `First visit: ${firstVisit}`,
     "First cleanup: NEW recurring household = quoted visit rate, up to 120 minutes included; time beyond 120 minutes only at $1/min agreed with the customer BEFORE work starts. RETURNING or unclear history = restart: quoted rate includes 30 minutes, then $1/min, billed after. Base charged at ETA text. Ordinary visits are never billed by the minute. Verify household history and existing promises before approval; never add a second maintenance charge.",
     `Desired start: ${values.intent === "service_request" ? values.startTiming : "Not requested"}`,
@@ -1079,6 +1158,7 @@ function buildV3Forward(lead, values, requestId, request, env) {
     submittedAt: cleanString(lead.submittedAt, 40),
     receivedAt: acceptedAt,
     consentUserAgent: cleanString(request.headers.get("User-Agent"), 500),
+    ...(referredBy ? { referredBy } : {}),
     source: "purge-pros-cloudflare-widget"
   };
 }
@@ -1431,6 +1511,7 @@ async function expireResumeStorage(instance) {
 var worker_default = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === "/submit" && url.search === "?operation=request-status") return handleRequestStatus(request, env);
     if (url.pathname === "/quote-resume" || url.pathname === "/quote-resume/open") return handleQuoteResume(request, env);
     if (url.pathname === "/voice-quote") return handleVoiceQuote(request, env);
     if (request.method === "GET" && url.pathname === "/purge-quote.js") {
