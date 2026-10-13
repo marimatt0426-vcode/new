@@ -1,0 +1,490 @@
+/* ==========================================================================
+   Purge Pros — "Cover Story" direction
+   family-guide.css : what the Yard Guide pages add to the system: the index, and the custom code that stands around
+   a native GoHighLevel post (the band above it, the price prompt and the row of guides under it).
+   Same tokens, radii, shadows and type sizes as css/site.css; every class starts with .guide-.
+   Each component is shown on kit-guide.html (source _work/pages/kit-guide.html).
+
+   THE POST ITSELF IS NOT STYLED HERE. An article is GoHighLevel's own markup, and css/blog-native.css is the one
+   stylesheet that dresses it (owner decision, October 8: articles stay native posts; the chapter layout is not used).
+
+   Contents
+     G1  .guide-lib      the library: search, topic filter, the count line, the cover grid (index)
+     G2  .guide-chip     one topic of the filter: a radio button drawn as a chip (index)
+     G3  .guide-card     a cover card; the first three of a view are drawn large (index, the row under an article)
+     G4  .guide-ribbon   the category ribbon in its four topic colours (index, the row under an article)
+     G5  .guide-close    the closing card that completes the last row of the grid (index)
+     G8  .guide-col      a 720px column for one card in a band (the price prompt under an article)
+     G10 .guide-quote    the price prompt under an article: a compact card that opens "Build your price"
+     G13 .guide-search   the search box of the library, shown by the script (index)
+     G14 .guide-acts     a row that closes a block outside a split (index)
+     G15 .guide-says     one light line beside a row of covers, text only (index, the row under an article)
+     G16 .guide-open     the band that opens every article: the way back to the Yard Guide (header code of the blog)
+     G17 .guide-native   the frame a native post stands in on the review page; it also takes the review builder's
+                         hero and facts strip out of view on that page
+     G18 .guide-lib--row the row of three guides under an article: the library's three large cards and nothing else
+     G19 .guide-after    the wrapper of the footer code: it holds the join between the post and what follows
+   Retired on October 9 with the chapter layout, and removed: G6 .guide-cover, G7 .guide-read, G9 .guide-prices,
+   G11 .guide-note, G12 .guide-fee (as they were: shots/round3-guide/_before/family-guide.css).
+   Add new components at the end, numbered on, with a line here and an entry on the kit page.
+   ========================================================================== */
+
+/* G1. THE LIBRARY -----------------------------------------------------------
+   One block under a centred section heading: the search box (G13), the topic filter, one line that names the
+   count (G15), then every article as a cover card on a 12-column grid.
+
+   THE VIEW. The filter is five radio buttons and needs no script. The view is the topic of
+     the checked radio; or, while none is checked (the page as written, before the script runs or without it),
+     the chip the address points at (yard-guide.html#service-guides); or "all articles".
+   Each topic has ONE rule below that names the view and sets what follows from it as variables: which topics'
+   cards are hidden, which count line shows, how wide the closing card is.
+
+   THE NUMBERS. The page generator writes them, so no row is ever left short for any topic at any width:
+     --guide-V-C     on .guide-lib: columns the closing card spans in view V (0 = all, 1..6 = topic) at C columns
+                     (2, 3, 4). Always 1 (it completes a row of cards) or C (a band under full rows).
+     data-one="3 4"  on a radio: at 3 or 4 columns this view shows ONE large card (the first, on its side across
+                     the row) and not three, because three would leave one or two cards beside a stretched closing
+                     card.
+     data-rest="none" on a radio: the view has no card beyond the large ones, so the "rest" label is not shown.
+   Up to six topics are wired here. */
+.guide-lib {
+  --guide-gap-y: 30px;                 /* between rows of the grid */
+  --guide-col-reg: 12; --guide-col-lead: 12; --guide-col-first: 12;   /* columns (of 12) an ordinary, a large and the first card span */
+  --guide-up-span: 1; --guide-up-rows: auto auto 1fr auto;            /* an upright card: cover, title, sentence, link */
+  /* an ordinary card on a phone is a ticket: cover left, ribbon and title right, the sentence under both */
+  --guide-title-reg: 19px; --guide-reg-tpl: minmax(0, 41%) minmax(0, 1fr); --guide-reg-gap: 12px; --guide-reg-span: 1; --guide-reg-rows: auto 1fr;
+  --guide-reg-pic: contents; --guide-reg-words: 2; --guide-reg-inset: 0px; --guide-reg-more: none; --guide-reg-radius: 14px; --guide-reg-title-top: 8px;
+  --guide-reg-rib-left: 0px; --guide-reg-rib-tuck: 0px; --guide-reg-rib-size: 12.5px; --guide-reg-rib-pad: 14px;
+  /* the large cards (the second and third of a view) and the first one */
+  --guide-title-lead: 25px; --guide-lead-text: 16px; --guide-lead-order: 1;
+  --guide-title-first: 27px; --guide-first-text: 16px; --guide-first-tpl: minmax(0, 1fr); --guide-first-gap: 0px; --guide-first-body: contents;
+  --guide-first-span: var(--guide-up-span); --guide-first-rows: var(--guide-up-rows);
+  --guide-v2: var(--guide-0-2, 2); --guide-v3: var(--guide-0-3, 3); --guide-v4: var(--guide-0-4, 4);
+  --guide-close: 1;
+  display: grid; gap: 18px;
+}
+@media (min-width: 620px) {
+  .guide-lib {
+    --guide-gap-y: 44px; --guide-col-reg: 6; --guide-col-lead: 6; --guide-close: var(--guide-v2); gap: 22px;
+    /* from here an ordinary card is upright like the large ones */
+    --guide-title-reg: 21px; --guide-reg-tpl: minmax(0, 1fr); --guide-reg-gap: 0px; --guide-reg-span: var(--guide-up-span); --guide-reg-rows: var(--guide-up-rows);
+    --guide-reg-pic: block; --guide-reg-words: 1; --guide-reg-inset: 4px; --guide-reg-more: block; --guide-reg-radius: var(--r-photo); --guide-reg-title-top: 12px;
+    --guide-reg-rib-left: 14px; --guide-reg-rib-tuck: 6px; --guide-reg-rib-size: 14px; --guide-reg-rib-pad: 20px;
+    /* the first card of the view lies on its side: cover left, words right, centred on the cover */
+    --guide-title-first: 32px; --guide-first-tpl: minmax(0, 7fr) minmax(0, 5fr); --guide-first-gap: 28px; --guide-first-body: flex; --guide-first-span: 1; --guide-first-rows: auto;
+  }
+}
+@supports (grid-template-rows: subgrid) {
+  /* cards in one row share their row lines, so titles of two and three lines still leave every sentence and every
+     "Read the guide" of the row on one line */
+  @media (min-width: 620px) { .guide-lib { --guide-up-span: 4; --guide-up-rows: subgrid; } }
+}
+@media (min-width: 900px) {
+  .guide-lib { --guide-col-reg: 4; --guide-title-lead: 28px; --guide-title-first: 40px; --guide-first-text: 17px; --guide-first-gap: 40px; --guide-close: var(--guide-v3); }
+}
+@media (min-width: 900px) and (max-width: 1099.98px) {
+  /* ONE large card at three columns (data-one~="3" on the view's radio): the second and third are ordinary cards */
+  .guide-lib:has(.guide-filter input[data-one~="3"]:checked),
+  .guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[data-one~="3"]),
+  .guide-lib:not(:has(.guide-filter input:checked)):not(:has(.guide-filter .guide-chip:target)):has(.guide-filter .guide-chip:first-of-type input[data-one~="3"]) {
+    --guide-col-lead: var(--guide-col-reg); --guide-title-lead: var(--guide-title-reg); --guide-lead-text: 15px; --guide-lead-order: 3;
+  }
+}
+@media (min-width: 1100px) {
+  .guide-lib {
+    --guide-col-reg: 3; --guide-col-lead: 4; --guide-col-first: 4; --guide-close: var(--guide-v4);
+    /* three large cards across: the first is upright too */
+    --guide-title-first: 28px; --guide-first-text: 16px; --guide-first-tpl: minmax(0, 1fr); --guide-first-gap: 0px; --guide-first-body: contents; --guide-first-span: var(--guide-up-span); --guide-first-rows: var(--guide-up-rows);
+  }
+  /* ONE large card at four columns (data-one~="4"): the first lies on its side across the row, the next two are ordinary */
+  .guide-lib:has(.guide-filter input[data-one~="4"]:checked),
+  .guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[data-one~="4"]),
+  .guide-lib:not(:has(.guide-filter input:checked)):not(:has(.guide-filter .guide-chip:target)):has(.guide-filter .guide-chip:first-of-type input[data-one~="4"]) {
+    --guide-col-lead: var(--guide-col-reg); --guide-title-lead: var(--guide-title-reg); --guide-lead-text: 15px; --guide-lead-order: 3;
+    --guide-col-first: 12; --guide-title-first: 42px; --guide-first-text: 18px; --guide-first-tpl: minmax(0, 7fr) minmax(0, 5fr); --guide-first-gap: 48px; --guide-first-body: flex; --guide-first-span: 1; --guide-first-rows: auto;
+  }
+}
+
+/* the view of each topic: by its checked radio, or by the address while no radio is checked */
+.guide-lib:has(.guide-filter input[value="c1"]:checked),
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[value="c1"]) {
+  --guide-v2: var(--guide-1-2, 2); --guide-v3: var(--guide-1-3, 3); --guide-v4: var(--guide-1-4, 4);
+  --guide-says-all: none; --guide-says-c1: inline; --guide-c2: none; --guide-c3: none; --guide-c4: none; --guide-c5: none; --guide-c6: none;
+}
+.guide-lib:has(.guide-filter input[value="c2"]:checked),
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[value="c2"]) {
+  --guide-v2: var(--guide-2-2, 2); --guide-v3: var(--guide-2-3, 3); --guide-v4: var(--guide-2-4, 4);
+  --guide-says-all: none; --guide-says-c2: inline; --guide-c1: none; --guide-c3: none; --guide-c4: none; --guide-c5: none; --guide-c6: none;
+}
+.guide-lib:has(.guide-filter input[value="c3"]:checked),
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[value="c3"]) {
+  --guide-v2: var(--guide-3-2, 2); --guide-v3: var(--guide-3-3, 3); --guide-v4: var(--guide-3-4, 4);
+  --guide-says-all: none; --guide-says-c3: inline; --guide-c1: none; --guide-c2: none; --guide-c4: none; --guide-c5: none; --guide-c6: none;
+}
+.guide-lib:has(.guide-filter input[value="c4"]:checked),
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[value="c4"]) {
+  --guide-v2: var(--guide-4-2, 2); --guide-v3: var(--guide-4-3, 3); --guide-v4: var(--guide-4-4, 4);
+  --guide-says-all: none; --guide-says-c4: inline; --guide-c1: none; --guide-c2: none; --guide-c3: none; --guide-c5: none; --guide-c6: none;
+}
+.guide-lib:has(.guide-filter input[value="c5"]:checked),
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[value="c5"]) {
+  --guide-v2: var(--guide-5-2, 2); --guide-v3: var(--guide-5-3, 3); --guide-v4: var(--guide-5-4, 4);
+  --guide-says-all: none; --guide-says-c5: inline; --guide-c1: none; --guide-c2: none; --guide-c3: none; --guide-c4: none; --guide-c6: none;
+}
+.guide-lib:has(.guide-filter input[value="c6"]:checked),
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[value="c6"]) {
+  --guide-v2: var(--guide-6-2, 2); --guide-v3: var(--guide-6-3, 3); --guide-v4: var(--guide-6-4, 4);
+  --guide-says-all: none; --guide-says-c6: inline; --guide-c1: none; --guide-c2: none; --guide-c3: none; --guide-c4: none; --guide-c5: none;
+}
+
+/* the filter: one full-width chip and two pairs on a phone, three and two from 620px, and one row only where the
+   row fits inside the container (the five chips are about 1075px wide; the container is 1100px at 1180).
+   It appears only where :has() exists; without it every card stays in view and nothing is offered that cannot work. */
+.guide-filter { display: none; min-width: 0; margin: 0; padding: 0; border: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@supports selector(:has(a)) { .guide-filter { display: grid; } }
+.guide-filter > .guide-chip:first-of-type { grid-column: 1 / -1; }
+@media (min-width: 620px) {
+  .guide-filter { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+  .guide-filter > .guide-chip, .guide-filter > .guide-chip:first-of-type { grid-column: span 2; }
+  .guide-filter > .guide-chip:nth-of-type(n+4) { grid-column: span 3; }
+}
+@media (min-width: 1180px) {
+  .guide-filter { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: max-content; justify-content: center; gap: 12px; }
+  .guide-filter > .guide-chip, .guide-filter > .guide-chip:first-of-type, .guide-filter > .guide-chip:nth-of-type(n+4) { grid-column: auto; }
+}
+
+/* the count line under the filter (G15): one sentence per view, the count first */
+.guide-says__line { display: none; }
+.guide-says__line[data-view="all"] { display: var(--guide-says-all, inline); }
+.guide-says__line[data-view="c1"] { display: var(--guide-says-c1, none); }
+.guide-says__line[data-view="c2"] { display: var(--guide-says-c2, none); }
+.guide-says__line[data-view="c3"] { display: var(--guide-says-c3, none); }
+.guide-says__line[data-view="c4"] { display: var(--guide-says-c4, none); }
+.guide-says__line[data-view="c5"] { display: var(--guide-says-c5, none); }
+.guide-says__line[data-view="c6"] { display: var(--guide-says-c6, none); }
+
+/* the grid: 12 columns at every width; a card says how many it spans. Rows are spaced by a top margin on every
+   item and not by a row gap, because an upright card spans four row lines (cover, title, sentence, link) that
+   must touch; the grid's own top margin takes the first row's margin back. */
+.guide-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0 var(--gap); margin-top: calc(16px - var(--guide-gap-y)); }
+.guide-grid > * { margin-top: var(--guide-gap-y); }
+.guide-grid__rest { /* the label between the large cards and the rest */
+  grid-column: 1 / -1; order: 2; display: flex; align-items: center; gap: 14px;
+  font: 700 15px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700);
+}
+.guide-grid__rest::before, .guide-grid__rest::after { content: ""; flex: 1 1 0; border-top: 2px dotted var(--sky-200); }
+@media (min-width: 900px) { .guide-grid__rest::before { content: none; } }
+/* a view of three cards or fewer has no "rest" (data-rest="none" on its radio): no label */
+.guide-lib:has(.guide-filter input[data-rest="none"]:checked) .guide-grid__rest,
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input[data-rest="none"]) .guide-grid__rest,
+.guide-lib:not(:has(.guide-filter input:checked)):not(:has(.guide-filter .guide-chip:target)):has(.guide-filter .guide-chip:first-of-type input[data-rest="none"]) .guide-grid__rest { display: none; }
+
+/* G2. A TOPIC CHIP -----------------------------------------------------------
+   label.guide-chip > input.vh[type=radio] + icon + name + count. The whole chip is the control: 48px tall,
+   navy when it is the chosen one, a focus ring when the keyboard is on it. Its id is the topic's address. */
+.guide-chip {
+  position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 6px 12px 6px 10px;
+  border-radius: 14px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--line);
+  font: 600 15px/1.15 var(--f-text); color: var(--navy); cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
+  transition: box-shadow .16s, background-color .16s, transform .16s var(--ease);
+}
+.guide-chip img { width: 28px; height: 28px; flex: none; }
+.guide-chip__n { flex: none; min-width: 28px; padding: 4px 7px 3px; border-radius: var(--r-pill); background: var(--sky-050); font: 700 13.5px/1.15 var(--f-text); text-align: center; color: var(--navy); }
+@media (hover: hover) { .guide-chip:hover { box-shadow: inset 0 0 0 2px var(--cyan); background: var(--cyan-050); transform: translateY(-2px); } }
+/* the chosen chip: the checked one; while none is checked, the one the address points at, or the first */
+.guide-chip:has(input:checked),
+.guide-lib:not(:has(.guide-filter input:checked)) .guide-chip:target,
+.guide-lib:not(:has(.guide-filter input:checked)):not(:has(.guide-filter .guide-chip:target)) .guide-chip:first-of-type { background: var(--navy); color: #fff; box-shadow: var(--sh-1); transform: none; }
+.guide-chip:has(input:checked) .guide-chip__n,
+.guide-lib:not(:has(.guide-filter input:checked)) .guide-chip:target .guide-chip__n,
+.guide-lib:not(:has(.guide-filter input:checked)):not(:has(.guide-filter .guide-chip:target)) .guide-chip:first-of-type .guide-chip__n { background: var(--gold); }
+.guide-chip:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 3px; }
+@media (min-width: 1000px) { .guide-chip { padding-inline: 14px 16px; font-size: 16px; } }
+
+/* G3. A COVER CARD -------------------------------------------------------------
+   a.guide-card > .guide-card__pic (the cover: the 720px thumbnail, whole, 3:2; then the ribbon) + .guide-card__body
+   (h3 title, one-sentence description, "Read the guide"). No box: the cover is the card, as on the shared Yard Guide
+   cards. THE RIBBON NEVER SITS ON THE ARTWORK: covers carry lettering and logos in every corner, and new ones are
+   published all the time. It is a tab that hangs under the cover's bottom edge, its top tucked behind the cover,
+   and reads as the label above the title. On a phone ticket it sits beside the cover.
+   Three layouts, chosen by variables only, so every width is set once on .guide-lib:
+     ticket       cover left, ribbon and title right, the sentence under both (an ordinary card on a phone)
+     upright      cover, ribbon, title, sentence, link in one column (an ordinary card from 620px; a large card)
+     on its side  cover left, words right, centred on it (the first card of a view when it takes the whole row)
+   Which cards are large is decided by the view, from two words the generator writes in data-lead:
+     all, all1     one of the first three of the whole list / the very first
+     topic, topic1 one of the first three of its topic / the first of its topic */
+.guide-card {
+  /* an ordinary card */
+  --gc-col: var(--guide-col-reg); --gc-order: 3; --gc-title: var(--guide-title-reg); --gc-text: 15px;
+  --gc-tpl: var(--guide-reg-tpl); --gc-gap: var(--guide-reg-gap); --gc-span: var(--guide-reg-span); --gc-rows: var(--guide-reg-rows);
+  --gc-pic: var(--guide-reg-pic); --gc-body: contents; --gc-words: var(--guide-reg-words); --gc-inset: var(--guide-reg-inset); --gc-more: var(--guide-reg-more);
+  --gc-radius: var(--guide-reg-radius); --gc-title-top: var(--guide-reg-title-top);
+  --gc-rib-left: var(--guide-reg-rib-left); --gc-rib-tuck: var(--guide-reg-rib-tuck); --gc-rib-size: var(--guide-reg-rib-size); --gc-rib-pad: var(--guide-reg-rib-pad);
+  grid-column: span var(--gc-col); grid-row: span var(--gc-span); order: var(--gc-order); position: relative; isolation: isolate;
+  display: grid; grid-template-columns: var(--gc-tpl); grid-template-rows: var(--gc-rows); column-gap: var(--gc-gap); align-items: start;
+  text-decoration: none; color: inherit;
+}
+/* a topic is chosen: the other topics' cards leave the grid (the view's rule sets these) */
+.guide-card[data-topic="c1"] { display: var(--guide-c1, grid); }
+.guide-card[data-topic="c2"] { display: var(--guide-c2, grid); }
+.guide-card[data-topic="c3"] { display: var(--guide-c3, grid); }
+.guide-card[data-topic="c4"] { display: var(--guide-c4, grid); }
+.guide-card[data-topic="c5"] { display: var(--guide-c5, grid); }
+.guide-card[data-topic="c6"] { display: var(--guide-c6, grid); }
+/* a large card (one of the first three of the view): upright at every width. The rule for the whole list stands
+   alone, so a browser that does not know :has() (and shows no filter) still draws the first three large. */
+.guide-card[data-lead~="all"] {
+  --gc-col: var(--guide-col-lead); --gc-order: var(--guide-lead-order); --gc-title: var(--guide-title-lead); --gc-text: var(--guide-lead-text);
+  --gc-tpl: minmax(0, 1fr); --gc-gap: 0px; --gc-span: var(--guide-up-span); --gc-rows: var(--guide-up-rows);
+  --gc-pic: block; --gc-words: 1; --gc-inset: 4px; --gc-more: block; --gc-radius: var(--r-photo); --gc-title-top: 12px;
+  --gc-rib-left: 14px; --gc-rib-tuck: 6px; --gc-rib-size: 14px; --gc-rib-pad: 20px;
+}
+.guide-lib:has(.guide-filter input:not([value="all"]):checked) .guide-card[data-lead~="topic"],
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input:not([value="all"])) .guide-card[data-lead~="topic"] {
+  --gc-col: var(--guide-col-lead); --gc-order: var(--guide-lead-order); --gc-title: var(--guide-title-lead); --gc-text: var(--guide-lead-text);
+  --gc-tpl: minmax(0, 1fr); --gc-gap: 0px; --gc-span: var(--guide-up-span); --gc-rows: var(--guide-up-rows);
+  --gc-pic: block; --gc-words: 1; --gc-inset: 4px; --gc-more: block; --gc-radius: var(--r-photo); --gc-title-top: 12px;
+  --gc-rib-left: 14px; --gc-rib-tuck: 6px; --gc-rib-size: 14px; --gc-rib-pad: 20px;
+}
+/* the very first card of the view */
+.guide-card[data-lead~="all1"] {
+  --gc-col: var(--guide-col-first); --gc-order: 1; --gc-title: var(--guide-title-first); --gc-text: var(--guide-first-text);
+  --gc-tpl: var(--guide-first-tpl); --gc-gap: var(--guide-first-gap); --gc-span: var(--guide-first-span); --gc-rows: var(--guide-first-rows); --gc-body: var(--guide-first-body);
+}
+.guide-lib:has(.guide-filter input:not([value="all"]):checked) .guide-card[data-lead~="topic1"],
+.guide-lib:not(:has(.guide-filter input:checked)):has(.guide-filter .guide-chip:target input:not([value="all"])) .guide-card[data-lead~="topic1"] {
+  --gc-col: var(--guide-col-first); --gc-order: 1; --gc-title: var(--guide-title-first); --gc-text: var(--guide-first-text);
+  --gc-tpl: var(--guide-first-tpl); --gc-gap: var(--guide-first-gap); --gc-span: var(--guide-first-span); --gc-rows: var(--guide-first-rows); --gc-body: var(--guide-first-body);
+}
+
+/* The parts. On a ticket the picture dissolves (display: contents) and the cover and the ribbon sit on the card's
+   own grid; the body always dissolves except on a card lying on its side, where it is the words column. */
+.guide-card__pic { position: relative; display: var(--gc-pic); grid-column: 1; grid-row: 1; transition: transform .3s var(--ease); }
+.guide-card__cover { position: relative; z-index: 1; display: block; grid-column: 1; grid-row: 1 / span 2; border-radius: var(--gc-radius); overflow: hidden; box-shadow: var(--sh-2); background: var(--sky-050); transition: box-shadow .3s var(--ease); }
+.guide-card__cover img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+.guide-card .guide-ribbon { --guide-rib-tuck: var(--gc-rib-tuck); display: block; width: max-content; max-width: 100%; margin: calc(var(--gc-rib-tuck) * -1) 0 0 var(--gc-rib-left); grid-column: 2; grid-row: 1; justify-self: start; font-size: var(--gc-rib-size); padding-inline: var(--gc-rib-pad); }
+.guide-card__body { display: var(--gc-body); flex-direction: column; align-self: center; margin-top: calc(var(--gc-title-top) * -1); }
+.guide-card__title { grid-column: var(--gc-words); grid-row: 2; margin-top: var(--gc-title-top); padding-inline: var(--gc-inset); font: 700 var(--gc-title)/1.1 var(--f-display); letter-spacing: 0; color: var(--navy); text-wrap: balance; }
+.guide-nb { white-space: nowrap; }   /* a hyphenated word of a title, kept on one line */
+.guide-card__text { grid-column: 1 / -1; grid-row: 3; margin-top: 8px; padding-inline: var(--gc-inset); font-size: var(--gc-text); line-height: 1.5; color: var(--ink-700); }
+.guide-card__more { display: var(--gc-more); grid-column: 1 / -1; grid-row: 4; margin-top: auto; padding: 8px var(--gc-inset) 0; }
+.guide-card__more span { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font: 700 19px/1 var(--f-display); color: var(--navy); background: linear-gradient(var(--cyan), var(--cyan)) no-repeat 0 calc(100% - 9px) / calc(100% - 30px) 3px; }
+.guide-card__more img { width: 20px; height: 20px; transition: transform .2s var(--ease); }
+@media (hover: hover) { .guide-card:hover .guide-card__pic { transform: translateY(-5px) rotate(-1.2deg); } }
+@media (hover: hover) { .guide-card:nth-child(even):hover .guide-card__pic { transform: translateY(-5px) rotate(1.2deg); } }
+@media (hover: hover) { .guide-card:hover .guide-card__cover { box-shadow: var(--sh-3); } }
+@media (hover: hover) { .guide-card:hover .guide-card__more img { transform: translateX(4px); } }
+@media (hover: hover) { .guide-card:hover .guide-card__title { color: var(--blue-700); } }
+@supports not (grid-template-rows: subgrid) {
+  /* without shared row lines, four-across cards keep room for a three-line title so the sentences still start level */
+  @media (min-width: 1100px) { .guide-card__title { min-height: 3.3em; } }
+}
+
+/* G4. THE CATEGORY RIBBON ------------------------------------------------------
+   The shared swallow-tailed ribbon in the four topic colours, so a colour always means the same topic:
+   c1 grass, c2 navy, c3 cyan, c4 gold (the order of the filter). One ribbon per card.
+   --guide-rib-tuck is how much of its top hides behind the picture it hangs from (0 when it stands alone): the
+   ribbon grows by that much at the top and the two notches stay in the middle of the part that shows. */
+.guide-ribbon {
+  --guide-rib-tuck: 0px;
+  display: inline-block; padding: calc(6px + var(--guide-rib-tuck)) 20px 6px; background: var(--gold); color: var(--navy);
+  font: 700 14px/1.1 var(--f-display); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap;
+  clip-path: polygon(0 0, 100% 0, 100% var(--guide-rib-tuck), calc(100% - 9px) calc(50% + var(--guide-rib-tuck) / 2), 100% 100%, 0 100%, 9px calc(50% + var(--guide-rib-tuck) / 2), 0 var(--guide-rib-tuck));
+}
+.guide-ribbon--c1, .guide-ribbon--c5 { background: var(--grass); }
+.guide-ribbon--c2, .guide-ribbon--c6 { background: var(--navy); color: #fff; }
+.guide-ribbon--c3 { background: var(--cyan); }
+.guide-ribbon--c4 { background: var(--gold); }
+
+/* G5. THE CLOSING CARD ----------------------------------------------------------
+   The last item of the grid. It is either ONE card wide, completing a row of cards, or a band across the whole
+   row under full rows; never two or three columns of empty navy beside a lone card (the generator and the
+   search choose how many cards are large so that this holds). It lays itself out by its own width: upright
+   with full-width buttons when it is one card wide, a band when it is wider. No mascot: it sits among covers
+   that show the flat character. The ring is drawn in the one corner that holds no words. */
+.guide-close { grid-column: span calc(var(--guide-col-reg) * var(--guide-close)); grid-row: span var(--guide-up-span); order: 4; container-type: inline-size; display: grid; }
+/* a browser that does not know :has() cannot read the view or its numbers: there the card is always a band */
+@supports not selector(:has(a)) { .guide-close { grid-column: 1 / -1; } }
+.guide-close__in {
+  --focus: var(--gold);
+  position: relative; overflow: hidden; overflow: clip; display: grid; gap: 12px; align-content: center; justify-items: start;
+  padding: 26px 22px 24px; border-radius: var(--r-card); background: var(--navy); color: var(--on-navy-soft); box-shadow: var(--sh-2);
+}
+.guide-close__in::before { content: ""; position: absolute; right: -64px; top: -78px; width: 176px; aspect-ratio: 1; border-radius: 50%; background: var(--navy-600); }
+.guide-close__in::after { content: ""; position: absolute; right: -70px; top: -84px; width: 188px; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 3px var(--cyan); opacity: .55; }
+.guide-close__in > * { position: relative; z-index: 1; }
+.guide-close__title { font: 800 28px/1.02 var(--f-display); color: #fff; text-wrap: balance; }
+.guide-close__text { margin-top: 6px; font-size: 15.5px; line-height: 1.5; }
+.guide-close__text a { color: #fff; font-weight: 700; text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 3px; white-space: nowrap; }
+.guide-close__acts { display: grid; gap: 10px; justify-self: stretch; margin-top: 4px; }
+.guide-close__acts .btn { display: flex; width: 100%; }
+@container (min-width: 520px) {
+  /* a band: the disc sweeps in from the left end with the icon standing on it, and its keyline passes between the
+     icon and the words; nothing is drawn behind the words or the buttons */
+  .guide-close__in { grid-template-columns: auto minmax(0, 1fr); column-gap: 34px; align-items: center; padding: 26px 30px; }
+  .guide-close__in::before { right: auto; left: -124px; top: 50%; width: 248px; margin-top: -124px; }
+  .guide-close__in::after { right: auto; left: -130px; top: 50%; width: 260px; margin-top: -130px; }
+  .guide-close__in > .puck { grid-row: 1 / span 2; }
+  .guide-close__acts { grid-column: 2; display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: center; justify-self: start; }
+  .guide-close__acts .btn { display: inline-flex; width: auto; }
+}
+@container (min-width: 780px) {
+  .guide-close__in { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .guide-close__in > .puck { grid-row: auto; }
+  .guide-close__acts { grid-column: auto; margin-top: 0; flex-wrap: nowrap; }
+}
+
+/* G8. THE CARD COLUMN ---------------------------------------------------------------
+   One column 720px wide, centred, for a card that stands alone in a band: the price prompt under an article.
+   (A native post's own text column is narrower, about 610px; that measure belongs to css/blog-native.css.) */
+.guide-col { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; max-width: 720px; margin-inline: auto; }
+
+/* G10. THE PRICE PROMPT UNDER AN ARTICLE ---------------------------------------------------
+   A compact navy card in the band that follows every post: the glossy price tag on a puck, a short title, ONE
+   plain line and one gold button (href="#quote" data-purge-quote). The blog-post template places it (footer code),
+   so it is the same under every post and no post's text has to carry it. One per page.
+   Under 700px it is upright like the closing card of the library (G5): icon, title, line, a full-width button,
+   and the ring in the top right corner, the one place that holds no words. From 700px it is one row, and like the
+   closing band the disc sweeps in from the left end with the icon on it; nothing is drawn behind words or button. */
+.guide-quote {
+  --focus: var(--gold);
+  position: relative; overflow: hidden; overflow: clip; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: center; justify-items: start;
+  padding: 26px 22px 24px; border-radius: var(--r-card); background: var(--navy); color: var(--on-navy-soft); box-shadow: var(--sh-2);
+}
+.guide-quote::before { content: ""; position: absolute; right: -64px; top: -78px; width: 176px; aspect-ratio: 1; border-radius: 50%; background: var(--navy-600); }
+.guide-quote::after { content: ""; position: absolute; right: -70px; top: -84px; width: 188px; aspect-ratio: 1; border-radius: 50%; box-shadow: 0 0 0 3px var(--cyan); opacity: .55; }
+.guide-quote > * { position: relative; z-index: 1; }
+.guide-quote__title { font: 800 28px/1.02 var(--f-display); color: #fff; text-wrap: balance; }
+.guide-quote__text { margin-top: -6px; font-size: 15.5px; line-height: 1.5; text-wrap: balance; }
+.guide-quote__go { justify-self: stretch; margin-top: 4px; }
+.guide-quote__go .btn { display: flex; width: 100%; }
+@media (min-width: 700px) {
+  .guide-quote { grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 34px; padding: 26px 30px; }
+  .guide-quote::before { right: auto; left: -124px; top: 50%; width: 248px; margin-top: -124px; }
+  .guide-quote::after { right: auto; left: -130px; top: 50%; width: 260px; margin-top: -130px; }
+  .guide-quote .puck { grid-row: 1 / span 2; }
+  .guide-quote__title { grid-column: 2; align-self: end; }
+  .guide-quote__text { grid-column: 2; grid-row: 2; align-self: start; margin-top: 0; }
+  .guide-quote__go { grid-column: 3; grid-row: 1 / span 2; justify-self: end; margin-top: 0; }
+  .guide-quote__go .btn { display: inline-flex; width: auto; }
+}
+
+/* G13. THE SEARCH BOX ---------------------------------------------------------------------------
+   div.guide-search[hidden] > label.vh + img.guide-search__ico + input.field__input.guide-search__input.
+   The first block of the library, above the topic chips. It is written hidden and js/family-guide.js shows it,
+   so nothing is offered that cannot work without the script. While a search is on, the library carries
+   .guide-lib--search: matches are ordinary cards (no "rest" label), the script sets how wide the closing card is,
+   and the count line is the number of matches or the "nothing matches" sentence.
+   The last row keeps the rule of G5. Where the matches would leave one card over at three or four columns, the
+   first match (data-lead="q1") lies on its side across the row; where they would leave two at four columns, the
+   first two (q1, q2) are large and share a row. The script says which with data-q3 and data-q4 on the library. */
+.guide-search { position: relative; justify-self: center; width: min(100%, 520px); }
+.guide-search__ico { position: absolute; z-index: 1; left: 14px; top: 50%; width: 28px; height: 28px; margin-top: -14px; pointer-events: none; }
+.guide-search__input { padding-left: 52px; border-radius: var(--r-pill); box-shadow: var(--sh-1); }
+.guide-lib--search .guide-grid__rest { display: none; }
+.guide-lib--search .guide-says__line[data-view] { display: none !important; }
+.guide-lib--search .guide-says__line--q { display: inline; }
+@media (min-width: 900px) and (max-width: 1099.98px) {
+  .guide-lib--search[data-q3="1"] .guide-card[data-lead~="q1"] {
+    --gc-col: 12; --gc-order: 1; --gc-title: 40px; --gc-text: 17px;
+    --gc-tpl: minmax(0, 7fr) minmax(0, 5fr); --gc-gap: 40px; --gc-span: 1; --gc-rows: auto; --gc-body: flex;
+  }
+}
+@media (min-width: 1100px) {
+  .guide-lib--search[data-q4="1"] .guide-card[data-lead~="q1"] {
+    --gc-col: 12; --gc-order: 1; --gc-title: 42px; --gc-text: 18px;
+    --gc-tpl: minmax(0, 7fr) minmax(0, 5fr); --gc-gap: 48px; --gc-span: 1; --gc-rows: auto; --gc-body: flex;
+  }
+  .guide-lib--search[data-q4="2"] .guide-card[data-lead~="q1"],
+  .guide-lib--search[data-q4="2"] .guide-card[data-lead~="q2"] { --gc-col: 6; --gc-order: 1; --gc-title: 28px; --gc-text: 16px; }
+}
+
+/* G14. A CLOSING ROW ----------------------------------------------------------------------------
+   The row that closes a block which is not handled by the shared rules of a split: a mascot line, or buttons.
+   Side by side from 620px; a button in it is as wide as the block on a phone, like every closing button. */
+.guide-acts { display: flex; flex-wrap: wrap; gap: 12px 14px; align-items: center; }
+@media (max-width: 619.98px) { .guide-acts > .btn { display: flex; width: 100%; } }
+
+/* G15. A LINE BESIDE COVERS -----------------------------------------------------------------------
+   p.guide-says: one light line next to a row of covers: the count line of the library (G1, one span per view)
+   and the line under the row of guides that follows an article. Text only. The covers show the flat character,
+   and the glossy mascot (the round avatar of the shared p.says) is never drawn beside him at a similar size, so
+   this line has no picture. Away from covers, use the shared p.says. */
+.guide-says { justify-self: center; margin-inline: auto; text-align: center; text-wrap: balance; font: 500 16px/1.4 var(--f-text); color: var(--ink-700); }
+.guide-says b { font-weight: 700; color: var(--navy); }
+/* in a .center-row with a button: the line takes the first row and the button is centred under it */
+.guide-says--row { flex: 1 1 100%; }
+
+/* G16. THE BAND THAT OPENS AN ARTICLE ----------------------------------------------------------------
+   div.guide-open > .wrap.guide-open__in > nav.guide-open__trail (ol of links) + p.guide-open__tag.
+   A slim navy band directly under the header: the way back (Home, Yard Guide) on the container's left edge, and
+   on the right the Yard Guide's book with its line. The white page rises into it on a shallow arc with the cyan
+   keyline, the curve every section of the site ends on. It is custom code in the header code of the blog-post
+   template, the same on every post, so it names no article: the post's own title is the heading under the cover.
+   Compact on purpose (60px on a phone, 72px on a desktop): the cover and the title belong on the first screen. */
+.guide-open { --focus: var(--gold); position: relative; z-index: 1; overflow: hidden; overflow: clip; background: var(--navy); color: #fff; padding: 4px 0 18px; }
+.guide-open::after {
+  content: ""; position: absolute; left: -6%; right: -6%; bottom: -1px; height: 15px; background: var(--paper);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0; box-shadow: 0 -3px 0 var(--cyan);
+}
+.guide-open__in { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.guide-open__trail ol { display: flex; align-items: center; gap: 0 2px; font: 600 15px/1.2 var(--f-text); }
+.guide-open__trail li { display: inline-flex; align-items: center; gap: 2px; min-height: 44px; }
+.guide-open__trail li + li::before { content: ""; flex: none; width: 7px; height: 7px; margin: 0 6px 0 4px; border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan); transform: rotate(45deg); }
+.guide-open__trail a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; color: #fff; text-decoration: underline; text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+@media (hover: hover) { .guide-open__trail a:hover { text-decoration-color: var(--gold); } }
+.guide-open__trail li:last-child a { font-weight: 700; }
+.guide-open__tag { display: flex; align-items: center; gap: 10px; font: 700 15px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); white-space: nowrap; }
+.guide-open__tag img { width: 34px; height: 34px; flex: none; }
+.guide-open__tag span { display: none; }
+@media (min-width: 520px) { .guide-open__tag span { display: inline; } }
+@media (min-width: 700px) {
+  .guide-open { padding: 8px 0 22px; }
+  .guide-open::after { height: 18px; }
+  .guide-open__trail ol { font-size: 16px; }
+  .guide-open__tag img { width: 38px; height: 38px; }
+}
+
+/* G17. THE FRAME OF A NATIVE POST (review page only) ------------------------------------------------
+   div.guide-native[data-guide-css="css/blog-native.css"] holds GoHighLevel's own markup for one post, wrappers and
+   all. Nothing inside it is styled from this file: css/blog-native.css does that, and js/family-guide.js adds that
+   stylesheet to the page (on the blog it is a <link> in the header code; the review builder only puts family
+   stylesheets in a page's head). Three things belong to the review page alone:
+   1. The review builder writes its hero and its facts strip on every page and cannot leave them out. A native post
+      has neither: its title is the heading under its cover. On a page that holds this frame both are taken out of
+      view. (Shared gap, reported in FAMILY-NOTES-guide.md: the builder needs a recipe with no hero.)
+   2. Until the stylesheet has arrived the post is not shown, so it never flashes undressed. If the script cannot
+      run at all, the post appears after two seconds as plain text in a readable column.
+   3. With scripts switched off the post is shown at once in that plain column. */
+main:has(> .guide-native) > .cover, main:has(> .guide-native) > .sec.facts { display: none; }
+@media (scripting: enabled) {
+  .guide-native:not(.guide-native--styled) { visibility: hidden; animation: guide-native-show 0s linear 2s forwards; }
+}
+@keyframes guide-native-show { to { visibility: visible; } }
+.guide-native:not(.guide-native--styled) { max-width: 644px; margin-inline: auto; padding: 24px 16px 56px; }
+.guide-native:not(.guide-native--styled) [role="heading"] { margin: 20px 0 8px; font: 800 34px/1 var(--f-display); color: var(--navy); }
+
+/* G18. THE ROW OF THREE GUIDES UNDER AN ARTICLE --------------------------------------------------------
+   div.guide-lib.guide-lib--row > .guide-grid > three a.guide-card[data-lead]. The library (G1) with its three
+   large cards and nothing else: no search, no filter, no count line, no closing card. Three across from 1100px;
+   below that the first lies on its side across the row and the other two share the next one; full-width covers
+   on a phone. Index and article therefore show one and the same card, and a ribbon colour means one topic on both.
+   Footer code of the blog-post template; the generator writes the three cards (the newest guides). */
+.guide-lib--row .guide-grid { margin-top: calc(var(--guide-gap-y) * -1); }
+
+/* G19. THE WRAPPER OF THE FOOTER CODE ------------------------------------------------------------------------
+   div.guide-after > section (the price prompt) + section (the row of guides). On the blog the footer code is a block
+   of its own: no <main> surrounds it, and GoHighLevel's wrappers stand between it and the post. So this wrapper
+   does three jobs that a page of this build leaves to <main> and to the section before:
+   1. THE JOIN TO THE POST. A section of the site sweeps up over the section before it by a negative top margin.
+      That margin would have to reach across two of GoHighLevel's sections, which a wrapper there can stop. Here
+      the first section does not move at all: the wrapper keeps white room above it (the section gap less the
+      section's own top padding), and the curve is drawn on that white. From the author to the price prompt is
+      the site's one section gap whatever GoHighLevel puts between the two blocks.
+   2. The last section ends on a level line for the closing scene (as main > .sec:last-of-type does).
+   3. Nothing drawn outside the page can scroll it sideways (as main does).
+   The review page uses the same wrapper, so its markup is the footer code's own. */
+.guide-after { overflow-x: clip; padding-top: calc(var(--sec-pad) - var(--edge-h) + 1px); background: var(--paper); }
+.guide-after > .sec[data-edge]:first-child { margin-top: 0; }
+.guide-after > .sec:last-of-type { padding-bottom: var(--sec-gap); }

@@ -1,0 +1,79 @@
+<!--
+{
+  "title": "Example of a city page | Cover Story page platform",
+  "description": "A working example of the city hero recipe for page authors. Copy this file to _work/pages and replace every word with the live page's wording.",
+  "hero": {
+    "recipe": "city",
+    "city": "Westfield",
+    "zip": "46074",
+    "scene": "heroes/westfield.jpg",
+    "alt": "Purge Pros mascot in blue gloves giving a thumbs-up beside a husky on a mown, fenced lawn behind a two-storey home.",
+    "kw": "Dog waste removal in Westfield, Indiana",
+    "title": ["Westfield yards.", "Handled."],
+    "wrap": "first",
+    "lead": "Example lead for a city page: one or two plain sentences that name the community and say what the visitor can do here."
+  },
+  "facts": {
+    "label": "Purge Pros in Westfield at a glance",
+    "items": ["google", "proof", "pay", { "icon": "pp-local-area", "value": "Example fact", "label": "A fact about this community, written in the JSON block" }]
+  },
+  "schema": { "breadcrumb": [{ "name": "Service Areas", "page": "additional" }, "Westfield"] }
+}
+-->
+
+<!-- 1. A SPLIT: the map on the picture side, words on the other. The first split on a page has its picture on the left. -->
+<section class="sec" data-edge="arc-r" id="area" aria-labelledby="area-title">
+  <div class="wrap">
+    <div class="split">
+      <div class="split__art">
+        {{MAP}}
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left sh--sky">
+          <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-local-area.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">Example section</p>
+          <h2 class="sh__title" id="area-title">A split section with the <span class="swash">map</span></h2>
+          <p class="sh__intro lead">The lead sentence of a split sits inside the heading block, so it centres with the heading on a phone.</p>
+        </div>
+        <p>Body copy stays left-aligned under the heading at every width. Coverage is decided by ZIP code, never by the map.</p>
+        <p><a class="btn btn--primary" href="#quote" data-purge-quote>Check my ZIP <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. FAQ: the FAQPage structured data is written from these questions by the builder. Nothing else to do. -->
+<section class="sec sec--cream" data-edge="scoop" id="faq" aria-labelledby="faq-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-search.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">Example section</p>
+      <h2 class="sh__title" id="faq-title">A centred section with an <span class="swash">accordion</span></h2>
+    </div>
+    <div class="faq">
+      <details class="faq__item" name="example-faq" open>
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-gate-photo.webp" width="42" height="42" loading="lazy" alt=""><h3>What is the first example question?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>The first example answer. Use the live page&rsquo;s questions and answers, word for word.</p></div>
+      </details>
+      <details class="faq__item" name="example-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-local-area.webp" width="42" height="42" loading="lazy" alt=""><h3>What is the second example question?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>The second example answer. Each question has its own icon, and only one is open at a time.</p></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- 3. YARD GUIDE: three real articles by slug. The last section before the closing scene is white. -->
+<section class="sec" data-edge="arc-r" id="yard-guide" aria-labelledby="guide-title">
+  <div class="wrap stack">
+    <div class="sh sh--center sh--grass">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-yard-guide.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">From the Yard Guide</p>
+      <h2 class="sh__title" id="guide-title">Three cards from one <span class="swash">token</span></h2>
+    </div>
+    {{GUIDE_CARDS:dog-poop-removal-cost-indianapolis,gate-access-dog-waste-removal,spring-yard-cleanup-after-snow}}
+    <div class="center-row">
+      <a class="btn btn--secondary" href="yard-guide.html">Browse the whole Yard Guide <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+  </div>
+</section>

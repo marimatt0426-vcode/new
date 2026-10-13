@@ -1,0 +1,3 @@
+HERE, between the two Custom Code blocks, stands GoHighLevel's own "Blog Posts" element (today blog-post-AMuAg4dR2w, in a section of its own).
+Do not paste anything here and do not remove the element. It is kept, and kept out of view by the template page's Custom CSS, as today
+(the line "#section-…{display:none!important}" for the native element's own section; keep that line, drop the others: FRAGMENT-NOTES.md, "The blog").

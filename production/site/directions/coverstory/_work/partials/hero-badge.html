@@ -1,0 +1,9 @@
+<!--# The Google review badge of a hero: always a link to reviews.html. It holds NO figure of its own. The builder fills
+      every data-pp-reviews line from _work/partials/reviews.json (the one switch): the stand-in rating while that file
+      has one, the neutral line (data-pp-neutral) when it has none. On the live site the review feed calls
+      PurgeProsReviews.set({ rating, count }) (js/site.js) and the same lines are rewritten with the real figures. -->
+  <a class="gbadge" href="reviews.html" data-standin="true" data-pp-reviews-label="{rating}, {count} Google reviews. Read what neighbors say." data-pp-neutral-label="Read our Google reviews.">
+    <img class="gbadge__star" src="../../assets/brand-icons/pp-review-star.webp" width="34" height="34" alt="">
+    <span class="gbadge__num" data-pp-reviews="{rating}" data-pp-neutral=""></span>
+    <span class="gbadge__txt"><span data-pp-reviews="{count} Google reviews" data-pp-neutral="Read our Google reviews"></span> <u data-pp-reviews="Read what neighbors say" data-pp-neutral=""></u></span>
+  </a>

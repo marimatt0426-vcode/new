@@ -1,0 +1,1503 @@
+/* ==========================================================================
+   Purge Pros — "Cover Story" direction
+   builder.css : the price builder (class prefix ppb-). Needs the tokens in site.css.
+   Behaviour is in js/builder.js. The same rules style the static mock that pages
+   carry inside [data-pp-builder] until the script replaces it, so the two must match.
+
+   ONE rule for where the builder lives, on every device:
+     the HERO CARD asks the first question only (how many dogs). When a price is under way it shows the
+     summary instead (.ppb-hero: answers, price so far, Continue, Start over). Same outer size either way.
+     the PANEL runs every later step: a full-height sheet on a phone, a dialog on larger screens.
+
+   The stage is a FIXED box per presentation. Nothing inside may change its outer size:
+     hero card, phone   : 100% wide x 368px
+     hero card, tablet  : up to 470px x 520px       hero card, desktop : 450px x 520px (410px at 1280)
+     sheet (phone)      : 100vw x (100dvh - 12px)
+     dialog (desktop)   : 560px x min(780px, 100dvh - 48px), one size for every step at a given window size
+   Rows, top to bottom, always in the same place:
+     1 head      avatar, title, step count, the mascot's line (a heads-up note may cover it)
+     2 progress  one segment per question; an answered question becomes a chip that edits it
+     3 body      question + hint (fixed), then .ppb-opts: the ONLY part that may scroll, then .ppb-pin
+                 (what a screen keeps in view with its button: the promise and the terms box on the confirm screen)
+     4 foot      Back, the pinned price, Next. The hero card has no Back: there is nothing before the first question.
+   The later screens (request, confirm, done) use the same rows; their rules start at "The later screens" below.
+   No text in the builder is cut off at 360px and wider: chips, hints and the pinned bar wrap instead of ending in an ellipsis.
+   (The small title keeps one as a last resort on phones under 340px, so that it can never wrap and push the question down.)
+   ========================================================================== */
+
+.ppb {
+  --ppb-h: 368px;
+  --ppb-pad: 12px;
+  position: relative; font-family: var(--f-text); color: var(--ink-700); text-align: left;
+}
+.ppb-stage {
+  position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto;
+  height: var(--ppb-h); padding: var(--ppb-pad); border-radius: 26px; background: #fff;
+  box-shadow: 0 0 0 1px rgba(6, 38, 68, .06), var(--sh-3);
+}
+/* the cover arc inside the card: a sky field behind the mascot's line */
+.ppb-stage::before {
+  content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 0; height: 74px; border-radius: 26px 26px 0 0;
+  background: linear-gradient(180deg, #d4eeff 0, #e9f7ff 100%);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 80' preserveAspectRatio='none'%3E%3Cpath d='M0 0H400V52C300 86 120 84 0 60Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 80' preserveAspectRatio='none'%3E%3Cpath d='M0 0H400V52C300 86 120 84 0 60Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+/* a button elsewhere on the page pointed here: one ring so the eye finds the card (the card itself never waits for it) */
+@keyframes ppb-ping {
+  from { box-shadow: 0 0 0 1px rgba(6, 38, 68, .06), var(--sh-3), 0 0 0 0 rgba(24, 174, 245, .7); }
+  to { box-shadow: 0 0 0 1px rgba(6, 38, 68, .06), var(--sh-3), 0 0 0 18px rgba(24, 174, 245, 0); }
+}
+.ppb-stage.is-ping { animation: ppb-ping .9s var(--ease); }
+
+/* 1 head ------------------------------------------------------------------- */
+.ppb-head { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: center; min-height: 48px; padding-right: var(--ppb-head-clear, 0px); }
+.ppb-avatar {
+  width: 46px; height: 46px; border-radius: 50%; overflow: hidden; flex: none; background: #bfe6fc;
+  box-shadow: 0 0 0 3px #fff, 0 4px 10px rgba(6, 38, 68, .22); margin: -4px 0 0 -2px;
+}
+.ppb-avatar img { width: 112%; max-width: none; height: 112%; margin: 6% 0 0 -6%; object-fit: cover; }
+.ppb-title {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  font: 700 13px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700);
+}
+.ppb-count { font: 600 12.5px/1.2 var(--f-text); letter-spacing: 0; text-transform: none; color: var(--ink-500); white-space: nowrap; }
+/* the mascot's line: two lines are always reserved so a longer line never moves the question */
+.ppb-say { margin-top: 2px; min-height: 2.5em; display: flex; align-items: center; font: 600 14.5px/1.25 var(--f-text); color: var(--navy); }
+/* he nods when he says something new (transform only: the words never wait for it) */
+@keyframes ppb-bop { 0% { transform: none; } 35% { transform: translateY(-3px) rotate(-7deg) scale(1.07); } 70% { transform: translateY(1px) rotate(3deg); } 100% { transform: none; } }
+.ppb-avatar.is-bop { animation: ppb-bop .5s var(--ease); }
+
+/* heads-up: the engine changed something by itself (a frequency that no longer fits, a custom quote).
+   The note covers the head and the progress band completely, so nothing below it moves and no chip is half hidden.
+   The whole note is one button: "Got it" puts the head back. */
+.ppb-headsup { position: absolute; z-index: 4; left: -6px; right: -6px; top: -6px; bottom: -27px; }
+.ppb-headsup__btn {
+  display: grid; grid-template-columns: 18px minmax(0, 1fr); column-gap: 8px; align-items: center; align-content: center; width: 100%; height: 100%;
+  padding: 5px calc(var(--ppb-head-clear, 0px) + 10px) 5px 11px; border: 0; border-radius: 16px; background: var(--cream); color: var(--navy);
+  box-shadow: inset 0 0 0 2px var(--gold-300), 0 8px 18px rgba(6, 38, 68, .2); font: 600 12.5px/1.3 var(--f-text); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.ppb-headsup__ico { width: 18px; height: 18px; }
+.ppb-headsup__txt u { margin-left: 2px; font-weight: 800; color: var(--blue-700); white-space: nowrap; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--cyan); }
+.ppb-headsup__btn:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 2px; }
+@media (hover: hover) { .ppb-headsup__btn:hover { background: #fff3d6; } }
+
+/* 2 progress: a fixed band. Bars for what is ahead, a chip for each answer already given. ---- */
+/* 6px under the band on a phone: a chip in it (a city page’s ZIP on the first question) is taller than a bar and must not sit on the question */
+.ppb-progress { display: flex; align-items: center; gap: 5px; height: 27px; min-width: 0; margin: 0 0 6px; padding: 0; list-style: none; }
+.ppb-progress li { position: relative; flex: 1 1 0; min-width: 10px; height: 7px; border-radius: 7px; background: #d5e5f1; font-size: 0; }
+.ppb-progress li.is-done { background: var(--navy); }
+.ppb-progress li.is-current { background: var(--cyan); box-shadow: 0 0 0 3px rgba(24, 174, 245, .22); }
+.ppb-progress li > span { display: none; }
+.ppb-progress li.is-chip { flex: 0 0 auto; min-width: 0; height: auto; background: none; box-shadow: none; }
+/* the chip is a 44px-tall button; the pill inside it is what shows */
+.ppb-chip {
+  display: flex; align-items: center; min-width: 44px; max-width: 100%; height: 44px; margin: -9px 0; padding: 0; border: 0; background: none; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.ppb-chip__pill {
+  display: block; flex: 1 0 auto; height: 24px; padding: 0 7px; border-radius: 12px; background: var(--navy); color: #fff;
+  font: 700 13px/24px var(--f-display); letter-spacing: .015em; text-align: center; white-space: nowrap;   /* its full words, always: the row wraps before a chip is cut */
+  box-shadow: 0 2px 5px rgba(6, 38, 68, .2); transition: background-color .15s, transform .15s var(--ease);
+}
+.ppb-progress li[data-ppb-seg="price"] .ppb-chip__pill { background: var(--gold); color: var(--navy); }   /* the price chip is the gold one */
+.ppb-chip:focus-visible { outline: none; }
+.ppb-chip:focus-visible .ppb-chip__pill { outline: 3px solid var(--focus, #0877b9); outline-offset: 2px; }
+.ppb-chip:active .ppb-chip__pill { transform: translateY(1px); }
+.ppb-chip:disabled { cursor: default; }
+.ppb-chip:disabled .ppb-chip__pill, .ppb-progress li[data-ppb-seg="price"] .ppb-chip:disabled .ppb-chip__pill { background: #6b8298; color: #fff; box-shadow: none; }
+@media (hover: hover) {
+  .ppb-chip:not(:disabled):hover .ppb-chip__pill { background: var(--blue); transform: translateY(-1px); }
+  .ppb-progress li[data-ppb-seg="price"] .ppb-chip:not(:disabled):hover .ppb-chip__pill { background: var(--gold-300); }
+}
+
+/* 3 body ------------------------------------------------------------------- */
+.ppb-body { min-height: 0; display: flex; flex-direction: column; overflow: hidden; margin-inline: -10px; padding-inline: 10px; }
+.ppb-qrow { flex: none; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; height: 29.3px; }
+.ppb-q { flex: none; font: 800 27px/1.05 var(--f-display); color: var(--navy); letter-spacing: 0; white-space: nowrap; }
+.ppb-q:focus, .ppb-q:focus-visible { outline: none; }
+.ppb-hint { align-self: flex-end; min-width: 0; font: 500 12.5px/1.3 var(--f-text); color: var(--ink-500); text-align: right; white-space: nowrap; }
+.ppb-hint:empty::before { content: "\200b"; }
+.ppb-hint.is-alert { color: #8a2b06; font-weight: 700; font-size: 12.5px; line-height: 1.14; white-space: normal; text-wrap: balance; }
+.ppb-hint.is-alert::before { content: ""; display: inline-block; width: 14px; height: 14px; margin-right: 4px; vertical-align: -2px; background: url("../../../assets/brand-icons/pp-alert.webp") center / contain no-repeat; }
+@keyframes ppb-nudge { 0%, 100% { transform: none; } 25% { transform: translateX(-4px); } 60% { transform: translateX(3px); } }
+.ppb-hint.is-nudge { animation: ppb-nudge .32s var(--ease); }
+
+/* the options area: the one place that scrolls. Padding keeps rings, ticks and focus outlines unclipped. */
+.ppb-optwrap { position: relative; flex: 1 1 auto; min-height: 0; display: flex; margin-inline: -10px; }
+.ppb-opts { flex: 1 1 auto; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 8px 10px 4px; scrollbar-width: thin; scrollbar-color: #b9cfe0 transparent; }
+.ppb-opts:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: -3px; border-radius: 12px; }
+/* "there is more": a soft edge and a small tab, shown only while the options really overflow */
+.ppb-optwrap::before, .ppb-optwrap::after { content: ""; position: absolute; z-index: 2; left: 0; right: 0; height: 22px; pointer-events: none; display: none; }
+.ppb-optwrap::before { top: 0; background: linear-gradient(180deg, #fff 0, rgba(255, 255, 255, 0) 100%); }
+.ppb-optwrap::after { bottom: 0; height: 34px; background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, .9) 62%, #fff 100%); }
+.ppb-optwrap[data-more~="above"]::before, .ppb-optwrap[data-more~="below"]::after { display: block; }
+.ppb-morehint {
+  position: absolute; z-index: 3; left: 50%; top: calc(-13px - var(--ppb-pin-h, 0px)); transform: translateX(-50%); display: none; align-items: center; gap: 5px; padding: 3px 10px 3px 11px;
+  border-radius: 999px; background: var(--navy); color: #fff; font: 700 12.5px/1.3 var(--f-text); letter-spacing: .02em; pointer-events: none; box-shadow: 0 3px 8px rgba(6, 38, 68, .28);
+}
+.ppb-morehint::after { content: ""; width: 6px; height: 6px; border-right: 2px solid var(--cyan-200); border-bottom: 2px solid var(--cyan-200); transform: rotate(45deg); margin-top: -3px; }
+.ppb-stage[data-ppb-more~="below"] .ppb-morehint { display: inline-flex; }
+
+.ppb-panel { position: relative; z-index: 1; display: grid; gap: 8px; align-content: start; min-width: 0; }
+/* the sheet only: when a step leaves room under its options, the brand face rests on the foot's edge, very faintly */
+.ppb-spare { display: none; position: absolute; z-index: 0; right: 4px; bottom: -34px; width: 190px; height: auto; opacity: .09; pointer-events: none; }
+.ppb--dialog .ppb-optwrap { overflow: hidden; }
+.ppb--dialog .ppb-optwrap[data-spare] .ppb-spare { display: block; }
+.ppb-tiles { display: grid; gap: 8px; margin-top: 8px; padding-bottom: 4px; }
+.ppb-opts .ppb-tiles { margin-top: 0; padding-bottom: 0; }
+.ppb-tiles--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ppb-tiles--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ppb-tiles--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* five options: three then two, the two made wider so no tile is stranded */
+.ppb-tiles--5 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.ppb-tiles--5 > * { grid-column: span 2; }
+.ppb-tiles--5 > :nth-child(n+4) { grid-column: span 3; }
+
+/* tile: a real button. Border width is the same in every state so nothing shifts. */
+.ppb-tile {
+  position: relative; display: grid; justify-items: center; align-content: center; gap: 1px; min-height: 86px; min-width: 0;
+  padding: 5px 4px 7px; border: 2px solid #c4d9ea; border-radius: var(--r-tile, 16px);
+  background: linear-gradient(180deg, #fff 0, #f0f8ff 100%); color: var(--navy);
+  box-shadow: 0 2px 0 rgba(6, 38, 68, .08), 0 6px 12px rgba(6, 38, 68, .08);
+  font: 700 14px/1.15 var(--f-text); text-align: center; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .15s var(--ease), border-color .15s, box-shadow .15s, background .15s;
+}
+.ppb-tile__pic { width: 56px; height: 56px; object-fit: contain; transition: transform .22s var(--ease); }
+.ppb-tile__label { font: 800 19px/1 var(--f-display); white-space: nowrap; }
+.ppb-tile__sub { font: 500 12.5px/1.25 var(--f-text); color: var(--ink-500); }
+.ppb-tile__price { font: 800 20px/1 var(--f-display); color: var(--navy); margin-top: 2px; }
+.ppb-tile__price small { font: 600 12.5px/1 var(--f-text); color: var(--ink-500); }
+.ppb-tile__why { display: none; font: 600 12.5px/1.25 var(--f-text); color: var(--ink-500); }
+
+/* hover: lift and a blue edge. Only on devices that really hover, so a tile never lights up by itself. */
+@media (hover: hover) {
+  .ppb-tile:not([aria-disabled="true"]):not(.is-disabled):hover { border-color: var(--blue); transform: translateY(-3px); box-shadow: 0 3px 0 rgba(6, 38, 68, .08), 0 12px 20px rgba(6, 38, 68, .14); }
+  .ppb-tile:not([aria-disabled="true"]):not(.is-disabled):hover .ppb-tile__pic { transform: rotate(-5deg) scale(1.07); }
+}
+.ppb-tile.is-hover { border-color: var(--blue); transform: translateY(-3px); box-shadow: 0 3px 0 rgba(6, 38, 68, .08), 0 12px 20px rgba(6, 38, 68, .14); }
+.ppb-tile.is-hover .ppb-tile__pic { transform: rotate(-5deg) scale(1.07); }
+/* pressed */
+.ppb-tile:not([aria-disabled="true"]):active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(6, 38, 68, .08), 0 2px 4px rgba(6, 38, 68, .1); }
+/* keyboard focus */
+.ppb-tile:focus-visible, .ppb-tile.is-focus { outline: 3px solid var(--focus, #0877b9); outline-offset: 3px; border-radius: 16px; }
+/* selected: cyan edge, pale fill, ring and a tick badge. Unmistakably different from hover. */
+.ppb-tile[aria-checked="true"], .ppb-tile[aria-pressed="true"], .ppb-tile.is-selected {
+  border-color: var(--cyan); background: var(--cyan-050);
+  box-shadow: 0 0 0 4px rgba(24, 174, 245, .26), 0 6px 12px rgba(6, 38, 68, .1);
+}
+.ppb-tile[aria-checked="true"]::after, .ppb-tile[aria-pressed="true"]::after, .ppb-tile.is-selected::after {
+  content: ""; position: absolute; right: -8px; top: -8px; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--navy) url("../../../assets/brand-icons/pp-service-check.webp") center / 15px no-repeat; box-shadow: 0 0 0 2.5px #fff;
+}
+/* multi-select tiles (areas) show an empty box until chosen, so "nothing is preselected" is visible */
+.ppb-tile[role="checkbox"]::after {
+  content: ""; position: absolute; right: 7px; top: 7px; width: 22px; height: 22px; border-radius: 7px; border: 2px solid #9db9cf; background: #fff;
+}
+.ppb-tile[role="checkbox"][aria-checked="true"]::after {
+  right: 7px; top: 7px; width: 22px; height: 22px; border-radius: 7px; border: 0; box-shadow: none;
+  background: var(--navy) url("../../../assets/brand-icons/pp-service-check.webp") center / 14px no-repeat;
+}
+/* disabled: still readable, with the reason in words */
+.ppb-tile[aria-disabled="true"], .ppb-tile.is-disabled {
+  cursor: not-allowed; border-style: dashed; border-color: #c3d2de; background: #f4f8fb; box-shadow: none; color: var(--ink-500);
+}
+.ppb-tile[aria-disabled="true"] .ppb-tile__pic, .ppb-tile.is-disabled .ppb-tile__pic { filter: grayscale(1) opacity(.5); }
+.ppb-tile[aria-disabled="true"] .ppb-tile__price, .ppb-tile.is-disabled .ppb-tile__price { display: none; }
+.ppb-tile[aria-disabled="true"] .ppb-tile__why, .ppb-tile.is-disabled .ppb-tile__why { display: block; }
+
+/* wide tile ("5 or more"): one row, picture left, words centre, caret right */
+.ppb-tile--wide { grid-column: 1 / -1; grid-template-columns: auto minmax(0, 1fr) auto; justify-items: start; align-items: center; gap: 10px; min-height: 50px; padding: 3px 14px 3px 10px; text-align: left; }
+.ppb-tile--wide .ppb-tile__pic { width: 40px; height: 40px; }
+.ppb-tile--wide .ppb-tile__sub { margin-left: 8px; }
+.ppb-tile__caret { width: 10px; height: 10px; border-right: 2.5px solid var(--blue); border-bottom: 2.5px solid var(--blue); transform: rotate(45deg); margin: -4px 4px 0 0; }
+/* "5 or more" opens IN PLACE: the same slot shows 5 to 10+ as six number tiles; nothing else moves */
+.ppb-more { grid-column: 1 / -1; height: 50px; min-width: 0; }
+.ppb-more > .ppb-tile--wide { width: 100%; height: 100%; min-height: 0; }
+.ppb-morerow { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; height: 100%; }
+.ppb-tile--num { min-height: 0; height: 100%; padding: 0 0 1px; gap: 1px; border-radius: 14px; }
+.ppb-tile--num b { font: 800 23px/.95 var(--f-display); }
+.ppb-tile--num span { font: 600 12.5px/1 var(--f-text); color: var(--ink-500); }
+.ppb-tile--num[aria-pressed="true"]::after { right: -5px; top: -6px; width: 20px; height: 20px; background-size: 12px; box-shadow: 0 0 0 2px #fff; }
+
+/* row tile (how often): picture left, name and note, price right */
+.ppb-tile--row { grid-template-columns: auto minmax(0, 1fr) auto; justify-items: start; align-items: center; gap: 2px 12px; min-height: 60px; padding: 6px 14px 6px 10px; text-align: left; }
+.ppb-tile--row .ppb-tile__pic { width: 44px; height: 44px; grid-row: 1 / span 2; }
+.ppb-tile--row .ppb-tile__label { align-self: end; }
+.ppb-tile--row .ppb-tile__sub, .ppb-tile--row .ppb-tile__why { grid-column: 2; align-self: start; }
+.ppb-tile--row .ppb-tile__price { grid-column: 3; grid-row: 1 / span 2; margin: 0 14px 0 0; text-align: right; }
+.ppb-tile--row .ppb-tile__price small { display: block; margin-top: 3px; }
+
+/* how often, inline: two columns of compact rows so every option and its one price is on screen at once */
+.ppb-freq { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ppb-freq > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+.ppb-freq .ppb-tile--row { grid-template-columns: auto minmax(0, 1fr); gap: 1px 8px; min-height: 44px; padding: 1px 8px 2px 6px; align-content: center; }
+.ppb-freq .ppb-tile--row .ppb-tile__pic { width: 30px; height: 30px; }
+.ppb-freq .ppb-tile__label { font-size: 16.5px; align-self: end; }
+.ppb-freq .ppb-tile__sub { display: none; grid-column: 2; font-size: 12.5px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.ppb-freq .ppb-tile--row .ppb-tile__price { grid-column: 2; grid-row: auto; margin: 0; text-align: left; font-size: 15.5px; align-self: start; }
+.ppb-freq .ppb-tile--row .ppb-tile__price small { display: inline; margin: 0 0 0 4px; font-size: 12.5px; }
+.ppb-freq .ppb-tile__why { font-size: 12.5px; line-height: 1.15; }
+.ppb-freq .ppb-tile--noprice:not([aria-disabled="true"]) .ppb-tile__sub { display: block; }
+@media (max-width: 699px) {
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq .ppb-tile[aria-disabled="true"] { grid-template-columns: minmax(0, 1fr); padding-left: 9px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq .ppb-tile[aria-disabled="true"] .ppb-tile__pic { display: none; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq .ppb-tile[aria-disabled="true"] .ppb-tile__label { font-size: 15px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq .ppb-tile[aria-disabled="true"] .ppb-tile__why { grid-column: 1; line-height: 1.1; }
+}
+/* "popular": a pill beside the name. In the compact grid it leaves once the option is chosen (the tick takes that corner). */
+.ppb-tile__flag { justify-self: end; align-self: center; padding: 2px 6px 2px; border-radius: 999px; background: var(--gold); color: var(--navy); font: 700 12.5px/1.2 var(--f-display); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+.ppb-freq .ppb-tile--row { grid-template-columns: auto minmax(0, 1fr) auto; }
+.ppb-freq .ppb-tile__flag { grid-column: 3; grid-row: 1; }
+.ppb-freq .ppb-tile[aria-pressed="true"] .ppb-tile__flag { display: none; }
+.ppb-freq .ppb-tile--row .ppb-tile__price, .ppb-freq .ppb-tile__sub, .ppb-freq .ppb-tile__why { grid-column: 2 / -1; }
+.ppb-tile[aria-disabled="true"] .ppb-tile__flag { display: none; }
+
+/* ZIP ---------------------------------------------------------------------- */
+.ppb-zip__field { position: relative; }
+.ppb-zip__ico { position: absolute; left: 11px; top: 50%; width: 34px; height: 34px; transform: translateY(-50%); object-fit: contain; pointer-events: none; }
+.ppb-zip__input.field__input { min-height: 54px; padding: 6px 14px 6px 56px; font: 800 28px/1 var(--f-display); letter-spacing: .14em; }
+.ppb-zip__input.field__input::placeholder { font: 500 17px/1 var(--f-text); letter-spacing: 0; }
+.ppb-zip__input[aria-invalid="true"] { border-color: #c2410c; background: #fff7f2; }
+.ppb-zip__msg { display: flex; gap: 9px; align-items: center; min-height: 44px; font: 500 14px/1.3 var(--f-text); color: var(--ink-500); }
+.ppb-zip__msg img { width: 30px; height: 30px; flex: none; }
+.ppb-zip__msg b { display: block; font: 800 19px/1.1 var(--f-display); color: var(--navy); }
+.ppb-zip__msg.is-ok { padding: 4px 12px 4px 8px; border-radius: 14px; background: var(--grass-050); color: var(--ink-700); }
+.ppb-zip__msg.is-bad { color: #8a2b06; font-weight: 600; }
+.ppb-zip__msg.is-bad img { width: 18px; height: 18px; }
+/* out of area: kind, clear, and somewhere to go next */
+.ppb-ooa {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 74px; column-gap: 12px; align-items: start; padding: 11px 12px 12px 14px; border-radius: 16px;
+  background: var(--cream); box-shadow: inset 0 0 0 2px var(--gold-300); overflow: hidden;
+}
+.ppb-ooa:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 2px; }
+.ppb-ooa__copy { display: grid; gap: 5px; min-width: 0; }
+.ppb-ooa__kicker { font: 700 12.5px/1.2 var(--f-display); letter-spacing: .13em; text-transform: uppercase; color: var(--blue-700); }
+.ppb-ooa__title { font: 800 21px/1.08 var(--f-display); color: var(--navy); }
+.ppb-ooa__text { font-size: 13.5px; line-height: 1.45; color: var(--ink-700); }
+.ppb-ooa__text b { color: var(--navy); }
+.ppb-ooa__text a { display: inline-block; padding: 14px 0; margin: -14px 0; color: var(--blue-700); font-weight: 700; white-space: nowrap; }
+.ppb-ooa__pose { grid-column: 2; grid-row: 1 / span 2; align-self: start; width: 74px; margin: 6px 0 10px; justify-self: center; }   /* on a phone he is beside the headline, in the first view */
+.ppb--dialog .ppb-ooa__pose { align-self: end; }
+.ppb-ooa__edge { grid-column: 1; margin-top: 4px; }
+.ppb-ooa__pose img { width: 100%; height: auto; }
+.ppb-ooa__pose.stand--mound::before { left: -12%; right: -30%; }
+.ppb-ooa__pin { grid-column: 2; grid-row: 1 / span 2; align-self: start; justify-self: center; width: 64px; height: 64px; margin-top: 4px; box-shadow: 0 0 0 3px rgba(24, 174, 245, .3), 0 6px 14px rgba(6, 38, 68, .16); }
+/* TEXT FIRST: the pair of buttons wherever the builder offers a call. Text is first and filled and carries the number;
+   Call is the compact one beside it. One row at every width (the row is as tall as the single Call button it replaced). */
+.ppb-reach { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ppb-reach .btn { min-height: 44px; }
+.ppb-reach .btn img { width: 20px; height: 20px; flex: none; }
+.ppb-reach__text { padding-inline: 14px 16px; }
+.ppb-reach__call { padding-inline: 12px 16px; }
+.ppb-ooa__reach { grid-column: 1 / -1; justify-self: start; margin-top: 8px; }
+
+/* yard size: five pictures at stepped sizes, small to large at a glance */
+.ppb-tiles--yard { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.ppb-tile--yard { align-content: end; gap: 2px; min-height: 96px; padding: 4px 2px 7px; }
+.ppb-tile__plot { display: grid; align-items: end; justify-items: center; height: 46px; }
+.ppb-tile--yard .ppb-tile__pic { width: calc(26px + var(--i, 0) * 5px); height: calc(26px + var(--i, 0) * 5px); }
+.ppb-tile--yard .ppb-tile__label { display: grid; justify-items: center; gap: 1px; font-size: 16.5px; }
+.ppb-tile--yard .ppb-tile__label small { font: 600 12.5px/1 var(--f-text); color: var(--ink-500); }
+.ppb-yardrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; }
+.ppb-most { padding: 5px 11px 5px 7px; font-size: 12.5px; white-space: nowrap; }
+.ppb-most img { width: 18px; height: 18px; }
+
+/* text buttons inside the builder: 44px tall, underlined, plainly a control */
+.ppb-link {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 2px; border: 0; background: none; color: var(--blue-700);
+  font: 700 14px/1.2 var(--f-text); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--cyan); white-space: nowrap; cursor: pointer;
+}
+@media (hover: hover) { .ppb-link:hover { color: var(--navy); } }
+.ppb-link[aria-disabled="true"] { color: var(--ink-500); text-decoration-color: #c3d2de; cursor: default; }
+.ppb-note { font: 500 13px/1.4 var(--f-text); color: var(--ink-500); }
+
+/* price screen --------------------------------------------------------------- */
+.ppb-pricepanel__a, .ppb-pricepanel__b { display: contents; }
+.ppb-total { order: 0; } .ppb-fee { order: 1; } .ppb-terms { order: 2; } .ppb-ways { order: 3; } .ppb-lines { order: 4; } .ppb-nexts { order: 5; } .ppb-save { order: 6; }
+.ppb-total { display: grid; justify-items: start; gap: 4px; }
+.ppb-total__ribbon { display: none; font-size: 12.5px; padding: 4px 16px 4px; }
+.ppb-total__amt { display: flex; align-items: baseline; font: 800 50px/.88 var(--f-display); color: var(--navy); letter-spacing: -.005em; white-space: nowrap; }
+.ppb-total__amt small { font: 700 14px/1.1 var(--f-text); color: var(--ink-500); letter-spacing: 0; margin-left: .78em; }
+.ppb-total__amt.is-words { font-size: 32px; line-height: 1; white-space: normal; }
+/* no start-up fee: one strip, the whole of it opens "How this works" */
+.ppb-fee {
+  display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; column-gap: 8px; align-items: center; width: 100%; min-height: 44px; padding: 3px 12px 3px 8px; border-radius: 14px; border: 0;
+  background: var(--gold-050); box-shadow: inset 0 0 0 1.5px var(--gold-300); color: var(--navy); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .15s var(--ease), box-shadow .15s;
+}
+.ppb-fee img { width: 30px; height: 30px; }
+.ppb-fee__txt { display: grid; min-width: 0; }
+.ppb-fee__title { font: 800 17px/1.05 var(--f-display); color: var(--navy); }
+.ppb-fee__sub { font: 500 12.5px/1.2 var(--f-text); color: var(--ink-700); }
+.ppb-fee__how { font: 700 12.5px/1.2 var(--f-text); color: var(--blue-700); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--cyan); white-space: nowrap; }
+@media (hover: hover) { .ppb-fee:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1.5px var(--gold-600), 0 6px 12px rgba(6, 38, 68, .12); } }
+.ppb-fee:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 3px; }
+.ppb-terms { display: grid; gap: 5px; padding: 10px 12px; border-radius: 14px; background: var(--sky-050); box-shadow: inset 0 0 0 1.5px var(--sky-200); }
+.ppb-terms__title { font: 800 17px/1.1 var(--f-display); color: var(--navy); }
+.ppb-terms p { font-size: 13px; line-height: 1.45; }
+/* the other two ways forward: always directly under the price, never hidden */
+.ppb-ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.ppb-way {
+  display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; justify-items: start; gap: 1px; min-height: 46px; padding: 4px 10px 5px 12px; border-radius: 14px;
+  border: 2px solid var(--navy); background: #fff; color: var(--navy); text-align: left; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .15s var(--ease), background-color .15s, box-shadow .15s;
+}
+.ppb-way__ico { display: none; width: 30px; height: 30px; grid-row: 1 / span 2; }
+.ppb-way__mark { place-items: center; border-radius: 50%; background: radial-gradient(circle at 35% 28%, #1c5f96 0, var(--navy) 62%); color: var(--cyan-200); font: 800 22px/30px var(--f-display); text-align: center; box-shadow: 0 2px 4px rgba(6, 38, 68, .25); }
+.ppb-way small { font: 600 12.5px/1.1 var(--f-text); color: var(--ink-500); }
+.ppb-way b { font: 800 17px/1.05 var(--f-display); letter-spacing: .01em; white-space: nowrap; }
+@media (hover: hover) { .ppb-way:not([aria-disabled="true"]):hover { background: var(--cyan-050); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(6, 38, 68, .12); } }
+.ppb-way:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 3px; }
+.ppb-way[aria-disabled="true"] { border-style: dashed; border-color: #c3d2de; background: #f4f8fb; color: var(--ink-500); cursor: not-allowed; }
+.ppb-ways__why { grid-column: 1 / -1; font: 600 12.5px/1.35 var(--f-text); color: var(--ink-700); }
+/* line items: only ever shown here */
+.ppb-lines { display: grid; gap: 0; align-content: start; padding: 8px 12px 9px; border-radius: 14px; background: #f5faff; box-shadow: inset 0 0 0 1.5px #d5e5f1; }
+.ppb-lines__title { font: 700 12.5px/1.2 var(--f-display); letter-spacing: .13em; text-transform: uppercase; color: var(--blue-700); margin-bottom: 3px; }
+.ppb-lines__row { display: flex; align-items: baseline; gap: 8px; padding: 4px 0; font: 500 13.5px/1.3 var(--f-text); color: var(--ink-700); }
+.ppb-lines__row + .ppb-lines__row { border-top: 1.5px dotted #c9dcea; }
+.ppb-lines__row span { flex: 1 1 auto; min-width: 0; }
+.ppb-lines__row b { flex: none; font: 700 14px/1.2 var(--f-text); color: var(--navy); font-variant-numeric: tabular-nums; }
+.ppb-lines__row.is-total { border-top: 2px solid var(--navy); margin-top: 2px; padding-top: 6px; color: var(--navy); font-weight: 700; }
+.ppb-lines__row.is-total b { font: 800 19px/1 var(--f-display); }
+.ppb-lines__note { font-size: 12.5px; line-height: 1.4; color: var(--ink-500); margin-top: 4px; }
+/* what happens next */
+.ppb-nexts { display: grid; gap: 6px; align-content: start; }
+.ppb-nexts__title { font: 700 12.5px/1.2 var(--f-display); letter-spacing: .13em; text-transform: uppercase; color: var(--blue-700); }
+.ppb-nexts li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 9px; align-items: center; font: 500 13.5px/1.35 var(--f-text); color: var(--ink-700); }
+.ppb-nexts li img { width: 30px; height: 30px; }
+.ppb-nexts li b { color: var(--navy); }
+/* save for 7 days */
+.ppb-save { display: grid; gap: 4px; padding-top: 2px; border-top: 2px dotted #c9dcea; }
+.ppb-save__status { font: 600 13px/1.4 var(--f-text); color: var(--ink-700); }
+.ppb-save__status:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 2px; border-radius: 6px; }
+.ppb-save__status.is-bad { color: #8a2b06; }
+.ppb-save__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
+.ppb-save__url.field__input { min-height: 44px; padding: 6px 10px; font-size: 16px; border-radius: 12px; }
+.ppb-save__copy { min-height: 44px; padding: 0 14px; border-radius: 12px; border: 2px solid var(--navy); background: #fff; color: var(--navy); font: 700 17px/1 var(--f-display); cursor: pointer; }
+@media (hover: hover) { .ppb-save__copy:hover { background: var(--cyan-050); } }
+
+
+/* 4 foot: Back, the pinned price, Next. Always here, always in this order. --- */
+.ppb-foot { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; margin-top: 8px; padding-top: 10px; border-top: 2px dotted #c9dcea; }
+/* the hero card asks the first question only, so it has no Back: the price takes the room (the same rule styles the static mock) */
+.ppb:not(.ppb--dialog) .ppb-stage:not(.ppb-hero) > .ppb-foot { grid-template-columns: minmax(0, 1fr) auto; }
+.ppb:not(.ppb--dialog) .ppb-stage:not(.ppb-hero) > .ppb-foot > .ppb-back { display: none; }
+/* phone card: the 6px given to the progress band comes out of the gap above the foot’s divider, so the options area keeps its full height */
+@media (max-width: 699px) { .ppb:not(.ppb--dialog) .ppb-foot { margin-top: 2px; } }
+.ppb-back {
+  display: inline-grid; place-items: center; width: 46px; height: 46px; padding: 0; border-radius: 50%; border: 2px solid #c4d9ea; background: #fff; color: var(--navy);
+  font: 700 0/1 var(--f-display); text-decoration: none; transition: border-color .15s, transform .15s var(--ease);
+}
+.ppb-back::before { content: ""; width: 10px; height: 10px; border-left: 2.5px solid currentColor; border-bottom: 2.5px solid currentColor; transform: rotate(45deg); margin-left: 4px; }
+@media (hover: hover) { .ppb-back:hover:not(:disabled) { border-color: var(--blue); transform: translateX(-2px); } }
+.ppb-back:disabled, .ppb-back[aria-disabled="true"] { opacity: .38; cursor: default; }
+.ppb-price { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 8px; align-items: center; min-width: 0; }
+.ppb-price__ico { width: 30px; height: 30px; grid-row: 1 / span 2; object-fit: contain; }   /* the tag is taller than wide: never stretched */
+.ppb-price__label { font: 600 12.5px/1.15 var(--f-text); color: var(--ink-500); text-wrap: balance; }   /* wraps to two lines before it is ever cut */
+.ppb-price__amt { font: 800 25px/.95 var(--f-display); color: var(--navy); white-space: nowrap; }
+.ppb-price__amt small { font: 600 12.5px/1 var(--f-text); color: var(--ink-500); margin-left: 3px; }
+/* no number to show (still building, custom estimate, out of area): words, on two short lines */
+.ppb-price.is-words .ppb-price__label { display: none; }
+.ppb-price.is-words .ppb-price__amt { grid-row: 1 / span 2; font: 700 13px/1.2 var(--f-text); white-space: normal; text-wrap: balance; }
+.ppb-next {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 108px; min-height: 48px; padding: 3px 20px 4px; border: 0; border-radius: var(--r-pill);
+  font: 700 21px/1 var(--f-display); letter-spacing: .015em; color: var(--navy); text-decoration: none; white-space: nowrap;
+  background: linear-gradient(180deg, #ffd766 0%, #ffc12f 52%, #f8b214 100%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .55), inset 0 -2px 0 rgba(160, 96, 0, .18), 0 2px 4px rgba(6, 38, 68, .14), 0 8px 18px rgba(242, 169, 0, .34);
+  transition: transform .16s var(--ease), box-shadow .16s var(--ease), background .16s;
+}
+.ppb-next img { width: 22px; height: 22px; transition: transform .2s var(--ease); }
+@media (hover: hover) { .ppb-next:hover:not([aria-disabled="true"]) { transform: translateY(-2px); } }
+@media (hover: hover) { .ppb-next:hover:not([aria-disabled="true"]) img { transform: translateX(3px); } }
+/* waiting: Next is in its place but resting until the step has an answer. The hint beside the question says why. */
+.ppb-next[aria-disabled="true"] { background: var(--gold-050); color: rgba(6, 38, 68, .6); box-shadow: inset 0 0 0 2px var(--gold-300); cursor: default; }
+.ppb-next[aria-disabled="true"] img { opacity: .55; }
+.ppb-next.is-off { visibility: hidden; }
+/* the price screen: Next becomes the request button. On a phone the pinned price gives it the room. */
+.ppb-stage[data-ppb-current="price"] .ppb-next { padding-inline: 16px; font-size: 20px; }
+.ppb-stage[data-ppb-current="price"] .ppb-next img { display: none; }
+.ppb-stage[data-ppb-current="price"] .ppb-price__ico { display: none; }
+.ppb-stage[data-ppb-current="price"] .ppb-price { grid-template-columns: minmax(0, 1fr); }
+.ppb-stage[data-ppb-current="price"] .ppb-price__amt small { display: none; }   /* the unit is beside the big number above */
+
+/* desktop and tablet inline --------------------------------------------------- */
+@media (min-width: 700px) {
+  .ppb { --ppb-h: 520px; --ppb-pad: 20px 22px 18px; }
+  .ppb-stage::before { height: 96px; }
+  .ppb-head { gap: 14px; min-height: 60px; }
+  .ppb-avatar { width: 58px; height: 58px; margin: -2px 0 0 -2px; }
+  .ppb-title { font-size: 14px; }
+  .ppb-count { font-size: 13px; }
+  .ppb-say { font-size: 16.5px; min-height: 2.5em; }
+  .ppb-avatar { position: relative; z-index: 5; }            /* he stays in front of his own note */
+  .ppb-headsup { bottom: -43px; }
+  .ppb-headsup__btn { grid-template-columns: minmax(0, 1fr); padding-left: 80px; font-size: 13.5px; }
+  .ppb-headsup__ico { display: none; }
+  .ppb-progress { height: 26px; margin: 7px 0 0; gap: 6px; }
+  .ppb-progress li { min-width: 16px; }
+  .ppb-progress li { height: 8px; }
+  .ppb-progress li > span { display: block; position: absolute; left: 0; right: 0; top: 14px; font: 600 12.5px/1 var(--f-text); color: var(--ink-500); text-align: center; white-space: nowrap; }
+  .ppb-progress li.is-current > span { color: var(--navy); font-weight: 700; }
+  .ppb-progress li.is-done > span { color: var(--ink-500); }
+  .ppb-progress li.is-chip > span { display: none; }
+  .ppb-chip__pill { height: 26px; line-height: 26px; padding: 0 9px; border-radius: 13px; font-size: 13.5px; }
+  .ppb-body { padding-top: 37.2px; }
+  .ppb-qrow { display: block; height: auto; }
+  .ppb-q { font-size: 36px; }
+  .ppb-hint, .ppb-hint.is-alert { text-align: left; font-size: 14.5px; line-height: 1.3; margin-top: 4px; min-height: 1.3em; white-space: normal; }
+  .ppb-opts { padding-top: 14px; }
+  .ppb-panel { gap: 10px; }
+  .ppb-tiles { gap: 10px; margin-top: 14px; }
+  .ppb-tile { min-height: 116px; padding: 8px 6px 10px; gap: 3px; }
+  .ppb-tile__pic { width: 72px; height: 72px; }
+  .ppb-tile__label { font-size: 22px; }
+  .ppb-tile--wide { min-height: 60px; padding: 4px 18px 4px 14px; }
+  .ppb-tile--wide .ppb-tile__pic { width: 48px; height: 48px; }
+  .ppb-more { height: 60px; }
+  .ppb-morerow { gap: 8px; }
+  .ppb-tile--num { min-height: 0; padding: 0 0 2px; gap: 2px; }
+  .ppb-tile--num b { font-size: 28px; }
+  .ppb-tile--num span { font-size: 12.5px; }
+  .ppb-tile--row { min-height: 64px; }
+  .ppb-tile__sub { font-size: 13px; }
+  .ppb-freq { gap: 8px 10px; }
+  .ppb-freq .ppb-tile--row { min-height: 58px; gap: 2px 10px; padding: 3px 10px 4px 8px; }
+  .ppb-freq .ppb-tile--row .ppb-tile__pic { width: 40px; height: 40px; }
+  .ppb-freq .ppb-tile__label { font-size: 19.5px; }
+  .ppb-freq .ppb-tile--row .ppb-tile__price { font-size: 18px; }
+  .ppb-freq .ppb-tile--row .ppb-tile__price small { font-size: 12.5px; }
+  .ppb-freq .ppb-tile__why, .ppb-freq .ppb-tile__sub { font-size: 12.5px; line-height: 1.12; }
+  .ppb-freq .ppb-tile[aria-disabled="true"] .ppb-tile__label { font-size: 18.5px; }
+  .ppb-zip__input.field__input { min-height: 60px; font-size: 32px; padding-left: 62px; }
+  .ppb-zip__ico { width: 40px; height: 40px; }
+  .ppb-zip__msg { font-size: 15px; min-height: 52px; }
+  .ppb-zip__msg b { font-size: 22px; }
+  .ppb-zip__msg img { width: 36px; height: 36px; }
+  .ppb-ooa { grid-template-columns: minmax(0, 1fr) 92px; padding: 13px 14px 14px 16px; }
+  .ppb-ooa__title { font-size: 24px; }
+  .ppb-ooa__text { font-size: 14.5px; }
+  .ppb-ooa__pose { width: 92px; align-self: end; }
+  .ppb-tiles--yard { gap: 8px; }
+  .ppb-tile--yard { min-height: 128px; padding: 6px 4px 10px; gap: 4px; }
+  .ppb-tile__plot { height: 68px; }
+  .ppb-tile--yard .ppb-tile__pic { width: calc(38px + var(--i, 0) * 7.5px); height: calc(38px + var(--i, 0) * 7.5px); }
+  .ppb-tile--yard .ppb-tile__label { font-size: 20px; }
+  .ppb-tile--yard .ppb-tile__label small { font-size: 12.5px; }
+  .ppb-most { font-size: 13.5px; }
+  .ppb-note { font-size: 14.5px; }
+  .ppb-total { grid-template-columns: auto auto; justify-content: start; align-items: center; column-gap: 14px; }
+  .ppb-total__ribbon { display: inline-block; grid-column: 2; grid-row: 1; }
+  .ppb-total__amt { font-size: 60px; grid-column: 1; grid-row: 1; }
+  .ppb-total__amt small { font-size: 16px; }
+  .ppb-total__amt.is-words { font-size: 36px; }
+  .ppb-fee { grid-template-columns: 36px minmax(0, 1fr) auto; min-height: 50px; padding: 4px 14px 4px 10px; column-gap: 10px; }
+  .ppb-fee img { width: 36px; height: 36px; }
+  .ppb-fee__title { font-size: 20px; }
+  .ppb-fee__sub { font-size: 12.5px; }
+  .ppb-fee__how { font-size: 13.5px; }
+  .ppb-tile__flag { font-size: 12.5px; padding: 3px 8px 2px; }
+  .ppb-way { min-height: 50px; grid-template-columns: auto minmax(0, 1fr); column-gap: 9px; padding: 4px 12px 5px 10px; }
+  .ppb-way__ico { display: block; }
+  .ppb-way b { font-size: 19px; }
+  .ppb-way small { font-size: 12.5px; }
+  .ppb-lines__row { font-size: 14.5px; }
+  .ppb-nexts li { font-size: 14.5px; }
+  .ppb-foot { gap: 14px; padding-top: 14px; margin-top: 10px; }
+  .ppb-back { width: auto; height: 48px; padding: 0 18px 1px 14px; border-radius: var(--r-pill); font-size: 19px; display: inline-flex; gap: 8px; align-items: center; }
+  .ppb-back::before { margin-left: 2px; }
+  .ppb-price__ico { width: 36px; height: 36px; }
+  .ppb-price__label { font-size: 13px; }
+  .ppb-price__amt { font-size: 30px; }
+  .ppb-price.is-words .ppb-price__amt { font-size: 14px; }
+  .ppb-next { min-width: 124px; min-height: 52px; font-size: 22px; padding-inline: 24px; }
+  .ppb-stage[data-ppb-current="price"] .ppb-next { padding-inline: 20px; font-size: 21px; }
+}
+
+/* compact pinned bar: appears after the first answer, whenever the builder itself is out of view */
+.ppb-bar {
+  position: fixed; z-index: 70; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); margin-inline: auto; max-width: 560px;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 8px 8px 10px; border-radius: 999px;
+  background: var(--navy); color: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, .9), var(--sh-3);
+  transform: translateY(140%); transition: transform .35s var(--ease), visibility 0s .35s; visibility: hidden;
+}
+.ppb-bar.is-on { transform: none; visibility: visible; transition: transform .35s var(--ease), visibility 0s; }
+.ppb-bar--demo { position: relative; left: auto; right: auto; bottom: auto; transform: none; visibility: visible; z-index: 0; }
+.ppb-bar__avatar { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: #bfe6fc; box-shadow: 0 0 0 2px var(--cyan); }
+.ppb-bar__avatar img { width: 112%; max-width: none; height: 112%; margin: 6% 0 0 -6%; object-fit: cover; }
+.ppb-bar__txt { min-width: 0; display: grid; }
+.ppb-bar__plan { font: 600 12.5px/1.2 var(--f-text); color: var(--on-navy-soft); text-wrap: balance; }   /* wraps to a second line; never cut */
+.ppb-bar__price { font: 800 24px/1 var(--f-display); color: #fff; white-space: nowrap; }
+.ppb-bar__price small { font: 600 12.5px/1 var(--f-text); color: var(--cyan-200); margin-left: 4px; }
+.ppb-bar__price.is-words { font: 700 15px/1.2 var(--f-text); white-space: normal; }
+.ppb-bar .ppb-next { min-height: 46px; min-width: 0; font-size: 20px; padding-inline: 18px; }
+.ppb-bar .ppb-next:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+@media (min-width: 700px) { .ppb-bar { bottom: 20px; padding: 10px 10px 10px 12px; gap: 14px; } .ppb-bar__price { font-size: 28px; } .ppb-bar__plan { font-size: 13.5px; } .ppb-bar__price.is-words { font-size: 17px; } }
+
+/* the same builder as a sheet (phone) or dialog (desktop), opened by any [data-purge-quote] control.
+   A native <dialog>: top layer, the page behind inert, Escape handled, focus kept inside. */
+dialog.ppb-sheet, dialog.ppb-pop {
+  position: fixed; inset: var(--ppb-top, 0px) 0 calc(var(--ppb-cut, 0px) - var(--ppb-top, 0px)) 0; width: 100vw; max-width: none; height: calc(100dvh - var(--ppb-cut, 0px)); max-height: none; margin: 0; padding: 0; border: 0; overflow: hidden;
+  background: rgba(1, 20, 36, .62); color: inherit;
+}
+/* FIX 2026-10-11. Chrome on Android can leave its own strip (saved passwords) at the foot of the screen after the keyboard has
+   gone. It shortens only what can be seen, so the foot of the panel, with the price and Next, lay under it. builder.js (fitSheet)
+   sets --ppb-cut (the height hidden at the foot) and --ppb-top (where the seen part starts) on the open panel, and the panel is
+   then exactly as tall as what can be seen. Both are unset in every other case: 0px, and every size here is what it was.
+   2026-10-12: a pop-up (yard guide, "How this works", the terms) is a dialog of its own in front of the panel and is sized by the
+   rule above, so fitSheet now writes the same two properties on an open pop-up, and .ppb-pop__panel takes --ppb-cut off its
+   greatest height: "Got it" stays above the strip. Unset, as everywhere but under a strip, the pop-up is what it was. */
+dialog.ppb-sheet::backdrop, dialog.ppb-pop::backdrop { background: transparent; }
+dialog.ppb-sheet:not([open]), dialog.ppb-pop:not([open]) { display: none; }
+dialog.ppb-sheet[open], dialog.ppb-pop[open] { display: flex; align-items: flex-end; justify-content: center; }
+.ppb-sheet { position: fixed; inset: 0; z-index: 95; display: none; align-items: flex-end; justify-content: center; background: rgba(1, 20, 36, .62); }
+.ppb-sheet.is-open { display: flex; }
+.ppb-sheet .ppb { width: 100%; --ppb-h: calc(100dvh - 12px - var(--ppb-cut, 0px)); --ppb-head-clear: 44px; }
+.ppb-sheet .ppb-stage { border-radius: 26px 26px 0 0; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+@keyframes ppb-rise { from { transform: translateY(28px); } to { transform: none; } }
+dialog.ppb-sheet[open] .ppb, dialog.ppb-pop[open] .ppb-pop__panel { animation: ppb-rise .26s var(--ease); }
+.ppb-close {
+  position: absolute; right: 10px; top: 10px; z-index: 5; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 0; display: grid; place-items: center;
+  background: #fff; box-shadow: var(--sh-1); cursor: pointer;
+}
+.ppb-close img { width: 18px; height: 18px; }
+@media (hover: hover) { .ppb-close:hover { background: var(--cyan-050); } }
+@media (min-width: 700px) {
+  .ppb-sheet, dialog.ppb-sheet[open], dialog.ppb-pop[open] { align-items: center; padding: 24px; }
+  .ppb-sheet .ppb { width: 560px; --ppb-h: min(780px, calc(100dvh - 48px - var(--ppb-cut, 0px))); --ppb-head-clear: 46px; }
+  .ppb-sheet .ppb-stage { border-radius: 28px; padding-bottom: 18px; }
+  .ppb-close { right: 14px; top: 14px; }
+}
+/* the page behind the sheet neither scrolls nor shifts */
+/* the page behind the panel does not scroll. Only the root is locked: overflow on <body> as well would make the body
+   the scroll container of everything sticky, and the sticky header (and a family's pinned list) would jump away
+   behind the scrim while the panel is open. */
+html.ppb-lock { overflow: hidden; }
+html.ppb-lock body { padding-right: var(--ppb-sbw, 0px); }
+
+/* roomy: inside the sheet or dialog the same steps get the space ---------------- */
+.ppb--dialog .ppb-opts { padding-top: 12px; }
+.ppb--dialog .ppb-freq { grid-template-columns: minmax(0, 1fr); }
+.ppb--dialog .ppb-freq .ppb-tile--row { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "pic label price" "pic sub price"; gap: 2px 12px; min-height: 68px; padding: 6px 12px 6px 10px; }
+.ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__pic { grid-area: pic; }
+.ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__label { grid-area: label; }
+.ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__sub, .ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__why { grid-area: sub; }
+.ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__pic { width: 48px; height: 48px; }
+.ppb--dialog .ppb-freq .ppb-tile__label { font-size: 21px; }
+.ppb--dialog .ppb-freq .ppb-tile__sub { display: block; white-space: normal; font-size: 12.5px; line-height: 1.25; }
+.ppb--dialog .ppb-freq .ppb-tile[aria-disabled="true"] .ppb-tile__sub { display: none; }
+.ppb--dialog .ppb-freq .ppb-tile__why { font-size: 12.5px; line-height: 1.25; }
+.ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__price { grid-area: price; margin: 0 6px 0 0; text-align: right; font-size: 23px; align-self: center; }
+.ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__price small { display: block; margin: 3px 0 0; font-size: 12.5px; }
+.ppb--dialog .ppb-freq .ppb-tile__flag, .ppb--dialog .ppb-freq .ppb-tile[aria-pressed="true"] .ppb-tile__flag { display: block; grid-area: auto; position: absolute; left: auto; right: 16px; top: -10px; padding: 3px 10px 2px; font-size: 12.5px; box-shadow: 0 0 0 2px #fff; }
+.ppb--dialog .ppb-freq .ppb-tile[aria-pressed="true"] .ppb-tile__flag { right: 30px; }
+.ppb--dialog .ppb-freq .ppb-tile[aria-disabled="true"] .ppb-tile__flag { display: none; }
+.ppb--dialog .ppb-way__ico { display: block; }
+.ppb--dialog .ppb-way { grid-template-columns: auto minmax(0, 1fr); column-gap: 9px; min-height: 54px; }
+@media (max-width: 699px) {
+  .ppb--dialog .ppb-panel { gap: 12px; }
+  .ppb--dialog .ppb-tiles { gap: 10px; }
+  .ppb--dialog .ppb-tiles--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ppb--dialog .ppb-tiles--4 > .ppb-tile { min-height: 166px; gap: 5px; }
+  .ppb--dialog .ppb-tiles--4 > .ppb-tile .ppb-tile__pic { width: 116px; height: 116px; }
+  .ppb--dialog .ppb-tiles--4 > .ppb-tile .ppb-tile__label { font-size: 27px; }
+  .ppb--dialog .ppb-more { height: 68px; }
+  .ppb--dialog .ppb-tile--wide .ppb-tile__pic { width: 48px; height: 48px; }
+  .ppb--dialog .ppb-tile--num b { font-size: 27px; }
+  .ppb--dialog .ppb-tiles--3 { grid-template-columns: minmax(0, 1fr); }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile { grid-template-columns: auto minmax(0, 1fr); justify-items: start; align-items: center; column-gap: 16px; min-height: 100px; padding: 8px 60px 8px 16px; text-align: left; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile .ppb-tile__pic { width: 78px; height: 78px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile .ppb-tile__label { font-size: 27px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile[role="checkbox"]::after { top: 50%; right: 18px; width: 28px; height: 28px; margin-top: -14px; border-radius: 9px; background-size: 17px; }
+  .ppb--dialog .ppb-tiles--yard { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+  .ppb--dialog .ppb-tiles--yard > * { grid-column: span 2; }
+  .ppb--dialog .ppb-tiles--yard > :nth-child(n+4) { grid-column: span 3; }
+  .ppb--dialog .ppb-tile--yard { min-height: 158px; padding: 8px 4px 12px; gap: 6px; }
+  .ppb--dialog .ppb-tile__plot { height: 92px; }
+  .ppb--dialog .ppb-tile--yard .ppb-tile__pic { width: calc(52px + var(--i, 0) * 10px); height: calc(52px + var(--i, 0) * 10px); }
+  .ppb--dialog .ppb-tile--yard .ppb-tile__label { font-size: 23px; }
+  .ppb--dialog .ppb-tile--yard .ppb-tile__label small { font-size: 13px; }
+  .ppb--dialog .ppb-freq .ppb-tile--row { min-height: 76px; }
+  .ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__pic { width: 54px; height: 54px; }
+  .ppb--dialog .ppb-freq .ppb-tile__label { font-size: 23px; }
+  .ppb--dialog .ppb-freq .ppb-tile__sub, .ppb--dialog .ppb-freq .ppb-tile__why { font-size: 13px; }
+  .ppb--dialog .ppb-zip__msg { font-size: 15px; min-height: 56px; }
+  .ppb--dialog .ppb-zip__msg b { font-size: 22px; }
+  .ppb--dialog .ppb-yardrow { flex-wrap: wrap; }
+  .ppb--dialog .ppb-zip__input.field__input { min-height: 62px; font-size: 32px; }
+  .ppb--dialog .ppb-ooa { grid-template-columns: minmax(0, 1fr) 96px; }
+  .ppb--dialog .ppb-ooa__pose { width: 96px; }
+  .ppb--dialog .ppb-ooa__text { font-size: 14.5px; }
+  .ppb--dialog .ppb-total__amt { font-size: 66px; }
+  .ppb--dialog .ppb-total__ribbon { display: inline-block; }
+  .ppb--dialog .ppb-ways { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ppb--dialog .ppb-way { column-gap: 8px; padding-inline: 9px 6px; }
+  .ppb--dialog .ppb-lines__row, .ppb--dialog .ppb-nexts li { font-size: 14px; }
+  .ppb--dialog .ppb-note { font-size: 14.5px; }
+}
+@media (min-width: 700px) {
+  .ppb--dialog .ppb-body { padding-top: 18px; }
+  .ppb--dialog .ppb-opts { padding-top: 8px; }
+  .ppb--dialog .ppb-tile { min-height: 138px; }
+  .ppb--dialog .ppb-tile__pic { width: 88px; height: 88px; }
+  .ppb--dialog .ppb-tile--wide, .ppb--dialog .ppb-tile--num { min-height: 0; }
+  .ppb--dialog .ppb-tile--wide .ppb-tile__pic { width: 48px; height: 48px; }
+  .ppb--dialog .ppb-more { height: 64px; }
+  .ppb--dialog .ppb-tile--yard { min-height: 146px; }
+  .ppb--dialog .ppb-tile__plot { height: 84px; }
+  .ppb--dialog .ppb-tile--yard .ppb-tile__pic { width: calc(46px + var(--i, 0) * 9.5px); height: calc(46px + var(--i, 0) * 9.5px); }
+  .ppb--dialog .ppb-freq .ppb-tile--row { min-height: 64px; padding-block: 3px; }
+  .ppb--dialog .ppb-freq .ppb-tile--row .ppb-tile__pic { width: 42px; height: 42px; }
+  .ppb--dialog .ppb-ooa { grid-template-columns: minmax(0, 1fr) 118px; }
+  .ppb--dialog .ppb-ooa__pose { width: 118px; }
+  /* the price screen has the width for two columns: nothing is hidden below a scroll */
+  .ppb--dialog .ppb-pricepanel { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 18px; }
+  .ppb--dialog .ppb-pricepanel > .ppb-total, .ppb--dialog .ppb-pricepanel > .ppb-nexts { grid-column: 1 / -1; }
+  .ppb--dialog .ppb-pricepanel__a { display: grid; gap: 8px; align-content: start; min-width: 0; order: 2; }
+  .ppb--dialog .ppb-terms { grid-column: 1 / -1; order: 1; }      /* one-time and custom terms run the full width under the price */
+  .ppb--dialog .ppb-lines { order: 2; } .ppb--dialog .ppb-nexts { order: 3; }
+  .ppb--dialog .ppb-pricepanel:has(.ppb-lines[hidden]) .ppb-pricepanel__a { grid-column: 1 / -1; }
+  .ppb--dialog .ppb-pricepanel:has(.ppb-lines[hidden]) .ppb-ways { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ppb--dialog .ppb-ways { grid-template-columns: minmax(0, 1fr); align-content: start; }
+  .ppb--dialog .ppb-way { min-height: 50px; }
+  .ppb--dialog .ppb-fee { grid-template-columns: 36px minmax(0, 1fr); }
+  .ppb--dialog .ppb-fee__how { grid-column: 2; }
+  .ppb--dialog .ppb-save { border-top: 0; padding-top: 0; }
+  .ppb--dialog .ppb-nexts { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 14px; padding-top: 8px; border-top: 2px dotted #c9dcea; }
+  .ppb--dialog .ppb-nexts__title { grid-column: 1 / -1; }
+  .ppb--dialog .ppb-nexts li { align-items: start; font-size: 13px; line-height: 1.35; }
+}
+
+/* the inline mount while the builder is away in the sheet: same size, so the page does not move */
+.ppb-stage--away { align-content: center; justify-items: center; text-align: center; gap: 8px; grid-template-rows: none; }
+.ppb-stage--away .ppb-avatar { margin: 0; }
+.ppb-stage--away p { font: 600 15px/1.4 var(--f-text); color: var(--navy); max-width: 26ch; }
+
+/* pop-ups: the yard guide and "How this works" -------------------------------- */
+.ppb-pop__panel {
+  position: relative; width: 100%; max-height: calc(100dvh - 20px - var(--ppb-cut, 0px)); overflow-y: auto; overscroll-behavior: contain; padding: 20px 16px calc(16px + env(safe-area-inset-bottom));
+  border-radius: 26px 26px 0 0; background: #fff; color: var(--ink-700); box-shadow: var(--sh-3); font-family: var(--f-text); text-align: left;
+}
+.ppb-pop__kicker { font: 700 13px/1.2 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700); padding-right: 48px; }
+.ppb-pop__title { font: 800 28px/1.05 var(--f-display); color: var(--navy); margin-top: 4px; padding-right: 48px; }
+.ppb-pop__title:focus, .ppb-pop__title:focus-visible { outline: none; }
+.ppb-pop__body { display: grid; gap: 12px; margin-top: 12px; font-size: 15px; line-height: 1.5; }
+.ppb-pop__body b { color: var(--navy); }
+.ppb-pop__body a { color: var(--blue-700); font-weight: 700; }
+.ppb-pop__foot { display: flex; justify-content: flex-end; margin-top: 16px; }
+.ppb-pop__list { display: grid; gap: 10px; }
+.ppb-pop__list li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; }
+.ppb-pop__list li img { width: 30px; height: 30px; }
+.ppb-guide__fig { display: grid; gap: 6px; padding: 12px; border-radius: 18px; background: var(--sky-050); }
+.ppb-guide__fig svg { width: 100%; height: auto; border-radius: 10px; }
+.ppb-guide__fig figcaption { font-size: 13.5px; line-height: 1.4; }
+.ppb-guide__small { font-size: 13px; color: var(--ink-500); }
+.ppb-guide__table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.ppb-guide__table caption { text-align: left; font: 700 13px/1.3 var(--f-display); letter-spacing: .12em; text-transform: uppercase; color: var(--blue-700); padding-bottom: 6px; }
+.ppb-guide__table th, .ppb-guide__table td { text-align: left; padding: 8px 10px; border-bottom: 1.5px dotted #c9dcea; }
+.ppb-guide__table thead th { font: 700 13px/1.2 var(--f-text); color: var(--ink-500); border-bottom: 2px solid var(--navy); }
+.ppb-guide__table tbody th { font-weight: 700; color: var(--navy); }
+.ppb-guide__table tr.is-selected { background: var(--cyan-050); }
+.ppb-guide__table tr.is-selected th { box-shadow: inset 4px 0 0 var(--cyan); }
+@media (min-width: 700px) {
+  .ppb-pop__panel { width: 560px; max-height: calc(100dvh - 48px - var(--ppb-cut, 0px)); padding: 26px 28px 24px; border-radius: 28px; }
+  .ppb-pop__title { font-size: 34px; }
+  .ppb-pop__body { font-size: 16px; }
+}
+
+/* kit helpers: show the states without scripts */
+.ppb-demo { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 700px) { .ppb-demo { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.ppb-demo figure { display: grid; gap: 8px; }
+.ppb-demo figcaption { font: 600 12.5px/1.3 var(--f-text); color: var(--ink-500); text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ppb-avatar.is-bop, .ppb-hint.is-nudge, .ppb-stage.is-ping, dialog.ppb-sheet[open] .ppb, dialog.ppb-pop[open] .ppb-pop__panel { animation: none; }
+}
+
+/* ==========================================================================
+   The later screens: request (who, how to reach you, where and when), confirm, done.
+   Same stage, same rows, same foot. Only the options area scrolls.
+   ========================================================================== */
+
+/* a later screen's own 3D icon rides at the end of the question row; nothing moves for it */
+.ppb-qrow { position: relative; }
+.ppb-qico { flex: none; align-self: flex-end; width: 36px; height: 36px; margin: 0 0 -6px 2px; object-fit: contain; }
+.ppb-qico:not([hidden]) ~ .ppb-hint, .ppb-stage[data-ppb-phase="later"] .ppb-hint { margin-left: auto; }
+.ppb-stage[data-ppb-phase="later"] .ppb-qrow { gap: 6px; }
+
+/* progress on the later screens: the plan is the gold chip */
+.ppb-progress li[data-ppb-seg="r-plan"] .ppb-chip__pill { background: var(--gold); color: var(--navy); }
+.ppb-progress li[data-ppb-seg="r-plan"] .ppb-chip:disabled .ppb-chip__pill { background: #6b8298; color: #fff; box-shadow: none; }
+@media (hover: hover) { .ppb-progress li[data-ppb-seg="r-plan"] .ppb-chip:not(:disabled):hover .ppb-chip__pill { background: var(--gold-300); } }
+
+/* the foot on the later screens: the button's words are longer, so the price gives it the room (as on the price screen) */
+.ppb-stage[data-ppb-phase="later"] .ppb-next { padding-inline: 16px; font-size: 20px; }
+.ppb-stage[data-ppb-phase="later"] .ppb-price__ico { display: none; }
+.ppb-stage[data-ppb-phase="later"] .ppb-price { grid-template-columns: minmax(0, 1fr); }
+.ppb-next.is-plain img { display: none; }
+@keyframes ppb-spin { to { transform: rotate(360deg); } }
+.ppb-next.is-busy { cursor: progress; }
+.ppb-next.is-busy::before, .ppb-spin {
+  content: ""; flex: none; width: 20px; height: 20px; border-radius: 50%; border: 3px solid rgba(6, 38, 68, .22); border-top-color: var(--navy);
+  animation: ppb-spin .8s linear infinite;
+}
+.ppb-close:disabled { opacity: .4; cursor: default; }
+
+/* links in sentences: plainly links, with a full-height target */
+.ppb-a { position: relative; z-index: 2; display: inline-block; padding: 13px 0; margin: -13px 0; color: var(--blue-700); font-weight: 700; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 2px; white-space: nowrap; }
+@media (hover: hover) { .ppb-a:hover { color: var(--navy); } }
+
+/* the price screen orders its parts with "order"; the later screens read top to bottom as written */
+.ppb-confirm > *, .ppb-sum > *, .ppb-form > *, .ppb-done__main > *, .ppb-done__main > .ppb-done__nexts { order: 0; }
+.ppb-done__nexts li.is-done b::after { content: ""; display: inline-block; width: 6px; height: 11px; margin: 0 0 1px 9px; border: solid var(--grass-700); border-width: 0 3px 3px 0; transform: rotate(45deg); }
+
+/* ---- the request form ---- */
+.ppb-request { gap: 10px; }
+.ppb-form { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.ppb-field { gap: 5px; min-width: 0; }
+.ppb-field .field__label { font-size: 14.5px; line-height: 1.25; }
+.ppb-req { color: #b93a08; font-weight: 800; }
+.ppb-field .field__help, .ppb-row2 > .field__help { font-size: 12.5px; line-height: 1.4; }
+.ppb-field .field__error { font-size: 13px; line-height: 1.35; }
+.ppb-field .field__input { min-width: 0; }
+.ppb-textarea { min-height: 104px; line-height: 1.4; resize: none; }
+.ppb-row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px 10px; align-items: start; min-width: 0; }
+.ppb-row2 > .field__help { grid-column: 1 / -1; }
+.ppb-row2.is-single { grid-template-columns: minmax(0, 1fr); }
+.ppb-row2--zip { grid-template-columns: minmax(0, 1fr) 146px; }
+.ppb-row2 .field__label { white-space: nowrap; }
+/* phone and email: one under the other on a phone, so each has the full width to type in */
+.ppb-row2--reach { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
+.ppb-row2--reach > .ppb-field--email { order: 2; margin-top: 8px; }
+.ppb-row2--reach > .field__help { order: 1; }
+.ppb-zipok { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ink-700); }
+.ppb-zipok img { width: 18px; height: 18px; flex: none; }
+
+/* one-tap choices (site.css .choice), with the builder's own state rules */
+.ppb-picks { gap: 8px; }
+.ppb-pick { min-width: 0; min-height: 52px; padding: 6px 8px; gap: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.ppb-pick__ico { width: 32px; height: 32px; flex: none; object-fit: contain; }
+.ppb-pick__ico.ppb-way__mark { display: block; }
+.ppb-pick__txt { display: grid; gap: 2px; min-width: 0; }
+.ppb-pick__txt b { font: 700 14.5px/1.15 var(--f-text); }
+.ppb-pick__txt small { font: 500 12.5px/1.25 var(--f-text); color: var(--ink-500); }
+.ppb-pick:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 3px; border-radius: 14px; }
+/* a touch screen keeps ":hover" on the last thing tapped: it must never look like a second selection */
+@media (hover: none) { .ppb-pick:not(.is-selected):hover { border-color: #bcd3e4; transform: none; box-shadow: 0 2px 0 rgba(6, 38, 68, .06); } }
+/* reply method and customer status: the picture above the words */
+.ppb-picks--preferredContact .ppb-pick, .ppb-picks--customerStatus .ppb-pick { flex-direction: column; justify-content: flex-start; gap: 4px; padding: 8px 6px 9px; }
+.ppb-picks--preferredContact[data-count="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ppb-picks--customerStatus .ppb-pick__ico { width: 38px; height: 38px; }
+.ppb-picks--customerStatus .ppb-way__mark { font: 800 27px/38px var(--f-display); }
+.ppb-picks--customerStatus .ppb-pick__txt b { font: 800 20px/1 var(--f-display); letter-spacing: .01em; }
+.ppb-picks--startTiming { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ppb-picks--lastCleaned { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ppb-picks--lastCleaned .ppb-pick, .ppb-picks--startTiming .ppb-pick { padding-inline: 6px; }
+.ppb-field.is-invalid .ppb-pick:not(.is-selected) { border-color: #e3a07f; }
+
+/* a short note from the engine beside the control it is about (permission cleared, terms to confirm again) */
+.ppb-fieldnote { padding: 6px 10px; border-radius: 10px; background: var(--cream); box-shadow: inset 0 0 0 1.5px var(--gold-300); font: 600 12.5px/1.4 var(--f-text); color: var(--ink-700); }
+
+/* the text-message permission and the terms box: the engine's wording in a quiet panel; the whole label is the target */
+.ppb-consent { display: grid; gap: 6px; padding: 10px 12px 10px 10px; border-radius: 14px; background: #f5faff; box-shadow: inset 0 0 0 1.5px #d5e5f1; min-width: 0; }
+.ppb-consent.is-invalid { background: #fff7f2; box-shadow: inset 0 0 0 2px #c2410c; }
+.ppb-check { position: relative; grid-template-columns: 26px minmax(0, 1fr); font-size: 13.5px; line-height: 1.5; color: var(--ink-700); }
+.ppb-check input { inset: 0; width: 100%; height: 100%; margin: 0; z-index: 1; }
+.ppb-check input:disabled { cursor: default; }
+.ppb-check input:disabled + .check__box { opacity: .55; }
+.ppb-check__txt strong { color: var(--navy); }
+.ppb-consent__alt { padding-left: 36px; font-size: 12.5px; line-height: 1.45; color: var(--ink-500); }
+.ppb-consent .field__error { padding-left: 36px; font-size: 13px; }
+
+/* the error summary: one box, each line goes to its field */
+.ppb-errors { display: grid; gap: 0; padding: 9px 10px 4px 12px; border-radius: 14px; background: #fff7f2; box-shadow: inset 0 0 0 2px #e9a583; }
+.ppb-errors:focus-visible, .ppb-alert:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 2px; }
+.ppb-errors__title { display: flex; align-items: center; gap: 7px; font: 700 13.5px/1.3 var(--f-text); color: #8a2b06; }
+.ppb-errors__title img { width: 18px; height: 18px; }
+.ppb-errors ul, .ppb-alert__list { display: grid; gap: 0 14px; margin: 0; padding: 0; list-style: none; }
+.ppb-errors__link {
+  display: flex; align-items: center; width: 100%; min-height: 44px; padding: 2px 0; border: 0; background: none; color: var(--navy); text-align: left; cursor: pointer;
+  font: 600 13.5px/1.3 var(--f-text); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: #e08a5f;
+}
+@media (hover: hover) { .ppb-errors__link:hover { color: #8a2b06; } }
+
+/* ---- confirm ---- */
+.ppb-confirm { gap: 10px; }
+.ppb-sum { display: grid; gap: 4px; min-width: 0; padding: 9px 12px 10px; border-radius: 14px; background: #f5faff; box-shadow: inset 0 0 0 1.5px #d5e5f1; }
+.ppb-sum__head { display: flex; align-items: baseline; gap: 8px; }
+.ppb-sum__head b, .ppb-sum__k, .ppb-alert__kicker { font: 700 12.5px/1.2 var(--f-display); letter-spacing: .13em; text-transform: uppercase; color: var(--blue-700); }
+.ppb-sum__head small { font: 500 12.5px/1.2 var(--f-text); color: var(--ink-500); }
+.ppb-sum__chips { display: flex; flex-wrap: wrap; gap: 0 6px; margin: -3px 0 -5px -1px; }
+.ppb-sum__chips .ppb-chip { margin: -3px 0; }
+.ppb-chip__brief, .ppb-stage[data-ppb-mode="inline"] .ppb-chip__full { display: none; }
+.ppb-stage[data-ppb-mode="inline"] .ppb-chip__brief { display: inline; }
+.ppb-sum__chips .ppb-chip__pill { height: 30px; padding: 0 11px; border-radius: 15px; font-size: 15px; line-height: 30px; }
+.ppb-sum__price { display: inline-flex; align-items: baseline; gap: 5px; margin-left: auto; white-space: nowrap; }
+.ppb-sum__price strong { font: 800 25px/.9 var(--f-display); color: var(--navy); }
+.ppb-sum__price strong.is-words { font-size: 19px; }
+.ppb-sum__price span { font: 600 12.5px/1.2 var(--f-text); color: var(--ink-500); }
+/* no start-up fee, as one line inside the plan card: the whole line opens "How this works" */
+.ppb-fee--line { grid-template-columns: 26px minmax(0, 1fr) auto; min-height: 44px; margin: 2px -6px -8px; width: calc(100% + 12px); padding: 2px 6px; border-radius: 10px; background: none; box-shadow: none; border-top: 1.5px dotted #c9dcea; border-top-left-radius: 0; border-top-right-radius: 0; }
+.ppb-fee--line img { width: 26px; height: 26px; }
+.ppb-fee--line .ppb-fee__title { font-size: 16px; }
+@media (hover: hover) { .ppb-fee--line:hover { transform: none; box-shadow: none; background: var(--gold-050); } }
+.ppb-fee:disabled { cursor: default; }
+.ppb-fee:disabled .ppb-fee__how { color: #8ea3b5; text-decoration-color: transparent; }
+@media (hover: hover) { .ppb-fee--line:disabled:hover { background: none; } }
+.ppb-sum--rows { gap: 0; padding-block: 2px; }
+.ppb-sum__row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; column-gap: 8px; align-items: center; min-height: 46px; padding: 5px 0; }
+.ppb-sum__row:not([hidden]) ~ .ppb-sum__row { border-top: 1.5px dotted #c9dcea; }
+.ppb-sum__v { display: grid; gap: 1px; min-width: 0; font: 500 13.5px/1.3 var(--f-text); color: var(--ink-700); overflow-wrap: anywhere; }
+.ppb-sum__v span:first-child { font-weight: 700; font-size: 14.5px; color: var(--navy); }
+.ppb-edit {
+  min-width: 44px; min-height: 44px; margin: -4px -6px -4px 0; padding: 0 6px; border: 0; background: none; color: var(--blue-700); cursor: pointer;
+  font: 700 14px/1 var(--f-text); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--cyan);
+}
+@media (hover: hover) { .ppb-edit:hover:not(:disabled) { color: var(--navy); } }
+.ppb-edit:disabled { color: #8ea3b5; text-decoration-color: transparent; cursor: default; }
+.ppb-sum__row.is-flagged { margin-inline: -8px; padding-inline: 8px; border-radius: 10px; background: #fff7f2; box-shadow: inset 3px 0 0 #c2410c; }
+.ppb-promise { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 9px; align-items: center; padding: 9px 12px; border-radius: 14px; background: var(--grass-050); font: 500 13.5px/1.45 var(--f-text); color: var(--ink-700); }
+.ppb-promise img { width: 30px; height: 30px; }
+.ppb-promise b { color: var(--navy); }
+.ppb-ack { font-size: 13px; line-height: 1.45; color: var(--ink-700); }
+.ppb-review { font: 600 12.5px/1.3 var(--f-text); color: var(--ink-500); }
+
+/* what is going on with the request: sending, a failure in plain words, or the locked "please call" state */
+.ppb-alert { display: grid; gap: 4px; min-width: 0; padding: 11px 12px 12px 14px; border-radius: 16px; }
+.ppb-alert__title { font: 800 21px/1.1 var(--f-display); color: var(--navy); }
+.ppb-alert__text { font: 500 14px/1.45 var(--f-text); color: var(--ink-700); }
+.ppb-alert__small { font: 600 12.5px/1.4 var(--f-text); color: var(--ink-500); }
+.ppb-alert.is-sending { grid-template-columns: 24px minmax(0, 1fr); gap: 11px; align-items: center; background: var(--sky-050); box-shadow: inset 0 0 0 1.5px var(--sky-200); }
+.ppb-alert.is-sending .ppb-alert__text { font-weight: 600; color: var(--navy); }
+.ppb-spin { display: block; width: 24px; height: 24px; border-color: var(--sky-200); border-top-color: var(--blue); }
+.ppb-alert.is-failed { grid-template-columns: 18px minmax(0, 1fr); column-gap: 9px; align-items: start; background: #fff7f2; box-shadow: inset 0 0 0 2px #e9a583; }
+.ppb-alert__ico { width: 18px; height: 18px; margin-top: 3px; }
+.ppb-alert__body { display: grid; gap: 3px; min-width: 0; }
+.ppb-alert.is-locked { gap: 5px; background: var(--cream); box-shadow: inset 0 0 0 2px var(--gold-300); }
+.ppb-alert.is-locked .ppb-alert__title { font-size: 25px; }
+.ppb-alert__reach { justify-self: start; margin-top: 5px; }
+.ppb-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 8px; font: 600 12.5px/1.3 var(--f-text); color: var(--ink-500); }
+.ppb-ref code { padding: 4px 8px; border-radius: 8px; background: #eef5fb; color: var(--navy); font: 600 12.5px/1.3 ui-monospace, "Cascadia Mono", Consolas, monospace; overflow-wrap: anywhere; user-select: all; }
+
+/* ---- done: he stands on a rise of lawn at the card's ground line ---- */
+.ppb-done.ppb-panel { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 10px; align-content: stretch; min-height: 100%; }
+.ppb-done__main { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.ppb-done__lead { font: 500 14.5px/1.45 var(--f-text); color: var(--ink-700); }
+.ppb-done__lead b { color: var(--navy); }
+.ppb-done__nexts li.is-done { color: var(--navy); }
+.ppb-done__scene { align-self: end; display: grid; justify-items: center; overflow: hidden; padding-top: 8px; margin-bottom: -4px; }
+.ppb-done__pose img { width: auto; height: 150px; }
+.ppb-done__scene[data-pose="relax"] .ppb-done__pose img { height: 132px; }
+.ppb-done__puck { margin: 8px 0 12px; }
+
+/* phone sheet: the form has the whole height */
+@media (max-width: 699px) {
+  .ppb--dialog .ppb-request { gap: 12px; }
+  .ppb--dialog .ppb-form { gap: 12px; }
+  /* replying by text: phone number, then the permission box, then the optional email, so everything required is in the first view on a 360x740 phone */
+  .ppb--dialog .ppb-form:has(> .ppb-consent:not([hidden])) > .ppb-row2--reach { display: contents; }
+  .ppb--dialog .ppb-form:has(> .ppb-consent:not([hidden])) > .ppb-field--preferredContact { order: 0; }
+  .ppb--dialog .ppb-form:has(> .ppb-consent:not([hidden])) .ppb-field--phone { order: 1; }
+  .ppb--dialog .ppb-form:has(> .ppb-consent:not([hidden])) .ppb-row2--reach > .field__help { order: 2; margin-top: -7px; }
+  .ppb--dialog .ppb-form:has(> .ppb-consent:not([hidden])) > .ppb-consent { order: 3; }
+  .ppb--dialog .ppb-form:has(> .ppb-consent:not([hidden])) .ppb-row2--reach > .ppb-field--email { order: 4; margin-top: 0; }
+  .ppb--dialog .ppb-picks--startTiming .ppb-pick, .ppb--dialog .ppb-picks--lastCleaned .ppb-pick { min-height: 48px; }
+  .ppb--dialog .ppb-consent .ppb-check { font-size: 13px; line-height: 1.45; }
+  .ppb--dialog .ppb-done__pose img { height: 190px; }
+  .ppb--dialog .ppb-done__scene[data-pose="relax"] .ppb-done__pose img { height: 168px; }
+  .ppb--dialog .ppb-done__lead { font-size: 15.5px; }
+}
+
+/* desktop and tablet */
+@media (min-width: 700px) {
+  .ppb-qico { position: absolute; right: 0; top: -6px; width: 62px; height: 62px; margin: 0; }
+  .ppb-row2--reach { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 5px; }
+  .ppb-row2--reach > .ppb-field--email { order: 0; margin-top: 0; }
+  .ppb-errors ul, .ppb-alert__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ppb-done.ppb-panel { grid-template-columns: minmax(0, 1fr) 124px; grid-template-rows: auto; column-gap: 14px; }
+  .ppb-done__scene { position: sticky; bottom: -4px; }
+  .ppb-done__pose img { height: 122px; }
+  .ppb-done__scene[data-pose="relax"] .ppb-done__pose img { height: 76px; }
+  /* inline in the hero card: the same form, a little tighter */
+  .ppb-stage[data-ppb-mode="inline"] .ppb-form { gap: 10px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-field { gap: 4px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-field .field__label { font-size: 13.5px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-field .field__input { min-height: 46px; padding-block: 7px; font-size: 16px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-pick { min-height: 46px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-picks--preferredContact .ppb-pick, .ppb-stage[data-ppb-mode="inline"] .ppb-picks--customerStatus .ppb-pick { padding: 6px 4px 7px; gap: 2px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-pick__ico { width: 28px; height: 28px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-picks--customerStatus .ppb-pick__ico { width: 30px; height: 30px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-picks--customerStatus .ppb-way__mark { font-size: 22px; line-height: 30px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-picks--customerStatus .ppb-pick__txt b { font-size: 18px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-pick__txt small { font-size: 12.5px; line-height: 1.2; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-pick__txt b { font-size: 13.5px; }
+  /* the dialog: room for wider rows */
+  .ppb--dialog .ppb-request, .ppb--dialog .ppb-confirm { gap: 12px; }
+  .ppb--dialog .ppb-form { gap: 12px; }
+  .ppb--dialog .ppb-picks--preferredContact .ppb-pick { flex-direction: row; justify-content: center; gap: 9px; padding: 6px 10px; }
+  .ppb--dialog .ppb-picks--customerStatus .ppb-pick { flex-direction: row; justify-content: flex-start; align-items: center; gap: 10px; padding: 8px 10px; text-align: left; }
+  .ppb--dialog .ppb-picks--startTiming { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ppb--dialog .ppb-picks--lastCleaned { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .ppb--dialog .ppb-picks--lastCleaned .ppb-pick__txt b, .ppb--dialog .ppb-picks--startTiming .ppb-pick__txt b { font-size: 13.5px; }
+  /* the dialog has the width to put a row's facts on one line */
+  .ppb--dialog .ppb-confirm { gap: 10px; }
+  .ppb--dialog .ppb-sum__v { display: block; }
+  .ppb--dialog .ppb-sum__v span + span::before { content: " · "; color: #8ea3b5; font-weight: 400; }
+  .ppb--dialog .ppb-sum__row { min-height: 44px; padding-block: 3px; }
+  .ppb--dialog .ppb-promise { padding-block: 7px; }
+  .ppb--dialog .ppb-done.ppb-panel { grid-template-columns: minmax(0, 1fr) 150px; }
+  .ppb--dialog .ppb-done__main > .ppb-done__nexts { grid-template-columns: minmax(0, 1fr); row-gap: 5px; padding-top: 0; border-top: 0; }
+  .ppb--dialog .ppb-done__nexts li { align-items: center; font-size: 13.5px; }
+  .ppb--dialog .ppb-done__pose img { height: 204px; }
+  .ppb--dialog .ppb-done__scene[data-pose="relax"] .ppb-done__pose img { height: 128px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ppb-next.is-busy::before, .ppb-spin { animation: none; border-top-color: transparent; }
+}
+
+/* desktop and tablet: later-screen details that depend on the rules above */
+@media (min-width: 700px) {
+  .ppb--dialog .ppb-fee--line { grid-template-columns: 26px minmax(0, 1fr) auto; }
+  .ppb--dialog .ppb-fee--line .ppb-fee__how { grid-column: auto; }
+  .ppb--dialog .ppb-fee--line .ppb-fee__txt { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 7px; }
+  .ppb--dialog .ppb-confirm { gap: 8px; }
+  .ppb--dialog .ppb-agree { padding-block: 8px; }
+  .ppb--dialog .ppb-sum--plan { padding-block: 7px 8px; }
+  .ppb--dialog .ppb-sum__row { min-height: 40px; padding-block: 2px; }
+  .ppb--dialog .ppb-edit { margin-block: -6px; }
+  .ppb-done__pose.stand--mound::before { left: -10%; right: -10%; }
+}
+
+/* a saved plan being opened: the note shows a spinner, and the options rest until the engine answers */
+.ppb-headsup__spin { display: none; width: 15px; height: 15px; margin-right: 7px; border-width: 2.5px; vertical-align: -2px; }
+.ppb-headsup.is-loading .ppb-headsup__spin { display: inline-block; }
+.ppb-headsup.is-loading u, .ppb-headsup.is-loading .ppb-headsup__ico { display: none; }
+.ppb-headsup.is-loading .ppb-headsup__btn { cursor: progress; grid-template-columns: minmax(0, 1fr); }
+.ppb-stage[aria-busy="true"] .ppb-opts { opacity: .5; pointer-events: none; }
+
+/* narrow phones (under 375px): the foot's button has longer words on the later screens, so the unit beside the pinned price steps aside */
+@media (max-width: 374px) {
+  .ppb-stage[data-ppb-phase="later"] .ppb-price__amt small { display: none; }
+  .ppb-stage[data-ppb-phase="later"] .ppb-next { padding-inline: 12px; font-size: 18.5px; }
+  .ppb-row2--zip { grid-template-columns: minmax(0, 1fr) 128px; }
+  .ppb-row2--zip .field__label { font-size: 13.5px; }
+}
+
+/* the title never wraps (a wrapped title would push the question down): a long one is cut with an ellipsis, the count stays whole */
+.ppb-headtxt, .ppb-title { min-width: 0; }
+.ppb-title > [data-ppb-title] { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* a page's own, longer title (hero.cardTitle, up to 20 characters) on a phone narrower than 360px: tighter spacing, never an ellipsis */
+@media (max-width: 359.98px) { [data-ppb-titled] .ppb-title { letter-spacing: .07em; } }
+
+/* narrow phones, the plan questions (360px Android phones are common; the card was drawn at 390) */
+@media (max-width: 374px) {
+  .ppb-price__ico { display: none; }
+  .ppb-price { grid-template-columns: minmax(0, 1fr); }
+  .ppb-price__label { font-size: 12.5px; }
+  .ppb-tile--wide > span:not(.ppb-tile__caret) { display: grid; gap: 1px; min-width: 0; }
+  .ppb-tile--wide .ppb-tile__sub { margin-left: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq { gap: 6px 8px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq .ppb-tile__label { font-size: 15px; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq .ppb-tile__flag { padding: 2px 4px 1px; font-size: 12.5px; letter-spacing: .04em; }
+  .ppb-stage[data-ppb-current="price"] .ppb-next { padding-inline: 12px; font-size: 18.5px; }
+}
+@media (max-width: 339px) {
+  .ppb-price__label { white-space: normal; font-size: 12.5px; line-height: 1.05; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq .ppb-tile__flag { display: none; }
+  .ppb-stage[data-ppb-mode="inline"] .ppb-freq .ppb-tile__label { white-space: normal; font-size: 14.5px; line-height: 1; }
+  .ppb-way b { font-size: 15px; white-space: normal; line-height: 1; }
+}
+
+/* a panel is one column that never grows wider than the options area, whatever is inside it */
+.ppb-panel { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 339px) {
+  .ppb-yardrow { flex-wrap: wrap; row-gap: 0; }
+  .ppb-most { white-space: normal; }
+}
+
+/* ==========================================================================
+   The hero card and the panel (the one rule for where the builder lives).
+   The hero card asks the first question only. With a price under way it shows the summary below.
+   Every later step runs in the panel: a sheet on a phone, a dialog on larger screens.
+   ========================================================================== */
+
+/* ---- the summary: the hero card while a price is under way and the panel is closed. Same outer size as the stage. ---- */
+/* how far along: the builder’s own bars (no chips here: the answers are the chips below). Larger screens only; a phone card has no room for it. */
+.ppb-hero__progress { display: none; }
+.ppb-hero { grid-template-rows: auto minmax(0, 1fr) auto; }
+@media (min-width: 700px) { .ppb-hero { grid-template-rows: auto auto minmax(0, 1fr) auto; } .ppb-hero__progress { display: flex; } .ppb-hero__progress li.is-done { box-shadow: none; } }
+.ppb-hero__body { min-height: 0; display: grid; align-content: center; gap: 9px; padding-top: 4px; }
+.ppb-hero__kicker { display: flex; align-items: baseline; gap: 8px; }
+.ppb-hero__kicker b { font: 700 12.5px/1.2 var(--f-display); letter-spacing: .13em; text-transform: uppercase; color: var(--blue-700); }
+.ppb-hero__kicker small { font: 500 12.5px/1.2 var(--f-text); color: var(--ink-500); }
+.ppb-hero[data-ppb-sum-empty] .ppb-hero__kicker, .ppb-hero[data-ppb-sum-empty] .ppb-hero__chips { display: none; }
+/* the answers: every chip whole, wrapping to a second row when it must. A chip opens the panel on its own question. */
+.ppb-hero__chips { display: flex; flex-wrap: wrap; gap: 8px 6px; }
+.ppb-hero__chips .ppb-chip { margin: -9px 0; }
+.ppb-hero__chips .ppb-chip__pill { height: 26px; line-height: 26px; padding: 0 9px; border-radius: 13px; }
+/* the price so far, on a gold plate: the same line as the builder's foot and the pinned bar */
+.ppb-hero__plate {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; align-items: center; padding: 9px 14px 10px 12px; border-radius: 16px;
+  background: linear-gradient(180deg, #fff8dd 0, var(--gold-050) 100%); box-shadow: inset 0 0 0 1.5px var(--gold-300), 0 2px 0 rgba(160, 96, 0, .08);
+}
+.ppb-hero__ico { width: auto; height: 46px; object-fit: contain; }
+.ppb-hero__price { display: grid; gap: 3px; min-width: 0; }
+.ppb-hero__label { font: 600 13px/1.2 var(--f-text); color: var(--ink-700); }
+.ppb-hero__amt { font: 800 40px/.92 var(--f-display); color: var(--navy); white-space: nowrap; }
+.ppb-hero__amt small { font: 600 13px/1 var(--f-text); color: var(--ink-500); margin-left: 6px; }
+.ppb-hero__plate.is-words .ppb-hero__label { display: none; }
+.ppb-hero__plate.is-words .ppb-hero__amt { font: 800 23px/1.08 var(--f-display); white-space: normal; text-wrap: balance; }
+.ppb-hero__note { font: 500 13px/1.4 var(--f-text); color: var(--ink-700); text-wrap: pretty; }
+/* its foot: Start over (quiet) where Back would be, Continue where Next is */
+.ppb-hero > .ppb-foot { grid-template-columns: auto minmax(0, 1fr) auto; }
+.ppb-over {
+  min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--ink-500); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  font: 600 14px/1.2 var(--f-text); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; text-decoration-color: #b9cfe0; white-space: nowrap;
+}
+@media (hover: hover) { .ppb-over:hover { color: var(--navy); text-decoration-color: var(--cyan); } }
+.ppb-over:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 2px; border-radius: 8px; }
+/* START OVER IN THE PANEL (2026-10-12). The same quiet button as the summary's, at the end of the question row on the plan questions
+   and the price, where a later screen shows its icon. It is out of the row's flow, so no question, hint or answer moves by a pixel.
+   Its 44px of touch height starts at the row's top edge (clear of the chips above) and its words sit level with the question.
+   When the question's words reach that far, builder.js (placeOver) marks the stage data-ppb-has-over="low": the button then stands
+   at the foot of the row, its words level with the hint, and the hint keeps clear of it. The question itself is never narrowed.
+   Never in the hero card: that card has the summary's own button. */
+.ppb-over--panel { position: absolute; z-index: 2; right: -4px; top: 0; display: inline-flex; align-items: flex-start; padding-top: 6px; }
+.ppb-over--panel[hidden], .ppb:not(.ppb--dialog) .ppb-over--panel { display: none; }
+[data-ppb-has-over="low"] .ppb-over--panel { top: auto; bottom: 0; align-items: flex-end; padding-top: 0; }
+.ppb--dialog [data-ppb-has-over="low"] .ppb-hint { padding-right: 84px; }
+@media (min-width: 700px) {
+  .ppb-over--panel { padding-top: 13px; }
+  .ppb--dialog [data-ppb-has-over="low"] .ppb-hint { padding-right: 96px; }
+}
+/* a phone on its side: the question and its hint share one 27px line there, so the button's 44px reach 9px above the line (never
+   over a chip: the chips are at the other end of the band) and stop short of the answers; the whole row keeps clear of it. Its
+   words start 7px under the row's top edge, which is where a heads-up note ends in this layout. */
+@media (min-width: 700px) and (max-height: 600px) {
+  .ppb-over--panel, [data-ppb-has-over="low"] .ppb-over--panel { top: -9px; bottom: auto; align-items: flex-start; padding-top: 16px; }
+  .ppb--dialog [data-ppb-has-over] .ppb-qrow { padding-right: 96px; }
+  .ppb--dialog [data-ppb-has-over="low"] .ppb-hint { padding-right: 0; }
+  /* a heads-up note reaches down to this line in this layout: the button waits until "Got it" has put the head back */
+  .ppb--dialog .ppb-stage:has(.ppb-headsup:not([hidden])) .ppb-over--panel { display: none; }
+}
+.ppb-hero .ppb-next { min-width: 132px; }
+@media (min-width: 700px) {
+  .ppb-hero__body { gap: 13px; padding-top: 24px; }      /* clears the names under the bars */
+  .ppb-hero__kicker b { font-size: 13px; }
+  .ppb-hero__kicker small { font-size: 13px; }
+  .ppb-hero__chips { gap: 10px 7px; }
+  .ppb-hero__chips .ppb-chip__pill { height: 30px; line-height: 30px; padding: 0 12px; border-radius: 15px; font-size: 15.5px; }
+  .ppb-hero__chips .ppb-chip { margin: -7px 0; }
+  .ppb-hero__plate { column-gap: 16px; padding: 16px 18px 17px 16px; border-radius: 20px; }
+  .ppb-hero__ico { height: 72px; }
+  .ppb-hero__price { gap: 5px; }
+  .ppb-hero__label { font-size: 15px; }
+  .ppb-hero__amt { font-size: 60px; }
+  .ppb-hero__amt small { font-size: 15px; margin-left: 8px; }
+  .ppb-hero__plate.is-words .ppb-hero__amt { font-size: 30px; }
+  .ppb-hero__note { font-size: 15px; }
+  .ppb-over { font-size: 15px; }
+  .ppb-hero .ppb-next { min-width: 158px; }
+}
+
+/* ---- the panel grows out of the hero card when it opens from there (one transform, nothing fades) ---- */
+@keyframes ppb-from-card { from { transform: var(--ppb-from, translateY(28px)); } to { transform: none; } }
+dialog.ppb-sheet[open] .ppb.is-from-card { animation: ppb-from-card .34s var(--ease); }
+dialog.ppb-sheet:focus, dialog.ppb-sheet:focus-visible { outline: none; }
+@media (prefers-reduced-motion: reduce) { dialog.ppb-sheet[open] .ppb.is-from-card { animation: none; } }
+
+/* ---- what a screen keeps in view with its button: pinned directly above the foot, outside the part that scrolls ---- */
+.ppb-pin { flex: none; min-width: 0; padding-top: 8px; }
+.ppb-pinned { display: grid; gap: 7px; min-width: 0; }
+.ppb-pinned > * { order: 0; }
+.ppb-pinned .ppb-promise { padding: 7px 11px; font-size: 13px; line-height: 1.4; }
+.ppb-pinned .ppb-promise img { width: 26px; height: 26px; }
+.ppb-pinned .ppb-promise { grid-template-columns: 26px minmax(0, 1fr); }
+.ppb-pinned .ppb-agree { padding: 8px 12px 8px 10px; }
+.ppb-pinned .ppb-check { font-size: 13.5px; line-height: 1.42; }
+
+/* ---- the progress band and the question in the phone sheet ---- */
+/* Every chip shows its whole words on ONE row down to a 360px phone (measured: the widest set of answers is 329px of 336).
+   To make sure of that the bar of the price step steps aside on the price screen (five chips say "all answered"), and the
+   gold price shortcut is left out under 400px (Next goes to the price anyway). Should a font fail to load, the row wraps;
+   it is never cut. */
+@media (max-width: 699px) {
+  .ppb--dialog .ppb-progress { flex-wrap: wrap; height: auto; min-height: 27px; row-gap: 8px; margin-bottom: 10px; }
+  .ppb--dialog .ppb-progress li { min-width: 14px; }
+  .ppb--dialog .ppb-progress li.is-chip { min-width: 0; }
+  .ppb--dialog .ppb-stage[data-ppb-current="price"] .ppb-progress li[data-ppb-seg="price"] { display: none; }
+  /* the question has the row to itself; its hint sits under it and may wrap */
+  .ppb--dialog .ppb-qrow { display: block; height: auto; }
+  .ppb--dialog .ppb-q { white-space: normal; }
+  .ppb--dialog .ppb-hint, .ppb--dialog .ppb-hint.is-alert { text-align: left; white-space: normal; margin-top: 3px; min-height: 1.3em; font-size: 13px; line-height: 1.3; }
+  .ppb--dialog .ppb-qico { position: absolute; right: 0; top: -6px; width: 44px; height: 44px; margin: 0; }
+}
+@media (max-width: 399px) { .ppb--dialog .ppb-progress li.is-chip[data-ppb-seg="price"] { display: none; } }
+@media (max-width: 374px) {
+  .ppb--dialog .ppb-progress { column-gap: 3px; margin-bottom: 8px; }
+  .ppb--dialog .ppb-progress .ppb-chip__pill { padding: 0 5px; font-size: 12.5px; }
+  /* a 360x740 phone: the same screens a little tighter, so every required control of every screen is in the first view */
+  .ppb--dialog .ppb-opts { padding-top: 8px; }
+  .ppb--dialog .ppb-form { gap: 10px; }
+  .ppb--dialog .ppb-field .field__input { min-height: 48px; padding-block: 8px; }
+  .ppb--dialog .ppb-picks--startTiming .ppb-pick, .ppb--dialog .ppb-picks--lastCleaned .ppb-pick { min-height: 44px; padding-block: 4px; }
+  .ppb--dialog .ppb-way__ico { display: none; }
+  .ppb--dialog .ppb-way { grid-template-columns: minmax(0, 1fr); padding-inline: 10px 6px; }
+  /* the confirm screen: the short form of each answer, so the plan is one row of chips (the full words are each chip’s label for a screen reader) */
+  .ppb--dialog .ppb-sum__chips .ppb-chip__full { display: none; }
+  .ppb--dialog .ppb-sum__chips .ppb-chip__brief { display: inline; }
+  .ppb--dialog .ppb-sum__chips { column-gap: 5px; }
+  .ppb--dialog .ppb-sum__chips .ppb-chip__pill { padding: 0 8px; font-size: 14px; }
+  .ppb--dialog .ppb-pinned .ppb-promise { padding: 6px 10px; font-size: 12.5px; line-height: 1.38; }
+}
+
+/* ---- in the panel the pictures earn their space ---- */
+/* yard size: three then two, each yard picture a clear step larger than the one before. The tiles share the height the
+   panel has (up to 400px), so the pictures are as large as the window allows and never push anything off the screen. */
+.ppb--dialog .ppb-panel[data-ppb-step="yard"] { height: 100%; grid-template-rows: minmax(0, 1fr) auto; align-content: stretch; }
+.ppb--dialog .ppb-tiles--yard { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 10px; min-height: 0; max-height: 400px; }
+.ppb--dialog .ppb-tiles--yard > * { grid-column: span 2; }
+.ppb--dialog .ppb-tiles--yard > :nth-child(n+4) { grid-column: span 3; }
+.ppb--dialog .ppb-tile--yard { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-height: 0; padding: 8px 4px 11px; gap: 6px; }
+.ppb--dialog .ppb-tile__plot { flex: 1 1 0; display: flex; align-items: flex-end; justify-content: center; width: 100%; height: auto; min-height: 0; }
+.ppb--dialog .ppb-tile--yard .ppb-tile__pic { width: auto; height: calc(52% + var(--i, 0) * 12%); max-width: 100%; aspect-ratio: 1 / 1; }
+.ppb--dialog .ppb-tile--yard .ppb-tile__label { flex: none; font-size: 23px; }
+.ppb--dialog .ppb-tile--yard .ppb-tile__label small { font-size: 13px; }
+/* ZIP: one field leaves the panel nearly empty, so he stands on the ground line and presents the question.
+   The panel is as tall as the options area; his scene is clipped at the ground line and at the card’s edge. */
+.ppb-zip__scene { display: none; }
+.ppb--dialog .ppb-panel[data-ppb-step="zip"] { min-height: 100%; }
+.ppb--dialog .ppb-zip__scene:not([hidden]) { position: absolute; right: -10px; bottom: -4px; z-index: -1; display: flex; align-items: flex-end; justify-content: flex-end; width: 320px; max-width: calc(100% + 20px); height: min(250px, 62%); padding-right: 44px; overflow: hidden; pointer-events: none; }
+.ppb--dialog .ppb-zip__pose { display: block; height: 100%; margin-bottom: 7px; }
+.ppb--dialog .ppb-zip__pose img { width: auto; height: 100%; }
+.ppb--dialog .ppb-stage[data-ppb-current="zip"]:has(.ppb-zip__scene:not([hidden])) .ppb-spare { display: none; }
+@media (min-width: 700px) {
+  .ppb--dialog .ppb-zip__scene:not([hidden]) { width: 400px; height: min(300px, 66%); padding-right: 56px; }
+}
+/* areas: large area pictures */
+@media (max-width: 699px) {
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile { min-height: 118px; column-gap: 18px; padding: 8px 60px 8px 14px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile .ppb-tile__pic { width: 100px; height: 100px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile .ppb-tile__label { font-size: 28px; }
+}
+@media (min-width: 700px) {
+  .ppb--dialog .ppb-tiles--4 > .ppb-tile { min-height: 164px; gap: 6px; }
+  .ppb--dialog .ppb-tiles--4 > .ppb-tile .ppb-tile__pic { width: 108px; height: 108px; }
+  .ppb--dialog .ppb-tiles--4 > .ppb-tile .ppb-tile__label { font-size: 25px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile { min-height: 204px; gap: 10px; padding: 14px 8px 16px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile .ppb-tile__pic { width: 132px; height: 132px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile .ppb-tile__label { font-size: 26px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile[role="checkbox"]::after { top: 10px; right: 10px; width: 26px; height: 26px; border-radius: 8px; background-size: 16px; }
+}
+
+/* ---- done: he stands on the card’s ground line, at a proud size, beside what happens next ----
+   The panel is exactly as tall as the options area, and he takes the height the words leave him (up to a limit),
+   so he is as large as the window allows and never causes scrolling. */
+.ppb--dialog .ppb-done.ppb-panel { grid-template-columns: minmax(0, 1fr) 118px; grid-template-rows: auto auto auto minmax(0, 1fr) auto; column-gap: 12px; row-gap: 10px; align-content: stretch; height: 100%; min-height: 0; }
+.ppb--dialog .ppb-done__main { display: contents; }
+.ppb--dialog .ppb-done__main > * { grid-column: 1; }
+.ppb--dialog .ppb-done__main > .ppb-done__lead, .ppb--dialog .ppb-done__main > .ppb-ref, .ppb--dialog .ppb-done__main > .ppb-promise { grid-column: 1 / -1; }
+.ppb--dialog .ppb-done__main > .ppb-done__nexts { align-self: start; }
+.ppb--dialog .ppb-done__main > .ppb-review { grid-row: 5; align-self: end; }
+/* the scene is wider than his column so the rise of lawn is whole on the left, and runs off the card’s edge on the right and at the ground line */
+.ppb--dialog .ppb-done__scene { grid-column: 2; grid-row: 4 / span 2; align-self: stretch; justify-self: stretch; display: flex; align-items: flex-end; justify-content: center; position: static; min-height: 0; overflow: hidden; margin: 0 -10px -4px -46px; padding: 0 0 0 36px; pointer-events: none; }
+.ppb--dialog .ppb-done__pose { display: block; height: 100%; max-height: 176px; margin-bottom: 6px; }
+.ppb--dialog .ppb-done__pose img, .ppb--dialog .ppb-done__scene[data-pose="relax"] .ppb-done__pose img { width: auto; height: 100%; }
+.ppb--dialog .ppb-done__scene[data-pose="relax"] .ppb-done__pose { max-height: 120px; }
+/* the two short requests (a quote, a question) have no list of next steps: he stands under the words, centred */
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) { grid-template-columns: minmax(0, 1fr); }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__scene { grid-column: 1; grid-row: 4; margin: 0 -10px -4px; padding: 0; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__pose { max-height: 240px; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__scene[data-pose="relax"] .ppb-done__pose { max-height: 200px; }
+/* the optional sentences above the list (the first request had already reached us; who sent you): the full width, each
+   in a row of its own, so the row that stretches stays the list's and he stays beside the list */
+.ppb--dialog .ppb-done__main > .ppb-done__referral { grid-column: 1 / -1; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden])) { grid-template-rows: auto auto auto auto minmax(0, 1fr) auto; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden])) .ppb-done__scene { grid-row: 5 / span 2; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden])) .ppb-done__main > .ppb-review { grid-row: 6; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden]) ~ .ppb-done__referral:not([hidden])) { grid-template-rows: auto auto auto auto auto minmax(0, 1fr) auto; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden]) ~ .ppb-done__referral:not([hidden])) .ppb-done__scene { grid-row: 6 / span 2; }
+.ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__referral:not([hidden]) ~ .ppb-done__referral:not([hidden])) .ppb-done__main > .ppb-review { grid-row: 7; }
+@media (min-width: 700px) {
+  .ppb--dialog .ppb-done.ppb-panel { grid-template-columns: minmax(0, 1fr) 196px; column-gap: 16px; row-gap: 12px; }
+  .ppb--dialog .ppb-done__scene { margin-left: -70px; padding-left: 60px; }
+  .ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__scene { margin-left: -10px; padding-left: 0; }
+  .ppb--dialog .ppb-done__pose { max-height: 272px; }
+  .ppb--dialog .ppb-done__scene[data-pose="relax"] .ppb-done__pose { max-height: 180px; }
+  .ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__pose { max-height: 300px; }
+  .ppb--dialog .ppb-done.ppb-panel:has(.ppb-done__nexts[hidden]) .ppb-done__scene[data-pose="relax"] .ppb-done__pose { max-height: 230px; }
+}
+
+/* ---- confirm in the panel: tight rows, one fact after another on a line ---- */
+.ppb--dialog .ppb-sum__v { display: block; }
+.ppb--dialog .ppb-sum__v span + span::before { content: " · "; color: #8ea3b5; font-weight: 400; }
+.ppb--dialog .ppb-sum__row { min-height: 44px; padding-block: 4px; }
+.ppb--dialog .ppb-sum--plan { padding-block: 8px 9px; }
+/* the plan card's one line of terms: "No start-up fee" (How this works), or the engine's terms for a restart, a one-time cleanup or a custom review (Read the terms) */
+.ppb-fee--terms .ppb-fee__title { font: 700 13.5px/1.25 var(--f-text); }
+.ppb-fee--terms .ppb-fee__sub:empty { display: none; }
+.ppb-fee--line { align-items: center; }
+.ppb-pop__body p + p { margin-top: 0; }
+
+/* ---- one-tap choice groups: the tick on the chosen tile clears the group's label (it used to sit on the words) ---- */
+.ppb-field .ppb-picks { margin-top: 5px; }
+.ppb-pick.is-selected::after, .ppb-pick[aria-checked="true"]::after { right: -5px; top: -5px; width: 20px; height: 20px; background-size: 12px; }   /* a little smaller and closer to the corner, so it stays 3px clear of the label above */
+
+/* ---- pinned bar on a phone: more room for the words, which wrap and are never cut ---- */
+.ppb-bar { border-radius: 36px; }
+.ppb-bar__txt { gap: 2px; }
+.ppb-bar__plan[hidden] { display: none; }
+@media (max-width: 419px) {
+  .ppb-bar { grid-template-columns: minmax(0, 1fr) auto; padding-left: 18px; }
+  .ppb-bar__avatar { display: none; }
+  .ppb-bar .ppb-next { padding-inline: 14px; gap: 6px; }
+}
+
+/* ---- the hero card on narrow phones ---- */
+.ppb-hero .ppb-title > :first-child { white-space: nowrap; }
+/* 340 to 374px: with no Back in the hero card there is room for the price tag again */
+@media (min-width: 340px) and (max-width: 374px) {
+  .ppb:not(.ppb--dialog) .ppb-price__ico { display: block; }
+  .ppb:not(.ppb--dialog) .ppb-price { grid-template-columns: auto minmax(0, 1fr); }
+}
+/* under 340px (a 320px phone): the hint beside the first question and the count beside the summary's title have no room, so they step
+   aside rather than be cut. A reason for a resting button (an alert) still shows, wrapped. */
+@media (max-width: 339px) {
+  .ppb:not(.ppb--dialog) .ppb-hint:not(.is-alert) { display: none; }
+  .ppb-hero .ppb-count { display: none; }
+  .ppb-hero__kicker small { display: none; }
+  .ppb-hero__ico { height: 38px; }
+  .ppb-hero__amt { font-size: 34px; }
+}
+
+/* ---- a short window (a 1366x768 or 1280x720 laptop): the dialog is 720px tall or less, so the same screens sit a little tighter.
+   One size for every step at a given window size; nothing here depends on the step. ---- */
+@media (min-width: 700px) and (max-height: 800px) {
+  .ppb--dialog .ppb-body { padding-top: 12px; }
+  .ppb--dialog .ppb-q { font-size: 32px; }
+  .ppb--dialog .ppb-form { gap: 9px; }
+  .ppb--dialog .ppb-field .field__input { min-height: 46px; padding-block: 7px; }
+  .ppb--dialog .ppb-total__amt { font-size: 52px; }
+  .ppb--dialog .ppb-terms { padding: 8px 12px; gap: 3px; }
+  .ppb--dialog .ppb-terms p { font-size: 12.5px; line-height: 1.4; }
+  /* the confirm screen: the short form of each answer, so the plan is one row of chips */
+  .ppb--dialog .ppb-sum__chips .ppb-chip__full { display: none; }
+  .ppb--dialog .ppb-sum__chips .ppb-chip__brief { display: inline; }
+  .ppb--dialog .ppb-way { min-height: 46px; }
+  .ppb--dialog .ppb-pricepanel { row-gap: 6px; }
+  .ppb--dialog .ppb-pricepanel__a { gap: 6px; }
+}
+@media (min-width: 700px) and (max-height: 740px) {
+  .ppb--dialog .ppb-sum__row { min-height: 36px; padding-block: 1px; }
+  .ppb--dialog .ppb-edit { margin-block: -8px; }
+  .ppb--dialog .ppb-sum--plan { padding-block: 6px 7px; }
+  .ppb--dialog .ppb-pinned .ppb-promise { padding-block: 5px; }
+  .ppb--dialog .ppb-pinned .ppb-agree { padding-block: 6px; }
+  .ppb--dialog .ppb-restart p { font-size: 12.5px; line-height: 1.4; }
+  .ppb--dialog .ppb-pricepanel { row-gap: 6px; }
+  .ppb--dialog .ppb-pricepanel__a { gap: 6px; }
+}
+@media (min-width: 700px) and (max-height: 800px) { .ppb--dialog .ppb-qico { top: 0; width: 52px; height: 52px; } }
+/* with something pinned, the "More below" tab sits wholly inside the scrolling part, not across the pinned block */
+.ppb-stage[data-ppb-pinned] .ppb-morehint { top: calc(-27px - var(--ppb-pin-h, 0px)); }
+
+/* ---- a very short, wide window (a phone on its side, 844x390): the panel takes the whole height and its chrome is compact, so the
+   options area keeps a usable height. The questions scroll inside it there; no window this short can show them whole. ---- */
+@media (min-width: 700px) and (max-height: 600px) {
+  .ppb-sheet, dialog.ppb-sheet[open], dialog.ppb-pop[open] { padding: 6px; }
+  .ppb-sheet .ppb { width: min(760px, calc(100vw - 12px)); --ppb-h: calc(100dvh - 12px - var(--ppb-cut, 0px)); }
+  .ppb-sheet .ppb-stage { padding: 10px 16px 10px; border-radius: 22px; }
+  .ppb--dialog .ppb-stage::before { height: 66px; }
+  .ppb--dialog .ppb-head { min-height: 44px; gap: 12px; }
+  .ppb--dialog .ppb-avatar { width: 44px; height: 44px; }
+  .ppb--dialog .ppb-say { min-height: 1.25em; font-size: 14.5px; }
+  .ppb--dialog .ppb-progress { margin-top: 4px; }
+  .ppb--dialog .ppb-progress li > span { display: none; }
+  .ppb--dialog .ppb-body { padding-top: 6px; }
+  .ppb--dialog .ppb-qrow { display: flex; align-items: baseline; justify-content: flex-start; gap: 12px; }
+  .ppb--dialog .ppb-q { font-size: 26px; }
+  .ppb--dialog .ppb-hint, .ppb--dialog .ppb-hint.is-alert { margin-top: 0; }
+  .ppb--dialog .ppb-qico { display: none; }
+  .ppb--dialog .ppb-opts { padding-top: 8px; }
+  .ppb--dialog .ppb-foot { margin-top: 4px; padding-top: 8px; }
+  .ppb--dialog .ppb-next { min-height: 46px; }
+  .ppb--dialog .ppb-back { height: 46px; }
+  .ppb-close { right: 10px; top: 8px; }
+  /* the pictures at sizes that leave something else on screen */
+  .ppb--dialog .ppb-tiles--4 > .ppb-tile { min-height: 112px; }
+  .ppb--dialog .ppb-tiles--4 > .ppb-tile .ppb-tile__pic { width: 68px; height: 68px; }
+  .ppb--dialog .ppb-more { height: 52px; }
+  .ppb--dialog .ppb-panel[data-ppb-step="yard"] { height: auto; grid-template-rows: auto auto; }
+  .ppb--dialog .ppb-tiles--yard { grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: 124px; max-height: none; }
+  .ppb--dialog .ppb-tiles--yard > *, .ppb--dialog .ppb-tiles--yard > :nth-child(n+4) { grid-column: auto; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile { min-height: 124px; gap: 4px; padding-block: 8px 10px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile .ppb-tile__pic { width: 76px; height: 76px; }
+  .ppb--dialog .ppb-freq { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ppb--dialog .ppb-zip__scene:not([hidden]) { display: none; }
+  .ppb--dialog .ppb-done__pose { max-height: 130px; }
+  .ppb--dialog .ppb-done.ppb-panel { height: auto; min-height: 100%; }
+}
+
+/* ---- the price screen in the phone sheet, tightened so the usual prices fit without scrolling at 390x844:
+   the plan's ribbon sits beside the number (it wraps under it when the two do not fit), and the lists are a little closer ---- */
+@media (max-width: 699px) {
+  .ppb--dialog .ppb-pricepanel { gap: 10px; }
+  .ppb--dialog .ppb-total { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
+  .ppb--dialog .ppb-total__amt { order: 0; font-size: 60px; }
+  .ppb--dialog .ppb-total__ribbon { order: 1; }
+  .ppb--dialog .ppb-way { min-height: 50px; }
+  .ppb--dialog .ppb-lines { padding-block: 7px 8px; }
+  .ppb--dialog .ppb-lines__row { padding-block: 3px; }
+  .ppb--dialog .ppb-nexts { gap: 4px; }
+  .ppb--dialog .ppb-nexts li { font-size: 13.5px; line-height: 1.32; }
+}
+
+/* ---- a 360px phone, the confirm screen: rows a little closer, so the summary fits above the pinned block for a one-time or custom request too ---- */
+@media (max-width: 374px) {
+  .ppb--dialog .ppb-sum__row { min-height: 40px; padding-block: 2px; }
+  .ppb--dialog .ppb-edit { margin-block: -6px; }
+  .ppb--dialog .ppb-sum--plan { padding-block: 6px 7px; }
+  .ppb--dialog .ppb-confirm { gap: 8px; }
+}
+
+/* ---- boxes that only clip must not be scrollable by a script, by find-in-page or by focus (the faint brand face and the rises of lawn
+   reach past their boxes on purpose). "clip" where the browser has it; "hidden" stays as the fallback, and every screen resets the scroll. ---- */
+.ppb-body { overflow: clip; }
+.ppb--dialog .ppb-optwrap { overflow: clip; }
+.ppb--dialog .ppb-done__scene, .ppb--dialog .ppb-zip__scene:not([hidden]) { overflow: clip; }
+
+/* ---- 2026-10-08, the first-cleanup wording: "How this works" prints the engine's three paragraphs ---- */
+/* one picture per paragraph, room to read, a measure that never runs wide, then the engine's promise as a quiet last line */
+.ppb-pop__list--how { gap: 14px; }
+.ppb-pop__list--how li { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
+.ppb-pop__list--how li img { width: 34px; height: 34px; margin-top: 1px; }
+.ppb-pop__list--how li span { max-width: 48ch; }
+.ppb-pop__promise { padding-top: 12px; border-top: 1.5px dotted #c9dcea; font-size: 13.5px; line-height: 1.4; color: var(--ink-500); }
+@media (min-width: 700px) {
+  .ppb-pop__list--how { gap: 16px; }
+  .ppb-pop__promise { font-size: 14px; }
+}
+
+/* ---- 2026-10-08, ZIP choices on a city page: a community with SEVERAL accepted ZIPs offers them as one-tap choices above the field ----
+   (builder.js, CITY: the mount has data-city and no data-zip; the list is the engine's own, PO Box ZIPs left out.)
+   Up to three: one row of large chips. More (Indianapolis has 18): a compact grid, at most 6 across in the phone sheet (3 rows of 6)
+   and 9 across in the dialog (2 rows of 9), every chip at least 44px each way. builder.js sets the two column counts. The choices take room only from the empty part of the options area: the
+   stage, the question, the field's own size and the foot are what they are on every other page. */
+.ppb-zippick { display: grid; gap: 6px; min-width: 0; }
+.ppb-zippick__label { font: 700 12.5px/1.2 var(--f-display); letter-spacing: .13em; text-transform: uppercase; color: var(--blue-700); }
+.ppb-zippick__grid { display: grid; grid-template-columns: repeat(var(--ppb-zips, 2), minmax(0, 1fr)); gap: 8px; min-width: 0; }
+.ppb-zippick__grid--many { gap: 5px; }
+/* the chip: the tile's look at a chip's size. Border width is the same in every state so nothing shifts. */
+.ppb-zipchip {
+  position: relative; min-width: 0; min-height: 56px; padding: 0 2px 1px; border: 2px solid #c4d9ea; border-radius: 14px;
+  background: linear-gradient(180deg, #fff 0, #f0f8ff 100%); color: var(--navy);
+  box-shadow: 0 2px 0 rgba(6, 38, 68, .08), 0 6px 12px rgba(6, 38, 68, .08);
+  font: 800 27px/1 var(--f-display); letter-spacing: .08em; font-variant-numeric: tabular-nums; text-align: center; white-space: nowrap;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform .15s var(--ease), border-color .15s, box-shadow .15s, background .15s;
+}
+.ppb-zippick__grid--many .ppb-zipchip { min-height: 44px; padding-inline: 0; border-radius: 12px; font-size: clamp(14.5px, 4.4vw, 17px); letter-spacing: 0; box-shadow: 0 2px 0 rgba(6, 38, 68, .08), 0 3px 6px rgba(6, 38, 68, .06); }
+/* hover only where a pointer really hovers, so a chip never stays lit after a tap */
+@media (hover: hover) {
+  .ppb-zipchip:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: 0 3px 0 rgba(6, 38, 68, .08), 0 10px 16px rgba(6, 38, 68, .14); }
+}
+.ppb-zipchip:active { transform: translateY(1px); box-shadow: 0 1px 0 rgba(6, 38, 68, .08), 0 2px 4px rgba(6, 38, 68, .1); }
+.ppb-zipchip:focus-visible { outline: 3px solid var(--focus, #0877b9); outline-offset: 3px; border-radius: 14px; }
+/* selected: the tile's cyan edge, pale fill, ring and tick. The tick stays clear of the label above the grid. */
+.ppb-zipchip[aria-pressed="true"] { border-color: var(--cyan); background: var(--cyan-050); box-shadow: 0 0 0 4px rgba(24, 174, 245, .26), 0 6px 12px rgba(6, 38, 68, .1); }
+.ppb-zipchip[aria-pressed="true"]::after {
+  content: ""; position: absolute; right: -6px; top: -5px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--navy) url("../../../assets/brand-icons/pp-service-check.webp") center / 13px no-repeat; box-shadow: 0 0 0 2px #fff;
+}
+.ppb-zippick__grid--many .ppb-zipchip[aria-pressed="true"] { box-shadow: 0 0 0 3px rgba(24, 174, 245, .26), 0 3px 6px rgba(6, 38, 68, .08); }
+.ppb-zippick__grid--many .ppb-zipchip[aria-pressed="true"]::after { right: -5px; top: -5px; width: 18px; height: 18px; background-size: 11px; }
+/* the field under the choices is the way out: its placeholder says so, in the placeholder's own quiet type */
+.ppb-zip--picks .ppb-zip__input.field__input::placeholder { font-size: 16px; }
+/* the phone sheet: the rows a little closer, so the out-of-area answer still fits under 18 chips and the field at 390x844 */
+@media (max-width: 699px) {
+  .ppb--dialog .ppb-zip--picks { gap: 10px; }
+}
+@media (max-width: 359px) {
+  .ppb-zippick__grid--many { gap: 4px; }
+  .ppb-zipchip { font-size: 24px; }
+  .ppb-zip--picks .ppb-zip__input.field__input::placeholder { font-size: 14.5px; }
+}
+@media (min-width: 700px) {
+  .ppb--dialog .ppb-zippick__label { font-size: 13px; }
+  .ppb--dialog .ppb-zipchip { min-height: 58px; font-size: 30px; }
+  .ppb--dialog .ppb-zippick__grid--many { grid-template-columns: repeat(var(--ppb-zips-wide, 9), minmax(0, 1fr)); }
+  .ppb--dialog .ppb-zippick__grid--many .ppb-zipchip { min-height: 46px; font-size: 16.5px; }
+  .ppb--dialog .ppb-zip--picks .ppb-zip__input.field__input::placeholder { font-size: 17px; }
+}
+/* a phone on its side (the compact panel): the rows closer, so the field is whole in the first view under two rows of chips */
+@media (min-width: 700px) and (max-height: 600px) {
+  .ppb--dialog .ppb-zip--picks { gap: 8px; }
+  .ppb--dialog .ppb-zippick { gap: 4px; }
+  .ppb--dialog .ppb-zippick__grid--many { gap: 4px; }
+  .ppb--dialog .ppb-zippick__grid--many .ppb-zipchip { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) { .ppb-zipchip { transition: none; } }
+
+/* ==========================================================================
+   2026-10-09, fixes from the Safari, Firefox and accessibility audit (XBROWSER-A11Y-FINDINGS.md).
+   Each block names its finding. Nothing here changes a word, a price or a step.
+   ========================================================================== */
+
+/* ---- m11: the steps of "What happens next" are their own <ol> under the title (a list holds list items only).
+   The list takes its parent's columns and gaps, so every item sits exactly where it did. ---- */
+.ppb-nexts__list { display: grid; grid-column: 1 / -1; grid-template-columns: inherit; gap: inherit; align-content: start; min-width: 0; margin: 0; padding: 0; list-style: none; }
+
+/* ---- m2: a ZIP outside the area. The Text and Call buttons sit directly under the answer, before the explanation, so they are
+   in the first view at a phone's real height (they were last, half under the fade at 390x664 and below it on a city page).
+   Phone: answer and buttons run the full width, and he stands beside the explanation. Dialog: he keeps his place beside
+   the answer, as before. ---- */
+.ppb-ooa__lead { grid-column: 1 / -1; }
+.ppb-ooa__reach { grid-column: 1 / -1; margin: 8px 0 6px; }
+.ppb-ooa__help { grid-column: 1; }
+.ppb-ooa__pose, .ppb-ooa__pin { grid-row: 3 / span 2; }
+@media (min-width: 700px) {
+  .ppb--dialog .ppb-ooa__lead, .ppb--dialog .ppb-ooa__reach { grid-column: 1; }
+  .ppb--dialog .ppb-ooa__pose, .ppb--dialog .ppb-ooa__pin { grid-row: 1 / span 3; }
+}
+
+/* ---- m2: at a phone's real height (Safari's bars showing: 390x664, 375x629) the three areas and the plans fit the first view:
+   the pictures a little smaller under 700px of height, nothing else changed. ---- */
+@media (max-width: 699px) and (max-height: 700px) {
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile { min-height: 106px; }
+  .ppb--dialog .ppb-tiles--3 > .ppb-tile .ppb-tile__pic { width: 88px; height: 88px; }
+  .ppb--dialog .ppb-freq .ppb-tile--row { min-height: 64px; padding-block: 5px; }
+}
+
+/* ---- M4: short windows (a phone on its side, a laptop at 200% or 400% zoom).
+   1. 480px of height or less: nothing is pinned above the foot. builder.js (syncPin) puts the promise and the terms box at the
+      end of the screen's own panel, inside the part that scrolls; the button stays in the foot. It does the same at any height
+      when the pinned block would leave the answers less than 96px. Here they only get the look of a part of the panel.
+   2. Shorter still (the answers area would be under 96px): the whole stage scrolls. The head, the progress band and the question
+      scroll away with the answers; the foot, with Back, the price and the button, stays at the bottom. The answers area keeps a
+      floor of 96px. The two limits are where the answers area reaches that floor in the phone sheet and in the wide compact panel. ---- */
+.ppb-panel > .ppb-pinned { margin-top: 2px; }
+@media (max-width: 699px) and (max-height: 340px), (min-width: 700px) and (max-height: 300px) {
+  .ppb-sheet .ppb-stage { display: block; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; padding-bottom: 0; scroll-padding-bottom: 72px; }   /* what takes focus lands clear of the foot */
+  .ppb-sheet .ppb-body { display: block; overflow: visible; min-height: 0; }
+  .ppb-sheet .ppb-optwrap, .ppb--dialog .ppb-optwrap { display: block; overflow: visible; }
+  .ppb-sheet .ppb-opts { overflow: visible; min-height: 96px; }
+  .ppb-sheet .ppb-optwrap::before, .ppb-sheet .ppb-optwrap::after, .ppb-sheet .ppb-morehint, .ppb-sheet .ppb-spare { display: none !important; }
+  .ppb-sheet .ppb-foot { position: sticky; bottom: 0; z-index: 4; margin-inline: -10px; padding: 8px 10px calc(10px + env(safe-area-inset-bottom)); background: #fff; }
+  .ppb--dialog .ppb-panel[data-ppb-step="zip"], .ppb--dialog .ppb-done.ppb-panel { min-height: 0; height: auto; }
+  .ppb--dialog .ppb-zip__scene:not([hidden]) { display: none; }
+}
+
+/* ---- m8 (needs a real iPhone): on a phone held sideways the page asks for the whole screen (viewport-fit=cover), so the panel
+   and the pinned bar keep clear of the sensor housing and the rounded corners on the left and right as well as at the bottom.
+   env() is 0 everywhere else, so nothing changes on any other screen. ---- */
+@media (min-width: 700px) and (max-height: 600px) {
+  .ppb-sheet, dialog.ppb-sheet[open], dialog.ppb-pop[open] { padding-left: max(6px, env(safe-area-inset-left)); padding-right: max(6px, env(safe-area-inset-right)); }
+  .ppb-sheet .ppb, .ppb-pop__panel { max-width: 100%; }
+}
+.ppb-bar { left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); }
+
+/* Optional referral: existing field typography and one full-width row. */
+.ppb-field--referredBy { grid-column: 1 / -1; min-width: 0; }
+.ppb-done__referral { margin: 0; color: var(--ink-700); overflow-wrap: anywhere; }

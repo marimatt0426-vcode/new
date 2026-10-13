@@ -1,0 +1,119 @@
+<!--# The footer: closing scene, contact, every link, the mailing address. Identical on every page. Keep id="site-footer":
+      the pinned price bar hides while it is on screen. After editing: node _work/build-site.mjs, then node _work/sync-kit.mjs.
+      A page for existing customers ("audience": "customer") gets the customer pieces: the client portal is the gold
+      button, and the two pricing links go to the price list instead of opening the price builder.
+      TEXT FIRST (owner decision, October 8): the contact block leads with "Text us" and the number as the large line
+      (a text link), then Call, then email. The rating badge is filled by the builder from partials/reviews.json.
+      REVIEW BUILD ONLY: the last line ("Review build. Nothing on this page is sent anywhere...") is printed only while
+      _work/partials/site.json says "review": true. A rollout build ("review": false, or the line missing) never prints it. -->
+<!-- FOOTER -->
+<footer class="foot" id="site-footer" aria-label="Purge Pros website footer">
+{{>closing}}
+
+  <div class="foot__main">
+    <div class="wrap">
+      <div class="foot__top">
+        <div class="foot__brand">
+          <a class="logo logo--dark logo--lg" href="index.html" aria-label="Purge Pros, pet waste removal. Home.">
+            <img class="logo__mark" src="../../assets/{{logoLarge}}" width="316" height="334" loading="lazy" alt="">
+            <span class="logo__text"><span class="logo__name">Purge <b>Pros</b></span> <span class="logo__tag">Pet waste removal</span></span>
+          </a>
+          <p class="foot__blurb">Professional recurring and one-time dog waste removal for Indianapolis and surrounding Central Indiana communities.</p>
+        </div>
+        <div class="foot__reach">
+          <a class="foot__txt" href="sms:+13179615865"><small>Text us</small><b>(317) 961-5865</b></a>
+          <div class="foot__ways">
+            <a class="foot__way" href="tel:+13179615865"><span class="puck"><img src="../../assets/step-icons/call.webp" width="256" height="256" loading="lazy" alt=""></span><u>Call (317) 961-5865</u></a>
+            <a class="foot__way" href="mailto:info@itspurgepros.com"><span class="puck"><img src="../../assets/step-icons/email.webp" width="256" height="256" loading="lazy" alt=""></span><u>info@itspurgepros.com</u></a>
+          </div>
+        </div>
+        <div class="foot__act">
+          <a class="gbadge" href="reviews.html" data-standin="true" data-pp-reviews-label="{rating}. Read our Google reviews. {count} reviews so far." data-pp-neutral-label="Read our Google reviews.">
+            <img class="gbadge__star" src="../../assets/brand-icons/pp-review-star.webp" width="34" height="34" loading="lazy" alt="">
+            <span class="gbadge__num" data-pp-reviews="{rating}" data-pp-neutral=""></span>
+            <span class="gbadge__txt">Read our Google reviews <u data-pp-reviews="{count} reviews so far" data-pp-neutral=""></u></span>
+          </a>
+{{#visitor}}
+          <a class="btn btn--primary" href="#quote" data-purge-quote>See my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+          <a class="foot__portal" href="{{portal}}" target="_blank" rel="noopener"><span class="puck"><img src="../../assets/brand-icons/pp-secure-payment.webp" width="96" height="96" loading="lazy" alt=""></span>Existing client portal <span class="vh">(opens in a new tab)</span></a>
+{{/visitor}}
+{{#customer}}
+          <a class="btn btn--primary" href="{{portal}}" target="_blank" rel="noopener">Client portal<span class="vh"> (opens in a new tab)</span> <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+{{/customer}}
+        </div>
+      </div>
+
+      <div class="foot__cols">
+        <nav class="foot__col" aria-label="Footer services">
+          <h2 class="foot__h">Services</h2>
+          <ul class="foot__links">
+            <li><a href="dog-waste-removal.html">Dog waste removal</a></li>
+            <li><a href="sanitizing-and-deodorizing.html">Sanitizing and deodorizing</a></li>
+{{#visitor}}
+            <li><a href="#quote" data-purge-quote>Price recurring service</a></li>
+            <li><a href="#quote" data-purge-quote data-quote-plan="onetime"><span>Price a <span class="nb">one-time</span> cleanup</span></a></li>
+{{/visitor}}
+{{#customer}}
+            <li><a href="dog-waste-removal.html#prices">Recurring service pricing</a></li>
+            <li><a href="dog-waste-removal.html#one-time"><span><span class="nb">One-time</span> cleanup pricing</span></a></li>
+{{/customer}}
+          </ul>
+        </nav>
+        <nav class="foot__col" aria-label="Footer company links">
+          <h2 class="foot__h">Company</h2>
+          <ul class="foot__links">
+            <li><a href="about.html">About Purge Pros</a></li>
+            <li><a href="reviews.html">Google reviews</a></li>
+            <li><a href="faq.html">Frequently asked questions</a></li>
+            <li><a href="yard-guide.html">Yard Guide blog</a></li>
+            <li><a href="terms-conditions.html">Terms &amp; Conditions</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          </ul>
+        </nav>
+        <nav class="foot__col foot__col--areas" aria-label="Footer service areas">
+          <h2 class="foot__h">Service areas</h2>
+          <ul class="foot__links foot__links--areas">
+            <li><a href="indianapolis.html">Indianapolis</a></li>
+            <li><a href="carmel.html">Carmel</a></li>
+            <li><a href="fishers.html">Fishers</a></li>
+            <li><a href="noblesville.html">Noblesville</a></li>
+            <li><a href="westfield.html">Westfield</a></li>
+            <li><a href="anderson.html">Anderson</a></li>
+            <li><a href="avon.html">Avon</a></li>
+            <li><a href="brownsburg.html">Brownsburg</a></li>
+            <li><a href="danville.html">Danville</a></li>
+            <li><a href="fortville.html">Fortville</a></li>
+            <li><a href="greenfield.html">Greenfield</a></li>
+            <li><a href="greenwood.html">Greenwood</a></li>
+            <li><a href="ingalls.html">Ingalls</a></li>
+            <li><a href="lawrence.html">Lawrence</a></li>
+            <li><a href="mccordsville.html">McCordsville</a></li>
+            <li><a href="new-palestine.html">New Palestine</a></li>
+            <li><a href="plainfield.html">Plainfield</a></li>
+            <li><a href="zionsville.html">Zionsville</a></li>
+            <li><a href="whitestown.html">Whitestown</a></li>
+            <li><a href="mooresville.html">Mooresville</a></li>
+            <li><a href="pendleton.html">Pendleton</a></li>
+            <li><a href="camby.html">Camby</a></li>
+            <li><a href="cicero.html">Cicero</a></li>
+            <li><a href="pittsboro.html">Pittsboro</a></li>
+            <li><a href="lapel.html">Lapel</a></li>
+            <li><a href="markleville.html">Markleville</a></li>
+            <li><a href="additional.html">All service areas</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <p class="foot__addr"><b>Mailing address</b> (mail only, not a storefront): 5625 N German Church Rd., Unit 2036, Indianapolis, IN 46235</p>
+
+      <div class="foot__legal">
+        <span>&copy; <span data-year>2026</span> Purge Pros. All rights reserved.</span>
+        <span>Serving Indianapolis &amp; surrounding communities</span>
+        <span class="foot__legal-links"><a href="terms-conditions.html">Terms</a> <a href="privacy-policy.html">Privacy</a></span>
+      </div>
+{{#reviewBuild}}
+      <p class="foot__review">Review build. Nothing on this page is sent anywhere.{{#standinAsOf}} The rating shown is the {{standinAsOf}} figure; the live site reads it from Google.{{/standinAsOf}}</p>
+{{/reviewBuild}}
+    </div>
+  </div>
+</footer>

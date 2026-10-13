@@ -1,0 +1,9 @@
+{
+  "//": "THE ONE SWITCH for the Google rating printed anywhere on the site (hero badge, facts strip, footer badge, a review frame's badge). While \"standin\" holds figures, every page is built with them and each badge is marked data-standin. Set \"standin\" to null and build: every page is then built with the neutral line (\"Read our Google reviews\", no figure) and the live review feed fills the real figures by calling PurgeProsReviews.set({ rating, count }) in js/site.js. Nobody types a rating into a partial or a page. ADD-A-PAGE.md section 4a.",
+  "standin": {
+    "rating": "4.9",
+    "count": 43,
+    "asOf": "October 4"
+  },
+  "neutral": "Read our Google reviews"
+}

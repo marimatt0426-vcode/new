@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPQuoteCore: minimal wiring (demo mode, nothing is sent)</title>
+<style>
+  /* Deliberately plain. This page shows the wiring, not a design. */
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; }
+  button, input { font: inherit; margin: 0.25rem 0.25rem 0.25rem 0; padding: 0.5rem 0.75rem; }
+  button[aria-pressed="true"] { outline: 3px solid #18aef5; }
+  label { display: block; margin: 0.5rem 0; }
+  .notice { background: #fff6d6; padding: 0.5rem; }
+  .problem { color: #a40000; }
+  footer { position: sticky; bottom: 0; background: #062644; color: #fff; padding: 0.5rem; margin-top: 1rem; }
+</style>
+</head>
+<body>
+<p><strong>Demo mode.</strong> Nothing on this page is sent anywhere. Try <code>?pp_demo=timeout</code>, <code>?pp_demo=uncertain</code> or <code>?zip=46032</code>.</p>
+<p><a href="#quote" data-purge-quote>Get my price</a></p>
+<main id="app" tabindex="-1"></main>
+
+<script src="../pp-quote-core.js"></script>
+<script id="wiring">
+const C = PPQuoteCore, store = C.create();        // demo mode is the default: nothing is sent
+const app = document.getElementById("app");
+let notices = [], problems = [], shown = store.getState().step;   // engine notices, the last press's errors, the step on screen
+
+const h = (tag, text, props) => Object.assign(document.createElement(tag), { textContent: text || "" }, props || {});
+const change = (patch) => { problems = []; store.set(patch); };
+const tile = (label, pressed, onclick, disabled) => {
+  const button = h("button", label, { type: "button", onclick, disabled: Boolean(disabled) });
+  button.setAttribute("aria-pressed", String(Boolean(pressed)));
+  return button;
+};
+const choices = (key, options) => options.map((o) => tile(o.label, store.getState()[key] === (o.value || o.id), () => change({ [key]: o.value || o.id })));
+const typed = (key, props) => h("input", "", Object.assign({ name: key, value: store.getState()[key], oninput: (e) => change({ [key]: e.target.value }) }, props));
+const ticked = (key, text) => {
+  const label = h("label", " " + text);
+  label.prepend(h("input", "", { type: "checkbox", name: key, checked: store.getState()[key], onchange: (e) => change({ [key]: e.target.checked }) }));
+  return label;
+};
+const words = (parts) => parts.map((part) => part.text).join("");   // a real page renders part.href as a link
+
+const screens = {
+  dogs: () => choices("dogCount", C.DOG_OPTIONS),
+  zip: () => [typed("zip", { inputMode: "numeric", maxLength: 5 }),
+    h("p", store.checkZip().inArea ? "Good news: we serve " + store.checkZip().community + "." : store.checkZip().complete ? store.checkZip().message : "")],
+  yard: () => choices("yardSize", C.YARD_SIZES),
+  areas: (s) => C.AREAS.map((area) => tile(area.label, s.areas.includes(area.id), () => { problems = []; store.toggleArea(area.id); })),
+  frequency: () => store.frequencyOptions().map((o) =>
+    tile(o.label + ": " + (o.available ? o.priceText || "custom quote" : o.reason), o.selected, () => change({ frequency: o.id }), !o.available)),
+  price: () => [h("h2", store.quote().priceText), ...store.quote().lineItems.map((item) => h("p", item.label + "  " + item.amount)),
+    ...store.intentOptions().filter((intent) => intent.available).map((intent) => tile(intent.label, intent.selected, () => change({ intent: intent.id })))],
+  request: (s) => store.fieldRules().filter((rule) => rule.shown && rule.key !== "termsAccepted").map((rule) => {
+    const consentText = () => rule.lead + " " + rule.body + " " + words(C.wording.consentAlternativeParts(s.intent !== "quote_delivery"));
+    if (rule.key === "smsConsent") return ticked("smsConsent", consentText());
+    const label = h("label", rule.label + (rule.required ? " (required) " : " "));
+    label.append(...(rule.choices ? choices(rule.key, rule.choices) : [typed(rule.key, { maxLength: rule.maxLength, placeholder: rule.placeholder || "" })]));
+    return label;
+  }),
+  confirm: (s) => { const who = store.requestSummary(); return [   // plan, price, contact details and terms box, all on screen
+    ...store.planSummary().map((row) => tile("Edit " + row.label + ": " + row.value, false, () => store.edit(row.step))),
+    ...[who.name, "Reply by: " + who.replyBy, who.phone, who.email, who.serviceAddress, who.startTiming, who.question].filter(Boolean).map((line) => h("p", line)),
+    h("p", C.PROMISES.requestNotBooking + " " + C.PROMISES.nothingCharged),
+    s.intent === "service_request" ? ticked("termsAccepted", words(C.wording.termsParts(store.quote().oneTime !== null))) : h("p", words(C.wording.otherIntentsParts()))]; },
+  done: (s) => [h("h2", "Request received"), h("p", "Reference: " + s.receipt.requestId), h("p", "We will reply in " + s.receipt.replyWhere + ". " + C.PROMISES.requestNotBooking), tile("Start a new quote", false, () => store.reset())]
+};
+
+async function send() {
+  const sent = await store.submit();                // success needs nothing here: the subscriber below has already drawn the done step
+  problems = sent.ok ? [] : sent.fieldErrors.length ? sent.fieldErrors : [{ message: sent.message }];
+  if (!sent.ok) render();
+}
+function render() {
+  const s = store.getState(), flow = store.flow(), bar = store.priceBar(), focused = document.activeElement && document.activeElement.name;
+  const heading = h("h1", "Step: " + s.step, { tabIndex: -1 });
+  app.replaceChildren(heading, ...notices.map((n) => h("p", n.message, { className: "notice" })),
+    ...problems.map((p) => h("p", p.message, { className: "problem" })), ...screens[s.step](s));
+  if (s.locked || s.submitting) app.append(h("p", s.locked ? s.locked.message : C.SUBMIT_MESSAGES.sending, { className: s.locked ? "problem" : "notice", role: "status" }));
+  if (flow.back) app.append(tile("Back", false, () => store.back()));
+  const goOn = () => { problems = []; const went = store.next(); if (!went.ok) { problems = went.errors; render(); } };
+  if (flow.primaryAction === "next") app.append(tile("Continue", false, goOn, flow.disablePrimary), h("small", flow.disablePrimary ? flow.blockedReason : ""));   // ONE field decides; blockedReason says why
+  if (flow.primaryAction === "submit") app.append(tile("Send my request", false, send, flow.disablePrimary));
+  if (bar.visible) app.append(h("footer", bar.headline + (bar.detail ? "  (" + bar.detail + ")" : "")));
+  const again = s.step !== shown ? heading : focused && app.querySelector('[name="' + focused + '"]');     // a new step takes the focus
+  shown = s.step;
+  if (again) { again.focus(); if (again.name && again.type !== "checkbox") again.setSelectionRange(again.value.length, again.value.length); }
+}
+
+store.subscribe((state, info) => { notices = info.notices || []; render(); });   // told once for EVERY change, whatever caused it
+C.installPageHooks(store, { open: () => { app.scrollIntoView(); app.focus(); } });
+render();
+</script>
+</body>
+</html>

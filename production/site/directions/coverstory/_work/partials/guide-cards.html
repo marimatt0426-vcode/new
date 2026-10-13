@@ -1,0 +1,15 @@
+<!--# Yard Guide cards, page token {{GUIDE_CARDS:slug,slug,slug}} (exactly three post slugs from assets/covers/covers.json).
+      Title, text, alt, cover and category come from covers.json; a page may reword a card in its own JSON block ("guideCards").
+      The ribbons run gold, cyan, navy. Covers are the real published covers: never a placeholder.
+      The ribbon comes first in the source and hangs under the cover on the card (css/site.css section 22): it never
+      sits on the artwork. The title is an h3, so the three article titles are in the page's outline. -->
+<!-- @block grid -->
+<div class="grid grid--3">
+{{cards}}
+    </div>
+<!-- @block card -->
+      <a class="gcard" href="{{url}}">
+        <span class="ribbon{{ribbonClass}}">{{ribbon}}</span>
+        <span class="gcard__cover"><img src="../../{{cover}}" width="{{w}}" height="{{h}}" loading="lazy" decoding="async" alt="{{alt}}"></span>
+        <div class="gcard__body"><h3 class="gcard__title">{{title}}</h3><span class="gcard__text">{{text}}</span><span class="gcard__more"><span>{{more}} <img src="../../assets/brand-icons/pp-next-arrow.webp" width="20" height="20" loading="lazy" alt=""></span></span></div>
+      </a>

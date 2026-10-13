@@ -1,0 +1,280 @@
+{
+ "_meta": "Reduced copy for the public repository: only the ZIP-to-community table that shared/tests/strings-and-tables.test.mjs compares the engine with. The full city research file is not kept here.",
+ "lookups": {
+  "zipToCommunity": {
+   "46011": {
+    "community": "Anderson",
+    "mailingCity": "Anderson",
+    "page": "/anderson"
+   },
+   "46013": {
+    "community": "Anderson",
+    "mailingCity": "Anderson",
+    "page": "/anderson"
+   },
+   "46014": {
+    "community": "Anderson",
+    "mailingCity": "Anderson",
+    "page": "/anderson",
+    "poBox": true
+   },
+   "46015": {
+    "community": "Anderson",
+    "mailingCity": "Anderson",
+    "page": "/anderson",
+    "poBox": true
+   },
+   "46016": {
+    "community": "Anderson",
+    "mailingCity": "Anderson",
+    "page": "/anderson"
+   },
+   "46032": {
+    "community": "Carmel",
+    "mailingCity": "Carmel",
+    "page": "/carmel"
+   },
+   "46033": {
+    "community": "Carmel",
+    "mailingCity": "Carmel",
+    "page": "/carmel"
+   },
+   "46034": {
+    "community": "Cicero",
+    "mailingCity": "Cicero",
+    "page": null
+   },
+   "46037": {
+    "community": "Fishers",
+    "mailingCity": "Fishers",
+    "page": "/fishers"
+   },
+   "46038": {
+    "community": "Fishers",
+    "mailingCity": "Fishers",
+    "page": "/fishers"
+   },
+   "46040": {
+    "community": "Fortville",
+    "mailingCity": "Fortville",
+    "page": "/fortville"
+   },
+   "46048": {
+    "community": "Ingalls",
+    "mailingCity": "Ingalls",
+    "page": "/ingalls"
+   },
+   "46051": {
+    "community": "Lapel",
+    "mailingCity": "Lapel",
+    "page": null
+   },
+   "46055": {
+    "community": "McCordsville",
+    "mailingCity": "McCordsville",
+    "page": "/mccordsville"
+   },
+   "46056": {
+    "community": "Markleville",
+    "mailingCity": "Markleville",
+    "page": null
+   },
+   "46060": {
+    "community": "Noblesville",
+    "mailingCity": "Noblesville",
+    "page": "/noblesville"
+   },
+   "46061": {
+    "community": "Noblesville",
+    "mailingCity": "Noblesville",
+    "page": "/noblesville",
+    "poBox": true
+   },
+   "46062": {
+    "community": "Noblesville",
+    "mailingCity": "Noblesville",
+    "page": "/noblesville"
+   },
+   "46064": {
+    "community": "Pendleton",
+    "mailingCity": "Pendleton",
+    "page": null
+   },
+   "46074": {
+    "community": "Westfield",
+    "mailingCity": "Westfield",
+    "page": "/westfield"
+   },
+   "46075": {
+    "community": "Whitestown",
+    "mailingCity": "Whitestown",
+    "page": null
+   },
+   "46077": {
+    "community": "Zionsville",
+    "mailingCity": "Zionsville",
+    "page": null
+   },
+   "46112": {
+    "community": "Brownsburg",
+    "mailingCity": "Brownsburg",
+    "page": "/brownsburg"
+   },
+   "46113": {
+    "community": "Camby",
+    "mailingCity": "Camby",
+    "page": null
+   },
+   "46122": {
+    "community": "Danville",
+    "mailingCity": "Danville",
+    "page": "/danville"
+   },
+   "46123": {
+    "community": "Avon",
+    "mailingCity": "Avon",
+    "page": "/avon"
+   },
+   "46140": {
+    "community": "Greenfield",
+    "mailingCity": "Greenfield",
+    "page": "/greenfield"
+   },
+   "46142": {
+    "community": "Greenwood",
+    "mailingCity": "Greenwood",
+    "page": "/greenwood"
+   },
+   "46143": {
+    "community": "Greenwood",
+    "mailingCity": "Greenwood",
+    "page": "/greenwood"
+   },
+   "46158": {
+    "community": "Mooresville",
+    "mailingCity": "Mooresville",
+    "page": null
+   },
+   "46163": {
+    "community": "New Palestine",
+    "mailingCity": "New Palestine",
+    "page": "/new-palestine"
+   },
+   "46167": {
+    "community": "Pittsboro",
+    "mailingCity": "Pittsboro",
+    "page": null
+   },
+   "46168": {
+    "community": "Plainfield",
+    "mailingCity": "Plainfield",
+    "page": "/plainfield"
+   },
+   "46214": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46216": {
+    "community": "Lawrence",
+    "mailingCity": "Indianapolis",
+    "page": "/lawrence"
+   },
+   "46217": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46220": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46221": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46227": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46228": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46231": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46234": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46236": {
+    "community": "Lawrence",
+    "mailingCity": "Indianapolis",
+    "page": "/lawrence"
+   },
+   "46237": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46239": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46240": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46250": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46256": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46259": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46260": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46268": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46278": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46280": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   },
+   "46290": {
+    "community": "Indianapolis",
+    "mailingCity": "Indianapolis",
+    "page": "/indianapolis"
+   }
+  }
+ }
+}

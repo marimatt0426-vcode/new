@@ -1,0 +1,40 @@
+<!--
+{
+  "title": "Example of a plain content page with a scene | Cover Story page platform",
+  "description": "A working example of the plain hero recipe with the page's own scene, for page authors. Copy it to _work/pages and replace every word.",
+  "hero": {
+    "recipe": "plain",
+    "scene": "heroes/about.jpg",
+    "alt": "Purge Pros mascot standing in a fenced back yard, the scene for the about page.",
+    "kw": "Keyword line for the page",
+    "title": ["The page title in white.", "One line in cyan."],
+    "lead": "Example lead for a plain content page: one or two plain sentences that say what this page is for.",
+    "buttons": ["quote", "call"]
+  },
+  "facts": { "label": "Purge Pros at a glance", "items": ["google", "proof", "pay", "team"] }
+}
+-->
+
+<!-- 1. A SPLIT with a scene in a frame. One scene appears once per page; no page repeats a picture. -->
+<section class="sec" data-edge="arc-r" id="story" aria-labelledby="story-title">
+  <div class="wrap">
+    <div class="split">
+      <div class="split__art">
+        <figure class="frame frame--wide">
+          <img class="frame__img" src="../../assets/scenes/scene-ontheway.jpg" width="1600" height="900" loading="lazy" decoding="async" style="object-position:100% 50%" alt="Purge Pros mascot walking up a stone path to a wooden side gate, scooper over his shoulder, holding up a phone.">
+          <figcaption class="frame__cap"><img src="../../assets/brand-icons/pp-visit-message.webp" width="30" height="30" loading="lazy" alt="">A caption is a sticker on the picture.</figcaption>
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left">
+          <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-visit-message.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">Example section</p>
+          <h2 class="sh__title" id="story-title">Every section has its own <span class="swash">picture</span></h2>
+          <p class="sh__intro lead">Art direction in every section: a scene, a set of receipts, an emblem with icons, or the mascot standing on something.</p>
+        </div>
+        <p>This page has no price builder in its hero, so its &ldquo;Get my price&rdquo; buttons open the builder in a panel over the page.</p>
+        <p><a class="btn btn--primary" href="#quote" data-purge-quote>See my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+  </div>
+</section>

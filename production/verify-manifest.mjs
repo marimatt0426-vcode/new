@@ -12,12 +12,39 @@ for (const file of manifest.files) {
   assert.ok(target.startsWith(here + path.sep), 'Manifest path escapes production');
   assert.equal(sha(fs.readFileSync(target)), file.sha256, `Source changed: ${file.path}; reconcile provenance before updating its hash`);
 }
-assert.equal(sha(fs.readFileSync(path.join(here, 'quote/dist/worker.mjs'))),
+// The October 5 release, live until a deployment is approved, stays in the tree as the regression reference.
+assert.equal(sha(fs.readFileSync(path.join(here, 'quote/tests/fixtures/2026-10-05-live-worker.mjs'))),
   '113ce3beee7ac937605d7da6eb7453052bfe03ee95c92e520e623396bffea95c',
-  'Quote rebuild differs from approved October 5 pixel step release');
-const metadata = JSON.parse(fs.readFileSync(path.join(here, 'website/pages/metadata.json')));
-assert.equal(metadata.routes.length, 27);
-for (const route of metadata.routes) assert.ok(fs.existsSync(path.join(here, 'website/pages', route.id + '.html')));
+  'Regression reference is not the October 5 pixel step release');
+// The quote Worker of build v5-20261013 (deployed October 13, 2026): ZIP 46290, the optional "Who sent you?" name (forwarded key and one team-summary line), the read-only request status operation.
+assert.equal(sha(fs.readFileSync(path.join(here, 'quote/dist/worker.mjs'))),
+  "235713cdca9d48e6f7da98dc5cd6f66b359267fcad96f39c12dbc2ead2cc2300",
+  'Quote rebuild differs from the prepared ZIP 46290 candidate; run npm run build, or reconcile before updating this hash');
+// The rebuilt website (v5): the paste-ready blocks, their field sheet and the hosted files they name.
+// Prepared and locally tested; not installed until the owner approves the switch (OPERATIONS.md).
+const fields = JSON.parse(fs.readFileSync(path.join(here, 'website/fields.json')));
+const blocks = JSON.parse(fs.readFileSync(path.join(here, 'website/BLOCKS-MANIFEST.json')));
+const listed = new Set(manifest.files.map(f => f.path));
+const kept = file => 'website/' + (file.startsWith('blog/') ? 'blog/blocks/' + file.slice(5) : file);
+assert.equal(fields.profile, 'production');
+assert.equal(blocks.profile, 'production');
+assert.equal(fields.pages.length, 40, 'Expected 38 website pages and the two blog templates');
+assert.equal(fields.pages.filter(p => p.where === 'website page').length, 38);
+for (const page of fields.pages) {
+  for (const block of [...page.pasteBodyBlocks, ...(page.typeThese.schemaFile ? [page.typeThese.schemaFile] : [])]) {
+    if (/NATIVE/.test(block)) continue;
+    assert.ok(fs.existsSync(path.join(here, kept(block))), `Missing block ${block} of page ${page.slug}`);
+  }
+}
+for (const block of blocks.blocks) {
+  assert.equal(sha(fs.readFileSync(path.join(here, kept(block.file)))), block.sha256, `Block changed without repackaging: ${block.file}`);
+  assert.ok(listed.has('production/' + kept(block.file)), `Block not in SOURCE-MANIFEST.json: ${block.file}`);
+}
+assert.deepEqual(blocks.uploadList.missing, []);
+for (const file of blocks.uploadList.files) {
+  assert.equal(sha(fs.readFileSync(path.join(here, 'site', file.path))), file.sha256, `Hosted file differs from the one the blocks were packaged with: ${file.path}`);
+}
+const placeholder = blocks.placeholdersStillInUse.length ? `; placeholder still in use: ${blocks.placeholdersStillInUse[0]}` : '';
 const articles = JSON.parse(fs.readFileSync(path.join(here, 'website/blog/articles/MANIFEST.json')));
 assert.equal(articles.articles.length, 45);
 for (const article of articles.articles) {
@@ -26,4 +53,4 @@ for (const article of articles.articles) {
   assert.equal(sha(fs.readFileSync(path.join(here, 'website/blog/articles', article.bodyFile))), article.bodySha256);
   assert.ok(article.cover?.src && article.cover?.alt, 'Missing cover source/alt');
 }
-console.log(`PASS: ${manifest.files.length} source hashes; exact production Worker rebuild; 27 pages; 45 public article snapshots.`);
+console.log(`PASS: ${manifest.files.length} source hashes; exact quote Worker candidate rebuild; ${fields.pages.length} pages in ${blocks.blocks.length} blocks; ${blocks.uploadList.files.length} hosted files${placeholder}; 45 public article snapshots.`);

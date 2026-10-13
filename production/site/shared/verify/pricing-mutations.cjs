@@ -1,0 +1,33 @@
+// Single-place faults used to test the tests. Each is [label, exact text in ../pp-quote-core.js, replacement].
+// They are applied IN MEMORY only (pricing-mutation-sanity.mjs and pricing-mutate-preload.cjs); the engine file is never written.
+module.exports = [
+  ["weekly 3-dog base price off by one cent", "prices: { 1: 1999, 2: 2249, 3: 2499,", "prices: { 1: 1999, 2: 2249, 3: 2498,"],
+  ["quarter-acre adder 400 -> 450", '{ id: "m", label: "Up to ¼ acre", addCents: 400,', '{ id: "m", label: "Up to ¼ acre", addCents: 450,'],
+  ["three-area adder 500 -> 550", "const AREA_ADDERS_CENTS = { 1: 0, 2: 250, 3: 500 };", "const AREA_ADDERS_CENTS = { 1: 0, 2: 250, 3: 550 };"],
+  ["one-time flat price 8999 -> 9999", "flatPriceCents: 8999", "flatPriceCents: 9999"],
+  ["every-other-week offered for 5 dogs", "prices: { 1: 2999, 2: 3349, 3: 3699, 4: 4049 }", "prices: { 1: 2999, 2: 3349, 3: 3699, 4: 4049, 5: 4399 }"],
+  ["over 1 acre no longer forces custom (eligibility)", 'if (yardSizeId === "over") {\n      return { allowed: false, code: "YARD_OVER_ONE_ACRE"', 'if (yardSizeId === "never") {\n      return { allowed: false, code: "YARD_OVER_ONE_ACRE"'],
+  ["custom sticks after its reason has gone", "if (customNeededBefore && !customNeededNow) {", "if (false) {"],
+  ["reconciliation notices dropped", "if (reconciled.notice) result.notices.push(reconciled.notice);", ""],
+  ["a ZIP removed from the list", '"46016", "46032", "46033", "46034",', '"46016", "46033", "46034",'],
+  ["a ZIP added to the list", '"46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280", "46290"\n  ];', '"46240", "46250", "46256", "46259", "46260", "46268", "46278", "46280", "46290", "46201"\n  ];'],
+  ["ZIP not checked in the plan", 'if (!zip.inArea) {\n      errors.push({ field: "zip", step: "zip"', 'if (false) {\n      errors.push({ field: "zip", step: "zip"'],
+  ["save link allowed for an incomplete plan", "const problems = planErrors(state, labels);\n      if (problems.length) {\n        // Never a save link", "const problems = planErrors(state, labels);\n      if (false) {\n        // Never a save link"],
+  ["teaser shown for 6 dogs", "if (Number(state.dogCount) >= 6) return null;", "if (Number(state.dogCount) >= 7) return null;"],
+  ["option price forgets the yard adder", "priceCents = definition.prices[dogs] + yard.addCents + (AREA_ADDERS_CENTS[areaCount] || 0);", "priceCents = definition.prices[dogs] + (AREA_ADDERS_CENTS[areaCount] || 0);"],
+  ["yard line item missing", "if (yardAddCents) lineItems.push({ label: yard.label", "if (false) lineItems.push({ label: yard.label"],
+  ["10+ dogs one-time treated as custom", 'if (dogs >= 10 && frequencyId !== "onetime") reasons.push("DOG_COUNT_10_PLUS");', 'if (dogs >= 10) reasons.push("DOG_COUNT_10_PLUS");'],
+  ["explicit frequency not checked for eligibility", "if (eligibility.allowed) {\n            state.frequency = input.frequency;", "if (true) {\n            state.frequency = input.frequency;"],
+  ["custom not auto-selected for 10+ dogs or over 1 acre", 'if (customNeededNow) return notice("CUSTOM_AUTO_SELECTED"', 'if (false) return notice("CUSTOM_AUTO_SELECTED"'],
+  ["ineligible frequency cleared instead of moved to custom", 'if (customNeededNow) {\n      return notice("FREQUENCY_MOVED_TO_CUSTOM"', 'if (false) {\n      return notice("FREQUENCY_MOVED_TO_CUSTOM"'],
+  ["payload price off by one cent", "clientPriceCents: priced ? quote.priceCents : null,", "clientPriceCents: priced ? quote.priceCents + 1 : null,"],
+  ["save-link dogs sent as a string", "dogs: Number(state.dogCount),", "dogs: state.dogCount,"],
+  ["visitor not taken back when the plan breaks", "if (problems.length) {\n          state.editReturn = state.step;", "if (false) {\n          state.editReturn = state.step;"],
+  ["saved plan ZIP not re-checked on resume", 'typeof plan.zip !== "string" || SERVICE_ZIPS.indexOf(plan.zip) < 0 ||', 'typeof plan.zip !== "string" || false ||'],
+  ["restored progress not reconciled", 'const reconciled = reconcileFrequency({ dogCount: "", yardSize: "" }, state, labels);\n      state.frequency = reconciled.frequency;', 'const reconciled = reconcileFrequency({ dogCount: "", yardSize: "" }, state, labels);'],
+  ["twice-weekly 9-dog price changed", "8: 2649, 9: 2799 }", "8: 2649, 9: 2800 }"],
+  ["area adder applied to a one-time cleanup", "priceCents: frequency.flatPriceCents,\n        baseCents: frequency.flatPriceCents,", "priceCents: frequency.flatPriceCents + (AREA_ADDERS_CENTS[areaIds.length] || 0),\n        baseCents: frequency.flatPriceCents,"],
+  ["custom estimate leaks a price label", 'summary.priceText = "Custom estimate";', 'summary.priceText = "Custom estimate from $19.99";'],
+  ["out-of-area ZIP kept in storage", "return checkZip(state.zip).inArea && state.zipSource !== \"page\" ? state.zip : \"\";", "return state.zipSource !== \"page\" ? state.zip : \"\";"],
+  ["stored ZIP not re-checked on restore", "zip: SERVICE_ZIPS.indexOf(zip) >= 0 ? zip : \"\",", "zip: zip,"]
+];

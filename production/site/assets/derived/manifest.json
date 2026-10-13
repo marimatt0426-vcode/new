@@ -1,0 +1,2520 @@
+{
+ "note": "Written by directions/coverstory/_work/perf/derive-images.mjs. Do not edit: run the script.",
+ "images": {
+  "covers/by-slug/dog-poop-removal-cost-indianapolis.jpg": {
+   "sha1": "f066d4a7adcf9eb9e873ca65d8fe9e81c5eae9f8",
+   "w": 1536,
+   "h": 1024,
+   "bytes": 423924,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/covers/by-slug/dog-poop-removal-cost-indianapolis-768.webp",
+     "bytes": 50218,
+     "average": 6.1
+    },
+    {
+     "w": 1152,
+     "h": 768,
+     "file": "derived/covers/by-slug/dog-poop-removal-cost-indianapolis-1152.webp",
+     "bytes": 77142,
+     "average": 4.62
+    },
+    {
+     "w": 1536,
+     "h": 1024,
+     "file": "derived/covers/by-slug/dog-poop-removal-cost-indianapolis-1536.webp",
+     "bytes": 113248,
+     "average": 3.93
+    }
+   ]
+  },
+  "heroes/about.jpg": {
+   "sha1": "16d440dceacd1082196ad8ae05eb4b7141930d98",
+   "w": 1600,
+   "h": 900,
+   "bytes": 291124,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/about-768.webp",
+     "bytes": 66862,
+     "average": 7.92
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/about-1152.webp",
+     "bytes": 124228,
+     "average": 6.45
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/about-1600.webp",
+     "bytes": 197764,
+     "average": 5.28
+    }
+   ]
+  },
+  "heroes/additional.jpg": {
+   "sha1": "d769fbf96b785c895d1ea6828e5c273405ac22ab",
+   "w": 1600,
+   "h": 900,
+   "bytes": 289122,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/additional-768.webp",
+     "bytes": 65168,
+     "average": 7.97
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/additional-1152.webp",
+     "bytes": 121256,
+     "average": 6.45
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/additional-1600.webp",
+     "bytes": 193126,
+     "average": 5.27
+    }
+   ]
+  },
+  "heroes/anderson.jpg": {
+   "sha1": "eaec8fb38877a24728219f541529321112e04042",
+   "w": 1600,
+   "h": 900,
+   "bytes": 318821,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/anderson-768.webp",
+     "bytes": 75508,
+     "average": 8.31
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/anderson-1152.webp",
+     "bytes": 141936,
+     "average": 6.84
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/anderson-1600.webp",
+     "bytes": 223174,
+     "average": 5.65
+    }
+   ]
+  },
+  "heroes/avon.jpg": {
+   "sha1": "3c4221e1b1d99da11a461c074ec90007f92734dd",
+   "w": 1600,
+   "h": 900,
+   "bytes": 303717,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/avon-768.webp",
+     "bytes": 70048,
+     "average": 8.65
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/avon-1152.webp",
+     "bytes": 133568,
+     "average": 7.04
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/avon-1600.webp",
+     "bytes": 211796,
+     "average": 5.67
+    }
+   ]
+  },
+  "heroes/brownsburg.jpg": {
+   "sha1": "32d46522ba125795c60a941d7eb95b70deb5a27e",
+   "w": 1600,
+   "h": 900,
+   "bytes": 303252,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/brownsburg-768.webp",
+     "bytes": 70450,
+     "average": 8.91
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/brownsburg-1152.webp",
+     "bytes": 132766,
+     "average": 7.19
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/brownsburg-1600.webp",
+     "bytes": 209772,
+     "average": 5.72
+    }
+   ]
+  },
+  "heroes/camby.jpg": {
+   "sha1": "c9436b6d10a7569b3b8040e6dc713224fa7e76cd",
+   "w": 1600,
+   "h": 900,
+   "bytes": 287630,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/camby-768.webp",
+     "bytes": 61320,
+     "average": 8.1
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/camby-1152.webp",
+     "bytes": 114196,
+     "average": 6.56
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/camby-1600.webp",
+     "bytes": 177630,
+     "average": 5.32
+    }
+   ]
+  },
+  "heroes/carmel.jpg": {
+   "sha1": "61211f165fc1ee12389a2fed0bec69f8449b4367",
+   "w": 1600,
+   "h": 900,
+   "bytes": 305683,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/carmel-768.webp",
+     "bytes": 70824,
+     "average": 8.85
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/carmel-1152.webp",
+     "bytes": 132648,
+     "average": 7.16
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/carmel-1600.webp",
+     "bytes": 211882,
+     "average": 5.72
+    }
+   ]
+  },
+  "heroes/cicero.jpg": {
+   "sha1": "dc480e03a0be9b7feb2795de13b143d194b7ecc4",
+   "w": 1600,
+   "h": 900,
+   "bytes": 301911,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/cicero-768.webp",
+     "bytes": 64420,
+     "average": 8.38
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/cicero-1152.webp",
+     "bytes": 122082,
+     "average": 6.72
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/cicero-1600.webp",
+     "bytes": 190814,
+     "average": 5.56
+    }
+   ]
+  },
+  "heroes/danville.jpg": {
+   "sha1": "49ab6df2289d0b026a60b69bd88be0a8880670b2",
+   "w": 1600,
+   "h": 900,
+   "bytes": 303182,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/danville-768.webp",
+     "bytes": 69762,
+     "average": 8.56
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/danville-1152.webp",
+     "bytes": 131310,
+     "average": 7.01
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/danville-1600.webp",
+     "bytes": 210464,
+     "average": 5.68
+    }
+   ]
+  },
+  "heroes/dog-waste-removal.jpg": {
+   "sha1": "e97a48b967bfa82062425c992ea2854c8f615c97",
+   "w": 1600,
+   "h": 900,
+   "bytes": 295452,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/dog-waste-removal-768.webp",
+     "bytes": 68920,
+     "average": 8.62
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/dog-waste-removal-1152.webp",
+     "bytes": 128822,
+     "average": 7
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/dog-waste-removal-1600.webp",
+     "bytes": 201246,
+     "average": 5.59
+    }
+   ]
+  },
+  "heroes/faq.jpg": {
+   "sha1": "5337206b8e8e45ae821845a930602c1fd807f08f",
+   "w": 1600,
+   "h": 900,
+   "bytes": 366238,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/faq-768.webp",
+     "bytes": 62862,
+     "average": 8.08
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/faq-1152.webp",
+     "bytes": 113170,
+     "average": 6.55
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/faq-1600.webp",
+     "bytes": 177598,
+     "average": 5.39
+    }
+   ]
+  },
+  "heroes/fishers.jpg": {
+   "sha1": "910efcaf8be25b522de82181463764b56f532e58",
+   "w": 1600,
+   "h": 900,
+   "bytes": 270853,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/fishers-768.webp",
+     "bytes": 62466,
+     "average": 8.3
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/fishers-1152.webp",
+     "bytes": 115610,
+     "average": 6.69
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/fishers-1600.webp",
+     "bytes": 181604,
+     "average": 5.39
+    }
+   ]
+  },
+  "heroes/fortville.jpg": {
+   "sha1": "fb64a41d63cca0e6176f1cadec4e0f47637a37b8",
+   "w": 1600,
+   "h": 900,
+   "bytes": 396694,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/fortville-768.webp",
+     "bytes": 99042,
+     "average": 10.38
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/fortville-1152.webp",
+     "bytes": 187638,
+     "average": 8.44
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/fortville-1600.webp",
+     "bytes": 294446,
+     "average": 6.72
+    }
+   ]
+  },
+  "heroes/greenfield.jpg": {
+   "sha1": "7235f9ee8442e5c17fc332840d97472d3a74b89f",
+   "w": 1600,
+   "h": 900,
+   "bytes": 332596,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/greenfield-768.webp",
+     "bytes": 78022,
+     "average": 9.22
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/greenfield-1152.webp",
+     "bytes": 148344,
+     "average": 7.52
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/greenfield-1600.webp",
+     "bytes": 237432,
+     "average": 6.04
+    }
+   ]
+  },
+  "heroes/greenwood.jpg": {
+   "sha1": "db0ff4601bd9fe98a18e498746054935ebdb838b",
+   "w": 1600,
+   "h": 900,
+   "bytes": 342304,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/greenwood-768.webp",
+     "bytes": 81470,
+     "average": 9.4
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/greenwood-1152.webp",
+     "bytes": 155152,
+     "average": 7.75
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/greenwood-1600.webp",
+     "bytes": 251380,
+     "average": 6.07
+    }
+   ]
+  },
+  "heroes/home-desktop.jpg": {
+   "sha1": "eebdf34f233885fb22e81a1c1454b4f7263ab4f2",
+   "w": 1600,
+   "h": 900,
+   "bytes": 264147,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/home-desktop-768.webp",
+     "bytes": 60120,
+     "average": 7.73
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/home-desktop-1152.webp",
+     "bytes": 113838,
+     "average": 6.34
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/home-desktop-1600.webp",
+     "bytes": 183816,
+     "average": 5.14
+    }
+   ]
+  },
+  "heroes/home-phone.jpg": {
+   "sha1": "9d29a87592d081db0e67bdf55bf7e9f0f57067a0",
+   "w": 900,
+   "h": 1350,
+   "bytes": 225624,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 1152,
+     "file": "derived/heroes/home-phone-768.webp",
+     "bytes": 116028,
+     "average": 5.83
+    },
+    {
+     "w": 900,
+     "h": 1350,
+     "file": "derived/heroes/home-phone-900.webp",
+     "bytes": 154112,
+     "average": 5.3
+    }
+   ]
+  },
+  "heroes/indianapolis.jpg": {
+   "sha1": "517f145676499781bdae8f64f0179b3fa6912adc",
+   "w": 1600,
+   "h": 900,
+   "bytes": 313394,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/indianapolis-768.webp",
+     "bytes": 75146,
+     "average": 8.56
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/indianapolis-1152.webp",
+     "bytes": 137484,
+     "average": 7.08
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/indianapolis-1600.webp",
+     "bytes": 215450,
+     "average": 5.76
+    }
+   ]
+  },
+  "heroes/ingalls.jpg": {
+   "sha1": "b4a7fd6492bdfd11ce51d0e1f34fa3da470b645e",
+   "w": 1600,
+   "h": 900,
+   "bytes": 329247,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/ingalls-768.webp",
+     "bytes": 77640,
+     "average": 9.35
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/ingalls-1152.webp",
+     "bytes": 145992,
+     "average": 7.6
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/ingalls-1600.webp",
+     "bytes": 236756,
+     "average": 5.92
+    }
+   ]
+  },
+  "heroes/lapel.jpg": {
+   "sha1": "1a05f7ec726eb55a2aa7ed6145b45df1ba05c5ac",
+   "w": 1600,
+   "h": 900,
+   "bytes": 283304,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/lapel-768.webp",
+     "bytes": 60318,
+     "average": 7.85
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/lapel-1152.webp",
+     "bytes": 111650,
+     "average": 6.39
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/lapel-1600.webp",
+     "bytes": 174542,
+     "average": 5.22
+    }
+   ]
+  },
+  "heroes/lawrence.jpg": {
+   "sha1": "6ea4f5fa0966966baab80ea981a6f01c8a6de19c",
+   "w": 1600,
+   "h": 900,
+   "bytes": 369686,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/lawrence-768.webp",
+     "bytes": 90548,
+     "average": 10.24
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/lawrence-1152.webp",
+     "bytes": 171610,
+     "average": 8.19
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/lawrence-1600.webp",
+     "bytes": 270904,
+     "average": 6.51
+    }
+   ]
+  },
+  "heroes/markleville.jpg": {
+   "sha1": "73934731d6b821f77490d7adb1d92b5bc77371ca",
+   "w": 1600,
+   "h": 900,
+   "bytes": 281410,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/markleville-768.webp",
+     "bytes": 58492,
+     "average": 7.75
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/markleville-1152.webp",
+     "bytes": 110962,
+     "average": 6.29
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/markleville-1600.webp",
+     "bytes": 175598,
+     "average": 5.13
+    }
+   ]
+  },
+  "heroes/mccordsville.jpg": {
+   "sha1": "159285c9e27f7d48b94ff643cae73b228c55c213",
+   "w": 1600,
+   "h": 900,
+   "bytes": 431776,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/mccordsville-768.webp",
+     "bytes": 85028,
+     "average": 8.88
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/mccordsville-1152.webp",
+     "bytes": 159860,
+     "average": 7.33
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/mccordsville-1600.webp",
+     "bytes": 257484,
+     "average": 5.96
+    }
+   ]
+  },
+  "heroes/mooresville.jpg": {
+   "sha1": "055f40f7f91f65e90fa5a11ff090bb427c91c90b",
+   "w": 1600,
+   "h": 900,
+   "bytes": 333989,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/mooresville-768.webp",
+     "bytes": 72596,
+     "average": 9.12
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/mooresville-1152.webp",
+     "bytes": 134954,
+     "average": 7.35
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/mooresville-1600.webp",
+     "bytes": 215010,
+     "average": 5.91
+    }
+   ]
+  },
+  "heroes/new-palestine.jpg": {
+   "sha1": "8b721d5f7443d6d4e6cb049261d708693618334f",
+   "w": 1600,
+   "h": 900,
+   "bytes": 341033,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/new-palestine-768.webp",
+     "bytes": 81076,
+     "average": 8.96
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/new-palestine-1152.webp",
+     "bytes": 152598,
+     "average": 7.46
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/new-palestine-1600.webp",
+     "bytes": 247346,
+     "average": 5.97
+    }
+   ]
+  },
+  "heroes/noblesville.jpg": {
+   "sha1": "3684c6b758d418ae621d4e87aed96784bc56c63c",
+   "w": 1600,
+   "h": 900,
+   "bytes": 327564,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/noblesville-768.webp",
+     "bytes": 77384,
+     "average": 9.26
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/noblesville-1152.webp",
+     "bytes": 144850,
+     "average": 7.46
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/noblesville-1600.webp",
+     "bytes": 230158,
+     "average": 5.92
+    }
+   ]
+  },
+  "heroes/pendleton.jpg": {
+   "sha1": "4814e19e54afb05616e367ff37f6109447c4daf9",
+   "w": 1600,
+   "h": 900,
+   "bytes": 349377,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/pendleton-768.webp",
+     "bytes": 80506,
+     "average": 9.67
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/pendleton-1152.webp",
+     "bytes": 146944,
+     "average": 7.76
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/pendleton-1600.webp",
+     "bytes": 231156,
+     "average": 6.13
+    }
+   ]
+  },
+  "heroes/pittsboro.jpg": {
+   "sha1": "af6598ac82a997fa394a074df82327411e1ab6d5",
+   "w": 1600,
+   "h": 900,
+   "bytes": 309301,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/pittsboro-768.webp",
+     "bytes": 68342,
+     "average": 8.59
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/pittsboro-1152.webp",
+     "bytes": 126166,
+     "average": 6.92
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/pittsboro-1600.webp",
+     "bytes": 197918,
+     "average": 5.51
+    }
+   ]
+  },
+  "heroes/plainfield.jpg": {
+   "sha1": "3eaea58a14279bbd82cf170fc98df69f4a312ffa",
+   "w": 1600,
+   "h": 900,
+   "bytes": 350569,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/plainfield-768.webp",
+     "bytes": 84206,
+     "average": 9.78
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/plainfield-1152.webp",
+     "bytes": 159680,
+     "average": 7.95
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/plainfield-1600.webp",
+     "bytes": 254824,
+     "average": 6.26
+    }
+   ]
+  },
+  "heroes/quote.jpg": {
+   "sha1": "4323839cf795a77d5d09d8db95519d23385c1d50",
+   "w": 1600,
+   "h": 900,
+   "bytes": 408234,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/quote-768.webp",
+     "bytes": 76392,
+     "average": 9.42
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/quote-1152.webp",
+     "bytes": 138062,
+     "average": 7.58
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/quote-1600.webp",
+     "bytes": 216364,
+     "average": 6.14
+    }
+   ]
+  },
+  "heroes/reviews.jpg": {
+   "sha1": "bdd052ea12804ae109391bd4bb8e189d8f7c5988",
+   "w": 1600,
+   "h": 900,
+   "bytes": 297040,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/reviews-768.webp",
+     "bytes": 67196,
+     "average": 8.06
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/reviews-1152.webp",
+     "bytes": 128484,
+     "average": 6.64
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/reviews-1600.webp",
+     "bytes": 206048,
+     "average": 5.47
+    }
+   ]
+  },
+  "heroes/sanitizing-and-deodorizing.jpg": {
+   "sha1": "2487948eb4dc85750159c18c494f0227fd5d6086",
+   "w": 1600,
+   "h": 900,
+   "bytes": 270368,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/sanitizing-and-deodorizing-768.webp",
+     "bytes": 61942,
+     "average": 7.85
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/sanitizing-and-deodorizing-1152.webp",
+     "bytes": 109630,
+     "average": 6.42
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/sanitizing-and-deodorizing-1600.webp",
+     "bytes": 170624,
+     "average": 5.22
+    }
+   ]
+  },
+  "heroes/welcome.jpg": {
+   "sha1": "96a778e5478ae42e0631eaf380b90e06d060ee5f",
+   "w": 1600,
+   "h": 900,
+   "bytes": 270273,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/welcome-768.webp",
+     "bytes": 61954,
+     "average": 7.9
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/welcome-1152.webp",
+     "bytes": 112894,
+     "average": 6.45
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/welcome-1600.webp",
+     "bytes": 178370,
+     "average": 5.27
+    }
+   ]
+  },
+  "heroes/westfield.jpg": {
+   "sha1": "31c872036b20f7b05a81aec5dc29d25c31f5926d",
+   "w": 1600,
+   "h": 900,
+   "bytes": 298896,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/westfield-768.webp",
+     "bytes": 69356,
+     "average": 8.74
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/westfield-1152.webp",
+     "bytes": 131170,
+     "average": 7.13
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/westfield-1600.webp",
+     "bytes": 209106,
+     "average": 5.7
+    }
+   ]
+  },
+  "heroes/whitestown.jpg": {
+   "sha1": "9083256bb4c8f14e7db4d812e909f7211b680741",
+   "w": 1600,
+   "h": 900,
+   "bytes": 307253,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/whitestown-768.webp",
+     "bytes": 64602,
+     "average": 8.37
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/whitestown-1152.webp",
+     "bytes": 121084,
+     "average": 6.82
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/whitestown-1600.webp",
+     "bytes": 195324,
+     "average": 5.42
+    }
+   ]
+  },
+  "heroes/yard-guide.jpg": {
+   "sha1": "0743a4a19f4641974e7f5875af3d939fbd443a60",
+   "w": 1600,
+   "h": 900,
+   "bytes": 288910,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/yard-guide-768.webp",
+     "bytes": 68548,
+     "average": 8.22
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/yard-guide-1152.webp",
+     "bytes": 123878,
+     "average": 6.74
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/yard-guide-1600.webp",
+     "bytes": 194890,
+     "average": 5.47
+    }
+   ]
+  },
+  "heroes/zionsville.jpg": {
+   "sha1": "aa67b25c5cac164a29875a339a2b3f297a3a54a3",
+   "w": 1600,
+   "h": 900,
+   "bytes": 374760,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/heroes/zionsville-768.webp",
+     "bytes": 83360,
+     "average": 9.93
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/heroes/zionsville-1152.webp",
+     "bytes": 157116,
+     "average": 8.12
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/heroes/zionsville-1600.webp",
+     "bytes": 252520,
+     "average": 6.5
+    }
+   ]
+  },
+  "scenes/city-dogs/anderson.jpg": {
+   "sha1": "c625f4dbef45b013cfac03a8dbbc2191351a205d",
+   "w": 1200,
+   "h": 800,
+   "bytes": 186073,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/anderson-768.webp",
+     "bytes": 47720,
+     "average": 5.91
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/anderson-1200.webp",
+     "bytes": 88708,
+     "average": 4.64
+    }
+   ]
+  },
+  "scenes/city-dogs/avon.jpg": {
+   "sha1": "e5a4b0d55ec0597dfaca2bc9ae37df8253d367ff",
+   "w": 1200,
+   "h": 800,
+   "bytes": 203053,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/avon-768.webp",
+     "bytes": 55546,
+     "average": 6.27
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/avon-1200.webp",
+     "bytes": 103154,
+     "average": 4.98
+    }
+   ]
+  },
+  "scenes/city-dogs/brownsburg.jpg": {
+   "sha1": "83aef7813419606325fc8117bcf958ff3e7e5cf1",
+   "w": 1200,
+   "h": 800,
+   "bytes": 167672,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/brownsburg-768.webp",
+     "bytes": 43050,
+     "average": 5.51
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/brownsburg-1200.webp",
+     "bytes": 77110,
+     "average": 4.43
+    }
+   ]
+  },
+  "scenes/city-dogs/camby.jpg": {
+   "sha1": "d96e81cbf8a4567a3907f1a4d1b9efe0720dadca",
+   "w": 1200,
+   "h": 800,
+   "bytes": 217907,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/camby-768.webp",
+     "bytes": 62106,
+     "average": 6.5
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/camby-1200.webp",
+     "bytes": 118412,
+     "average": 5.15
+    }
+   ]
+  },
+  "scenes/city-dogs/carmel.jpg": {
+   "sha1": "016d54e1647ef7886aba8426f0dd24315e1df150",
+   "w": 1200,
+   "h": 800,
+   "bytes": 180003,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/carmel-768.webp",
+     "bytes": 44718,
+     "average": 5.48
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/carmel-1200.webp",
+     "bytes": 82740,
+     "average": 4.37
+    }
+   ]
+  },
+  "scenes/city-dogs/cicero.jpg": {
+   "sha1": "434c58ec87d776edfec4073fa713c246886cc208",
+   "w": 1200,
+   "h": 800,
+   "bytes": 210769,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/cicero-768.webp",
+     "bytes": 57806,
+     "average": 6.4
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/cicero-1200.webp",
+     "bytes": 107208,
+     "average": 5.16
+    }
+   ]
+  },
+  "scenes/city-dogs/danville.jpg": {
+   "sha1": "654e60d9f63e3a3761dc6fa6ca4729c0d594d081",
+   "w": 1200,
+   "h": 800,
+   "bytes": 185407,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/danville-768.webp",
+     "bytes": 48908,
+     "average": 5.65
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/danville-1200.webp",
+     "bytes": 88264,
+     "average": 4.52
+    }
+   ]
+  },
+  "scenes/city-dogs/fishers.jpg": {
+   "sha1": "f62d33b39f83a1a0fd66f6cf2f01f0a7db0afab4",
+   "w": 1200,
+   "h": 800,
+   "bytes": 177889,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/fishers-768.webp",
+     "bytes": 43942,
+     "average": 5.37
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/fishers-1200.webp",
+     "bytes": 84790,
+     "average": 4.3
+    }
+   ]
+  },
+  "scenes/city-dogs/fortville.jpg": {
+   "sha1": "0c7bd9d780b19ede0d4369896c31ce76e061e9d6",
+   "w": 1200,
+   "h": 800,
+   "bytes": 183884,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/fortville-768.webp",
+     "bytes": 46018,
+     "average": 5.87
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/fortville-1200.webp",
+     "bytes": 86660,
+     "average": 4.54
+    }
+   ]
+  },
+  "scenes/city-dogs/greenfield.jpg": {
+   "sha1": "8978afe73d4a55f23d9d6148983881d3df3c30d2",
+   "w": 1200,
+   "h": 800,
+   "bytes": 193697,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/greenfield-768.webp",
+     "bytes": 50006,
+     "average": 6.17
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/greenfield-1200.webp",
+     "bytes": 92142,
+     "average": 4.99
+    }
+   ]
+  },
+  "scenes/city-dogs/greenwood.jpg": {
+   "sha1": "f19255a35149c4245c1c736843d36e92b4b0bb94",
+   "w": 1200,
+   "h": 800,
+   "bytes": 199607,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/greenwood-768.webp",
+     "bytes": 52180,
+     "average": 6.56
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/greenwood-1200.webp",
+     "bytes": 98324,
+     "average": 5.09
+    }
+   ]
+  },
+  "scenes/city-dogs/indianapolis.jpg": {
+   "sha1": "f76b0cbcd40ce82f6b9283f28bef6220a6b4af78",
+   "w": 1200,
+   "h": 800,
+   "bytes": 175256,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/indianapolis-768.webp",
+     "bytes": 43254,
+     "average": 5.23
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/indianapolis-1200.webp",
+     "bytes": 81980,
+     "average": 4.16
+    }
+   ]
+  },
+  "scenes/city-dogs/ingalls.jpg": {
+   "sha1": "4ec2ca1f519e41a234db147fa99afb6d2d66f503",
+   "w": 1200,
+   "h": 800,
+   "bytes": 154244,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/ingalls-768.webp",
+     "bytes": 36270,
+     "average": 5.01
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/ingalls-1200.webp",
+     "bytes": 67894,
+     "average": 4.07
+    }
+   ]
+  },
+  "scenes/city-dogs/lapel.jpg": {
+   "sha1": "ee52e044be77da17e0c7650ef875199b4c0a5e7a",
+   "w": 1200,
+   "h": 800,
+   "bytes": 198373,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/lapel-768.webp",
+     "bytes": 54260,
+     "average": 6.43
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/lapel-1200.webp",
+     "bytes": 99622,
+     "average": 5.11
+    }
+   ]
+  },
+  "scenes/city-dogs/lawrence.jpg": {
+   "sha1": "e7cc2f2548e3ce4afa218d21156c991c44fa5bb3",
+   "w": 1200,
+   "h": 800,
+   "bytes": 179902,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/lawrence-768.webp",
+     "bytes": 46344,
+     "average": 5.8
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/lawrence-1200.webp",
+     "bytes": 85248,
+     "average": 4.65
+    }
+   ]
+  },
+  "scenes/city-dogs/markleville.jpg": {
+   "sha1": "6aff2d31d536adc646c7469f78fae7bdb99e82c8",
+   "w": 1200,
+   "h": 800,
+   "bytes": 231996,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/markleville-768.webp",
+     "bytes": 63558,
+     "average": 6.73
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/markleville-1200.webp",
+     "bytes": 120196,
+     "average": 5.46
+    }
+   ]
+  },
+  "scenes/city-dogs/mccordsville.jpg": {
+   "sha1": "bfc9c1b769f983d6177e3e543294e64708f88bf0",
+   "w": 1200,
+   "h": 800,
+   "bytes": 205077,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/mccordsville-768.webp",
+     "bytes": 51842,
+     "average": 5.85
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/mccordsville-1200.webp",
+     "bytes": 98452,
+     "average": 4.72
+    }
+   ]
+  },
+  "scenes/city-dogs/mooresville.jpg": {
+   "sha1": "f75b7cd8b85b6644b1849b4d3940181d305fb83e",
+   "w": 1200,
+   "h": 800,
+   "bytes": 218547,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/mooresville-768.webp",
+     "bytes": 60830,
+     "average": 6.62
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/mooresville-1200.webp",
+     "bytes": 113320,
+     "average": 5.29
+    }
+   ]
+  },
+  "scenes/city-dogs/new-palestine.jpg": {
+   "sha1": "3e55560e114ab67ffa8f8024a58dc4a02f1ba2fe",
+   "w": 1200,
+   "h": 800,
+   "bytes": 162546,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/new-palestine-768.webp",
+     "bytes": 39438,
+     "average": 5.38
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/new-palestine-1200.webp",
+     "bytes": 73952,
+     "average": 4.24
+    }
+   ]
+  },
+  "scenes/city-dogs/noblesville.jpg": {
+   "sha1": "5fba98deb5719e2173b7e70717a31a56e11819da",
+   "w": 1200,
+   "h": 800,
+   "bytes": 177508,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/noblesville-768.webp",
+     "bytes": 45954,
+     "average": 5.46
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/noblesville-1200.webp",
+     "bytes": 83936,
+     "average": 4.33
+    }
+   ]
+  },
+  "scenes/city-dogs/pendleton.jpg": {
+   "sha1": "f685af84b276207598090eb96b869ddb0a62abd2",
+   "w": 1200,
+   "h": 800,
+   "bytes": 204288,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/pendleton-768.webp",
+     "bytes": 55140,
+     "average": 6.1
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/pendleton-1200.webp",
+     "bytes": 100322,
+     "average": 4.95
+    }
+   ]
+  },
+  "scenes/city-dogs/pittsboro.jpg": {
+   "sha1": "bbb0066b207388d75c07a66e5ebcfffa34dd185e",
+   "w": 1200,
+   "h": 800,
+   "bytes": 222900,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/pittsboro-768.webp",
+     "bytes": 63690,
+     "average": 6.62
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/pittsboro-1200.webp",
+     "bytes": 121068,
+     "average": 5.23
+    }
+   ]
+  },
+  "scenes/city-dogs/plainfield.jpg": {
+   "sha1": "c41ed00a002d6226cc7ec19e7f07e54801582f95",
+   "w": 1200,
+   "h": 800,
+   "bytes": 179696,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/plainfield-768.webp",
+     "bytes": 45658,
+     "average": 6.1
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/plainfield-1200.webp",
+     "bytes": 84158,
+     "average": 4.77
+    }
+   ]
+  },
+  "scenes/city-dogs/westfield.jpg": {
+   "sha1": "5373253e48336013de48e57aa01598a437619de2",
+   "w": 1200,
+   "h": 800,
+   "bytes": 183650,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/westfield-768.webp",
+     "bytes": 48494,
+     "average": 5.67
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/westfield-1200.webp",
+     "bytes": 89274,
+     "average": 4.54
+    }
+   ]
+  },
+  "scenes/city-dogs/whitestown.jpg": {
+   "sha1": "ed1b0378cf47af66ffe2b2f9848ed1e96a15333f",
+   "w": 1200,
+   "h": 800,
+   "bytes": 188375,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/whitestown-768.webp",
+     "bytes": 49418,
+     "average": 5.94
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/whitestown-1200.webp",
+     "bytes": 92178,
+     "average": 4.72
+    }
+   ]
+  },
+  "scenes/city-dogs/zionsville.jpg": {
+   "sha1": "b0572fe60a490223882a9615dec12a3eb4ce11fb",
+   "w": 1200,
+   "h": 800,
+   "bytes": 250237,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 512,
+     "file": "derived/scenes/city-dogs/zionsville-768.webp",
+     "bytes": 72732,
+     "average": 7.36
+    },
+    {
+     "w": 1200,
+     "h": 800,
+     "file": "derived/scenes/city-dogs/zionsville-1200.webp",
+     "bytes": 140476,
+     "average": 5.72
+    }
+   ]
+  },
+  "scenes/golden.jpg": {
+   "sha1": "6537df9d4eff19905ba540ed8c8c4ba94482bd71",
+   "w": 760,
+   "h": 950,
+   "bytes": 168969,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 760,
+     "h": 950,
+     "file": "derived/scenes/golden-760.webp",
+     "bytes": 121284,
+     "average": 5.52
+    }
+   ]
+  },
+  "scenes/lab.jpg": {
+   "sha1": "2cdba1160d5883c7616e3cef5febc50823474c2a",
+   "w": 760,
+   "h": 950,
+   "bytes": 149173,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 760,
+     "h": 950,
+     "file": "derived/scenes/lab-760.webp",
+     "bytes": 101806,
+     "average": 5.03
+    }
+   ]
+  },
+  "scenes/scene-fee.jpg": {
+   "sha1": "e78e74147d795fd7cb34aef69cead5e132c9a6bc",
+   "w": 1254,
+   "h": 1254,
+   "bytes": 431288,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 768,
+     "file": "derived/scenes/scene-fee-768.webp",
+     "bytes": 98922,
+     "average": 7.13
+    },
+    {
+     "w": 1254,
+     "h": 1254,
+     "file": "derived/scenes/scene-fee-1254.webp",
+     "bytes": 199762,
+     "average": 5.45
+    }
+   ]
+  },
+  "scenes/scene-footer.jpg": {
+   "sha1": "007b3362e5cafccf0eb192c9809c96dc74cceb78",
+   "w": 1600,
+   "h": 900,
+   "bytes": 287623,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/scenes/scene-footer-768.webp",
+     "bytes": 67912,
+     "average": 8.56
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/scenes/scene-footer-1152.webp",
+     "bytes": 124840,
+     "average": 6.84
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/scenes/scene-footer-1600.webp",
+     "bytes": 191416,
+     "average": 5.66
+    }
+   ]
+  },
+  "scenes/scene-gate.jpg": {
+   "sha1": "0feb478fe3201c9b2bfc415c6666af33a75402af",
+   "w": 1254,
+   "h": 1254,
+   "bytes": 442210,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 768,
+     "file": "derived/scenes/scene-gate-768.webp",
+     "bytes": 101466,
+     "average": 7.15
+    },
+    {
+     "w": 1254,
+     "h": 1254,
+     "file": "derived/scenes/scene-gate-1254.webp",
+     "bytes": 202910,
+     "average": 5.48
+    }
+   ]
+  },
+  "scenes/scene-onetime.jpg": {
+   "sha1": "5df02e2893576704555bc3e619b2659c05f32ea5",
+   "w": 1600,
+   "h": 900,
+   "bytes": 395568,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/scenes/scene-onetime-768.webp",
+     "bytes": 71042,
+     "average": 9.08
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/scenes/scene-onetime-1152.webp",
+     "bytes": 129904,
+     "average": 7.29
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/scenes/scene-onetime-1600.webp",
+     "bytes": 202806,
+     "average": 5.94
+    }
+   ]
+  },
+  "scenes/scene-ontheway.jpg": {
+   "sha1": "901509387a7e7be2d1466b895341527dfac9a613",
+   "w": 1600,
+   "h": 900,
+   "bytes": 410315,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/scenes/scene-ontheway-768.webp",
+     "bytes": 73992,
+     "average": 8.86
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/scenes/scene-ontheway-1152.webp",
+     "bytes": 135756,
+     "average": 7.25
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/scenes/scene-ontheway-1600.webp",
+     "bytes": 215786,
+     "average": 5.92
+    }
+   ]
+  },
+  "scenes/scene-sanitize.jpg": {
+   "sha1": "a3420a22eec1c4a6b52bea826f35c4cd06285311",
+   "w": 1600,
+   "h": 900,
+   "bytes": 358762,
+   "quality": 0.75,
+   "variants": [
+    {
+     "w": 768,
+     "h": 432,
+     "file": "derived/scenes/scene-sanitize-768.webp",
+     "bytes": 61042,
+     "average": 7.75
+    },
+    {
+     "w": 1152,
+     "h": 648,
+     "file": "derived/scenes/scene-sanitize-1152.webp",
+     "bytes": 113918,
+     "average": 6.28
+    },
+    {
+     "w": 1600,
+     "h": 900,
+     "file": "derived/scenes/scene-sanitize-1600.webp",
+     "bytes": 181712,
+     "average": 5.17
+    }
+   ]
+  }
+ },
+ "logo": {
+  "sha1": "585f0d95c18e528dfe4ce30a9f3d6447e49a2f5a",
+  "bytes": 147610,
+  "files": [
+   {
+    "file": "derived/brand/logo-mark-158.webp",
+    "w": 158,
+    "h": 167,
+    "bytes": 9820
+   },
+   {
+    "file": "derived/brand/logo-mark-316.webp",
+    "w": 316,
+    "h": 334,
+    "bytes": 24198
+   },
+   {
+    "file": "derived/brand/logo-mark-64.png",
+    "w": 64,
+    "h": 68,
+    "bytes": 8989
+   }
+  ]
+ },
+ "share": {
+  "about": {
+   "file": "derived/share/about.jpg",
+   "from": "heroes/about.jpg",
+   "sha1": "16d440dceacd1082196ad8ae05eb4b7141930d98",
+   "rule": "{\"height\":840,\"x\":\"right\",\"y\":0.5}",
+   "quality": 0.82,
+   "crop": [
+    0,
+    30,
+    1600,
+    840
+   ],
+   "bytes": 186002
+  },
+  "additional": {
+   "file": "derived/share/additional.jpg",
+   "from": "heroes/additional.jpg",
+   "sha1": "d769fbf96b785c895d1ea6828e5c273405ac22ab",
+   "rule": "{\"height\":840,\"x\":\"right\",\"y\":0.5}",
+   "quality": 0.82,
+   "crop": [
+    0,
+    30,
+    1600,
+    840
+   ],
+   "bytes": 183505
+  },
+  "anderson": {
+   "file": "derived/share/anderson.jpg",
+   "from": "heroes/anderson.jpg",
+   "sha1": "eaec8fb38877a24728219f541529321112e04042",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 193125
+  },
+  "avon": {
+   "file": "derived/share/avon.jpg",
+   "from": "heroes/avon.jpg",
+   "sha1": "3c4221e1b1d99da11a461c074ec90007f92734dd",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 189287
+  },
+  "brownsburg": {
+   "file": "derived/share/brownsburg.jpg",
+   "from": "heroes/brownsburg.jpg",
+   "sha1": "32d46522ba125795c60a941d7eb95b70deb5a27e",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 186357
+  },
+  "camby": {
+   "file": "derived/share/camby.jpg",
+   "from": "heroes/camby.jpg",
+   "sha1": "c9436b6d10a7569b3b8040e6dc713224fa7e76cd",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 174857
+  },
+  "carmel": {
+   "file": "derived/share/carmel.jpg",
+   "from": "heroes/carmel.jpg",
+   "sha1": "61211f165fc1ee12389a2fed0bec69f8449b4367",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 193555
+  },
+  "cicero": {
+   "file": "derived/share/cicero.jpg",
+   "from": "heroes/cicero.jpg",
+   "sha1": "dc480e03a0be9b7feb2795de13b143d194b7ecc4",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 182465
+  },
+  "danville": {
+   "file": "derived/share/danville.jpg",
+   "from": "heroes/danville.jpg",
+   "sha1": "49ab6df2289d0b026a60b69bd88be0a8880670b2",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 188993
+  },
+  "dog-waste-removal": {
+   "file": "derived/share/dog-waste-removal.jpg",
+   "from": "heroes/dog-waste-removal.jpg",
+   "sha1": "e97a48b967bfa82062425c992ea2854c8f615c97",
+   "rule": "{\"height\":780,\"x\":\"right\",\"y\":0.58}",
+   "quality": 0.82,
+   "crop": [
+    114,
+    70,
+    1486,
+    780
+   ],
+   "bytes": 186554
+  },
+  "faq": {
+   "file": "derived/share/faq.jpg",
+   "from": "heroes/faq.jpg",
+   "sha1": "5337206b8e8e45ae821845a930602c1fd807f08f",
+   "rule": "{\"height\":840,\"x\":\"right\",\"y\":0.75}",
+   "quality": 0.82,
+   "crop": [
+    0,
+    45,
+    1600,
+    840
+   ],
+   "bytes": 177544
+  },
+  "fishers": {
+   "file": "derived/share/fishers.jpg",
+   "from": "heroes/fishers.jpg",
+   "sha1": "910efcaf8be25b522de82181463764b56f532e58",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 174189
+  },
+  "fortville": {
+   "file": "derived/share/fortville.jpg",
+   "from": "heroes/fortville.jpg",
+   "sha1": "fb64a41d63cca0e6176f1cadec4e0f47637a37b8",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 228494
+  },
+  "greenfield": {
+   "file": "derived/share/greenfield.jpg",
+   "from": "heroes/greenfield.jpg",
+   "sha1": "7235f9ee8442e5c17fc332840d97472d3a74b89f",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 202751
+  },
+  "greenwood": {
+   "file": "derived/share/greenwood.jpg",
+   "from": "heroes/greenwood.jpg",
+   "sha1": "db0ff4601bd9fe98a18e498746054935ebdb838b",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 207147
+  },
+  "index": {
+   "file": "derived/share/index.jpg",
+   "from": "heroes/home-desktop.jpg",
+   "sha1": "eebdf34f233885fb22e81a1c1454b4f7263ab4f2",
+   "rule": "{\"height\":630,\"x\":\"right\",\"y\":0.57}",
+   "quality": 0.82,
+   "crop": [
+    400,
+    154,
+    1200,
+    630
+   ],
+   "bytes": 162710
+  },
+  "indianapolis": {
+   "file": "derived/share/indianapolis.jpg",
+   "from": "heroes/indianapolis.jpg",
+   "sha1": "517f145676499781bdae8f64f0179b3fa6912adc",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 190937
+  },
+  "ingalls": {
+   "file": "derived/share/ingalls.jpg",
+   "from": "heroes/ingalls.jpg",
+   "sha1": "b4a7fd6492bdfd11ce51d0e1f34fa3da470b645e",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 199192
+  },
+  "lapel": {
+   "file": "derived/share/lapel.jpg",
+   "from": "heroes/lapel.jpg",
+   "sha1": "1a05f7ec726eb55a2aa7ed6145b45df1ba05c5ac",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 171550
+  },
+  "lawrence": {
+   "file": "derived/share/lawrence.jpg",
+   "from": "heroes/lawrence.jpg",
+   "sha1": "6ea4f5fa0966966baab80ea981a6f01c8a6de19c",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 217455
+  },
+  "markleville": {
+   "file": "derived/share/markleville.jpg",
+   "from": "heroes/markleville.jpg",
+   "sha1": "73934731d6b821f77490d7adb1d92b5bc77371ca",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 170648
+  },
+  "mccordsville": {
+   "file": "derived/share/mccordsville.jpg",
+   "from": "heroes/mccordsville.jpg",
+   "sha1": "159285c9e27f7d48b94ff643cae73b228c55c213",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 215265
+  },
+  "mooresville": {
+   "file": "derived/share/mooresville.jpg",
+   "from": "heroes/mooresville.jpg",
+   "sha1": "055f40f7f91f65e90fa5a11ff090bb427c91c90b",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 190790
+  },
+  "new-palestine": {
+   "file": "derived/share/new-palestine.jpg",
+   "from": "heroes/new-palestine.jpg",
+   "sha1": "8b721d5f7443d6d4e6cb049261d708693618334f",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 210206
+  },
+  "noblesville": {
+   "file": "derived/share/noblesville.jpg",
+   "from": "heroes/noblesville.jpg",
+   "sha1": "3684c6b758d418ae621d4e87aed96784bc56c63c",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 199744
+  },
+  "page-not-found": {
+   "file": "derived/share/page-not-found.jpg",
+   "from": "scenes/scene-footer.jpg",
+   "sha1": "007b3362e5cafccf0eb192c9809c96dc74cceb78",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.5,\"from\":\"scenes/scene-footer.jpg\"}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    70,
+    1448,
+    760
+   ],
+   "bytes": 170049
+  },
+  "pendleton": {
+   "file": "derived/share/pendleton.jpg",
+   "from": "heroes/pendleton.jpg",
+   "sha1": "4814e19e54afb05616e367ff37f6109447c4daf9",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 201565
+  },
+  "pittsboro": {
+   "file": "derived/share/pittsboro.jpg",
+   "from": "heroes/pittsboro.jpg",
+   "sha1": "af6598ac82a997fa394a074df82327411e1ab6d5",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 191766
+  },
+  "plainfield": {
+   "file": "derived/share/plainfield.jpg",
+   "from": "heroes/plainfield.jpg",
+   "sha1": "3eaea58a14279bbd82cf170fc98df69f4a312ffa",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 208267
+  },
+  "privacy-policy": {
+   "file": "derived/share/privacy-policy.jpg",
+   "from": "scenes/scene-gate.jpg",
+   "sha1": "0feb478fe3201c9b2bfc415c6666af33a75402af",
+   "rule": "{\"height\":658,\"x\":\"center\",\"y\":0.2,\"from\":\"scenes/scene-gate.jpg\"}",
+   "quality": 0.82,
+   "crop": [
+    1,
+    119,
+    1253,
+    658
+   ],
+   "bytes": 144127
+  },
+  "quote": {
+   "file": "derived/share/quote.jpg",
+   "from": "heroes/quote.jpg",
+   "sha1": "4323839cf795a77d5d09d8db95519d23385c1d50",
+   "rule": "{\"height\":840,\"x\":\"right\",\"y\":0.4}",
+   "quality": 0.82,
+   "crop": [
+    0,
+    24,
+    1600,
+    840
+   ],
+   "bytes": 197209
+  },
+  "reviews": {
+   "file": "derived/share/reviews.jpg",
+   "from": "heroes/reviews.jpg",
+   "sha1": "bdd052ea12804ae109391bd4bb8e189d8f7c5988",
+   "rule": "{\"height\":720,\"x\":\"right\",\"y\":0.52}",
+   "quality": 0.82,
+   "crop": [
+    229,
+    94,
+    1371,
+    720
+   ],
+   "bytes": 179610
+  },
+  "sanitizing-and-deodorizing": {
+   "file": "derived/share/sanitizing-and-deodorizing.jpg",
+   "from": "heroes/sanitizing-and-deodorizing.jpg",
+   "sha1": "2487948eb4dc85750159c18c494f0227fd5d6086",
+   "rule": "{\"height\":780,\"x\":\"right\",\"y\":0.36}",
+   "quality": 0.82,
+   "crop": [
+    114,
+    43,
+    1486,
+    780
+   ],
+   "bytes": 170609
+  },
+  "terms-conditions": {
+   "file": "derived/share/terms-conditions.jpg",
+   "from": "scenes/scene-ontheway.jpg",
+   "sha1": "901509387a7e7be2d1466b895341527dfac9a613",
+   "rule": "{\"height\":840,\"x\":\"right\",\"y\":0.33,\"from\":\"scenes/scene-ontheway.jpg\"}",
+   "quality": 0.82,
+   "crop": [
+    0,
+    20,
+    1600,
+    840
+   ],
+   "bytes": 197890
+  },
+  "welcome": {
+   "file": "derived/share/welcome.jpg",
+   "from": "heroes/welcome.jpg",
+   "sha1": "96a778e5478ae42e0631eaf380b90e06d060ee5f",
+   "rule": "{\"height\":720,\"x\":\"right\",\"y\":0.36}",
+   "quality": 0.82,
+   "crop": [
+    229,
+    65,
+    1371,
+    720
+   ],
+   "bytes": 162256
+  },
+  "westfield": {
+   "file": "derived/share/westfield.jpg",
+   "from": "heroes/westfield.jpg",
+   "sha1": "31c872036b20f7b05a81aec5dc29d25c31f5926d",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 189939
+  },
+  "whitestown": {
+   "file": "derived/share/whitestown.jpg",
+   "from": "heroes/whitestown.jpg",
+   "sha1": "9083256bb4c8f14e7db4d812e909f7211b680741",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 182289
+  },
+  "yard-guide": {
+   "file": "derived/share/yard-guide.jpg",
+   "from": "heroes/yard-guide.jpg",
+   "sha1": "0743a4a19f4641974e7f5875af3d939fbd443a60",
+   "rule": "{\"height\":660,\"x\":\"right\",\"y\":0.72}",
+   "quality": 0.82,
+   "crop": [
+    343,
+    173,
+    1257,
+    660
+   ],
+   "bytes": 170915
+  },
+  "yard-guide-article": {
+   "file": "derived/share/yard-guide-article.jpg",
+   "from": "scenes/scene-footer.jpg",
+   "sha1": "007b3362e5cafccf0eb192c9809c96dc74cceb78",
+   "rule": "{\"height\":780,\"x\":\"right\",\"y\":0.53}",
+   "quality": 0.82,
+   "crop": [
+    114,
+    64,
+    1486,
+    780
+   ],
+   "bytes": 174059
+  },
+  "zionsville": {
+   "file": "derived/share/zionsville.jpg",
+   "from": "heroes/zionsville.jpg",
+   "sha1": "aa67b25c5cac164a29875a339a2b3f297a3a54a3",
+   "rule": "{\"height\":760,\"x\":\"right\",\"y\":0.8}",
+   "quality": 0.82,
+   "crop": [
+    152,
+    112,
+    1448,
+    760
+   ],
+   "bytes": 215516
+  }
+ }
+}

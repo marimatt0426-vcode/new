@@ -1,0 +1,263 @@
+/* family-city.css : what the 17 city pages add to the Cover Story system. Shown on kit-city.html; the recipe is CITY-PAGES.md.
+   Same tokens, radii, shadows and type sizes as css/site.css. Every class starts with .city- and no shared class is restyled
+   (a shared component placed INSIDE a city component is only sized or placed, the way .ticket sizes its .price). */
+
+/* C1. LOCATOR MAP ----------------------------------------------------------------------------------------------
+   The shared map plate (.map, kit component 20) with ONE community lit: a small gold seal under a larger pin and the
+   name on a navy flag. Drawn by  node _work/city-map.mjs <slug> --write ; never typed.
+   Its note sits UNDER the drawing at every width (never over it) and carries the key: what a paw pin and a dot mean. */
+.city-map .city-map__flag text {
+  font-family: var(--f-display); font-weight: 800; font-size: 19px; letter-spacing: .03em; fill: #fff; stroke: none;
+}
+.city-map .map__tall .city-map__flag text { font-size: 17px; }
+.city-map__here { filter: drop-shadow(0 3px 4px rgba(6, 38, 68, .28)); }
+.city-map .city-map__note { position: static; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: -6px 16px 14px; padding: 0 2px; background: none; }
+.city-map__key { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.city-map__key img { width: 18px; height: 18px; flex: none; }
+.city-map__dot { width: 11px; height: 11px; margin-inline: 3px; flex: none; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 2.5px var(--blue-700); }
+
+/* C2. ZIP TICKET -----------------------------------------------------------------------------------------------
+   "ZIP codes we cover here", as real text on a white ticket (the cut of the one-time ticket, in white, so it also
+   sits on navy). EVERY STAMP IS A BUTTON: a one-field form (data-pp-zip-form) that opens the price builder with that
+   ZIP answered, so what looks like a one-tap chip is one. One gold button ends the ticket.
+   1 to 3 ZIPs sit in the row of the ticket; more take .city-zips--many and a board whose columns follow the TICKET's
+   own width (a container query, so it holds in the kit's padded box and on a 320px phone too): 3 large stamps a row
+   in a ticket too narrow for six 44px taps, 6 small ones from 281px inside (a 360px phone and up; the size the price
+   builder shows the same ZIPs at), 6 large from a 620px window, 9 from 850px inside (a 1000px window).
+   Use a number that fills the rows: 18. */
+.city-zips {
+  position: relative; display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px 14px; align-items: center;
+  padding: 20px 22px 22px; border-radius: 22px; background: #fff; color: var(--ink-700); text-align: left;
+  /* the two notches of a ticket, as two whole layers cut out of each other (no join down the middle) */
+  -webkit-mask: radial-gradient(circle 12px at 0 50%, transparent 98%, #000), radial-gradient(circle 12px at 100% 50%, transparent 98%, #000);
+  -webkit-mask-composite: source-in;
+          mask: radial-gradient(circle 12px at 0 50%, transparent 98%, #000), radial-gradient(circle 12px at 100% 50%, transparent 98%, #000);
+          mask-composite: intersect;
+}
+.city-zips__ico { width: 56px; height: 56px; }
+.city-zips .city-zips__title { font: 800 clamp(25px, 2.6vw, 30px)/1.02 var(--f-display); color: var(--navy); }
+.city-zips__text { grid-column: 1 / -1; font-size: 15.5px; line-height: 1.5; color: var(--ink-700); }
+.city-zips__list { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px; }
+.city-zips__list > li { flex: 1 1 0; min-width: 0; }
+.city-zip { display: block; margin: 0; }
+.city-zip__btn {
+  -webkit-appearance: none; appearance: none; display: grid; place-items: center; width: 100%; min-height: 48px; margin: 0; padding: 13px 10px 10px;
+  border-radius: 16px; border: 2px solid var(--sky-200); background: var(--sky-050); box-shadow: var(--sh-1); cursor: pointer;
+  font: 800 44px/.9 var(--f-display); letter-spacing: .02em; color: var(--navy); white-space: nowrap;
+  transition: transform .16s var(--ease), box-shadow .16s, border-color .16s, background-color .16s;
+}
+@media (hover: hover) { .city-zip__btn:hover { border-color: var(--gold); background: var(--gold-050); transform: translateY(-2px); box-shadow: var(--sh-2); } }
+.city-zip__btn:active { transform: translateY(1px); box-shadow: var(--sh-1); }
+.city-zips__list > li:only-child .city-zip__btn { font-size: 64px; padding-block: 15px 12px; }
+/* exactly three stamps (Anderson): a size of their own, so 5 digits fit a third of a phone ticket */
+.city-zips__list > li:first-child:nth-last-child(3) .city-zip__btn, .city-zips__list > li:first-child:nth-last-child(3) ~ li .city-zip__btn { font-size: 33px; padding-inline: 4px; }
+/* exactly four stamps (Carmel, with the 46290 stamp of October 13): two rows of two on a phone. From 800px the four stand in
+   one row of their own under the words and the button under them: in the words' row four stamps squeeze the words to a
+   ribbon. The ticket carries .city-zips--four (the page source and _work/city-map.mjs write it). */
+.city-zips--four .city-zips__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.city-zips--four .city-zip__btn { font-size: clamp(34px, 11vw, 44px); padding-inline: 6px; }
+.city-zips--many { container-type: inline-size; }
+.city-zips__list--many { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.city-zips__list--many .city-zip__btn { font-size: 27px; padding: 12px 4px 9px; border-radius: 12px; }
+@container (min-width: 281px) and (max-width: 543.98px) {
+  .city-zips__list--many { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; margin-inline: -4px; }
+  .city-zips__list--many .city-zip__btn { min-height: 46px; font-size: clamp(15px, 4.5vw, 19px); letter-spacing: 0; padding: 10px 0 8px; border-radius: 10px; }
+}
+@media (min-width: 620px) { .city-zips__list--many { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+.city-zips__cta { grid-column: 1 / -1; }
+.city-zips__cta .btn { display: flex; width: 100%; }
+/* 800px and up. To 1199px the ticket is two rows: the words, then the stamps with the button at the end of their row
+   (one row would squeeze the words to a ribbon). From 1200px one to three stamps and the button sit in the words' row. */
+@media (min-width: 800px) {
+  .city-zips { grid-template-columns: 72px minmax(0, 1fr) auto; gap: 6px 22px; padding: 24px 34px; }
+  .city-zips__ico { width: 72px; height: 72px; grid-row: 1 / span 2; }
+  .city-zips .city-zips__title { grid-column: 2 / -1; align-self: end; }
+  .city-zips__text { grid-column: 2 / -1; grid-row: 2; align-self: start; }
+  .city-zips__list { grid-column: 1 / span 2; grid-row: 3; flex-wrap: nowrap; margin-top: 14px; }
+  .city-zips__list > li { flex: none; }
+  .city-zip__btn { padding-inline: 18px; }
+  .city-zips__list > li:first-child:nth-last-child(3) .city-zip__btn, .city-zips__list > li:first-child:nth-last-child(3) ~ li .city-zip__btn { font-size: 36px; padding-inline: 12px; }
+  .city-zips__cta { grid-column: 3; grid-row: 3; align-self: center; margin-top: 14px; }
+  .city-zips__cta .btn { display: inline-flex; width: auto; }
+  /* many ZIPs: the words and the button share the first row, the stamps fill the row under them */
+  .city-zips--many .city-zips__title, .city-zips--many .city-zips__text { grid-column: 2; }
+  .city-zips--many .city-zips__cta { grid-column: 3; grid-row: 1 / span 2; margin-top: 0; }
+  .city-zips--many .city-zips__list { grid-column: 1 / -1; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-top: 16px; padding: 18px 0 0; border-top: 3px dotted rgba(6, 38, 68, .3); }
+  .city-zips--many .city-zips__list > li { flex: initial; }
+  .city-zips--many .city-zip__btn { font-size: 30px; padding: 13px 6px 10px; }
+}
+@container (min-width: 850px) {
+  .city-zips--many .city-zips__list { grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 8px; margin-top: 12px; padding-top: 14px; }
+  .city-zips--many .city-zip__btn { padding: 11px 6px 8px; }
+}
+@media (min-width: 1200px) {
+  .city-zips:not(.city-zips--many) { grid-template-columns: 72px minmax(0, 1fr) auto auto; }
+  .city-zips:not(.city-zips--many) .city-zips__title, .city-zips:not(.city-zips--many) .city-zips__text { grid-column: 2; }
+  .city-zips:not(.city-zips--many) .city-zips__list { grid-column: 3; grid-row: 1 / span 2; margin-top: 0; padding-left: 26px; border-left: 3px dotted rgba(6, 38, 68, .3); }
+  .city-zips:not(.city-zips--many) .city-zips__cta { grid-column: 4; grid-row: 1 / span 2; margin-top: 0; }
+}
+@media (min-width: 800px) {
+  .city-zips.city-zips--four { grid-template-columns: 72px minmax(0, 1fr); }
+  .city-zips.city-zips--four .city-zips__title, .city-zips.city-zips--four .city-zips__text { grid-column: 2; }
+  .city-zips.city-zips--four .city-zips__list { grid-column: 1 / -1; grid-row: 3; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; padding: 18px 0 0; border-left: 0; border-top: 3px dotted rgba(6, 38, 68, .3); }
+  .city-zips.city-zips--four .city-zips__list > li { flex: initial; }
+  .city-zips.city-zips--four .city-zips__cta { grid-column: 1 / -1; grid-row: 4; justify-self: center; margin-top: 14px; }
+}
+
+/* C3. STARTING PRICES --------------------------------------------------------------------------------------------
+   The three "from" prices and the one-time price as one compact list (the look of the price rows on the service
+   page), for the words column of the prices section. Every figure is a .price with data-price. */
+.city-rates { background: #fff; border-radius: var(--r-card); box-shadow: var(--sh-1); padding: 6px 18px 14px; }
+.city-rate { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 8px 0; border-bottom: 2px dotted rgba(6, 38, 68, .2); }
+.city-rate > img { width: 46px; height: 46px; flex: none; }
+.city-rate__name { font: 700 17px/1.2 var(--f-text); color: var(--navy); }
+.city-rate__name small { display: block; font: 500 13.5px/1.3 var(--f-text); color: var(--ink-500); margin-top: 2px; }
+.city-rate__lead { flex: 1 1 auto; }
+.city-rate__amt { display: grid; justify-items: end; gap: 3px; text-align: right; }
+.city-rate__amt small { font: 700 12.5px/1 var(--f-display); letter-spacing: .14em; text-transform: uppercase; color: var(--blue-700); }
+.city-rate .price { font-size: 38px; }
+.city-rate--star { margin-inline: -10px; padding-inline: 10px; border-radius: 14px; background: var(--gold-050); border-bottom-color: transparent; }
+.city-rate--star .city-rate__name small { color: var(--ink-700); }
+.city-rate--once { margin: 10px -10px 0; padding: 10px 12px 10px 10px; border: 0; border-radius: 16px; background: var(--gold); }
+.city-rate--once .city-rate__name small, .city-rate--once .city-rate__amt small { color: var(--navy); }
+.city-rates__note { margin-top: 12px; font-size: 14px; line-height: 1.45; color: var(--ink-500); }
+.city-rates__more { display: flex; align-items: center; width: fit-content; min-height: 44px; font: 600 15px/1.2 var(--f-text); color: var(--blue-700); text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+/* C4. NEARBY PAGES, IN THE MAP BLOCK -------------------------------------------------------------------------------
+   The neighbours the map names, as links, in the words column beside the locator map (under it on a phone): a label,
+   .chips.chips--pair.city-chips with "All service areas" last, and the communities without a page as one plain
+   sentence (.city-also). An odd count never strands a chip: the last one takes the whole row.
+   .city-near--hub (Indianapolis, 16 neighbours) sits in the words column like every other page's list. Its board of
+   18 ("You are here", .city-chip--here, gold, not a link; the 16 neighbours; "All service areas") is inside
+   details.city-more, closed until asked for: the map beside it already names all 16, and the open board cost the
+   page 270px on a phone and a row of its own on a desktop. The summary (.city-more__sum) is one pill with the count.
+   Open: 3 across at every width (pin icons only from 620 to 899px, where a chip has the room). The split of the hub
+   page takes .city-hub, so the map stays where it is when the board opens. */
+.city-near .chips__label { margin: 0 0 8px; }
+.split__text > .city-near { margin-top: 22px; }
+.city-chips > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.city-also { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 15px; line-height: 1.45; color: var(--ink-700); }
+.city-also img { width: 30px; height: 30px; flex: none; }
+.city-near--hub .city-chips { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.city-near--hub .city-chips > li:first-child { grid-column: span 2; }   /* "You are here" takes two cells: with the 25 towns that is nine full rows of three */
+.city-near--hub .city-chips > li:last-child { grid-column: 1 / -1; }   /* "All service areas" closes the board on its own row */
+.city-near--hub .chip { justify-content: center; padding: 6px 6px; font-size: 14px; text-align: center; }
+.city-near--hub .chip img { display: none; }
+.city-chip--here { background: var(--gold); box-shadow: none; font-weight: 700; }
+.city-more > summary { list-style: none; }
+.city-more > summary::-webkit-details-marker { display: none; }
+.city-more__sum {
+  display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 8px 16px 8px 12px; border-radius: 16px; background: #fff;
+  box-shadow: inset 0 0 0 2px var(--line), var(--sh-1); cursor: pointer; font-size: 16px; line-height: 1.3; color: var(--ink-700);
+  transition: box-shadow .16s, background-color .16s;
+}
+@media (hover: hover) { .city-more__sum:hover { box-shadow: inset 0 0 0 2px var(--cyan), var(--sh-1); background: var(--cyan-050); } }
+.city-more__sum > img:first-child { width: 30px; height: 30px; flex: none; }
+.city-more__sum > span { flex: 1 1 auto; min-width: 0; }
+.city-more__sum b { color: var(--navy); font-weight: 700; }
+.city-more__chev { width: 22px; height: 22px; flex: none; transition: transform .25s var(--ease); }
+.city-more[open] .city-more__chev { transform: rotate(180deg); }
+.city-more[open] > .chips__label { margin-top: 16px; }
+@media (min-width: 620px) {
+  .city-near--hub .city-chips { gap: 8px; }
+  .city-near--hub .chip { justify-content: flex-start; padding: 6px 12px 6px 8px; font-size: 15px; text-align: left; }
+  .city-near--hub .chip--all { justify-content: center; }
+  .city-near--hub .chip img { display: block; }
+}
+@media (min-width: 900px) {
+  .city-hub { align-items: start; }
+  .city-near--hub .city-chips { gap: 6px; }
+  .city-near--hub .chip { justify-content: center; padding: 6px 6px; font-size: 14.5px; text-align: center; }
+  .city-near--hub .chip img { display: none; }
+}
+
+/* C5. PRICES AND PROOF ---------------------------------------------------------------------------------------------
+   One section for "what a visit includes and what it costs" (gold ground, id="start-up-fee"): the heading with the
+   policy lead, the starting prices (C3), the explainer token and one gold button; beside them the fee scene with its
+   $0 seal and, under it, three real-visit receipts. Four areas placed by one grid:
+     phone  : heading (the seal takes the emblem's place; the scene is not shown), prices, proof
+     tablet : heading, scene, prices, proof
+     900px+ : scene over proof in the picture half, heading over prices in the words column (the split's columns) */
+.city-deal { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px var(--gap); }
+.city-deal__head { order: 1; }
+.city-deal__art { order: 2; width: 100%; max-width: 460px; margin-inline: auto; }
+.city-deal__rates { order: 3; }
+.city-deal__proof { order: 4; }
+.city-deal__rates > * + * { margin-top: 18px; }
+.city-deal__cta .btn { display: flex; width: 100%; }
+.city-deal__seal { display: none; }
+.city-deal__proof { padding-top: 22px; border-top: 2px dotted rgba(6, 38, 68, .22); }
+.city-deal__proofhead { display: grid; gap: 4px; margin-bottom: 18px; text-align: center; }
+.city-deal__proofhead p { font-size: 15.5px; line-height: 1.45; color: var(--ink-700); }
+.city-deal__more { display: flex; align-items: center; gap: 8px; width: fit-content; min-height: 44px; margin: 10px auto 0; font: 700 19px/1 var(--f-display); color: var(--navy); text-decoration: none; background: linear-gradient(var(--cyan), var(--cyan)) no-repeat 0 calc(100% - 9px) / calc(100% - 30px) 3px; }
+.city-deal__more img { width: 20px; height: 20px; transition: transform .2s var(--ease); }
+@media (hover: hover) { .city-deal__more:hover img { transform: translateX(4px); } }
+@media (max-width: 619.98px) {
+  .city-deal { gap: 24px; }
+  .city-deal__art { display: none; }
+  .city-deal__head .city-deal__emblem { display: none; }
+  .city-deal__head .city-deal__seal { --seal: 104px; display: grid; margin-bottom: 2px; }
+}
+@media (min-width: 620px) { .city-deal__cta .btn { display: inline-flex; width: auto; } }
+@media (min-width: 900px) {
+  .city-deal { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: auto 1fr auto; row-gap: 0; }
+  .city-deal__art { grid-column: 1 / span 6; grid-row: 1 / span 2; align-self: start; max-width: none; margin: 0; }
+  .city-deal__art .frame__img { aspect-ratio: 6 / 5; object-position: 50% 48%; }   /* the square scene, trimmed of sky and lawn so the picture half is no taller than the words */
+  .city-deal__proof { grid-column: 1 / span 6; grid-row: 3; align-self: end; margin-top: 44px; }
+  .city-deal__head { grid-column: 8 / span 5; grid-row: 1; }
+  .city-deal__rates { grid-column: 8 / span 5; grid-row: 2 / span 2; margin-top: 20px; }
+  .city-deal__proofhead { text-align: left; }
+  .city-deal__more { margin-inline: 0; }
+}
+/* 900 to 1199px: the picture half is too narrow for three receipts side by side, so they are slips (photo left), as on a phone */
+@media (min-width: 900px) and (max-width: 1199.98px) {
+  .city-deal__proof .receipts--3 { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .city-deal__proof .receipt { display: grid; grid-template-columns: 38% minmax(0, 1fr); align-items: center; padding: 8px; }
+  .city-deal__proof .receipt__body { padding: 2px 4px 2px 12px; }
+  .city-deal__proof .receipt__tag { left: 13px; top: 13px; }
+}
+@media (min-width: 1200px) { .city-deal__proofhead { grid-template-columns: auto minmax(0, 1fr); align-items: baseline; gap: 4px 16px; } }
+
+/* C6. COMPACT STEPS ------------------------------------------------------------------------------------------------
+   .steps.steps--3.city-steps : the shared steps (kit 15), unchanged from 620px. On a phone the three steps of the
+   route review become one tight strip: a smaller number badge, the sticker tucked on its corner, closer rows. */
+@media (max-width: 619.98px) {
+  .city-steps { gap: 16px; }
+  .city-steps .step { grid-template-columns: 48px minmax(0, 1fr); gap: 2px 14px; }
+  .city-steps .step__num { width: 48px; height: 48px; font-size: 25px; }
+  .city-steps .step__ico { left: 28px; top: 28px; width: 30px; height: 30px; }
+  .city-steps .step__text { font-size: 15px; line-height: 1.45; }
+  .city-steps .step::before { left: 23px; top: 64px; bottom: -12px; }
+}
+
+/* C7. YARD GUIDE ROWS ----------------------------------------------------------------------------------------------
+   .city-guides around the {{GUIDE_CARDS}} token. From 900px the shared cards (kit 19) are untouched, three across.
+   Below that, where the shared grid is one column and a cover would fill the screen, each card is a row: the cover as
+   a thumbnail at the left, its ribbon above the title, the link label under it. The excerpt shows from 620px;
+   on a phone the row is ribbon, title and link. The whole row is the link. */
+@media (max-width: 899.98px) {
+  .city-guides .grid { gap: 12px; }
+  .city-guides .gcard { display: grid; grid-template-columns: clamp(118px, 30%, 240px) minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 14px; align-items: start; margin-top: 0; padding: 10px 12px 8px 10px; border-radius: 20px; background: #fff; box-shadow: var(--sh-1); }
+  .city-guides .gcard .ribbon { position: static; grid-column: 2; grid-row: 1; justify-self: start; margin: 2px 0 6px; }
+  .city-guides .gcard__cover { grid-column: 1; grid-row: 1 / span 2; align-self: center; border-radius: 12px; box-shadow: none; }
+  .city-guides .gcard__body { grid-column: 2; grid-row: 2; padding: 0; }
+  .city-guides .gcard__more { padding-top: 0; }
+}
+@media (max-width: 619.98px) {
+  .city-guides .gcard__title { font-size: 19px; line-height: 1.12; }
+  .city-guides .gcard__text { display: none; }
+  .city-guides .gcard__more span { font-size: 17px; }
+}
+@media (min-width: 620px) and (max-width: 899.98px) {
+  .city-guides .gcard { column-gap: 20px; padding: 12px 18px 10px 12px; }
+  .city-guides .gcard__text { margin-top: 4px; }
+}
+
+/* C8. THE TOWN'S OWN PICTURE ---------------------------------------------------------------------------------------
+   figure.frame.frame--flip.frame--wide.city-pic : the picture of the yard section, one per town
+   (assets/scenes/city-dogs/<slug>.jpg, 3:2, shown in the shared wide frame, kit 10). The dog fills these pictures down
+   to its paws, so from 700px the caption does not lie on the picture: it hangs on the bottom edge, as the shared
+   caption already does on a phone. */
+@media (min-width: 700px) {
+  .city-pic .frame__cap { position: relative; z-index: 1; left: auto; bottom: auto; width: fit-content; max-width: min(86%, 440px); margin: -24px 0 0 28px; }
+}

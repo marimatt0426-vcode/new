@@ -1,0 +1,441 @@
+<!--
+{
+  "title": "Central Indiana Dog Waste Removal Service Areas | Purge Pros",
+  "description": "Explore Purge Pros dog waste removal areas around Indianapolis. Find your city, check the service ZIP, and request an exact-address route review.",
+  "css": ["css/family-areas.css"],
+  "hero": {
+    "recipe": "plain",
+    "scene": "heroes/additional.jpg",
+    "alt": "Purge Pros mascot with a scooper over one shoulder beside a golden retriever on a neighborhood sidewalk, with a mailbox and a row of homes behind.",
+    "kw": "All Purge Pros service areas",
+    "title": ["Dog waste removal", "across Central Indiana."],
+    "lead": "Find the closest Purge Pros route, then check your ZIP code to see your price.",
+    "buttons": [{ "label": "Check my ZIP", "href": "#areas-zip" }, "call"]
+  },
+  "facts": {
+    "label": "The Purge Pros service area at a glance",
+    "items": [
+      "google",
+      "communities",
+      "pay",
+      "proof"
+    ]
+  },
+  "schema": {
+    "type": "CollectionPage",
+    "name": "Central Indiana Dog Waste Removal Service Areas",
+    "breadcrumb": ["Service Areas"],
+    "extra": [
+      {
+        "@type": "ItemList",
+        "@id": "https://itspurgepros.com/additional#city-pages",
+        "name": "Purge Pros city service-area pages",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Indianapolis", "url": "https://itspurgepros.com/indianapolis" },
+          { "@type": "ListItem", "position": 2, "name": "Fishers", "url": "https://itspurgepros.com/fishers" },
+          { "@type": "ListItem", "position": 3, "name": "Noblesville", "url": "https://itspurgepros.com/noblesville" },
+          { "@type": "ListItem", "position": 4, "name": "Carmel", "url": "https://itspurgepros.com/carmel" },
+          { "@type": "ListItem", "position": 5, "name": "Westfield", "url": "https://itspurgepros.com/westfield" },
+          { "@type": "ListItem", "position": 6, "name": "Greenfield", "url": "https://itspurgepros.com/greenfield" },
+          { "@type": "ListItem", "position": 7, "name": "Lawrence", "url": "https://itspurgepros.com/lawrence" },
+          { "@type": "ListItem", "position": 8, "name": "Brownsburg", "url": "https://itspurgepros.com/brownsburg" },
+          { "@type": "ListItem", "position": 9, "name": "Greenwood", "url": "https://itspurgepros.com/greenwood" },
+          { "@type": "ListItem", "position": 10, "name": "McCordsville", "url": "https://itspurgepros.com/mccordsville" },
+          { "@type": "ListItem", "position": 11, "name": "Avon", "url": "https://itspurgepros.com/avon" },
+          { "@type": "ListItem", "position": 12, "name": "Ingalls", "url": "https://itspurgepros.com/ingalls" },
+          { "@type": "ListItem", "position": 13, "name": "Anderson", "url": "https://itspurgepros.com/anderson" },
+          { "@type": "ListItem", "position": 14, "name": "Fortville", "url": "https://itspurgepros.com/fortville" },
+          { "@type": "ListItem", "position": 15, "name": "New Palestine", "url": "https://itspurgepros.com/new-palestine" },
+          { "@type": "ListItem", "position": 16, "name": "Danville", "url": "https://itspurgepros.com/danville" },
+          { "@type": "ListItem", "position": 17, "name": "Plainfield", "url": "https://itspurgepros.com/plainfield" },
+          { "@type": "ListItem", "position": 18, "name": "Zionsville", "url": "https://itspurgepros.com/zionsville" },
+          { "@type": "ListItem", "position": 19, "name": "Whitestown", "url": "https://itspurgepros.com/whitestown" },
+          { "@type": "ListItem", "position": 20, "name": "Mooresville", "url": "https://itspurgepros.com/mooresville" },
+          { "@type": "ListItem", "position": 21, "name": "Pendleton", "url": "https://itspurgepros.com/pendleton" },
+          { "@type": "ListItem", "position": 22, "name": "Camby", "url": "https://itspurgepros.com/camby" },
+          { "@type": "ListItem", "position": 23, "name": "Cicero", "url": "https://itspurgepros.com/cicero" },
+          { "@type": "ListItem", "position": 24, "name": "Pittsboro", "url": "https://itspurgepros.com/pittsboro" },
+          { "@type": "ListItem", "position": 25, "name": "Lapel", "url": "https://itspurgepros.com/lapel" },
+          { "@type": "ListItem", "position": 26, "name": "Markleville", "url": "https://itspurgepros.com/markleville" }
+        ]
+      }
+    ]
+  },
+  "guideCards": {
+    "dog-poop-removal-cost-indianapolis": { "more": "Read the pricing guide" },
+    "yard-size-vs-lot-size-poop-scooping": { "more": "Size up your yard" },
+    "choose-pooper-scooper-service-indianapolis": { "more": "Compare services" }
+  }
+}
+-->
+
+<!-- 1. THE MAP: the service-area story starts with the picture. The intro is the first sentence of the live "Built for
+     Central Indiana routes" lead and the plain rule of the homepage (coverage is decided by ZIP code). The ZIP check is
+     the live hero form (label, button and small print). The map is illustrative; the plate says so. -->
+<section class="sec" data-edge="arc-r" id="map" aria-labelledby="atlas-title">
+  <div class="wrap stack">
+    <div class="sh sh--center sh--sky">
+      <span class="sh__emblem"><img src="../../assets/step-icons/map-pin.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">A clearer answer for every address</p>
+      <h2 class="sh__title" id="atlas-title">Built for Central Indiana <span class="swash">routes</span></h2>
+      <p class="sh__intro lead">Our routes extend across Indianapolis and surrounding Central Indiana communities. Coverage is decided by ZIP code, so you find out as soon as&nbsp;you&nbsp;enter&nbsp;yours.</p>
+    </div>
+    <div class="areas-atlas">
+      <div class="areas-atlas__map">
+        {{MAP}}
+      </div>
+      <div class="areas-atlas__side">
+        <form class="areas-zipcard" data-pp-zip-form action="quote.html" method="get">
+          <div class="areas-zipcard__head">
+            <img class="areas-zipcard__ico" src="../../assets/step-icons/pin.webp" width="256" height="256" loading="lazy" alt="">
+            <h3 class="areas-zipcard__title">Check your service ZIP</h3>
+            <p class="areas-zipcard__sub">Your ZIP code decides if we come to you.</p>
+          </div>
+          <div class="field field--join">
+            <label class="field__label" for="areas-zip">Service ZIP code</label>
+            <input class="field__input" id="areas-zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" title="Type all 5 digits, like 46032" placeholder="e.g. 46032">
+            <button class="btn btn--primary" type="submit">See my price</button>
+            <p class="field__help">See the available price or request a custom quote before sharing contact details. No payment today.</p>
+          </div>
+          <p class="says"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt="">Five digits. That is all I need.</p>
+        </form>
+        <div class="areas-key">
+          <h3 class="areas-key__title">How to read the map</h3>
+          <ul class="areas-key__list">
+            <li class="areas-key__row"><span class="areas-key__mark"><img src="../../assets/brand-icons/pp-local-area.webp" width="34" height="34" loading="lazy" alt=""></span><b class="areas-key__what">26 communities, each with its own page</b><span class="areas-key__note">Tap a name in <a class="link" href="#directory">the directory below</a>.</span></li>
+            <li class="areas-key__row"><span class="areas-key__mark"><i class="areas-key__ring"></i></span><b class="areas-key__what">The I-465 ring</b><span class="areas-key__note">Drawn for your bearings only.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. THE DIRECTORY: all 26 accepted communities by county, each with its accepted ZIP codes as real text
+     (spec/cities.json; the three PO Box ZIP codes are left out, as CONTENT-CITIES.md section 5 says). -->
+<section class="sec sec--grass" data-edge="arc" id="directory" aria-labelledby="directory-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-local-area.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">26 communities, 51 ZIP codes</p>
+      <h2 class="sh__title" id="directory-title">Find the right Central Indiana service <span class="swash">area</span></h2>
+      <p class="sh__intro lead">Choose the closest listed community for local service details, or tap your ZIP code to see your price.</p>
+    </div>
+    <div class="areas-dir">
+      <div class="areas-legend">
+        <p class="says"><img src="../../assets/step-icons/mascot-head.webp" width="240" height="240" loading="lazy" alt="">Found yours? I&rsquo;ll fetch the price.</p>
+        <ul class="areas-legend__list" aria-label="How to read the directory">
+          <li class="areas-legend__item"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt="">Has its own page</li>
+          <li class="areas-legend__item"><span class="areas-legend__stamp" aria-hidden="true">ZIP</span>Tap a ZIP code to see your price</li>
+        </ul>
+      </div>
+      <article class="areas-county areas-county--lead">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="32" cy="32" r="6.500"/></svg>
+          <p class="areas-county__side">In the middle</p>
+          <h3 class="areas-county__name">Marion County</h3>
+          <p class="areas-county__count"><span>2 communities</span> <span>21 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town areas-town--many"><a class="areas-town__name" href="indianapolis.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Indianapolis</u></a><ul class="areas-zips" aria-label="Indianapolis ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46214" aria-label="See my price for ZIP code 46214">46214</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46217" aria-label="See my price for ZIP code 46217">46217</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46220" aria-label="See my price for ZIP code 46220">46220</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46221" aria-label="See my price for ZIP code 46221">46221</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46227" aria-label="See my price for ZIP code 46227">46227</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46228" aria-label="See my price for ZIP code 46228">46228</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46231" aria-label="See my price for ZIP code 46231">46231</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46234" aria-label="See my price for ZIP code 46234">46234</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46237" aria-label="See my price for ZIP code 46237">46237</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46239" aria-label="See my price for ZIP code 46239">46239</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46240" aria-label="See my price for ZIP code 46240">46240</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46250" aria-label="See my price for ZIP code 46250">46250</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46256" aria-label="See my price for ZIP code 46256">46256</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46259" aria-label="See my price for ZIP code 46259">46259</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46260" aria-label="See my price for ZIP code 46260">46260</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46268" aria-label="See my price for ZIP code 46268">46268</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46278" aria-label="See my price for ZIP code 46278">46278</button></form></li><li class="areas-zip areas-zip--noted"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46280" aria-label="See my price for ZIP code 46280" aria-describedby="areas-note-46280">46280</button></form></li><li class="areas-zip areas-zip--noted"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46290" aria-label="See my price for ZIP code 46290" aria-describedby="areas-note-46280">46290</button></form></li></ul><p class="areas-town__note" id="areas-note-46280"><span><b>46280 and 46290</b> also cover the south edge of <a class="link" href="carmel.html">Carmel</a>.</span></p></li>
+          <li class="areas-town"><a class="areas-town__name" href="lawrence.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Lawrence</u></a><ul class="areas-zips" aria-label="Lawrence ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46216" aria-label="See my price for ZIP code 46216">46216</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46236" aria-label="See my price for ZIP code 46236">46236</button></form></li></ul></li>
+        </ul>
+      </article>
+      <article class="areas-county">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="32" cy="10.5" r="6.500"/></svg>
+          <p class="areas-county__side">North side</p>
+          <h3 class="areas-county__name">Hamilton County</h3>
+          <p class="areas-county__count"><span>5 communities</span> <span>8 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town"><a class="areas-town__name" href="carmel.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Carmel</u></a><ul class="areas-zips" aria-label="Carmel ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46032" aria-label="See my price for ZIP code 46032">46032</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46033" aria-label="See my price for ZIP code 46033">46033</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="fishers.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Fishers</u></a><ul class="areas-zips" aria-label="Fishers ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46037" aria-label="See my price for ZIP code 46037">46037</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46038" aria-label="See my price for ZIP code 46038">46038</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="noblesville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Noblesville</u></a><ul class="areas-zips" aria-label="Noblesville ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46060" aria-label="See my price for ZIP code 46060">46060</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46062" aria-label="See my price for ZIP code 46062">46062</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="westfield.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Westfield</u></a><ul class="areas-zips" aria-label="Westfield ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46074" aria-label="See my price for ZIP code 46074">46074</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="cicero.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Cicero</u></a><ul class="areas-zips" aria-label="Cicero ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46034" aria-label="See my price for ZIP code 46034">46034</button></form></li></ul></li>
+        </ul>
+      </article>
+      <article class="areas-county">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="47.2" cy="16.8" r="6.500"/></svg>
+          <p class="areas-county__side">Northeast</p>
+          <h3 class="areas-county__name">Madison County</h3>
+          <p class="areas-county__count"><span>5 communities</span> <span>7 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town"><a class="areas-town__name" href="anderson.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Anderson</u></a><ul class="areas-zips" aria-label="Anderson ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46011" aria-label="See my price for ZIP code 46011">46011</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46013" aria-label="See my price for ZIP code 46013">46013</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46016" aria-label="See my price for ZIP code 46016">46016</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="ingalls.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Ingalls</u></a><ul class="areas-zips" aria-label="Ingalls ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46048" aria-label="See my price for ZIP code 46048">46048</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="lapel.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Lapel</u></a><ul class="areas-zips" aria-label="Lapel ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46051" aria-label="See my price for ZIP code 46051">46051</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="markleville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Markleville</u></a><ul class="areas-zips" aria-label="Markleville ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46056" aria-label="See my price for ZIP code 46056">46056</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="pendleton.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Pendleton</u></a><ul class="areas-zips" aria-label="Pendleton ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46064" aria-label="See my price for ZIP code 46064">46064</button></form></li></ul></li>
+        </ul>
+      </article>
+      <article class="areas-county">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="10.5" cy="32" r="6.500"/></svg>
+          <p class="areas-county__side">West side</p>
+          <h3 class="areas-county__name">Hendricks County</h3>
+          <p class="areas-county__count"><span>5 communities</span> <span>5 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town"><a class="areas-town__name" href="avon.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Avon</u></a><ul class="areas-zips" aria-label="Avon ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46123" aria-label="See my price for ZIP code 46123">46123</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="brownsburg.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Brownsburg</u></a><ul class="areas-zips" aria-label="Brownsburg ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46112" aria-label="See my price for ZIP code 46112">46112</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="danville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Danville</u></a><ul class="areas-zips" aria-label="Danville ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46122" aria-label="See my price for ZIP code 46122">46122</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="plainfield.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Plainfield</u></a><ul class="areas-zips" aria-label="Plainfield ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46168" aria-label="See my price for ZIP code 46168">46168</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="pittsboro.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Pittsboro</u></a><ul class="areas-zips" aria-label="Pittsboro ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46167" aria-label="See my price for ZIP code 46167">46167</button></form></li></ul></li>
+        </ul>
+      </article>
+      <article class="areas-county">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="53.5" cy="32" r="6.500"/></svg>
+          <p class="areas-county__side">East side</p>
+          <h3 class="areas-county__name">Hancock County</h3>
+          <p class="areas-county__count"><span>4 communities</span> <span>4 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town"><a class="areas-town__name" href="fortville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Fortville</u></a><ul class="areas-zips" aria-label="Fortville ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46040" aria-label="See my price for ZIP code 46040">46040</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="greenfield.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Greenfield</u></a><ul class="areas-zips" aria-label="Greenfield ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46140" aria-label="See my price for ZIP code 46140">46140</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="mccordsville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>McCordsville</u></a><ul class="areas-zips" aria-label="McCordsville ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46055" aria-label="See my price for ZIP code 46055">46055</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="new-palestine.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>New Palestine</u></a><ul class="areas-zips" aria-label="New Palestine ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46163" aria-label="See my price for ZIP code 46163">46163</button></form></li></ul></li>
+          <li class="areas-town areas-town--more"><a class="areas-town__more" href="#areas-zip"><img src="../../assets/brand-icons/pp-search.webp" width="24" height="24" loading="lazy" alt="">Near here? <u>Check your ZIP code</u></a></li>
+        </ul>
+      </article>
+      <article class="areas-county">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="32" cy="53.5" r="6.500"/></svg>
+          <p class="areas-county__side">South side counties</p>
+          <h3 class="areas-county__name">Johnson and Morgan<span class="vh"> counties</span></h3>
+          <p class="areas-county__count"><span>3 communities</span> <span>4 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town"><a class="areas-town__name" href="greenwood.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Greenwood</u></a><ul class="areas-zips" aria-label="Greenwood ZIP codes we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46142" aria-label="See my price for ZIP code 46142">46142</button></form></li><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46143" aria-label="See my price for ZIP code 46143">46143</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="camby.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><span><u>Camby</u><small>Marion and Morgan county line</small></span></a><ul class="areas-zips" aria-label="Camby ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46113" aria-label="See my price for ZIP code 46113">46113</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="mooresville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Mooresville</u></a><ul class="areas-zips" aria-label="Mooresville ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46158" aria-label="See my price for ZIP code 46158">46158</button></form></li></ul></li>
+        </ul>
+      </article>
+      <article class="areas-county">
+        <header class="areas-county__head dots">
+          <svg class="areas-county__dial" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle class="areas-dial__face" cx="32" cy="32" r="29"/><path class="areas-dial__north" d="M32 3.500 35.500 10h-7Z"/><circle class="areas-dial__ring" cx="32" cy="32" r="13"/><circle class="areas-dial__spot" cx="16.8" cy="16.8" r="6.500"/></svg>
+          <p class="areas-county__side">Northwest</p>
+          <h3 class="areas-county__name">Boone County</h3>
+          <p class="areas-county__count"><span>2 communities</span> <span>2 ZIP codes</span></p>
+        </header>
+        <ul class="areas-county__towns">
+          <li class="areas-town"><a class="areas-town__name" href="whitestown.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Whitestown</u></a><ul class="areas-zips" aria-label="Whitestown ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46075" aria-label="See my price for ZIP code 46075">46075</button></form></li></ul></li>
+          <li class="areas-town"><a class="areas-town__name" href="zionsville.html"><img src="../../assets/brand-icons/pp-local-area.webp" width="24" height="24" loading="lazy" alt=""><u>Zionsville</u></a><ul class="areas-zips" aria-label="Zionsville ZIP code we cover"><li class="areas-zip"><form class="areas-zip__form" data-pp-zip-form action="quote.html" method="get"><button class="areas-zip__go" type="submit" name="zip" value="46077" aria-label="See my price for ZIP code 46077">46077</button></form></li></ul></li>
+          <li class="areas-town areas-town--more"><a class="areas-town__more" href="#areas-zip"><img src="../../assets/brand-icons/pp-search.webp" width="24" height="24" loading="lazy" alt="">Near here? <u>Check your ZIP code</u></a></li>
+        </ul>
+      </article>
+    </div>
+    <div class="center-row">
+      <a class="btn btn--primary" href="#quote" data-purge-quote>Get my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. NOT LISTED: what to do when a ZIP code is not in the directory. Kind, with the ZIP check in place (its field is
+     required, so the button always answers with the check) and the text-first pair: Text (with the number), then Call
+     (owner, October 8). First split: picture left. -->
+<section class="sec" data-edge="scoop" id="not-listed" aria-labelledby="not-listed-title">
+  <div class="wrap">
+    <div class="split">
+      <div class="split__art">
+        <figure class="areas-stage">
+          <div class="areas-stage__plate">
+            <img class="areas-stage__pose" src="../../assets/brand/poses/sorry-map.webp" width="597" height="900" loading="lazy" decoding="async" alt="Purge Pros mascot holding an unfolded street map, with a kind shrug.">
+          </div>
+          <span class="areas-stage__pin"><img src="../../assets/step-icons/house.webp" width="256" height="256" loading="lazy" alt=""></span>
+          <figcaption class="areas-stage__cap"><img src="../../assets/brand-icons/pp-local-area.webp" width="30" height="30" loading="lazy" alt="">Sorry. Even my map has edges.</figcaption>
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left sh--sky">
+          <span class="sh__emblem"><img src="../../assets/step-icons/pin.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">Not on the list?</p>
+          <h2 class="sh__title" id="not-listed-title">What to do if your ZIP code is not <span class="swash">listed</span></h2>
+          <p class="sh__intro lead">Type your ZIP code in anyway. You get a straight answer in seconds, before you fill&nbsp;in&nbsp;anything&nbsp;else.</p>
+        </div>
+        <form class="areas-zipline" data-pp-zip-form action="quote.html" method="get">
+          <div class="field field--join">
+            <label class="field__label" for="areas-zip-2">Your ZIP code</label>
+            <input class="field__input" id="areas-zip-2" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" maxlength="5" pattern="[0-9]{5}" title="Type all 5 digits, like 46032" placeholder="5 digits" required>
+            <button class="btn btn--secondary" type="submit">Check my ZIP</button>
+          </div>
+        </form>
+        <ul class="ilist">
+          <li><img class="stk stk--thin" src="../../assets/brand-icons/pp-visit-message.webp" width="48" height="48" loading="lazy" alt=""><div><b>Close to a community on the list?</b><span>Text us the ZIP code and the street. An address near an active route may still be worth a second look.</span></div></li>
+          <li><img class="stk stk--thin stk--r" src="../../assets/step-icons/chat.webp" width="48" height="48" loading="lazy" alt=""><div><b>Rather ask a person?</b><span>Text is our fastest channel, and our local team answers. Texts and calls go to the same number.</span></div></li>
+        </ul>
+        <div class="areas-actions">
+          {{REACH}}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. ROUTE REVIEW: the live heading "City, ZIP, and address answer different questions." with the three cards that
+     answer it (live sections 3 and 6 joined). This is the ONE place the page explains the address review; the notice is
+     the kit notice, single and centred as on the home page. -->
+<section class="sec sec--navy" data-edge="arc-r" data-keyline id="route-review" aria-labelledby="route-review-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-property-notes.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">A local route review</p>
+      <h2 class="sh__title" id="route-review-title">City, ZIP, and address <span class="pop">answer different questions.</span></h2>
+      <p class="sh__intro lead">A city page tells you about your area, your ZIP code tells you if we come to you, and your address is how we pick your route day.</p>
+    </div>
+    <ol class="steps steps--3">
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>1</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-local-area.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">City page</h3><p class="step__text">Choose the nearest listed community for local service details and the ZIP codes it covers.</p></li>
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>2</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-search.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">ZIP check</h3><p class="step__text">Type your ZIP code to see right away whether we come to you, then build your price.</p></li>
+      <li class="step"><span class="step__num"><img src="../../assets/brand-icons/pp-number-badge.webp" width="72" height="72" loading="lazy" alt=""><span>3</span></span><img class="step__ico stk stk--thin stk--r" src="../../assets/brand-icons/pp-service-calendar.webp" width="46" height="46" loading="lazy" alt=""><h3 class="step__title">Exact address review</h3><p class="step__text">A person checks your full address against our routes and drive time, then confirms your day.</p></li>
+    </ol>
+    <div class="notice" style="max-width:760px;margin-inline:auto">
+      <img class="notice__ico stk stk--thin" src="../../assets/brand-icons/pp-service-check.webp" width="52" height="52" loading="lazy" alt="">
+      <p class="notice__title">Asking costs nothing</p>
+      <p class="notice__text">Nothing is charged for checking your price or sending a request. A request becomes a confirmed appointment only when Purge Pros approves your address and route day.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5. NO START-UP FEE: the block every page uses. Second split of the page, so it is flipped. -->
+<section class="sec sec--gold" data-edge="wave" id="start-up-fee" aria-labelledby="fee-title">
+  <div class="wrap">
+    <div class="split split--flip split--top">
+      <div class="split__art">
+        <figure class="frame frame--flip">
+          <img class="frame__img" src="../../assets/scenes/scene-fee.jpg" width="1254" height="1254" loading="lazy" decoding="async" alt="Purge Pros mascot leaning on his scooper on a clean lawn, holding up one tied bag.">
+          <span class="seal"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="60" cy="60" r="50" fill="#ffc12f" stroke="#ffc12f" stroke-width="12" stroke-linecap="round" stroke-dasharray="0.1 12.99"/><circle cx="60" cy="60" r="46" fill="none" stroke="#062644" stroke-width="1.6" stroke-dasharray="2 4.5" opacity=".5"/></svg><span class="seal__txt"><b>$0</b>start-up fee</span></span>
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left sh--sky">
+          <span class="sh__emblem"><img src="../../assets/step-icons/zero-fee.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">No start-up fee</p>
+          <h2 class="sh__title" id="fee-title">Built-up poop? Start fresh at your <span class="swash">regular</span> visit price.</h2>
+          <p class="sh__intro lead">New recurring customers pay no start-up fee. Your first cleanup costs the same as every visit after it, even when the yard has built up.</p>
+        </div>
+        {{EXPLAIN}}
+        <p><a class="btn btn--primary" href="#quote" data-purge-quote>See my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. REAL SERVICE PROOF: the live section with its three live captions, plus the kit photo with the caption the approved
+     home page uses for it. Real photos only. (The route vehicle is on the About page, where the live site shows it.) -->
+<section class="sec" data-edge="arc-r" id="proof" aria-labelledby="proof-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-gate-photo.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">Real service proof</p>
+      <h2 class="sh__title" id="proof-title">Details that make the routine <span class="swash">dependable</span></h2>
+      <p class="sh__intro lead">Real gates, cleanup tools, and finished visits from our service routes.</p>
+    </div>
+    <div class="receipts">
+      <figure class="receipt">
+        <img class="receipt__img" src="../../assets/photos/wood-gate-yard-cleanup-tools-768.webp" width="768" height="576" loading="lazy" decoding="async" style="object-position:42% 70%" alt="Real visit photo: a wood backyard gate with cleanup tools beside a green side yard.">
+        <span class="tag tag--real receipt__tag">Real visit</span>
+        <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Access is part of the plan</p><p class="receipt__text">Clear gate instructions help us access your yard as planned.</p></figcaption>
+      </figure>
+      <figure class="receipt">
+        <img class="receipt__img" src="../../assets/photos/metal-gate-cleanup-equipment-768.webp" width="768" height="765" loading="lazy" decoding="async" style="object-position:55% 62%" alt="Real visit photo: a closed wire gate with the scooping bin, rake and sanitizing sprayer.">
+        <span class="tag tag--real receipt__tag">Real visit</span>
+        <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">The kit: bin, rake, sprayer</p><p class="receipt__text">Tools and footwear are sanitized between yards.</p></figcaption>
+      </figure>
+      <figure class="receipt">
+        <img class="receipt__img" src="../../assets/photos/white-gate-latch-cleanup-tools-768.webp" width="768" height="576" loading="lazy" decoding="async" alt="Real visit photo: a closed white backyard gate with its black latch and cleanup tools.">
+        <span class="tag tag--real receipt__tag">Real visit</span>
+        <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Gate security is documented</p><p class="receipt__text">A completion photo helps show that the property was left secure.</p></figcaption>
+      </figure>
+      <figure class="receipt">
+        <img class="receipt__img" src="../../assets/photos/bagged-waste-chain-link-fence-768.webp" width="768" height="1024" loading="lazy" decoding="async" style="object-position:50% 66%" alt="Real visit photo: bagged pet waste and a cleanup rake beside a chain-link fence.">
+        <span class="tag tag--real receipt__tag">Real visit</span>
+        <figcaption class="receipt__body"><p class="receipt__title"><img src="../../assets/brand-icons/pp-service-check.webp" width="18" height="18" loading="lazy" alt="">Collected waste leaves with us</p><p class="receipt__text">Waste is hauled away instead of being added to household trash.</p></figcaption>
+      </figure>
+    </div>
+    <div class="center-row">
+      <a class="btn btn--secondary" href="reviews.html">Read customer reviews <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+      <a class="btn btn--outline" href="dog-waste-removal.html#every-visit"><img class="btn__ico" src="../../assets/brand-icons/pp-scoop.webp" width="26" height="26" loading="lazy" alt="">See what every visit includes</a>
+    </div>
+  </div>
+</section>
+
+<!-- 7. FAQ: the live questions of the all-areas page (cities.json allAreas.faq). The question about the first cleanup is
+     the explainer in section 5, never an FAQ entry. "Does passing the ZIP check guarantee service?" and "Does a Central
+     Indiana ZIP confirm a recurring service day?" asked the same thing and are one question now (the shared one). -->
+<section class="sec sec--cream" data-edge="arc" id="faq" aria-labelledby="faq-title">
+  <div class="wrap stack">
+    <div class="sh sh--center">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-search.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">Questions before you start?</p>
+      <h2 class="sh__title" id="faq-title">Clear answers before you request Central Indiana <span class="swash">service</span></h2>
+    </div>
+    <div class="faq">
+      <details class="faq__item" name="areas-faq" open>
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-local-area.webp" width="42" height="42" loading="lazy" alt=""><h3>What if my Central Indiana community is not listed?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Type your ZIP code into the ZIP check anyway. An address near an active route may still be worth a second look, so text us the ZIP code and the street. Outside the listed communities and ZIP codes we cannot promise service.</p></div>
+      </details>
+      <details class="faq__item" name="areas-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-service-calendar.webp" width="42" height="42" loading="lazy" alt=""><h3>Does a Central Indiana ZIP confirm a recurring service day?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>No. A supported ZIP lets you build your price and send a request. Purge Pros still reviews the exact address, the visits you asked for, and current route capacity before confirming a recurring day.</p></div>
+      </details>
+      <details class="faq__item" name="areas-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-professional-team.webp" width="42" height="42" loading="lazy" alt=""><h3>Why does Purge Pros review routes manually?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Manual review prevents an automated form from promising a day that does not fit current capacity or drive time. The goal is a recurring route the team can actually maintain.</p></div>
+      </details>
+      <details class="faq__item" name="areas-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-property-notes.webp" width="42" height="42" loading="lazy" alt=""><h3>What should I include in my request?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Include the dogs using the yard, total outdoor area to scoop, every front, back, side, patio, or concrete area needing service, preferred frequency, and gate or access details.</p></div>
+      </details>
+      <details class="faq__item" name="areas-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-per-visit-price.webp" width="42" height="42" loading="lazy" alt=""><h3>What starting prices should I compare?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>The starting example for one dog, one service area, and up to one-eighth acre is $19.99 per weekly visit. Twice weekly starts at $15.99 per visit for the same example. The dogs, yard, and schedule you choose set your price, or lead to a custom quote. The <a class="link" href="dog-waste-removal.html#prices">full price list</a> has every plan.</p></div>
+      </details>
+      <details class="faq__item" name="areas-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/quote-icons/frequency-one-time.webp" width="42" height="42" loading="lazy" alt=""><h3>Can I request a one-time cleanup?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Yes. One-time cleanup is $89.99 for the first 30 minutes, then $1 per additional minute. The $89.99 is charged when we text that we are on the way; any additional time is invoiced after the visit.</p><p>One-time cleanups are priced on their own, separately from recurring service.</p></div>
+      </details>
+      <details class="faq__item" name="areas-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-waste-bag.webp" width="42" height="42" loading="lazy" alt=""><h3>What is included with recurring dog waste removal?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Recurring visits include a systematic search of the selected service areas, removal and haul-away of the collected dog waste, sanitized tools between properties, arrival communication, and the gate-security routine.</p></div>
+      </details>
+      <details class="faq__item" name="areas-faq">
+        <summary class="faq__q"><img class="faq__ico" src="../../assets/brand-icons/pp-yard.webp" width="42" height="42" loading="lazy" alt=""><h3>How is the per-visit price calculated?</h3><img class="faq__chev" src="../../assets/brand-icons/pp-chevron.webp" width="26" height="26" loading="lazy" alt=""></summary>
+        <div class="faq__a"><p>Your price uses dog count, visit frequency, yard size, and the cleanup areas you select, counting any patio or concrete that needs scooping. Leave out the house and areas that do not need scooping. Larger or more complex properties may need a custom quote instead of an instant price.</p></div>
+      </details>
+    </div>
+    <div class="center-row">
+      <a class="btn btn--secondary" href="faq.html">Read every answer <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+      <a class="btn btn--outline" href="sms:+13179615865"><img class="btn__ico" src="../../assets/brand-icons/pp-visit-message.webp" width="26" height="26" loading="lazy" alt="">Text (317) 961-5865</a>
+    </div>
+  </div>
+</section>
+
+<!-- 8. YARD GUIDE and the links onward: the three live articles of this page, then the services, answers and reviews. -->
+<section class="sec" data-edge="scoop" id="yard-guide" aria-labelledby="guide-title">
+  <div class="wrap stack">
+    <div class="sh sh--center sh--grass">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-yard-guide.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">From the Yard Guide</p>
+      <h2 class="sh__title" id="guide-title">Plan the cleanup around the <span class="swash">yard</span> you have</h2>
+      <p class="sh__intro lead">What shapes a quote, what counts as yard, and how to compare one service with another.</p>
+    </div>
+    {{GUIDE_CARDS:dog-poop-removal-cost-indianapolis,yard-size-vs-lot-size-poop-scooping,choose-pooper-scooper-service-indianapolis}}
+    <div>
+      <div class="rowhead">
+        <h3 class="h3">Keep exploring</h3>
+        <p>Every service, the full price list, and what customers say.</p>
+      </div>
+      <ul class="chips chips--wide">
+        <li><a class="chip" href="dog-waste-removal.html"><img src="../../assets/brand-icons/pp-scoop.webp" width="24" height="24" loading="lazy" alt=""><u>Poop scooping</u></a></li>
+        <li><a class="chip" href="dog-waste-removal.html#prices"><img src="../../assets/brand-icons/pp-per-visit-price.webp" width="24" height="24" loading="lazy" alt=""><u>Full price list</u></a></li>
+        <li><a class="chip" href="dog-waste-removal.html#one-time"><img src="../../assets/brand-icons/pp-waste-bag.webp" width="24" height="24" loading="lazy" alt=""><u>One-time visit</u></a></li>
+        <li><a class="chip" href="sanitizing-and-deodorizing.html"><img src="../../assets/brand-icons/pp-deodorize.webp" width="24" height="24" loading="lazy" alt=""><u>Sanitizing</u></a></li>
+        <li><a class="chip" href="reviews.html"><img src="../../assets/brand-icons/pp-review-star.webp" width="24" height="24" loading="lazy" alt=""><u>Google reviews</u></a></li>
+        <li><a class="chip" href="yard-guide.html"><img src="../../assets/brand-icons/pp-yard-guide.webp" width="24" height="24" loading="lazy" alt=""><u>Yard Guide</u></a></li>
+      </ul>
+    </div>
+  </div>
+</section>

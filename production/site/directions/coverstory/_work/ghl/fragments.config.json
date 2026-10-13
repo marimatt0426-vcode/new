@@ -1,0 +1,100 @@
+{
+  "_how": "The ONE settings file of the GoHighLevel fragment builder (build-fragments.mjs). Everything that differs between staging and production is in 'profiles'. A value in CAPITALS (DATE) is a placeholder: the value is not known yet. check-fragments.mjs lists every placeholder still in use. mode, endpoint, reviewsEndpoint, allowedOrigins, googleAdsSendTo (production ONLY), firePixelEvents and the optional staging-only savedLinkBase become window.PPSite in the site body code (shared/CORE-API.md section 13.3); build-fragments.mjs refuses a profile whose send settings break the rules in lib.mjs settingsProblems(), and check-fragments.mjs hands the object in each block to the engine's own siteOptions(). 'pageDataInOwnFile' names the pages whose page data ALWAYS goes in a file of its own (pages/<slug>.schema.html) in EVERY profile, whatever the block's length; for every other page the length rule (blockLimit) decides. It is a shared setting on purpose: which blocks a page has must not depend on how many staging page ids this file holds. Explained line by line in rollout/FRAGMENT-NOTES.md.",
+  "blockLimit": 65000,
+  "largestBlockKnownToSave": 69432,
+  "sizeGuard": {
+    "placeholder": "DATE",
+    "realLength": 8
+  },
+  "pageDataInOwnFile": [
+    "faq"
+  ],
+  "bridge": {
+    "_how": "The website's site code for the switch evening only (SWITCH-RUNBOOK 1.2 step 8; made and checked by _work/ghl/bridge.mjs). 'source' is the copy of the LIVE head tracking code the old lines are cut from: a path under the release folder, or a list of paths of which the first on disk is used. The body code is the file beside it with 'head' in its name replaced by 'body'. One run can name another copy with --bridge-source=<file or folder>; a profile can name its own in profiles.<name>.bridgeSource. When no source is on disk, the source of the last cut is read again (BRIDGE.json names it), so a plain run never drops the bridge files. 'liveFiles' are the five old files the rule names, in live order: a production bridge is refused when the source names others.",
+    "source": "../website/shared/head.html",
+    "liveFiles": {
+      "stylesheets": [
+        "revision-2-theme-bff7357b4799b11f.css",
+        "navigation-repair-da5a1a7824b6951b.css"
+      ],
+      "headScripts": [
+        "purge-quote.js",
+        "interaction-repair-e97ae6f24a2a57f7.js"
+      ],
+      "bodyScripts": [
+        "production-bootstrap-3168ae9355832820.js"
+      ]
+    }
+  },
+  "assetsVersion": "v5-20261013",
+  "siteDir": "directions/coverstory",
+  "siteOrigin": "https://itspurgepros.com",
+  "blogOrigin": "https://blog.itspurgepros.com",
+  "publicUrl": {
+    "page-not-found": "https://itspurgepros.com/page-not-found"
+  },
+  "robotsTyped": {
+    "welcome": "noindex,follow"
+  },
+  "mustStayOutOfSearch": [
+    "welcome",
+    "quote",
+    "page-not-found"
+  ],
+  "asciiSafe": true,
+  "minified": false,
+  "scriptsPlacement": "footer",
+  "engineFile": "shared/pp-quote-core.js",
+  "bodyAppendedRoots": [
+    ".ppb-sheet",
+    ".ppb-bar",
+    ".ppb-pop"
+  ],
+  "tracking": {
+    "headSource": "../../../../../website/shared/head.html",
+    "bodySource": "../../../../../website/shared/body.html",
+    "expected": [
+      "AW-17767139897",
+      "770811879146972"
+    ]
+  },
+  "profiles": {
+    "staging": {
+      "environment": "staging",
+      "assetsBase": "https://staging-assets.invalid/assets/v5s",
+      "mode": "staging",
+      "endpoint": "https://staging-relay.invalid/submit",
+      "reviewsEndpoint": "https://staging-relay.invalid/reviews",
+      "allowedOrigins": [
+        "https://staging-pages.invalid"
+      ],
+      "firePixelEvents": false,
+      "tracking": false,
+      "robots": "noindex, nofollow, noarchive",
+      "links": {
+        "prefix": "",
+        "map": {},
+        "fallbackOrigin": "https://itspurgepros.com",
+        "previewBase": "https://staging-pages.invalid/preview/",
+        "pageIds": {}
+      }
+    },
+    "production": {
+      "environment": "production",
+      "assetsBase": "https://purge-pros-site-assets.purgepros.workers.dev/assets/{assetsVersion}",
+      "mode": "live",
+      "endpoint": "https://purge-lead-relay.purgepros.workers.dev/submit",
+      "reviewsEndpoint": "https://purge-lead-relay.purgepros.workers.dev/reviews",
+      "allowedOrigins": [],
+      "googleAdsSendTo": "AW-17767139897/g9smCM7pkL4cELmUhJhC",
+      "firePixelEvents": true,
+      "tracking": true,
+      "robots": "",
+      "links": {
+        "prefix": "",
+        "map": {}
+      }
+    }
+  },
+  "_repository": "The staging profile holds .invalid placeholders: the real staging addresses and page ids are kept outside this public repository. Only the production profile is built and checked here."
+}

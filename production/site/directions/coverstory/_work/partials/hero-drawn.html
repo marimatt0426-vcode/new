@@ -1,0 +1,19 @@
+<!--# The drawn field of a hero with a pose (plain with "pose", and legal). Everything in it is decoration except the pose.
+      Order = paint order: sky (the box's own gradient), clouds, the disc behind the pose, the back hill, the front hill,
+      the stickers, the pose with its shadow on the grass. The two lawn paths are stretched to the box's width; the front
+      hill is nearly level between 58% and 92% of the width, which is where the pose stands (--pose-x in the stylesheet).
+      A Yard Guide article shows its own cover here instead of a pose ("cover" in the page's JSON): a print planted in the
+      lawn, no glossy mascot beside the cover's flat one. -->
+  <div class="cover__scene cover__scene--drawn">
+    <svg class="drawn__cloud drawn__cloud--a" viewBox="0 0 138 60" aria-hidden="true" focusable="false"><path d="M22 58C10 58 2 50 2 40s8-17 18-17C22 11 33 2 47 2c12 0 22 7 26 17 4-3 9-5 15-5 14 0 25 10 26 23 12 0 22 7 22 16 0 2-1 4-2 5Z" fill="#fff"/></svg>
+    <svg class="drawn__cloud drawn__cloud--b" viewBox="0 0 138 60" aria-hidden="true" focusable="false"><path d="M22 58C10 58 2 50 2 40s8-17 18-17C22 11 33 2 47 2c12 0 22 7 26 17 4-3 9-5 15-5 14 0 25 10 26 23 12 0 22 7 22 16 0 2-1 4-2 5Z" fill="#fff"/></svg>
+    <svg class="drawn__cloud drawn__cloud--c" viewBox="0 0 138 60" aria-hidden="true" focusable="false"><path d="M22 58C10 58 2 50 2 40s8-17 18-17C22 11 33 2 47 2c12 0 22 7 26 17 4-3 9-5 15-5 14 0 25 10 26 23 12 0 22 7 22 16 0 2-1 4-2 5Z" fill="#fff"/></svg>
+    <span class="drawn__disc" aria-hidden="true"></span>
+    <svg class="drawn__lawn" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path class="drawn__hill drawn__hill--back" d="M0 120V52C150 26 330 22 520 50c150 22 300 44 470 34 90-5 160-16 210-26v62Z"/>
+      <path class="drawn__hill" d="M0 120V98C210 88 430 16 700 8c150-4 300-2 400 5 40 3 76 9 100 15v92Z"/>
+      <path d="M0 99C210 89 430 17 700 9c150-4 300-2 400 5 40 3 76 9 100 15" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+    </svg>
+{{stickers}}
+{{#pose}}    <span class="stand drawn__pose"><img src="../../assets/brand/poses/{{pose}}.webp" width="{{poseW}}" height="{{poseH}}" decoding="async" alt="{{alt}}"></span>{{/pose}}{{#cover}}    <span class="drawn__cover"><img src="../../{{cover}}" width="{{coverW}}" height="{{coverH}}" fetchpriority="high" decoding="async" alt="{{alt}}"></span>{{/cover}}
+  </div>

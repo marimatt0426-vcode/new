@@ -1,0 +1,51 @@
+<!--# The skeleton of every page. Slots are filled by _work/build-site.mjs from the page's JSON block.
+      Order matters: site.css, builder.css, then a family's own stylesheets; pp-quote-core.js first, builder.js last.
+      A page for existing customers ("audience": "customer") loads neither price script: nothing on it opens the builder.
+      SPEED (DESIGN.md, "Speed"): every script is deferred, the price engine too, so no script holds back the first
+      paint; deferred scripts still run in this order, and the static first question in the hero works before they do.
+      {{preloads}} is the first-screen picture, one line per breakpoint. {{icon}} is the small logo for the browser tab. -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+{{robots}}
+<meta name="theme-color" content="#062644">
+<link rel="icon" type="image/png" href="../../assets/{{icon}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Montserrat:wght@700&text=PURGEOSTWAMVL%20&display=swap" rel="stylesheet">
+{{preloads}}
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/builder.css">
+{{stylesheets}}
+{{canonical}}
+{{social}}
+<!-- STRUCTURED DATA START -->
+{{structuredData}}
+<!-- STRUCTURED DATA END -->
+</head>
+<body{{bodyAttrs}}>
+{{>header}}
+
+<main id="main">
+
+{{main}}
+
+</main>
+
+{{>footer}}
+
+{{#visitor}}
+<script src="../../shared/pp-quote-core.js" defer></script>
+{{/visitor}}
+<script src="js/site.js" defer></script>
+{{scripts}}
+{{#visitor}}
+<script src="js/builder.js" defer></script>
+{{/visitor}}
+</body>
+</html>

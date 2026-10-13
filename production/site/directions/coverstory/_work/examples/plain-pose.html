@@ -1,0 +1,58 @@
+<!--
+{
+  "title": "Example of a plain content page with a pose | Cover Story page platform",
+  "description": "A working example of the plain hero recipe with one mascot pose on the drawn field, for page authors. Copy it to _work/pages and replace every word.",
+  "hero": {
+    "recipe": "plain",
+    "pose": "think",
+    "stickers": ["pp-search", "pp-yard-guide"],
+    "alt": "Purge Pros mascot with a hand on his chin, thinking.",
+    "kw": "Keyword line for the page",
+    "title": ["Questions, answered", "in plain words."],
+    "lead": "Example lead for a page with no scene of its own: the drawn sky and lawn, and one pose standing on it.",
+    "buttons": [{ "label": "Read the reviews", "href": "reviews.html" }, "text"]
+  },
+  "facts": { "label": "Purge Pros at a glance", "items": ["google", "proof", "pay", "communities"] },
+  "guideCards": { "winter-dog-poop-cleanup-central-indiana": { "ribbon": "Winter", "more": "Plan for the cold months" } }
+}
+-->
+
+<!-- 1. THE NO-START-UP-FEE BLOCK, exactly as the homepage has it. The lead, the explainer and the small print are the
+     owner's wording (POLICY-WORDING.md): copy the lead, drop the explainer in with its token, change nothing. -->
+<section class="sec sec--gold" data-edge="wave" id="start-up-fee" aria-labelledby="fee-title">
+  <div class="wrap">
+    <div class="split split--top">
+      <div class="split__art">
+        <figure class="frame">
+          <img class="frame__img" src="../../assets/scenes/scene-fee.jpg" width="1254" height="1254" loading="lazy" decoding="async" alt="Purge Pros mascot leaning on his scooper on a clean lawn, holding up one tied bag.">
+          <span class="seal"><svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><circle cx="60" cy="60" r="50" fill="#ffc12f" stroke="#ffc12f" stroke-width="12" stroke-linecap="round" stroke-dasharray="0.1 12.99"/><circle cx="60" cy="60" r="46" fill="none" stroke="#062644" stroke-width="1.6" stroke-dasharray="2 4.5" opacity=".5"/></svg><span class="seal__txt"><b>$0</b>start-up fee</span></span>
+        </figure>
+      </div>
+      <div class="split__text">
+        <div class="sh sh--left sh--sky">
+          <span class="sh__emblem"><img src="../../assets/step-icons/zero-fee.webp" width="50" height="50" loading="lazy" alt=""></span>
+          <p class="kicker">No start-up fee</p>
+          <h2 class="sh__title" id="fee-title">Built-up poop? Start fresh at your <span class="swash">regular</span> visit price.</h2>
+          <p class="sh__intro lead">New recurring customers pay no start-up fee. Your first cleanup costs the same as every visit after it, even when the yard has built up.</p>
+        </div>
+        {{EXPLAIN}}
+        <p><a class="btn btn--primary" href="#quote" data-purge-quote>See my price <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. YARD GUIDE: one of the three cards is reworded for this page in the JSON block ("guideCards"). -->
+<section class="sec" data-edge="scoop" id="yard-guide" aria-labelledby="guide-title">
+  <div class="wrap stack">
+    <div class="sh sh--center sh--grass">
+      <span class="sh__emblem"><img class="stk" src="../../assets/brand-icons/pp-yard-guide.webp" width="62" height="62" loading="lazy" alt=""></span>
+      <p class="kicker">From the Yard Guide</p>
+      <h2 class="sh__title" id="guide-title">Three real articles, by <span class="swash">slug</span></h2>
+    </div>
+    {{GUIDE_CARDS:understanding-gate-closure-photo-after-scoop-visit,winter-dog-poop-cleanup-central-indiana,compare-per-visit-monthly-dog-waste-quotes}}
+    <div class="center-row">
+      <a class="btn btn--secondary" href="yard-guide.html">Browse the whole Yard Guide <img class="btn__arrow" src="../../assets/brand-icons/pp-next-arrow.webp" width="24" height="24" loading="lazy" alt=""></a>
+    </div>
+  </div>
+</section>

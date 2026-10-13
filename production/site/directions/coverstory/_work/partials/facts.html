@@ -1,0 +1,72 @@
+<!--# The facts strip, directly under every hero: always four facts. A page names them in its JSON block:
+        "facts": { "label": "…at a glance", "items": ["google", "proof", "pay", "communities"] }
+      A fact that is not in this file is written in the JSON as { "icon": "pp-…", "value": "…", "label": "…" };
+      with "href" it is a link (fact:linked), like the Google fact.
+      The sticker tilt alternates by position, so any four read as a set. Service pages add the in-page link bar ("jump").
+      A page whose breadcrumb has a parent (a city page under Service Areas) gets the visible trail (nav.crumbs) under the
+      facts: the builder writes it from schema.breadcrumb, so what a visitor sees is what the structured data says.
+      The Google fact holds no figure of its own: the builder fills every data-pp-reviews line from partials/reviews.json. -->
+<!-- @block section -->
+<!-- FACTS BAR -->
+<section class="sec facts" data-edge="arc" aria-label="{{label}}">
+  <div class="wrap">
+    <ul class="facts__list">
+{{items}}
+    </ul>
+{{#jump}}
+    <nav class="jump" aria-label="{{jumpLabel}}">
+      <p class="chips__label">On this page</p>
+      <ul class="chips chips--wide">
+{{jump}}
+      </ul>
+    </nav>
+{{/jump}}
+{{#crumbs}}
+    <nav class="crumbs" aria-label="Breadcrumb"><ol>{{crumbs}}</ol></nav>
+{{/crumbs}}
+  </div>
+</section>
+<!-- @block jump-link -->
+        <li><a class="chip" href="{{href}}"><img src="../../assets/brand-icons/{{icon}}.webp" width="24" height="24" alt=""><u>{{label}}</u></a></li>
+<!-- @block fact:google -->
+      <li><a class="fact" href="reviews.html" data-standin="true">
+        <img class="fact__ico stk{{tilt}}" src="../../assets/brand-icons/pp-review-star.webp" width="64" height="64" alt="">
+        <span class="fact__val" data-pp-reviews="{rating} on Google" data-pp-neutral="Google reviews"></span>
+        <span class="fact__lbl"><u data-pp-reviews="Read all {count} reviews" data-pp-neutral="Read our Google reviews"></u></span>
+      </a></li>
+<!-- @block fact:proof -->
+      <li class="fact"{{id}}>
+        <img class="fact__ico stk{{tilt}}" src="../../assets/brand-icons/pp-gate-photo.webp" width="64" height="64" alt="">
+        <span class="fact__val">Proof, every visit</span>
+        <span class="fact__lbl">An <span class="nb">on-the-way</span> text before, a <span class="nb">closed-gate</span> photo after</span>
+      </li>
+<!-- @block fact:pay -->
+      <li class="fact"{{id}}>
+        <img class="fact__ico stk{{tilt}}" src="../../assets/brand-icons/pp-per-visit-price.webp" width="64" height="64" alt="">
+        <span class="fact__val">Pay per visit</span>
+        <span class="fact__lbl">No contract. No <span class="nb">start-up</span> fee for new recurring customers</span>
+      </li>
+<!-- @block fact:communities -->
+      <li class="fact"{{id}}>
+        <img class="fact__ico stk{{tilt}}" src="../../assets/brand-icons/pp-local-area.webp" width="64" height="64" alt="">
+        <span class="fact__val">26 communities</span>
+        <span class="fact__lbl">Indianapolis and Central Indiana, checked by ZIP</span>
+      </li>
+<!-- @block fact:team -->
+      <li class="fact"{{id}}>
+        <img class="fact__ico stk{{tilt}}" src="../../assets/brand-icons/pp-professional-team.webp" width="64" height="64" alt="">
+        <span class="fact__val">W-2 employees</span>
+        <span class="fact__lbl fact__lbl--asis"><span class="nb">Background-checked,</span> trained to our <span class="nb">property-care</span> standards</span>
+      </li>
+<!-- @block fact:linked -->
+      <li><a class="fact" href="{{href}}"{{attrs}}{{id}}>
+        <img class="fact__ico stk{{tilt}}" src="../../assets/brand-icons/{{icon}}.webp" width="64" height="64" alt="">
+        <span class="fact__val">{{value}}</span>
+        <span class="fact__lbl"><u>{{label}}</u></span>
+      </a></li>
+<!-- @block fact:custom -->
+      <li class="fact"{{id}}>
+        <img class="fact__ico stk{{tilt}}" src="../../assets/brand-icons/{{icon}}.webp" width="64" height="64" alt="">
+        <span class="fact__val">{{value}}</span>
+        <span class="fact__lbl">{{label}}</span>
+      </li>

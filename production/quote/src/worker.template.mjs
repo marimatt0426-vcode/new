@@ -3,6 +3,79 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 
 // dist/worker.mjs
 import { DurableObject } from "cloudflare:workers";
+// Read-only receipt lookup. Separate from submission and saved-plan mutation paths.
+const REQUEST_STATUS_BODY_TIMEOUT_MS = 2000;
+const REQUEST_STATUS_WINDOW_MS = 60000;
+const REQUEST_STATUS_MAX = 120;
+async function requestStatusBody(request) {
+  if (!(request.headers.get("Content-Type") || "").toLowerCase().startsWith("application/json")) throw { status: 415 };
+  if (Number(request.headers.get("Content-Length")) > 128) throw { status: 413 };
+  if (!request.body) throw { status: 400 };
+  const reader = request.body.getReader(), chunks = [];
+  let bytes = 0, timer;
+  const deadline = new Promise((_, reject) => { timer = setTimeout(() => reject({ status: 408 }), REQUEST_STATUS_BODY_TIMEOUT_MS); });
+  try {
+    while (true) {
+      const part = await Promise.race([reader.read(), deadline]);
+      if (part.done) break;
+      bytes += part.value.byteLength;
+      if (bytes > 128) throw { status: 413 };
+      chunks.push(part.value);
+    }
+  } catch (error) {
+    // A stream's cancel hook may also stall or throw; it cannot extend the deadline.
+    try { Promise.resolve(reader.cancel()).catch(() => {}); } catch (_) {}
+    throw error;
+  } finally { clearTimeout(timer); }
+  const all = new Uint8Array(bytes);
+  let offset = 0;
+  for (const chunk of chunks) { all.set(chunk, offset); offset += chunk.byteLength; }
+  let body;
+  try { body = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(all)); } catch (_) { throw { status: 400 }; }
+  if (!body || Array.isArray(body) || typeof body !== "object" || Object.keys(body).length !== 1 || typeof body.requestId !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.requestId)) throw { status: 400 };
+  return body;
+}
+// Same binding and hashed caller/window pattern as the saved-plan limiter, but no storage or alarm.
+// The counter lives only in this dedicated limiter instance; eviction/restart resets its allowance.
+function limitRequestStatus(ledger, request) {
+  if (request.method !== "GET") return replayReply(405, { accepted: false });
+  const bucket = Math.floor(Date.now() / REQUEST_STATUS_WINDOW_MS);
+  if (!ledger.requestStatusRate || ledger.requestStatusRate.bucket !== bucket) ledger.requestStatusRate = { bucket, count: 0 };
+  if (ledger.requestStatusRate.count >= REQUEST_STATUS_MAX) return replayReply(429, { accepted: false });
+  ledger.requestStatusRate.count++;
+  return replayReply(200, { accepted: true });
+}
+async function readRequestStatus(ledger, request) {
+  if (request.method !== "GET") return replayReply(405, { accepted: false });
+  try {
+    const record = await ledger.ctx.storage.get("request");
+    const status = !record ? "unknown" : record.status === "accepted" ? "accepted" : record.status === "dispatching" ? "in_progress" : "uncertain";
+    return replayReply(200, status);
+  } catch (_) { return replayReply(503, { accepted: false }); }
+}
+async function handleRequestStatus(request, env) {
+  const origin = request.headers.get("Origin"), allowed = originAllowed(origin, env, request.url);
+  const cors = corsHeaders(allowed ? origin : "null");
+  const reply = (status, body) => new Response(JSON.stringify(body), { status, headers: Object.assign({}, cors, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }) });
+  if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
+  if (request.method !== "POST") return reply(405, { accepted: false });
+  if (!allowed) return reply(403, { accepted: false });
+  let body;
+  try { body = await requestStatusBody(request); } catch (error) { return reply(error.status || 400, { accepted: false }); }
+  if (!env.QUOTE_REQUESTS) return reply(503, { accepted: false });
+  try {
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    const bucket = Math.floor(Date.now() / REQUEST_STATUS_WINDOW_MS);
+    const limiter = await resumeStub(env, "request-status-limit", bucket + ":" + ip);
+    const permission = await limiter.fetch(new Request("https://quote-request.internal/request-status-limit", { method: "GET" }));
+    if (!permission.ok) return reply(permission.status === 429 ? 429 : 503, { accepted: false });
+    const key = await sha256Hex("purge-pros-quote-v3:" + body.requestId);
+    const stub = env.QUOTE_REQUESTS.get(env.QUOTE_REQUESTS.idFromName(key));
+    const response = await stub.fetch(new Request("https://quote-request.internal/request-status", { method: "GET" }));
+    if (response.status === 200) return reply(200, { requestId: body.requestId, status: await response.json() });
+    return new Response(response.body, { status: response.status, headers: Object.assign({}, cors, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }) });
+  } catch (_) { return reply(503, { accepted: false }); }
+}
 function replayReply(status, body) {
   return new Response(JSON.stringify(body), {
     status,
@@ -64,6 +137,7 @@ async function quoteRequestFingerprint(forward) {
     const value = forward[field];
     return (field === "areaIds" || field === "customReasons") && Array.isArray(value) ? value.slice().sort() : value;
   });
+  if (forward.referredBy) material.push(forward.referredBy);
   return sha256Hex(JSON.stringify(material));
 }
 __name(quoteRequestFingerprint, "quoteRequestFingerprint");
@@ -101,6 +175,8 @@ var QuoteRequestLedger = class extends DurableObject {
   }
   async alarm() { return expireResumeStorage(this); }
   async fetch(request) {
+    if (new URL(request.url).pathname === "/request-status-limit") return limitRequestStatus(this, request);
+    if (new URL(request.url).pathname === "/request-status") return readRequestStatus(this, request);
     if (new URL(request.url).pathname.startsWith("/resume/")) return handleResumeStorage(this, request);
     if (request.method !== "POST") return replayReply(405, { accepted: false });
     let forward;
@@ -173,52 +249,72 @@ var QuoteRequestLedger = class extends DurableObject {
     });
   }
 };
-var GOOGLE_ADS_SEND_TO = "AW-17767139897/g9smCM7pkL4cELmUhJhC";
-var FIRE_META_PIXEL_EVENTS = true;
-var WIDGET_JS = __PP_BUNDLE_WIDGET_JS__;
-var DEMO_HTML = '<!doctype html>\r\n<html lang="en">\r\n<head>\r\n  <meta charset="utf-8">\r\n  <meta name="viewport" content="width=device-width, initial-scale=1">\r\n  <title>Purge Pros \u2014 Quote Widget Demo</title>\r\n  <style>\r\n    body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #0d0f12; color: #fff;\r\n           min-height: 100vh; display: flex; align-items: center; justify-content: center; }\r\n    .hero { text-align: center; padding: 40px 20px; }\r\n    .hero h1 { font-size: 40px; margin: 0 0 8px; }\r\n    .hero h1 span { color: #38b6ff; }\r\n    .hero p { color: #b9c2cb; margin: 0 0 28px; }\r\n    .cta { display: inline-block; background: #38b6ff; color: #fff; font-weight: 800; font-size: 17px;\r\n           padding: 16px 34px; border-radius: 999px; text-decoration: none; }\r\n    .cta:hover { background: #1da4f5; }\r\n    .note { margin-top: 24px; font-size: 13px; color: #6c7680; }\r\n  </style>\r\n</head>\r\n<body>\r\n  <div class="hero">\r\n    <h1>Purge <span>Pros</span></h1>\r\n    <p>Pet waste removal \u2014 pay per visit, no contracts, no monthly billing.</p>\r\n    <a class="cta" href="#quote">Get My Instant Quote</a>\r\n    <p class="note">Leads log to the browser console until <code>leadEndpoint</code> is set in purge-quote.js.<br>\r\n       Try an in-area ZIP (46032) and an out-of-area one (85701).</p>\r\n  </div>\r\n  <script src="purge-quote.js" defer><\/script>\r\n</body>\r\n</html>\r\n';
-var QUOTE_LANDING_HTML = __PP_BUNDLE_QUOTE_LANDING_HTML__;
-var META_PIXEL_BOOTSTRAP = "!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init',__PP_META_PIXEL_ID__);fbq('track','PageView');";
-function promotionOverride(env) {
-  const override = {};
-  if (env && typeof env.PROMO_ENABLED === "string") override.enabled = env.PROMO_ENABLED.toLowerCase() !== "false";
-  const fields = {
-    PROMO_BADGE: "badge",
-    PROMO_TITLE: "title",
-    PROMO_DETAIL: "detail",
-    PROMO_ELIGIBILITY: "eligibility",
-    PROMO_LINK_LABEL: "linkLabel",
-    PROMO_MODAL_TITLE: "modalTitle",
-    PROMO_MODAL_INTRO: "modalIntro",
-    PROMO_FIRST_LABEL: "firstThirtyLabel",
-    PROMO_FIRST_VALUE: "firstThirtyValue",
-    PROMO_ADDITIONAL_LABEL: "additionalLabel",
-    PROMO_ADDITIONAL_VALUE: "additionalValue",
-    PROMO_EXAMPLE_LABEL: "exampleLabel",
-    PROMO_EXAMPLE_VALUE: "exampleValue",
-    PROMO_CUSTOMER_LABEL: "customerLabel",
-    PROMO_CUSTOMER_VALUE: "customerValue",
-    PROMO_DISCLAIMER: "disclaimer"
-  };
-  Object.keys(fields).forEach(function(name) {
-    if (env && typeof env[name] === "string" && env[name].trim()) override[fields[name]] = env[name].trim();
+var LAUNCHER_JS = __PP_BUNDLE_LAUNCHER_JS__;
+var DEFAULT_QUOTE_PAGE_URL = "https://itspurgepros.com/quote";
+// Saved-plan links keep the October 5 form by default: it is the only form the quote builder
+// accepts when it creates a link, and the quote host forwards it to the quote page.
+var DEFAULT_SAVED_LINK_BASE = "https://quote.itspurgepros.com/";
+var QUOTE_FORWARD_PATHS = /* @__PURE__ */ new Set(["/", "/quote", "/quote/", "/demo", "/demo.html"]);
+function configuredHttpsUrl(value, fallback) {
+  const text = typeof value === "string" ? value.trim() : "";
+  if (text) {
+    try {
+      const parsed = new URL(text);
+      if (parsed.protocol === "https:" && !parsed.username && !parsed.password) {
+        parsed.hash = "";
+        return parsed;
+      }
+    } catch (_) {
+    }
+  }
+  return new URL(fallback);
+}
+__name(configuredHttpsUrl, "configuredHttpsUrl");
+function quotePageUrl(env) {
+  return configuredHttpsUrl(env && env.QUOTE_PAGE_URL, DEFAULT_QUOTE_PAGE_URL);
+}
+__name(quotePageUrl, "quotePageUrl");
+function savedLinkBase(env) {
+  const base = configuredHttpsUrl(env && env.SAVED_LINK_BASE, DEFAULT_SAVED_LINK_BASE);
+  base.search = "";
+  return base.href;
+}
+__name(savedLinkBase, "savedLinkBase");
+function quotePageRedirect(request, env) {
+  const url = new URL(request.url);
+  let target = quotePageUrl(env);
+  // The target comes from configuration only. A target on this Worker's own host would loop.
+  if (target.host === url.host) target = new URL(DEFAULT_QUOTE_PAGE_URL);
+  if (target.host === url.host) return new Response("Not found", { status: 404 });
+  if (url.search.length > 1) target.search = target.search ? target.search + "&" + url.search.slice(1) : url.search;
+  return new Response(null, {
+    status: 302,
+    headers: { "Location": target.href, "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" }
   });
-  return override;
 }
-__name(promotionOverride, "promotionOverride");
-function widgetScript(request, env) {
-  const origin = new URL(request.url).origin;
-  const configured = WIDGET_JS.replace('leadEndpoint: ""', "leadEndpoint: " + JSON.stringify(origin + "/submit")).replace('reviewsEndpoint: ""', "reviewsEndpoint: " + JSON.stringify(origin + "/reviews")).replace('googleAdsSendTo: ""', "googleAdsSendTo: " + JSON.stringify(GOOGLE_ADS_SEND_TO)).replace("firePixelEvents: true", "firePixelEvents: " + JSON.stringify(FIRE_META_PIXEL_EVENTS));
-  return configured + "\nObject.assign(window.PurgeProsQuote.config.promotion," + JSON.stringify(promotionOverride(env)) + ");";
+__name(quotePageRedirect, "quotePageRedirect");
+function launcherScript(env) {
+  return LAUNCHER_JS.replace('var QUOTE_PAGE = "";', () => "var QUOTE_PAGE = " + JSON.stringify(quotePageUrl(env).href) + ";");
 }
-__name(widgetScript, "widgetScript");
-function quoteLandingHtml(request, env) {
-  const pixelId = env && typeof env.META_PIXEL_ID === "string" ? env.META_PIXEL_ID.trim() : "";
-  const pixelBootstrap = pixelId ? META_PIXEL_BOOTSTRAP.replace("__PP_META_PIXEL_ID__", JSON.stringify(pixelId)) : "";
-  const inlineWidget = widgetScript(request, env).replace(/^\/\*![\s\S]*?\*\/\s*/, "");
-  return QUOTE_LANDING_HTML.replace("__PP_META_PIXEL_BOOTSTRAP__", pixelBootstrap).replace("__PP_WIDGET_SCRIPT__", inlineWidget.replace(/<\/script/gi, "<\\/script"));
+__name(launcherScript, "launcherScript");
+function isStagingCopy(env) {
+  const mark = String(env && env.STAGING !== void 0 && env.STAGING !== null ? env.STAGING : "").trim().toLowerCase();
+  return mark !== "" && mark !== "0" && mark !== "false";
 }
-__name(quoteLandingHtml, "quoteLandingHtml");
+__name(isStagingCopy, "isStagingCopy");
+function oneLine(value) {
+  return String(value).replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]+/g, " ").trim();
+}
+__name(oneLine, "oneLine");
+// Accept and flag (owner decision, October 9, 2026): no request is turned away for its Terms version. A service request that carries
+// another Terms version is accepted exactly as normal; the team note gains one line. Both versions
+// are put on that line as plain single-line text, so neither can add or split a line of the note.
+function termsVersionCheck(env, intent, acceptedVersion) {
+  const current = cleanString(env && env.CURRENT_TERMS_VERSION, 80);
+  if (!current || intent !== "service_request" || acceptedVersion === current) return { outdated: false };
+  return { outdated: true, accepted: oneLine(acceptedVersion), current: oneLine(current) };
+}
+__name(termsVersionCheck, "termsVersionCheck");
 var SCHEMA_VERSION = "cloudflare-widget.v3";
 var PRICING_VERSION = "2026-08-cloudflare-v1";
 var MAX_BODY_BYTES = 3e4;
@@ -282,7 +378,8 @@ var SERVICE_ZIPS = /* @__PURE__ */ new Set([
   "46260",
   "46268",
   "46278",
-  "46280"
+  "46280",
+  "46290"
 ]);
 var FREQUENCIES = {
   twice: { label: "Twice weekly", maxDogs: 9, prices: { 1: 1599, 2: 1749, 3: 1899, 4: 2049, 5: 2199, 6: 2349, 7: 2499, 8: 2649, 9: 2799 } },
@@ -823,8 +920,8 @@ function voiceQuoteResponse(result, context) {
   const isOneTime = result.frequencyId === "onetime";
   return voiceOutcome(
     "standard_price",
-    isOneTime ? `${price} covers the first 30 minutes of one-time cleanup labor. The base deposit is charged when the ETA text goes out. Additional labor after 30 minutes is billed after cleanup at $1 per minute. Service approval is still required.` : `The current recurring maintenance price is ${price} per visit. Route approval is still required before service is confirmed.`,
-    isOneTime ? "Tell the caller the returned price and terms exactly. If they accept, collect the remaining intake details and submit the appropriate service-request workflow. Do not call the service scheduled or confirmed until the team approves it." : "This is a recurring maintenance quote, not an approved first-cleanup price. Ask whether the household has used Purge Pros before. Returning, uncertain-history and new-occupant requests require Submit Team Follow-Up Request for review. New-customer promotion eligibility also requires team verification: approved promotional first cleanups have NO additional-time charge. Standard initial/restart cleanup uses the quoted recurring rate for 30 minutes plus $1 per extra minute, billed after cleanup; base at ETA. Ordinary maintenance stays at the agreed rate regardless of time. Never add a second maintenance charge. Do not call service scheduled or confirmed until the team approves it.",
+    isOneTime ? `${price} covers the first 30 minutes of one-time cleanup labor. The ${price} base is charged when we text that we are on the way. Additional labor after 30 minutes is billed after cleanup at $1 per minute. Service approval is still required.` : `The current recurring maintenance price is ${price} per visit. Route approval is still required before service is confirmed.`,
+    isOneTime ? "Tell the caller the returned price and terms exactly. If they accept, collect the remaining intake details and submit the appropriate service-request workflow. Do not call the service scheduled or confirmed until the team approves it." : "This is a recurring maintenance quote, not an approved first-cleanup price. Ask whether the household has used Purge Pros before. Returning, uncertain-history and new-occupant requests require Submit Team Follow-Up Request for review. New-household status also requires team verification of service history, once per household. New recurring households: first cleanup at the quoted rate with up to 120 minutes included; time beyond 120 minutes is $1 per minute, agreed before work starts. Returning or unclear-history households: restart at the quoted rate for 30 minutes plus $1 per extra minute, billed after cleanup; base at ETA. Ordinary maintenance stays at the agreed rate regardless of time. Never add a second maintenance charge. Never promise a free or unlimited first cleanup. Do not call service scheduled or confirmed until the team approves it.",
     {
       ...context,
       price,
@@ -955,7 +1052,8 @@ function cleanAttribution(value) {
   return Object.fromEntries(allowed.map((key) => [key, cleanString(value[key], 500)]).filter(([, item]) => item));
 }
 __name(cleanAttribution, "cleanAttribution");
-function buildV3Forward(lead, values, requestId, request) {
+function buildV3Forward(lead, values, requestId, request, env) {
+  const referredBy = typeof lead.referredBy === "string" ? lead.referredBy.replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, "").trim().slice(0, 60) : "";
   const quote = values.quote;
   const acceptedAt = (/* @__PURE__ */ new Date()).toISOString();
   const attribution = cleanAttribution(lead.attribution);
@@ -964,6 +1062,9 @@ function buildV3Forward(lead, values, requestId, request) {
   const consentAt = values.preferredContact === "text" ? cleanString(lead.smsConsentCapturedAt, 40) || acceptedAt : "";
   const termsVersion = values.intent === "service_request" ? cleanString(lead.termsVersion, 80) : "";
   const termsAt = values.intent === "service_request" ? cleanString(lead.termsAcceptedAt, 40) || acceptedAt : "";
+  const termsCheck = termsVersionCheck(env, values.intent, termsVersion);
+  const newHousehold = !quote.custom && quote.frequencyId !== "onetime" && values.customerStatus === "new";
+  const firstVisit = quote.custom ? "Team approval required; price and first-cleanup terms are set by the custom review" : quote.frequencyId === "onetime" ? "One-time cleanup: base price covers the first 30 minutes, then $1/min, billed after the cleanup" : newHousehold ? "Team approval required; if household history is verified as new: quoted visit rate, up to 120 minutes included" : "Team approval required; maintenance quote is not a confirmed restart charge";
   const requestType = values.expectedStage === "service_requested" ? "Service requested" : values.expectedStage === "estimate_requested" ? "Custom estimate requested" : values.expectedStage === "quote_requested" ? "Quote copy requested" : "Customer question";
   const quoteSummary = [
     "Purge Pros website quote",
@@ -976,12 +1077,14 @@ function buildV3Forward(lead, values, requestId, request) {
     `Yard size: ${quote.yard.label}`,
     `Last fully cleaned: ${values.lastCleaned}`,
     `Customer history (self-reported): ${values.customerStatus}`,
-    `First visit: ${quote.frequencyId === "onetime" ? "One-time base price plus approved extra time" : "Team approval required; maintenance quote is not a confirmed restart charge"}`,
-    "Initial/restart: quoted recurring rate includes 30 minutes; extra time $1/min afterward; base at ETA. Approved new-customer promotion waives ALL additional-time charges. Ordinary maintenance has no time surcharge. Verify account/household and existing promises before approval; never add a second maintenance charge.",
+    referredBy ? `Who sent them (as typed by the customer, not verified): ${referredBy}` : "",
+    `First visit: ${firstVisit}`,
+    "First cleanup: NEW recurring household = quoted visit rate, up to 120 minutes included; time beyond 120 minutes only at $1/min agreed with the customer BEFORE work starts. RETURNING or unclear history = restart: quoted rate includes 30 minutes, then $1/min, billed after. Base charged at ETA text. Ordinary visits are never billed by the minute. Verify household history and existing promises before approval; never add a second maintenance charge.",
     `Desired start: ${values.intent === "service_request" ? values.startTiming : "Not requested"}`,
     `Reply preference: ${values.preferredContact}`,
     `Service SMS permission: ${values.preferredContact === "text" ? `Yes \u2014 ${consentVersion} at ${consentAt}` : "No"}`,
     `Terms accepted: ${values.intent === "service_request" ? `Yes \u2014 ${termsVersion} at ${termsAt}` : "Not applicable"}`,
+    termsCheck.outdated ? `Terms version check: the customer accepted Terms version ${termsCheck.accepted}; the current version is ${termsCheck.current}. Confirm the current Terms with the customer before approval.` : "",
     values.question ? `Customer message: ${values.question}` : "",
     attribution.utm_source ? `Attribution: ${[attribution.utm_source, attribution.utm_medium, attribution.utm_campaign].filter(Boolean).join(" / ")}` : "",
     `Request ID: ${requestId}`
@@ -1002,13 +1105,15 @@ function buildV3Forward(lead, values, requestId, request) {
     yardSizeId: quote.yardSizeId,
     lastCleaned: values.lastCleaned,
     customerStatus: values.customerStatus,
-    offerVersion: "2026-09-08-checkout-clarity",
+    offerVersion: "2026-10-08-no-start-up-fee-120",
     offerEligibility: quote.frequencyId === "onetime" ? "not_applicable" : quote.custom ? "custom_review" : values.customerStatus === "new" ? "new_customer_review" : "returning_customer_review",
-    cleanupPolicyVersion: "2026-09-08-checkout-clarity",
+    cleanupPolicyVersion: "2026-10-08-no-start-up-fee-120",
     proposedCleanupBaseCents: quote.custom ? null : quote.priceCents,
     standardCleanupIncludedMinutes: quote.custom ? null : 30,
     standardAdditionalMinuteCents: quote.custom ? null : 100,
-    promotionalAdditionalMinuteCents: quote.custom || quote.frequencyId === "onetime" ? null : 0,
+    promotionalAdditionalMinuteCents: null,
+    newCustomerCleanupIncludedMinutes: newHousehold ? 120 : null,
+    newCustomerExtraTimeRequiresAgreement: newHousehold ? true : null,
     cleanupBaseChargeTrigger: "eta_sent",
     cleanupBalanceChargeTrigger: "cleanup_completed",
     finalCleanupTotalCents: null,
@@ -1053,6 +1158,7 @@ function buildV3Forward(lead, values, requestId, request) {
     submittedAt: cleanString(lead.submittedAt, 40),
     receivedAt: acceptedAt,
     consentUserAgent: cleanString(request.headers.get("User-Agent"), 500),
+    ...(referredBy ? { referredBy } : {}),
     source: "purge-pros-cloudflare-widget"
   };
 }
@@ -1091,6 +1197,8 @@ __name(sha256Hex, "sha256Hex");
 async function sendMetaCapi(lead, request, env) {
   if (!env.META_PIXEL_ID || !env.META_CAPI_TOKEN) return;
   if (lead.stage !== "service_requested" && lead.stage !== "estimate_requested") return;
+  // A staging copy may only ever send a labelled test event.
+  if (isStagingCopy(env) && !String(env.META_TEST_EVENT_CODE || "").trim()) return;
   const requestOrigin = request.headers.get("Origin");
   if (requestOrigin && !env.META_TEST_EVENT_CODE) {
     try {
@@ -1123,12 +1231,31 @@ async function sendMetaCapi(lead, request, env) {
     }]
   };
   if (env.META_TEST_EVENT_CODE) body.test_event_code = env.META_TEST_EVENT_CODE;
+  // Keep Meta's answer: status, count received and trace id only. Never the event, never personal data.
+  const outcome = { event: "meta_capi_result", requestId: lead.requestId || null, stage: lead.stage, testEvent: Boolean(env.META_TEST_EVENT_CODE), httpStatus: null, eventsReceived: null, fbtraceId: null, errorCode: null };
   try {
-    await fetch(`https://graph.facebook.com/v21.0/${env.META_PIXEL_ID}/events?access_token=${env.META_CAPI_TOKEN}`, {
+    const reply = await fetch(`https://graph.facebook.com/v21.0/${env.META_PIXEL_ID}/events?access_token=${env.META_CAPI_TOKEN}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
+    outcome.httpStatus = reply.status;
+    try {
+      const answer = JSON.parse((await reply.text()).slice(0, 4e3));
+      if (answer && typeof answer === "object") {
+        const failure = answer.error && typeof answer.error === "object" ? answer.error : {};
+        if (Number.isFinite(answer.events_received)) outcome.eventsReceived = answer.events_received;
+        const trace = typeof answer.fbtrace_id === "string" ? answer.fbtrace_id : typeof failure.fbtrace_id === "string" ? failure.fbtrace_id : "";
+        if (trace) outcome.fbtraceId = trace.slice(0, 80);
+        if (Number.isFinite(failure.code)) outcome.errorCode = failure.code;
+      }
+    } catch (_) {
+    }
+  } catch (_) {
+    outcome.errorCode = "request_failed";
+  }
+  try {
+    console.log(JSON.stringify(outcome));
   } catch (_) {
   }
 }
@@ -1182,7 +1309,7 @@ async function handleLeadSubmission(request, env, ctx) {
     if (!validation.ok) {
       return jsonResponse(400, { accepted: false, message: "Please check the highlighted form details.", fields: validation.errors }, cors);
     }
-    forward = buildV3Forward(lead, validation.values, requestId, request);
+    forward = buildV3Forward(lead, validation.values, requestId, request, env);
   } else {
     if (env.ACCEPT_LEGACY_WIDGET === "false") {
       return jsonResponse(400, { accepted: false, message: "Unsupported widget version" }, cors);
@@ -1322,7 +1449,7 @@ async function handleQuoteResume(request, env) {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(record)
     }));
     if (!saved.ok) throw new Error("Save unavailable");
-    return resumeReply(201, { ok: true, url: "https://quote.itspurgepros.com/#resume=" + token, expiresAt: record.expiresAt }, cors);
+    return resumeReply(201, { ok: true, url: savedLinkBase(env) + "#resume=" + token, expiresAt: record.expiresAt }, cors);
   } catch (_) {
     return resumeReply(503, { ok: false, code: "UNAVAILABLE", message: "Save links are temporarily unavailable. You can continue with your quote." }, cors);
   }
@@ -1384,10 +1511,11 @@ async function expireResumeStorage(instance) {
 var worker_default = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === "/submit" && url.search === "?operation=request-status") return handleRequestStatus(request, env);
     if (url.pathname === "/quote-resume" || url.pathname === "/quote-resume/open") return handleQuoteResume(request, env);
     if (url.pathname === "/voice-quote") return handleVoiceQuote(request, env);
     if (request.method === "GET" && url.pathname === "/purge-quote.js") {
-      return new Response(widgetScript(request, env), {
+      return new Response(launcherScript(env), {
         headers: {
           "Content-Type": "application/javascript; charset=utf-8",
           "Cache-Control": "public, max-age=300",
@@ -1396,28 +1524,7 @@ var worker_default = {
         }
       });
     }
-    const directQuoteHost = url.hostname.toLowerCase() === "quote.itspurgepros.com";
-    if (request.method === "GET" && (url.pathname === "/quote" || url.pathname === "/quote/" || directQuoteHost && url.pathname === "/")) {
-      return new Response(quoteLandingHtml(request, env), {
-        headers: {
-          "Content-Type": "text/html; charset=utf-8",
-          "Cache-Control": "no-store",
-          "X-Content-Type-Options": "nosniff",
-          "Referrer-Policy": "strict-origin-when-cross-origin",
-          "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
-        }
-      });
-    }
-    if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/demo" || url.pathname === "/demo.html")) {
-      return new Response(DEMO_HTML, {
-        headers: {
-          "Content-Type": "text/html; charset=utf-8",
-          "Cache-Control": "no-store",
-          "X-Content-Type-Options": "nosniff",
-          "Referrer-Policy": "strict-origin-when-cross-origin"
-        }
-      });
-    }
+    if (request.method === "GET" && QUOTE_FORWARD_PATHS.has(url.pathname)) return quotePageRedirect(request, env);
     if (url.pathname === "/reviews" && request.method === "GET") return handleReviews(request, env);
     if (url.pathname === "/submit" && (request.method === "POST" || request.method === "OPTIONS")) {
       return handleLeadSubmission(request, {
