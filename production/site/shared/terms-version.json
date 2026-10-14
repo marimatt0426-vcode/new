@@ -1,5 +1,5 @@
 {
   "_how": "The ONE pin of the Terms version label that a service request carries (payload key termsVersion). The engine holds the same text as a literal (shared/pp-quote-core.js, VERSIONS.termsVersion: a browser script cannot read this file); the tests and the contract checker read THIS file and fail if the engine says anything else. Until the switch day the label is the live tool's own (switchDay null). On the switch day directions/coverstory/_work/set-switch-day.mjs YYYY-MM-DD writes the new label here and in the engine together (form YYYY-MM-DD-no-start-up-fee) and sets switchDay; from then on the engine's label is meant to DIFFER from the October 5 widget's, and the tests check exactly that. Never edit by hand.",
-  "termsVersion": "2026-10-11-no-start-up-fee",
-  "switchDay": "2026-10-11"
+  "termsVersion": "2026-10-14-no-start-up-fee",
+  "switchDay": "2026-10-14"
 }

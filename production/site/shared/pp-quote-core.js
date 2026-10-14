@@ -41,7 +41,7 @@
     schemaVersion: "cloudflare-widget.v3",
     pricingVersion: "2026-08-cloudflare-v1",
     consentVersion: "service-sms-2026-08-v1",
-    termsVersion: "2026-10-11-no-start-up-fee",
+    termsVersion: "2026-10-14-no-start-up-fee",
     // TRACKING CHANGE APPROVED BY THE OWNER 2026-10-09 (T4): ui_version is sent with
     // every analytics event. The live widget sends liveUiVersion; this rebuild
     // sends its own value so reports can tell the two front ends apart.

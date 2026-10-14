@@ -1,5 +1,13 @@
 # Production maintenance
 
+## Dated Terms revision 2026-10-14 (published October 14, 2026)
+
+The Terms carry "Last updated: October 14, 2026" and the label `2026-10-14-no-start-up-fee`, approved by the owner on October 13. What changed for a customer: a visit lost to a locked gate is normally refunded the same day, and a household that keeps leaving the gate locked is talked to first, given leeway within reason, and may then be charged for the missed visit, always told first; the $10 obstruction fee is charged at most once per visit and only after the customer is told which condition led to it; restart cleanups are named and explained in one place; the FAQ gained one question on fees and its refund sentence names the locked-gate exception (also on Dog Waste Removal). Prices, allowances and time limits are unchanged; Privacy and Quote wording are unchanged.
+
+Live on October 14, 2026, each step checked from outside: the file host serves the new folder `v5-20261014` beside every older folder (all older addresses unchanged); the quote Worker runs the October 13 bundle with `CURRENT_TERMS_VERSION` set to the new label (an older label is still accepted and flagged for the team; accepted-request retries keep their receipt); the Terms, FAQ and Dog Waste Removal pages, the shared footer, the Welcome footer and both blog footers were pasted and published, and all public pages passed their checks. Pricing, consent, request identity, saved plans, attribution and integrations are unchanged. The superseded Terms text and the revision record stay in the private release archive. The Terms label date is stored in the legacy-named `switchDay` pin; the original launch date remains October 11.
+
+This commit also carries the Yard Guide card of the post published on October 14 (the index blocks, the article footer's related row, `covers.json` and the card's thumbnail), live since that morning.
+
 ## Boundaries
 
 Website content is edited in GHL using the corresponding page/shared custom-code fragment. Static assets are served by `purge-pros-site-assets`; the quote form and relay are served by `purge-lead-relay`. Source synchronization does not publish either service.
