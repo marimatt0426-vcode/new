@@ -1,5 +1,5 @@
 {
- "note": "All 49 Yard Guide posts, in live index order. cover = full size (1536x1024) for an article page or a large feature; thumb = 720x480 for cards and grids (use thumbs wherever a cover is shown smaller than 720 CSS px wide). categoryOrder is the live filter order.",
+ "note": "All 50 Yard Guide posts, in live index order. cover = full size (1536x1024) for an article page or a large feature; thumb = 720x480 for cards and grids (use thumbs wherever a cover is shown smaller than 720 CSS px wide). categoryOrder is the live filter order.",
  "categoryOrder": [
   "Yard Care",
   "Property Guides",
@@ -7,6 +7,17 @@
   "Seasonal Yard Care"
  ],
  "posts": [
+  {
+   "slug": "backyard-leaf-pickup-piles-contractor-handoff",
+   "title": "Planning Backyard Leaf Pickup? Set the Piles Before the Contractor Arrives",
+   "category": "Seasonal Yard Care",
+   "description": "Plan leaf-pile locations, dog-waste separation, access, and the handoff to a leaf contractor before backyard pickup begins.",
+   "alt": "Illustrated autumn backyard with staged leaf piles, blue route arrows, a clear gate, an animated dog, and the Purge Pros mascot.",
+   "publicUrl": "https://blog.itspurgepros.com/post/backyard-leaf-pickup-piles-contractor-handoff",
+   "cover": "assets/covers/by-slug/backyard-leaf-pickup-piles-contractor-handoff.jpg",
+   "exists": true,
+   "thumb": "assets/covers/thumbs/backyard-leaf-pickup-piles-contractor-handoff.jpg"
+  },
   {
    "slug": "wet-lawn-irrigation-timing-dog-waste-cleanup",
    "title": "Wet Lawn, Working Sprinklers: Coordinate Yard Access Without Promising a Dry Visit",
