@@ -92,6 +92,38 @@ function uncertainQuoteReply(requestId) {
   });
 }
 __name(uncertainQuoteReply, "uncertainQuoteReply");
+// A failed hand-off to GoHighLevel writes one log line: the reply code, a redirect's host name and an error's
+// name only. Never the request, the webhook address, a reply body, other headers or an error message.
+// A thrown AbortError (the 10 second limit) is reported as "timeout". Logging never throws.
+// Only an http or https Location gives a host name: another scheme's "host" can hold path text.
+function logHandoffFailure(requestId, reason, upstream, error) {
+  try {
+    let httpStatus = null, redirectHost = null, errorName = null;
+    if (upstream) {
+      httpStatus = typeof upstream.status === "number" ? upstream.status : null;
+      if (httpStatus >= 300 && httpStatus < 400) {
+        try {
+          const location = upstream.headers.get("Location");
+          const target = location ? new URL(location, "https://x.invalid") : null;
+          if (target && (target.protocol === "https:" || target.protocol === "http:")) redirectHost = target.hostname.slice(0, 253) || null;
+        } catch (_) {
+          redirectHost = null;
+        }
+      }
+    }
+    if (error) {
+      try {
+        if (typeof error.name === "string" && error.name) errorName = error.name.slice(0, 40);
+      } catch (_) {
+        errorName = null;
+      }
+    }
+    if (reason === "network_error" && errorName === "AbortError") reason = "timeout";
+    console.log(JSON.stringify({ event: "ghl_handoff_failed", requestId, reason, httpStatus, redirectHost, errorName }));
+  } catch (_) {
+  }
+}
+__name(logHandoffFailure, "logHandoffFailure");
 function unavailableQuoteReply(requestId) {
   return replayReply(503, {
     accepted: false,
@@ -221,6 +253,7 @@ var QuoteRequestLedger = class extends DurableObject {
             redirect: "manual"
           });
         } catch (_) {
+          logHandoffFailure(forward.requestId, "network_error", null, _);
           record.status = "uncertain";
           await this.ctx.storage.put("request", record);
           return uncertainQuoteReply(forward.requestId);
@@ -228,6 +261,7 @@ var QuoteRequestLedger = class extends DurableObject {
           clearTimeout(timeout);
         }
         if (!upstream.ok) {
+          logHandoffFailure(forward.requestId, "http_status", upstream, null);
           record.status = "uncertain";
           record.upstreamStatus = upstream.status;
           await this.ctx.storage.put("request", record);
@@ -244,6 +278,7 @@ var QuoteRequestLedger = class extends DurableObject {
         }
         return replayReply(202, receipt);
       } catch (_) {
+        if (mayHaveDispatched) logHandoffFailure(forward.requestId, "internal_error", null, _);
         return mayHaveDispatched ? uncertainQuoteReply(forward.requestId) : unavailableQuoteReply(forward.requestId);
       }
     });

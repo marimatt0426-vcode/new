@@ -18,7 +18,8 @@
 //      protected code blocks (ledger, saved-plan store, validation and more) equal the
 //      reference.
 //   c. New behaviour: the forward to the quote page, the launcher script, the Meta
-//      guard, the Terms version flag (accept and flag, never refuse) and the saved-link base.
+//      guard, the Terms version flag (accept and flag, never refuse), the saved-link base
+//      and the log line of a failed hand-off to GoHighLevel.
 //   d. A word sweep of the candidate bundle.
 // Nothing here deploys or contacts any service. Every address and value is made up.
 import fs from 'node:fs';
@@ -85,7 +86,8 @@ const APPROVED = [
   ['voice-quote message (one-time price)', 'one sentence: "The base deposit is charged when the ETA text goes out." becomes "The $89.99 base is charged when we text that we are on the way."; every other word and field identical'],
   ['GET /purge-quote.js', 'the retired widget is replaced by the launcher script; same headers'],
   ['GET quote and demo pages', `GET ${FORWARD_PATHS.join(', ')} answer 302 to the quote page with the query string kept`],
-  ['Meta result log line', 'one structured console line per Meta copy sent (status, count received, trace id)']
+  ['Meta result log line', 'one structured console line per Meta copy sent (status, count received, trace id)'],
+  ['GHL hand-off failure log line', 'one structured console line when the hand-off to GoHighLevel fails (reason, reply code, redirect host name, error name); nothing else changes, and no request field other than the request id, no webhook address, reply body or error message is written']
 ];
 const approvedCounts = Object.fromEntries(APPROVED.map(([name]) => [name, 0]));
 const count = name => { assert.ok(name in approvedCounts, name); approvedCounts[name] += 1; };
@@ -149,7 +151,19 @@ globalThis.fetch = async (input, init = {}) => {
   active.outgoing.push(record);
   if (url === HOOK_V3 || url === HOOK_LEGACY) {
     if (active.upstream === 'throw') throw new Error('stand-in network failure');
-    if (active.upstream === 'fail') return new Response('stand-in failure', { status: 500 });
+    // spec.redirectLocation, if any, is the Location of the 500 reply and of a redirect (which the ledger does not follow).
+    const location = active.redirectLocation === undefined ? {} : { Location: active.redirectLocation };
+    if (active.upstream === 'fail') return new Response('stand-in failure', { status: 500, headers: location });
+    if (active.upstream === 'redirect') return new Response(null, { status: 302, headers: location });
+    // The 10 second abort: the caller's own timer, set just before this call, is fired at once (the real
+    // AbortController aborts the call's signal) and the call fails as fetch does, with the signal's reason.
+    if (active.upstream === 'abort') {
+      const timer = active.timers[active.timers.length - 1];
+      assert.ok(timer && timer.ms === 1e4 && init.signal && !init.signal.aborted, 'the hand-off runs under its 10 second timer');
+      timer.fire();
+      assert.ok(init.signal.aborted, 'the 10 second timer aborts the hand-off');
+      throw init.signal.reason;
+    }
     return new Response('{"status":"Success: request sent to trigger execution server"}', { status: 200 });
   }
   if (url.startsWith('https://graph.facebook.com/')) {
@@ -164,6 +178,14 @@ globalThis.caches = { default: {
   async match(request) { const hit = active.cache.get(request.url); return hit ? hit.clone() : undefined; },
   async put(request, response) { active.cache.set(request.url, response); }
 } };
+// While a request's hand-off is to time out (upstream 'abort'), the Worker's timers are noted so the stand-in can
+// fire the ledger's 10 second one at once; every timer still runs, and is cleared, as it would otherwise.
+const realSetTimeout = globalThis.setTimeout;
+globalThis.setTimeout = (callback, ms, ...rest) => {
+  const id = realSetTimeout(callback, ms, ...rest);
+  if (active && active.running && active.upstream === 'abort') active.timers.push({ ms, fire: () => callback(...rest) });
+  return id;
+};
 const realConsoleLog = console.log;
 console.log = (...args) => {
   if (active && active.running && typeof args[0] === 'string' && args[0].startsWith('{"event":"')) active.logs.push(JSON.parse(args[0]));
@@ -212,6 +234,8 @@ async function send(world, spec) {
   world.running = true;
   world.upstream = spec.upstream || 'ok';
   world.meta = spec.meta || 'ok';
+  world.redirectLocation = spec.redirectLocation;
+  world.timers = [];
   workerRandom = mulberry32(spec.seed || 1);
   if (spec.at !== undefined) clock = spec.at;
   const firstCall = world.outgoing.length;
@@ -286,8 +310,55 @@ function protect(label, before, after) {
   assert.equal(after, before, `${label} changed`);
   protectedBlocks[label] = sha256(after);
 }
-protectWithApprovedLines('request ledger, replies and request fingerprint (apart from the optional referral)',
-  ledgerBlock(referenceSource), ledgerBlock(candidateSource).replace("    if (new URL(request.url).pathname === \"/request-status-limit\") return limitRequestStatus(this, request);\n", "").replace("    if (new URL(request.url).pathname === \"/request-status\") return readRequestStatus(this, request);\n", ""), [["  if (forward.referredBy) material.push(forward.referredBy);\n", '']]);
+// The hand-off failure log (owner approval, October 15, 2026): one new helper beside the replies, pinned here to
+// its reviewed text, and three calls in the ledger's failure branches. With them removed the ledger must still
+// equal the October 5 release, so the log cannot change a reply, a stored record or the order of anything.
+const HANDOFF_LOG_HELPER = String.raw`// A failed hand-off to GoHighLevel writes one log line: the reply code, a redirect's host name and an error's
+// name only. Never the request, the webhook address, a reply body, other headers or an error message.
+// A thrown AbortError (the 10 second limit) is reported as "timeout". Logging never throws.
+// Only an http or https Location gives a host name: another scheme's "host" can hold path text.
+function logHandoffFailure(requestId, reason, upstream, error) {
+  try {
+    let httpStatus = null, redirectHost = null, errorName = null;
+    if (upstream) {
+      httpStatus = typeof upstream.status === "number" ? upstream.status : null;
+      if (httpStatus >= 300 && httpStatus < 400) {
+        try {
+          const location = upstream.headers.get("Location");
+          const target = location ? new URL(location, "https://x.invalid") : null;
+          if (target && (target.protocol === "https:" || target.protocol === "http:")) redirectHost = target.hostname.slice(0, 253) || null;
+        } catch (_) {
+          redirectHost = null;
+        }
+      }
+    }
+    if (error) {
+      try {
+        if (typeof error.name === "string" && error.name) errorName = error.name.slice(0, 40);
+      } catch (_) {
+        errorName = null;
+      }
+    }
+    if (reason === "network_error" && errorName === "AbortError") reason = "timeout";
+    console.log(JSON.stringify({ event: "ghl_handoff_failed", requestId, reason, httpStatus, redirectHost, errorName }));
+  } catch (_) {
+  }
+}
+__name(logHandoffFailure, "logHandoffFailure");
+`;
+// Each call is pinned to its place: the first line of the failure branch it belongs to (fetch threw, reply not ok,
+// the outer catch), so a call that moves, or a fourth one, fails here too.
+const HANDOFF_LOG_CALLS = [
+  ['        } catch (_) {\n', '          logHandoffFailure(forward.requestId, "network_error", null, _);\n'],
+  ['        if (!upstream.ok) {\n', '          logHandoffFailure(forward.requestId, "http_status", upstream, null);\n'],
+  ['      } catch (_) {\n', '        if (mayHaveDispatched) logHandoffFailure(forward.requestId, "internal_error", null, _);\n']
+];
+assert.equal(candidateSource.split('logHandoffFailure(').length - 1, 1 + HANDOFF_LOG_CALLS.length, 'the hand-off log helper and its three calls, nowhere else');
+assert.equal(candidateSource.split('"ghl_handoff_failed"').length - 1, 1, 'one place writes the hand-off failure line');
+assert.ok(!referenceSource.includes('ghl_handoff_failed'), 'the October 5 release has no hand-off log');
+protectWithApprovedLines('request ledger, replies and request fingerprint (apart from the optional referral and the hand-off failure log)',
+  ledgerBlock(referenceSource), ledgerBlock(candidateSource).replace("    if (new URL(request.url).pathname === \"/request-status-limit\") return limitRequestStatus(this, request);\n", "").replace("    if (new URL(request.url).pathname === \"/request-status\") return readRequestStatus(this, request);\n", ""),
+  [["  if (forward.referredBy) material.push(forward.referredBy);\n", ''], [HANDOFF_LOG_HELPER, ''], ...HANDOFF_LOG_CALLS.map(([opening, call]) => [opening + call, opening])]);
 protect('versions, default origins, ZIP list, prices, option sets and voice tables',
   slice(referenceSource, 'var SCHEMA_VERSION = ', 'function corsHeaders(', 'constants'), slice(candidateSource, 'var SCHEMA_VERSION = ', 'function corsHeaders(', 'constants').replace('  "46280",\n  "46290"\n]);', '  "46280"\n]);'));
 protect('origin check, cleaning, price calculator and voice parsing',
@@ -660,10 +731,44 @@ function expectedFromReference(spec, ref) {
     assert.ok(['service_requested', 'estimate_requested'].includes(toTeam.body.stage));
     return { event: 'meta_capi_result', requestId: toTeam.body.requestId, stage: toTeam.body.stage, testEvent: false, httpStatus: 200, eventsReceived: 1, fbtraceId: 'TRACE-RECEIVED', errorCode: null };
   });
+  // A current-format request whose hand-off to GoHighLevel failed (only /submit goes through the ledger) adds
+  // exactly one line, computed from what the stand-in answered. Nothing else in the result may differ.
+  const handoff = url.pathname === '/submit' && HANDOFF_FAILURE_LINES[spec.upstream] ? expected.outgoing.find(call => call.url === HOOK_V3) : undefined;
+  if (handoff) {
+    assert.deepEqual([ref.status, JSON.parse(ref.text).code], [409, 'SUBMISSION_UNCERTAIN']);
+    expected.logs.unshift({ event: 'ghl_handoff_failed', requestId: handoff.body.requestId, ...HANDOFF_FAILURE_LINES[spec.upstream] });
+    count('GHL hand-off failure log line');
+  }
   return expected;
 }
+// What the differential's two failing stand-ins produce: the team system answers 500, or cannot be reached.
+const HANDOFF_FAILURE_LINES = {
+  fail: { reason: 'http_status', httpStatus: 500, redirectHost: null, errorName: null },
+  throw: { reason: 'network_error', httpStatus: null, redirectHost: null, errorName: 'Error' }
+};
+const HANDOFF_LOG_KEYS = ['event', 'requestId', 'reason', 'httpStatus', 'redirectHost', 'errorName'];
+// A hand-off log line holds its six fields in this order and nothing from the request but the request id.
+function assertHandoffLineClean(line, lead, context) {
+  const text = JSON.stringify(line);
+  assert.deepEqual(Object.keys(line), HANDOFF_LOG_KEYS, `${context}: hand-off log fields and order`);
+  assert.ok(text.startsWith('{"event":"ghl_handoff_failed",'), context);
+  const requestId = cleanRequestId(lead);
+  if (requestId === undefined) assert.equal(typeof line.requestId, 'string', `${context}: request id made up by the Worker`);
+  else assert.equal(line.requestId, requestId, `${context}: request id`);
+  for (const field of ['firstName', 'lastName', 'phone', 'email', 'street', 'city', 'question', 'notes']) {
+    const value = typeof lead[field] === 'string' ? lead[field].trim() : '';
+    if (value) assert.ok(!text.includes(value), `${context}: hand-off log line leaks ${field}`);
+  }
+  const digits = String(lead.phone || '').replace(/\D/g, '').slice(-10);
+  if (digits) assert.ok(!text.includes(digits), `${context}: hand-off log line leaks the phone number`);
+  for (const secret of [HOOK_V3, HOOK_LEGACY, 'hooks.example.test', 'v3-intake']) assert.ok(!text.includes(secret), `${context}: hand-off log line leaks the webhook address`);
+}
+// The request id as the Worker forwards it (a missing one is made up by the Worker, so any string is accepted then).
+function cleanRequestId(lead) {
+  return typeof lead.requestId === 'string' && lead.requestId.trim() ? lead.requestId.trim().slice(0, 120) : undefined;
+}
 
-const tally = { requests: 0, byKind: {}, byStatus: {}, forwardsV3: 0, forwardsLegacy: 0, metaCalls: 0, plansSaved: 0, plansOpened: 0 };
+const tally = { requests: 0, byKind: {}, byStatus: {}, forwardsV3: 0, forwardsLegacy: 0, metaCalls: 0, plansSaved: 0, plansOpened: 0, handoffLines: 0 };
 async function compare(worlds, kind, spec) {
   const [refWorld, candWorld] = worlds;
   const ref = await send(refWorld, spec);
@@ -675,6 +780,10 @@ async function compare(worlds, kind, spec) {
   assert.equal(cand.text, expected.text, `${context}: body`);
   assert.deepEqual(cand.outgoing, expected.outgoing, `${context}: outgoing calls`);
   assert.deepEqual(cand.logs, expected.logs, `${context}: log lines`);
+  for (const line of cand.logs.filter(entry => entry.event === 'ghl_handoff_failed')) {
+    assertHandoffLineClean(line, JSON.parse(spec.body), context);
+    tally.handoffLines += 1;
+  }
   cand.outgoing.forEach((call, index) => {
     if (!isV3Forward(call)) return;
     // Same keys in the same order, with the two new keys and nothing else added.
@@ -1348,6 +1457,123 @@ const serviceLead = (overrides = {}) => ({ ...makeLead(generator(31337), 'recurr
   newBehaviour.origins = 'built-in list unchanged; a staging origin is accepted only through ALLOWED_ORIGINS';
 }
 
+{ // 6. A failed hand-off to GoHighLevel writes one log line (owner approval, October 15, 2026).
+  // Each case runs the reference and the candidate on fresh worlds. The answer (status, headers, body) and every
+  // stored ledger record must equal the reference byte for byte, every outgoing call must equal it apart from the
+  // approved forward differences, and every other log line must be as before: only the new line may differ.
+  const storeBytes = world => JSON.stringify([...world.objects].map(([id, object]) => [id, [...object.store]]));
+  const lead = serviceLead({ requestId: 'req-handoff-log', question: 'Please use the side gate.', notes: 'Dog is friendly.' });
+  let cases = 0;
+  const run = async (label, extra = {}, setup) => {
+    const spec = submitSpec(lead, { seed: 1015, ...extra });
+    const worlds = [makeWorld(reference, PRODUCTION_LIKE), makeWorld(candidate, PRODUCTION_LIKE)];
+    if (setup) worlds.forEach(setup);
+    const ref = await send(worlds[0], spec);
+    const cand = await send(worlds[1], spec);
+    const expected = expectedFromReference(spec, ref);
+    assert.deepEqual([cand.status, cand.headers, cand.text], [ref.status, ref.headers, ref.text], `${label}: the answer equals the reference byte for byte`);
+    assert.deepEqual(cand.outgoing, expected.outgoing, `${label}: outgoing calls`);
+    assert.equal(storeBytes(worlds[1]), storeBytes(worlds[0]), `${label}: stored ledger records equal the reference byte for byte`);
+    const other = logs => logs.filter(line => line.event !== 'ghl_handoff_failed');
+    assert.deepEqual(other(cand.logs), other(expected.logs), `${label}: every other log line as before`);
+    const lines = cand.logs.filter(line => line.event === 'ghl_handoff_failed');
+    lines.forEach(line => assertHandoffLineClean(line, lead, label));
+    cases += 1;
+    return { ref, cand, lines, record: worlds[1].objects.size ? [...worlds[1].objects.values()][0].store.get('request') : undefined };
+  };
+  const line = fields => ({ event: 'ghl_handoff_failed', requestId: 'req-handoff-log', reason: null, httpStatus: null, redirectHost: null, errorName: null, ...fields });
+  const uncertain = result => assert.deepEqual([result.cand.status, JSON.parse(result.cand.text).code], [409, 'SUBMISSION_UNCERTAIN']);
+
+  // (a) GoHighLevel answers 500: exactly one line, the six fields in order, and nothing else logged.
+  let result = await run('team system answers 500', { upstream: 'fail' });
+  uncertain(result);
+  assert.equal(result.lines.length, 1);
+  assert.deepEqual(Object.keys(result.lines[0]), HANDOFF_LOG_KEYS);
+  assert.deepEqual(result.lines[0], line({ reason: 'http_status', httpStatus: 500 }));
+  assert.deepEqual(result.cand.logs, result.lines, 'the only log line');
+  assert.deepEqual([result.record.status, result.record.upstreamStatus], ['uncertain', 500]);
+  // (b) GoHighLevel cannot be reached: the error's name only, never its message.
+  result = await run('team system unreachable', { upstream: 'throw' });
+  uncertain(result);
+  assert.deepEqual(result.lines, [line({ reason: 'network_error', errorName: 'Error' })]);
+  assert.ok(!JSON.stringify(result.lines).includes('stand-in network failure'), 'the error message is never logged');
+  // (c) The 10 second abort: the ledger's own timer fires and its AbortController ends the call.
+  result = await run('team system too slow (abort)', { upstream: 'abort' });
+  uncertain(result);
+  assert.deepEqual(result.lines, [line({ reason: 'timeout', errorName: 'AbortError' })]);
+  assert.ok(!JSON.stringify(result.lines).includes('aborted'), 'the error message is never logged');
+  // (d) A redirect: the Location's host name only, never its path or query.
+  result = await run('team system redirects', { upstream: 'redirect', redirectLocation: 'https://example.test/secret/path?token=1' });
+  uncertain(result);
+  assert.deepEqual(result.lines, [line({ reason: 'http_status', httpStatus: 302, redirectHost: 'example.test' })]);
+  for (const hidden of ['secret', 'token', '/path', '?']) assert.ok(!JSON.stringify(result.lines[0]).includes(hidden), `the redirect's ${hidden} is never logged`);
+  assert.deepEqual([result.record.status, result.record.upstreamStatus], ['uncertain', 302]);
+  // A relative Location resolves against the placeholder host x.invalid; none, or one that cannot be read, gives null.
+  // A Location with sign-in details gives the host name alone; an http one counts too; any other scheme gives
+  // null, because its "host" can carry path text (an encoded webhook path would otherwise reach the log).
+  for (const [redirectLocation, redirectHost] of [['/secret/next?token=1', 'x.invalid'], [undefined, null], ['http://[', null], ['', null],
+    ['https://user:pass@example.test/secret?token=1', 'example.test'], ['HTTP://Example.TEST/secret', 'example.test'],
+    ['foo://ghl.example%2Fhooks%2FSECRETPATH/', null], ['intent://scan/SECRET', null], ['ftp://files.test/secret', null], ['mailto:secret@example.test', null]]) {
+    result = await run(`team system redirects (Location ${JSON.stringify(redirectLocation)})`, { upstream: 'redirect', redirectLocation });
+    uncertain(result);
+    assert.deepEqual(result.lines, [line({ reason: 'http_status', httpStatus: 302, redirectHost })]);
+    for (const hidden of ['user', 'pass', 'hooks', 'SECRET', 'scan']) assert.ok(!JSON.stringify(result.lines[0]).includes(hidden), `the redirect's ${hidden} is never logged`);
+    assert.ok(!JSON.stringify(result.lines[0]).includes('secret'));
+  }
+  // A reply that is not a redirect gives no host name, even when it carries a Location.
+  result = await run('team system answers 500 with a Location', { upstream: 'fail', redirectLocation: 'https://example.test/secret?token=1' });
+  uncertain(result);
+  assert.deepEqual(result.lines, [line({ reason: 'http_status', httpStatus: 500 })]);
+  assert.ok(!JSON.stringify(result.lines[0]).includes('example.test'), 'a Location outside a redirect is never logged');
+  // (e) The hand-off succeeds: no hand-off line; the Meta line is logged as before.
+  result = await run('team system accepts', {});
+  assert.deepEqual([result.cand.status, result.lines.length, result.cand.logs.map(entry => entry.event)], [202, 0, ['meta_capi_result']]);
+  assert.equal(result.record.status, 'accepted');
+  // The ledger cannot save its record after the hand-off may have happened: internal_error, with the error's name.
+  // A save failing before the hand-off writes nothing (the request never left), and stays "unavailable".
+  const failingSave = when => world => {
+    const get = world.env.QUOTE_REQUESTS.get;
+    world.env.QUOTE_REQUESTS.get = id => {
+      const stub = get(id);
+      const storage = world.objects.get(id).instance.ctx.storage;
+      if (!storage.standInFailure) {
+        const put = storage.put;
+        storage.standInFailure = true;
+        storage.put = async (key, value) => { const failure = key === 'request' ? when(value) : null; if (failure) throw failure; return put(key, value); };
+      }
+      return stub;
+    };
+  };
+  result = await run('record of an accepted hand-off cannot be saved', {}, failingSave(value => (value.status === 'accepted' ? new TypeError('stand-in storage failure') : null)));
+  uncertain(result);
+  assert.deepEqual(result.lines, [line({ reason: 'internal_error', errorName: 'TypeError' })]);
+  assert.equal(result.cand.outgoing.filter(isMetaCall).length, 0, 'Meta is not sent, as before');
+  assert.equal(result.record.status, 'dispatching');
+  result = await run('record of a refused hand-off cannot be saved', { upstream: 'fail' }, failingSave(value => (value.status === 'uncertain' ? new TypeError('stand-in storage failure') : null)));
+  uncertain(result);
+  assert.deepEqual(result.lines, [line({ reason: 'http_status', httpStatus: 500 }), line({ reason: 'internal_error', errorName: 'TypeError' })], 'what GoHighLevel answered is logged before the save is tried');
+  result = await run('record cannot be saved before the hand-off', {}, failingSave(value => (value.status === 'dispatching' ? new TypeError('stand-in storage failure') : null)));
+  assert.deepEqual([result.cand.status, JSON.parse(result.cand.text).code, result.cand.outgoing.length, result.cand.logs.length], [503, 'SUBMISSION_UNAVAILABLE', 0, 0]);
+  // An error's name is cut to 40 characters; a name that cannot be read gives null; the line is still written.
+  result = await run('error with a long name', {}, failingSave(value => (value.status === 'accepted' ? Object.assign(new Error('stand-in'), { name: 'N'.repeat(60) }) : null)));
+  assert.deepEqual(result.lines, [line({ reason: 'internal_error', errorName: 'N'.repeat(40) })]);
+  result = await run('error whose name cannot be read', {}, failingSave(value => (value.status === 'accepted' ? { get name() { throw new Error('stand-in'); } } : null)));
+  assert.deepEqual(result.lines, [line({ reason: 'internal_error' })]);
+  // Logging never changes the outcome: with a log sink that throws, the answer and the record still equal the reference.
+  const intercept = console.log;
+  console.log = (...args) => { if (active && active.running) throw new Error('stand-in log sink failure'); intercept(...args); };
+  try {
+    for (const upstream of ['fail', 'throw', 'abort', 'redirect']) {
+      result = await run(`log sink fails (${upstream})`, { upstream, redirectLocation: 'https://example.test/next' });
+      uncertain(result);
+      assert.deepEqual(result.lines, []);
+    }
+  } finally {
+    console.log = intercept;
+  }
+  newBehaviour.handoffLog = `${cases} cases against the reference: one ghl_handoff_failed line (event, requestId, reason, httpStatus, redirectHost, errorName) for a 500 reply (no host name even with a Location), a network failure, the 10 second abort (the ledger's own timer fired), a redirect (an http or https host name only; relative, missing, unreadable, sign-in details and other schemes covered) and a record that cannot be saved after the hand-off (two lines when the reply was already refused); none on success or before the hand-off; answers, stored records, outgoing calls and Meta unchanged byte for byte, also with a log sink that throws; ${tally.handoffLines} differential lines all checked free of name, phone, email, address, question, notes and the webhook address`;
+}
+
 // ---------------------------------------------------------------------------
 // Optional referral: exercise the real handler, ledger and Meta stand-ins.
 {
@@ -1447,7 +1673,7 @@ console.log = realConsoleLog;
 console.log(`Differential: ${tally.requests} requests answered by the October 5 reference and the candidate (statuses ${JSON.stringify(tally.byStatus)}); ${tally.forwardsV3} forwards to the team, ${tally.metaCalls} Meta copies, ${tally.plansSaved} plans saved and ${tally.plansOpened} opened.`);
 console.log('Identical except for these approved differences (times seen):');
 for (const [name, description] of APPROVED) console.log(`  - ${name}: ${description} (${approvedCounts[name]})`);
-console.log(`Frozen: ${pricingCases} price combinations and 6 fixed prices; ${serviceZips.length} ZIP codes; ${Object.keys(protectedBlocks).length} code blocks byte-exact (ledger, saved-plan store, validation and more; the forward builder, request intake, Voice AI answer and router with only their approved lines put back). Saved-plan links identical to the reference.`);
+console.log(`Frozen: ${pricingCases} price combinations and 6 fixed prices; ${serviceZips.length} ZIP codes; ${Object.keys(protectedBlocks).length} code blocks byte-exact (saved-plan store, validation and more; the request ledger, forward builder, request intake, Voice AI answer and router with only their approved lines put back, the ledger's being the optional referral and the hand-off failure log). Saved-plan links identical to the reference.`);
 console.log('New behaviour:');
 for (const [name, description] of Object.entries(newBehaviour)) console.log(`  - ${name}: ${description}`);
 console.log(`Word sweep: none of ${RETIRED_WORDS.length} retired terms in the candidate bundle (kept key names: ${KEPT_KEY_NAMES.join(', ')}; allowed phrases: ${ALLOWED_PHRASES.map(([phrase]) => JSON.stringify(phrase)).join(', ')}).`);
