@@ -1552,6 +1552,27 @@
   // The five Meta pixel milestones, each at most once per page load (spec 10.2).
   const PIXEL_MILESTONES = ["QuoteZipAccepted", "QuoteZipOutOfArea", "QuotePriceViewed", "QuoteDetailsViewed", "QuoteReviewViewed"];
 
+  // GA4 (added 2026-10-18; engine 1.6.0). Since 2026-10-18 the site's Google tag (AW-17767139897) also carries the GA4
+  // property G-VV0Q16TW3X. Each Meta step event above, plus QuoteFunnelViewed and QuoteSent, also goes to GA4 under its
+  // own snake_case name, ONLY to that property (send_to), at the same moment, with only the parameters in GA4_PARAMS:
+  // the step, the frequency id, the dog count (1 to 4, or "5+"), the yard size id and whether the ZIP is in the area.
+  // Never a ZIP or ZIP prefix, a name, a phone number, an email address, a street, a request id or a resume token.
+  // The milestones go once per page load, as on Meta; quote_sent once per accepted request, as QuoteSent. Additive:
+  // every Google, Meta and Ads call is unchanged. There is deliberately no GA4 copy of Lead: the engine's own
+  // generate_lead (sent with no send_to) already reaches GA4, because the Google tag routes such events to all of its
+  // destinations (release 2026-10-18-quote-speed-and-price-skip, test/ga4-routing.mjs); a copy would count leads twice.
+  const GA4_MEASUREMENT_ID = "G-VV0Q16TW3X";
+  const GA4_EVENTS = {
+    QuoteFunnelViewed: { name: "quote_funnel_viewed", step: "start" },
+    QuoteZipAccepted: { name: "quote_zip_accepted", step: "zip" },
+    QuoteZipOutOfArea: { name: "quote_zip_out_of_area", step: "zip" },
+    QuotePriceViewed: { name: "quote_price_viewed", step: "price" },
+    QuoteDetailsViewed: { name: "quote_details_viewed", step: "request" },
+    QuoteReviewViewed: { name: "quote_review_viewed", step: "confirm" },
+    QuoteSent: { name: "quote_sent", step: "sent" }
+  };
+  const GA4_PARAMS = ["send_to", "quote_step", "frequency", "dog_count", "yard_size", "in_service_area"];
+
   // TRACKING CHANGE APPROVED BY THE OWNER 2026-10-09 (T7): funnel_step_viewed keeps
   // the LIVE step numbers by meaning, so existing reports and the pixel
   // milestones stay continuous (spec section 14 item 10):
@@ -1997,6 +2018,7 @@
     let stepsReportedOnThisScreen = {}; // step id -> true, since the engine last moved the visitor
     let lastChoiceReported = ""; // the way forward last counted for this quote (T15)
     const quoteSentCounted = {}; // event id -> true (T13)
+    const ga4Sent = {}; // GA4 event name -> true, for this page load (2026-10-18)
     let areasAnswerPending = false; // the visitor changed the areas and has not moved on yet (T17)
     let lastAreasCountReported = 0; // the areas count last counted, or carried in, for this quote (T17)
     let requestStepNow = ""; // the request sub-step the interface last reported on screen (T19)
@@ -2096,6 +2118,39 @@
       return clean;
     }
 
+    // GA4 (2026-10-18): the GA4 twin of a Meta step event (GA4_EVENTS). gtag only, never the dataLayer; only in live
+    // mode from a page that may send (T11), like every other tag call; a missing gtag sends nothing and a gtag that
+    // throws is caught (callTag). In demo, staging and a blocked page it is written to the log only (sent: false).
+    // Independent of the pixel: it goes whether or not fbq exists or pixel events are switched off.
+    function sendToGa4(metaName) {
+      if (!hasOwn(GA4_EVENTS, metaName)) return;
+      const name = GA4_EVENTS[metaName].name;
+      if (metaName !== "QuoteSent" && ga4Sent[name]) return;
+      const params = ga4Params(GA4_EVENTS[metaName].step, metaName === "QuoteZipAccepted" ? true : metaName === "QuoteZipOutOfArea" ? false : null);
+      let sent = false;
+      if (mode === "live" && !liveTagsBlocked()) {
+        const gtag = env.getGtag();
+        if (!gtag) return;
+        sent = callTag(function () { gtag("event", name, params); });
+      }
+      ga4Sent[name] = true;
+      recordEvent({ channel: "ga4", event: name, params: params, sent: sent });
+    }
+
+    // The GA4 parameters, built only from the engine's own option ids (never from anything typed).
+    function ga4Params(step, zipInArea) {
+      const params = { send_to: GA4_MEASUREMENT_ID, quote_step: step };
+      const frequency = findById(FREQUENCIES, state.frequency);
+      const dogs = findById(DOG_OPTIONS, state.dogCount);
+      const yard = findById(YARD_SIZES, state.yardSize);
+      if (frequency) params.frequency = frequency.id;
+      if (dogs) params.dog_count = dogs.count >= 5 ? "5+" : dogs.id;
+      if (yard) params.yard_size = yard.id;
+      if (typeof zipInArea === "boolean") params.in_service_area = zipInArea;
+      else if (state.zip) params.in_service_area = checkZip(state.zip).inArea === true;
+      return params;
+    }
+
     // Which pixel milestone, if any, goes with this event (by MEANING, not by
     // position in the flow: spec section 14 item 10).
     function pixelMilestoneFor(name, params) {
@@ -2131,6 +2186,9 @@
         if (name === "price_viewed" && typeof safe.value === "number") { pixelParams.value = safe.value; pixelParams.currency = "USD"; }
         if (sendToMeta("trackCustom", milestone, pixelParams)) pixelMilestonesSent[milestone] = true;
       }
+      // GA4 (2026-10-18): the same moments, after the Google and Meta calls above, once per page load each.
+      if (name === "funnel_viewed") sendToGa4("QuoteFunnelViewed");
+      if (milestone) sendToGa4(milestone);
     }
 
     // The measurement events added since 2026-10-09 (T13 to T22). Each is
@@ -2513,6 +2571,7 @@
         if (typeof params.value === "number") { quoteSentParams.value = params.value; quoteSentParams.currency = "USD"; }
         if (sendMethod) quoteSentParams.method = sendMethod;
         sendPixelCount("QuoteSent", quoteSentParams);
+        sendToGa4("QuoteSent"); // GA4 (2026-10-18): quote_sent, once per accepted request, like QuoteSent
       }
       if (payload.intent !== "service_request") return;
       if (leadEventsSent[eventId]) return;
@@ -4568,7 +4627,7 @@
    * ==================================================================== */
 
   return deepFreeze({
-    engineVersion: "1.5.2", // 1.5.2: the two verifier fixes of 2026-10-10 (staging refuses any spelling of a production host: a port, a user name, a trailing dot; a phone number with a country code other than +1 is refused instead of cut to ten digits). Nothing sent changed. 1.5.1: attribution privacy (a tag value that looks like an email address or a phone number is dropped before it is stored or sent; nothing else about attribution changed). 1.5.0: the send switch (staging mode, siteOptions for window.PPSite, a staging-only saved-link base) and audit fix B1 (no maxLength on the phone rule; area code and exchange start with 2 to 9). 1.4.0: 1.4.0: measurement fleshed out on the owner's go-ahead of 2026-10-09 (T13 renamed QuoteSent; T16 method; T17 to T22 the funnel and contact events, six of them reported through store.trackUi(); T23 attribution kept 30 days in the browser). Lead, generate_lead and conversion unchanged; no payload key, price or wording change. 1.3.0: the 2026-10-09 owner decisions on tracking (T1 to T12 approved; T13 to T15 added). 1.2.0: the 2026-10-08 first-cleanup wording (offerNote() and the customer-status hint; nothing sent changed). 1.1.0: the 2026-10-07 verifier fixes (see CORE-API.md and tests/verifier-findings.test.mjs)
+    engineVersion: "1.6.0", // 1.6.0: GA4 copies of the Meta step events, sent only to G-VV0Q16TW3X with five safe parameters (2026-10-18, CORE-API.md section 8). Nothing that was sent before changed. 1.5.2: the two verifier fixes of 2026-10-10 (staging refuses any spelling of a production host: a port, a user name, a trailing dot; a phone number with a country code other than +1 is refused instead of cut to ten digits). Nothing sent changed. 1.5.1: attribution privacy (a tag value that looks like an email address or a phone number is dropped before it is stored or sent; nothing else about attribution changed). 1.5.0: the send switch (staging mode, siteOptions for window.PPSite, a staging-only saved-link base) and audit fix B1 (no maxLength on the phone rule; area code and exchange start with 2 to 9). 1.4.0: 1.4.0: measurement fleshed out on the owner's go-ahead of 2026-10-09 (T13 renamed QuoteSent; T16 method; T17 to T22 the funnel and contact events, six of them reported through store.trackUi(); T23 attribution kept 30 days in the browser). Lead, generate_lead and conversion unchanged; no payload key, price or wording change. 1.3.0: the 2026-10-09 owner decisions on tracking (T1 to T12 approved; T13 to T15 added). 1.2.0: the 2026-10-08 first-cleanup wording (offerNote() and the customer-status hint; nothing sent changed). 1.1.0: the 2026-10-07 verifier fixes (see CORE-API.md and tests/verifier-findings.test.mjs)
 
     // create a store
     create: create,
@@ -4652,6 +4711,9 @@
     // tracking names
     EVENTS: EVENTS,
     PIXEL_MILESTONES: PIXEL_MILESTONES,
+    GA4_MEASUREMENT_ID: GA4_MEASUREMENT_ID,
+    GA4_EVENTS: GA4_EVENTS,
+    GA4_PARAMS: GA4_PARAMS,
     LEGACY_STEP_NUMBER: LEGACY_STEP_NUMBER,
 
     // demo switches

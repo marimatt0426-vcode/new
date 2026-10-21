@@ -13,7 +13,8 @@ import { widgetText } from "./helpers/live-source.mjs";
 
 const LIVE_PAGE = "https://pages.offline.invalid/carmel";
 const LIVE_ENDPOINT = "https://relay.offline.invalid/submit";
-const names = (entries) => entries.map((entry) => entry.event);
+// The GA4 twins of 2026-10-18 (channel "ga4") are tested in ga4-events.test.mjs; these sequences are the events sent before them.
+const names = (entries) => entries.filter((entry) => entry.channel !== "ga4").map((entry) => entry.event);
 const plain = (value) => JSON.parse(JSON.stringify(value));
 
 // A live-mode store on an allowed origin, with tags that record what they get.
@@ -21,7 +22,8 @@ function livePage(setup) {
   const config = setup || {};
   const calls = [];
   const sinks = {
-    gtag: (...args) => calls.push({ sink: "gtag", name: args[1], params: args[2] }),
+    // the GA4 twins (send_to G-VV0Q16TW3X, 2026-10-18) are left out here and tested in ga4-events.test.mjs
+    gtag: (...args) => { if (!(args[2] && args[2].send_to === core.GA4_MEASUREMENT_ID)) calls.push({ sink: "gtag", name: args[1], params: args[2] }); },
     fbq: (...args) => calls.push({ sink: "fbq", name: args[1], params: args[2] })
   };
   const made = makeStore({

@@ -765,6 +765,8 @@ html.is-locked, html.is-locked body { overflow: hidden; }
 .cover__lead { font-size: 15.5px; line-height: 1.5; color: #fff; }
 .cover__promise { display: flex; gap: 9px; align-items: flex-start; margin-top: 9px; font: 600 14.5px/1.4 var(--f-text); color: var(--cyan-200); text-wrap: balance; }
 .cover__promise img { width: 20px; height: 20px; flex: none; margin-top: 1px; }
+.cover__towns { margin-top: 8px; font: 500 14.5px/1.4 var(--f-text); color: var(--on-navy-soft); text-wrap: pretty; }   /* /quote: the towns served (hero.towns) */
+.cover__towns a { color: #fff; font-weight: 600; text-decoration: underline; text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 /* phone: the two cover stickers flank the head of the mascot on open sky */
 .cover__seal { grid-row: 2; align-self: start; justify-self: start; z-index: 3; --seal: 78px; margin: min(clamp(34px, 11vw, 60px), calc(var(--band) - var(--seal) - 8px)) 0 0 -4px; }
 .cover__seal .seal__txt { font-size: 14px; }
@@ -820,6 +822,7 @@ html.is-locked, html.is-locked body { overflow: hidden; }
   .cover__note { grid-column: 2; grid-row: 3; align-self: auto; justify-self: stretch; width: auto; background: none; padding: 0; margin: 18px 0 0; border-radius: 0; max-width: 372px; }
   .cover__lead { font-size: 18px; }
   .cover__promise { font-size: 15px; margin-top: 14px; }
+  .cover__towns { font-size: 15px; margin-top: 10px; }
   .cover > .gbadge {
     grid-column: 2; grid-row: 4; justify-self: start; margin: 22px 0 0;
     display: inline-flex; gap: 10px; padding: 6px 16px 6px 8px; border-radius: var(--r-pill);
@@ -1397,8 +1400,11 @@ a.chip u { text-decoration-color: var(--cyan); text-decoration-thickness: 2px; t
 .foot__keyline { display: none; }
 .foot__grass { /* approved navy silhouette: only here, joining the page to the footer */
   position: absolute; z-index: 3; left: 0; right: 0; bottom: -1px; height: 64px;
-  background: url("../../../assets/brand/grass.png") left bottom / auto 64px no-repeat; pointer-events: none;
+  background: left bottom / auto 64px no-repeat; pointer-events: none;
 }
+/* 2026-10-18: the picture (now a WebP, 34 KB in place of the 97 KB PNG) is asked for only when the footer comes within
+   about two screens (js/site.js adds is-near); until then the strip is empty and nothing moves */
+.foot__grass.is-near { background-image: url("../../../assets/brand/grass.webp"); }
 @media (min-width: 900px) {
   .foot__scene { min-height: clamp(450px, 38vw, 640px); align-items: center; }
   .foot__pic {
@@ -1952,6 +1958,11 @@ main { overflow-x: clip; }
 }
 /* phone menu: the mascot stands on the call button and points at the price button, when the screen has room for him */
 .mnav__mascot, .mnav__say { display: none; }
+/* 2026-10-18: the mascot is a lazy picture, but the closed menu is laid out (hidden, not removed), so it was fetched with
+   every page (97 KB). It is not drawn until the menu opens; on closing it stays for the menu's own fade (allow-discrete). */
+.mnav:not(.is-open) .mnav__mascot { display: none; }
+.mnav .mnav__mascot { transition: display 0s .28s; transition-behavior: allow-discrete; }
+.mnav.is-open .mnav__mascot { transition-delay: 0s; }
 @media (min-height: 820px) {
   .mnav__mascot {
     display: block; position: absolute; right: calc(var(--g) + 8px); bottom: calc(100% - 17px); width: auto; height: 164px;
