@@ -1,7 +1,7 @@
 {
   "state": "Prepared and locally simulated; not in GoHighLevel",
   "profile": "production",
-  "generated": "2026-10-18T23:37:15.109Z",
+  "generated": "2026-10-21T12:53:58.445Z",
   "assetsBase": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-20261018",
   "blockLimit": 65000,
   "placeholdersStillInUse": [],
@@ -1495,7 +1495,7 @@
   "uploadList": {
     "note": "Every file the blocks, the stylesheets and the scripts ask for, by its path under assetsBase (the same folder tree as the release folder). Upload these before any page names them (Cloudflare audit 3.2).",
     "count": 450,
-    "bytes": 56798131,
+    "bytes": 56802642,
     "missing": [],
     "files": [
       {
@@ -6756,8 +6756,8 @@
       {
         "path": "directions/coverstory/css/builder.css",
         "exists": true,
-        "bytes": 119217,
-        "sha256": "5c60010ee626f27c33e57e6a2819221d21662c78eb89792b2785940595c758b9",
+        "bytes": 120144,
+        "sha256": "832559404cb666083b79e56b4f2aae71014316109044d14d869c1ad2a2e6beef",
         "address": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-20261018/directions/coverstory/css/builder.css",
         "askedForBy": [
           "blog/home-1-header-and-index.html",
@@ -6861,8 +6861,8 @@
       {
         "path": "directions/coverstory/js/builder.js",
         "exists": true,
-        "bytes": 197807,
-        "sha256": "26723600b20e424e827f90f7c4bcfc7de439479055022ace7417130cc12dd285",
+        "bytes": 201391,
+        "sha256": "784e9c5e39c1be22a2a2e03a381b1fe8582e2b56f131aa636a9fe669550ec824",
         "address": "https://purge-pros-site-assets.purgepros.workers.dev/assets/v5-20261018/directions/coverstory/js/builder.js",
         "askedForBy": [
           "blog/home-3-footer.html",

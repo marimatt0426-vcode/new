@@ -124,6 +124,8 @@
     seePrice: function (value, shown) { return COPY.named(shown, value) + ". Go to your price."; },
     areasCount: function (n) { return n + " areas"; },
     yourPrice: "Your price",
+    // 2026-10-21: the exact price's unit sits in the label above the number ("per visit" after the number was cut to "per" on a 375 px phone)
+    unitLabel: function (unit) { return unit === "per visit" ? "Per visit" : unit === "base price" ? "Base price" : ""; },
     moreBelow: "More below",
     scrollLabel: "There is more on this step. Scroll to see it all.",
     gotIt: "Got it",
@@ -152,7 +154,9 @@
     line: {
       known: function (fromLabel) { return fromLabel.replace(/\s+from$/i, ""); },               // "Weekly visits from" -> "Weekly visits" once dogs, yard and areas are in
       from: function (label) { return label + " from"; },
-      oneTime: function (minutes) { return "One-time, first " + minutes + " minutes"; }
+      oneTime: function (minutes) { return "One-time, first " + minutes + " minutes"; },
+      building: "Building your price",                // 2026-10-21: after the first answer, until the plans show their prices
+      choose: "Pick a plan"                           // 2026-10-21: on the plan question, until one is picked (also shown on the page's card and the pinned bar, so no "above")
     },
     /* the hero card when a price is under way and the panel is closed */
     sum: {
@@ -410,7 +414,8 @@
     el.price = h("p", { class: "ppb-price", "data-ppb-price": true, "aria-live": "polite" }, pic(ICON.tag, 185, "ppb-price__ico", 256), el.priceLabel, el.priceAmt);
     el.nextLabel = h("span", { "data-ppb-next-label": true, text: COPY.next });
     el.next = h("button", { class: "ppb-next", type: "button", "data-ppb-next": true, "aria-describedby": "ppb-hint", onclick: pressNext }, el.nextLabel, pic(ICON.arrow, 22));
-    el.foot = h("div", { class: "ppb-foot" }, el.back, el.price, el.next, h("span", { class: "ppb-morehint", "aria-hidden": "true", text: COPY.moreBelow }));
+    el.foot = h("div", { class: "ppb-foot" }, el.back, el.price, el.next, h("span", { class: "ppb-morehint", "aria-hidden": "true", text: COPY.moreBelow,
+      onclick: showMoreBelow, onmousedown: moreTabPress, onwheel: moreTabWheel, ontouchstart: moreTabTouch, ontouchmove: moreTabTouch, ontouchend: moreTabTouch }));
     el.stage = h("div", { class: "ppb-stage", role: "group", "aria-label": COPY.title, "data-ppb-stage": true, "data-ppb-mode": "inline", "data-ppb-titled": PAGE_TITLE ? true : null }, el.head, el.progress, el.body, el.foot);
     /* FIX 2026-10-10 (VERIFY-xbrowser N1). Firefox does not scroll a control into view when Tab lands on one that is
        partly showing, so in a short window a focused choice could sit mostly under the fade. A control reached BY TAB
@@ -727,15 +732,24 @@
   /* Until the exact price is known the line is the FIXED starting price (owner decision, October 5): the engine's own
      calculator (C.calculateQuote) prices one dog, the smallest yard and one area. It does not move with the answers.
      With nothing answered it is the engine's own line, "Weekly visits from $19.99". A plan button (data-quote-plan) that
-     opened the builder makes it that plan's line instead, until a frequency is chosen. Never a number for a custom estimate. */
+     opened the builder makes it that plan's line instead, until a frequency is chosen. Never a number for a custom estimate.
+     2026-10-21 (owner, on his phone): the starting line stayed on screen while the plan question showed the visitor's exact
+     prices (Weekly $28.99 above "Weekly visits from $19.99": "even I was taken aback"). So the starting line now shows only
+     before the first answer. After it the line is words, no number: "Building your price", and on the plan question
+     "Pick a plan". Once a plan is picked: "Per visit" over the number. Still never a figure that
+     climbs with each answer. Claude and ChatGPT agreed on this separately (releases/2026-10-21-builder-price-bar-and-scroll). */
   function priceParts(bar) {
     var state = store.getState(), words = { label: "", amount: bar.headline, unit: "", words: true };
-    if (bar.kind === "exact") return { label: COPY.yourPrice, amount: bar.priceLabel, unit: bar.unit, words: false };
+    if (bar.kind === "exact") {
+      var unitLabel = COPY.unitLabel(bar.unit);
+      return { label: unitLabel || COPY.yourPrice, amount: bar.priceLabel, unit: bar.unit, unitInLabel: Boolean(unitLabel), words: false };
+    }
     if (bar.kind === "custom" || bar.kind === "out_of_area") return words;
     var prefer = !state.frequency && ui.prefer ? ui.prefer : "", option = prefer ? frequencyOption(prefer) : null;
     if (option && option.custom) return { label: "", amount: option.label, unit: "", words: true };
     if (prefer === "onetime") return { label: COPY.line.oneTime(C.ONE_TIME.includedMinutes), amount: C.formatMoney(C.ONE_TIME.baseCents), unit: "", words: false };
     if (bar.kind !== "from" && !option) return words;                    // still building (6 or more dogs): the engine's words, no number
+    if (hasProgress(state)) return { label: "", amount: state.step === "frequency" ? COPY.line.choose : COPY.line.building, unit: "", words: true };   // 2026-10-21
     var fromLabel = bar.kind === "from" ? bar.headline.replace(bar.priceLabel, "").trim() : "";
     var open = true;   // OWNER DECISION (October 5): a FIXED starting line until the exact price is known. A figure that climbs with each answer would reveal the add-on amounts he ruled out before the summary.
     var quote = C.calculateQuote({ dogs: C.DOG_OPTIONS[0].id, frequencyId: prefer || "weekly", yardSizeId: C.YARD_SIZES[0].id, areaIds: [C.AREAS[0].id] });
@@ -747,7 +761,7 @@
   function fillPrice(labelNode, amountNode, parts) {
     if (labelNode) setText(labelNode, parts.label);
     amountNode.textContent = parts.amount;
-    if (parts.unit) amountNode.append(h("small", { text: parts.unit }));
+    if (parts.unit && !(labelNode && parts.unitInLabel)) amountNode.append(h("small", { text: parts.unit }));   // the pinned bar has no label: it keeps the unit
   }
   function priceKey(bar, parts) { return [bar.kind, parts.label, parts.amount, parts.unit].join("|"); }
   function renderPrice(bar, parts) {
@@ -786,14 +800,37 @@
   }
 
   /* "there is more below": only while the options area really overflows */
+  /* 2026-10-21 (owner, on his phone): the "More below" tab looks like a button and gets tapped, so a tap now scrolls the
+     answers most of a screen down, or to the end when little would be left. Still not a keyboard stop or read aloud: the
+     part that scrolls already is one. The tab sits outside that part, so a swipe or a wheel that starts on it is passed
+     on (it used to fall through to whatever lay under it, the SMS consent text on "How do we reach you?"), and pressing
+     it leaves the focus where it is (a field being typed in keeps its keyboard). */
+  /* px still hidden below before the tab shows. 8: the box's own bottom padding (4px) and a tile's shadow are no reason to
+     show it. Not more: with Chrome's strip on an Android phone the panel is shorter, and the owner saw "Custom quote" and the
+     areas note cut by 12 to 22 px with no tab (24 was tried that morning). A tap on the tab then goes to the end. */
+  var MORE_TAB_MIN = 8;
+  function showMoreBelow() {
+    var box = el.opts, left = box.scrollHeight - box.clientHeight - box.scrollTop, step = Math.max(80, Math.round(box.clientHeight * 0.7));
+    box.scrollBy({ top: left - step < box.clientHeight * 0.25 ? left : step, behavior: QUIET ? "auto" : "smooth" });
+  }
+  function moreTabPress(event) { event.preventDefault(); }
+  function moreTabWheel(event) { event.preventDefault(); el.opts.scrollBy(0, event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? el.opts.clientHeight : 1)); }
+  var moreDragY = null;
+  function moreTabTouch(event) {
+    var touch = event.touches[0];
+    if (!touch) { moreDragY = null; return; }
+    if (event.type === "touchmove" && moreDragY != null) el.opts.scrollTop += moreDragY - touch.clientY;
+    moreDragY = touch.clientY;
+  }
   var moreQueued = false;
   function scheduleMore() { if (moreQueued) return; moreQueued = true; win.requestAnimationFrame(function () { moreQueued = false; updateMore(); }); }
   function updateMore() {
     var box = el.opts, more = [];
     if (box.scrollTop > 2) more.push("above");
-    if (box.scrollHeight - box.clientHeight - box.scrollTop > 2) more.push("below");
-    el.optwrap.setAttribute("data-more", more.join(" "));
-    el.stage.setAttribute("data-ppb-more", more.join(" "));
+    var below = box.scrollHeight - box.clientHeight - box.scrollTop;
+    if (below > 2) more.push("below");
+    el.optwrap.setAttribute("data-more", more.join(" "));   // the fade: from 2 px
+    el.stage.setAttribute("data-ppb-more", more.filter(function (m) { return m !== "below" || below > MORE_TAB_MIN; }).join(" "));   // the tab
     // M4, the floor: a pinned block that leaves the answers less than FLOOR px goes back into the part that scrolls (until the window changes or the screen does)
     if (!el.pin.hidden && !ui.floor && box.clientHeight < FLOOR && doc.contains(el.stage)) { ui.floor = true; syncPin(store.getState()); }
     el.stage.style.setProperty("--ppb-pin-h", (el.pin.hidden ? 0 : el.pin.offsetHeight) + "px");   // the "More below" tab sits on the edge of the part that scrolls
