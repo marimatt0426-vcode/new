@@ -62,7 +62,7 @@ function render(template, data, where) {
 const TOP_FIELDS = ["title", "description", "canonical", "robots", "audience", "ogImage", "body", "css", "scripts", "hero", "facts", "schema", "guideCards", "allow"];
 const HERO_FIELDS = {
   home: ["recipe", "alt", "kw", "title", "wrap", "lead", "kwLines", "titleLines", "spark"],
-  service: ["recipe", "scene", "alt", "kw", "title", "wrap", "lead", "sceneReach", "sceneLift", "lawn", "kwLines", "titleLines", "seal", "cardTitle", "action", "spark"],
+  service: ["recipe", "scene", "alt", "kw", "title", "wrap", "lead", "sceneReach", "sceneLift", "lawn", "kwLines", "titleLines", "seal", "cardTitle", "action", "spark", "towns"],
   city: ["recipe", "city", "zip", "alsoZips", "scene", "alt", "kw", "title", "wrap", "lead", "sceneReach", "sceneLift", "lawn", "kwLines", "titleLines", "seal", "cardTitle", "action", "breaks", "spark"],
   plain: ["recipe", "scene", "pose", "cover", "stickers", "alt", "kw", "title", "wrap", "lead", "buttons", "sceneY"],
   legal: ["recipe", "pose", "stickers", "date", "alt", "kw", "title", "wrap", "lead"],
@@ -126,6 +126,7 @@ function check(page) {
   if (hero.lawn !== undefined && !/^#[0-9a-f]{6}$/i.test(hero.lawn)) fail('hero.lawn is the colour of the bottom rows of the scene as six hex digits, for example "#5d961f".');
   if (hero.sceneLift !== undefined && !(typeof hero.sceneLift === "number" && hero.sceneLift >= 16 && hero.sceneLift <= 40)) fail("hero.sceneLift is a number of pixels from 16 to 40: how far the picture may slide up under the headline band on a short phone, so a short dog is not hidden by the price card. Look at 360 by 740, 375 by 667 and 390 by 664 afterwards: the mascot's whole head must stay below the cyan line.");
   if (hero.seal !== undefined && typeof hero.seal !== "boolean") fail('hero.seal is true or false. false leaves the "$0 start-up fee" seal off a page whose subject is not recurring scooping (the sanitizing page).');
+  if (hero.towns !== undefined) text(hero, "towns", 'hero.towns (the served towns named under the lead, largest first, for example "Indianapolis, Carmel, Fishers"; the page adds "and nearby towns", linked to the service areas page)', { max: 110 });
   if (hero.cardTitle !== undefined) text(hero, "cardTitle", 'hero.cardTitle (the small title of the price card, "Build your price" unless the page is about something else; 20 characters at most, so it fits the card and the panel on a 360px phone)', { max: 20 });
   if (hero.action !== undefined && (!hero.action || typeof hero.action.label !== "string" || !hero.action.label.trim() || typeof hero.action.href !== "string" || !/^(sms:|tel:|#[a-z][\w-]*$|[a-z0-9-]+\.html)/i.test(hero.action.href))) fail('hero.action is the page\'s own action beside the price card: { "label": "Text about availability", "href": "sms:+13179615865" } (a text, a call, a section of this page or another page).');
   if (hero.sceneY !== undefined && !(typeof hero.sceneY === "number" && hero.sceneY >= 0 && hero.sceneY <= 100)) fail("hero.sceneY is a number from 0 to 100: which part of the picture's height stays in view when a desktop window crops it (0 keeps the top, 100 the bottom; 50 when left out).");
@@ -349,7 +350,7 @@ function heroHtml(page) {
     seal: hero.seal === false ? "" : "1",
     sealHref: /\sid="start-up-fee"/.test(page.body) ? "#start-up-fee" : "dog-waste-removal.html#start-up-fee",
     mountAttrs: (hero.zip ? ` data-zip="${hero.zip}"` : "") + (recipe === "city" ? ` data-city="${esc(hero.city)}"` : "") + (hero.alsoZips ? ` data-zips-also="${hero.alsoZips.join(" ")}"` : "") + (hero.cardTitle ? ` data-title="${esc(hero.cardTitle)}"` : ""),
-    action: "", actionHref: "", actionIcon: "",
+    action: "", actionHref: "", actionIcon: "", towns: hero.towns ? esc(hero.towns) : "",
     scene: "", pose: "", buttons: "", sceneSources: heroPictures(page).sources.join("\n"),
   };
   if (hero.action) Object.assign(data, { action: esc(hero.action.label), actionHref: esc(hero.action.href),
@@ -525,14 +526,14 @@ function structuredData(page, sections) {
 // from enlarging a picture by more than a few percent. A picture that is cropped to fill a taller box is drawn wider
 // than the box: a 16:9 scene in the square arc frame is 1.78 box widths wide.
 const A = "../../assets/";
-const MARGIN = 1.15;
+const MARGIN = 1;   // 2026-10-18: was 1.15. Chrome, Safari and Firefox take the FIRST file at least as wide as the drawn width needs (measured in Chrome 141), so the margin only made every phone fetch the next size up (the /quote hero 1152 in place of 960, the fee scene 1254 in place of 768)
 const PHONE = "(max-width: 699px)", WIDE = "(min-width: 700px)";
 const PHONE_MAX = 1152;                                    // on a phone no hero file wider than this is offered (below)
 const HERO_PHONE_VW = { home: 100, service: 133, city: 133, plain: 100 };   // the hero scene on a phone, in window widths
-const FRAME_BOX = (wide) => [["(max-width: 619px)", 95, "vw"], ["(max-width: 899px)", wide ? 540 : 460, "px"], ["(max-width: 1279px)", 46, "vw"], ["", 588, "px"]];
+const FRAME_BOX = (wide) => [["(max-width: 619px)", 32, "vw-px"] /* 2026-10-18: a phone draws the frame the window width less 32px (measured 320 to 619); was 95vw, the widest case */, ["(max-width: 899px)", wide ? 540 : 460, "px"], ["(max-width: 1279px)", 46, "vw"], ["", 588, "px"]];
 const FOOT_DRAWN = [["(max-width: 899px)", 178, "vw"], ["(max-width: 1365px)", 93, "vw"], ["", 69, "vw"]];
 const COVER_DRAWN = [["(max-width: 539px)", 65, "vw"], ["(max-width: 699px)", 288, "px"], ["(max-width: 1239px)", 334, "px"], ["", 529, "px"]];   // an article's cover as hero art
-const sizesOf = (table, f) => table.map(([media, n, unit]) => `${media ? media + " " : ""}${Math.round(n * f)}${unit}`).join(", ");
+const sizesOf = (table, f) => table.map(([media, n, unit]) => `${media ? media + " " : ""}${unit === "vw-px" ? (f === 1 ? `calc(100vw - ${n}px)` : `calc((100vw - ${n}px) * ${+f.toFixed(3)})`) : Math.round(n * f) + unit}`).join(", ");
 const srcsetOf = (copies) => (copies.length === 1 ? A + copies[0].file : copies.map((v) => `${A}${v.file} ${v.w}w`).join(", "));
 const notes = new Map();                                   // slug -> sentences about a picture written as it was
 function note(slug, sentence) { if (!notes.has(sentence)) notes.set(sentence, new Set()); notes.get(sentence).add(slug); }

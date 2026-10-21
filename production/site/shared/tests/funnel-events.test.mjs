@@ -26,7 +26,8 @@ const PERSONAL = ["Test", "Reviewer", "3175550100", "555-0100", "(317)", "test@e
 const google = (store) => store.trackLog.filter((entry) => entry.channel === "google");
 const meta = (store) => store.trackLog.filter((entry) => entry.channel === "meta");
 const rejected = (store) => store.trackLog.filter((entry) => entry.channel === "rejected");
-const names = (entries) => entries.map((entry) => entry.event);
+// The GA4 twins of 2026-10-18 (channel "ga4") are tested in ga4-events.test.mjs; these sequences are the events sent before them.
+const names = (entries) => entries.filter((entry) => entry.channel !== "ga4").map((entry) => entry.event);
 const count = (entries, name) => entries.filter((entry) => entry.event === name && entry.channel !== "rejected").length;
 const last = (entries, name) => entries.filter((entry) => entry.event === name && entry.channel !== "rejected").pop();
 const paramsOf = (store, name) => store.trackLog.filter((entry) => entry.event === name && entry.channel !== "rejected").map((entry) => entry.params);

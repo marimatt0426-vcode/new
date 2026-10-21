@@ -7,7 +7,8 @@ import { core, makeStore, fillPlan, fillDetails, readyStore } from "./helpers/ma
 
 const google = (store) => store.trackLog.filter((entry) => entry.channel === "google");
 const meta = (store) => store.trackLog.filter((entry) => entry.channel === "meta");
-const names = (entries) => entries.map((entry) => entry.event);
+// The GA4 twins of 2026-10-18 (channel "ga4") are tested in ga4-events.test.mjs; these sequences are the events sent before them.
+const names = (entries) => entries.filter((entry) => entry.channel !== "ga4").map((entry) => entry.event);
 const count = (entries, name) => entries.filter((entry) => entry.event === name).length;
 const last = (entries, name) => entries.filter((entry) => entry.event === name).pop();
 
@@ -88,7 +89,7 @@ test("a ZIP handed over on purpose (?zip= or open({ zip })) is counted at once, 
   const url = makeStore({ url: "https://review.example/?zip=46032" }).store;
   assert.deepEqual(names(url.trackLog), ["service_area_eligible", "QuoteZipAccepted", "funnel_viewed", "QuoteFunnelViewed"]);
   assert.deepEqual(url.trackLog[0].params, { ui_version: "2026-10-07-site-rebuild-v5", zip_prefix: "460", entry: "hero_zip" });
-  assert.equal(url.trackLog[2].params.presentation, "hero_zip");
+  assert.equal(url.trackLog.filter((entry) => entry.channel !== "ga4")[2].params.presentation, "hero_zip");   // funnel_viewed: the third event, the GA4 twins left out
   url.set({ dogCount: "2" });
   assert.equal(count(google(url), "funnel_viewed"), 1);
   assert.equal(count(google(url), "service_area_eligible"), 1);

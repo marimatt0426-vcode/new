@@ -25,6 +25,9 @@
 
   <div class="cover__note">
     <p class="cover__lead">{{lead}}</p>
+{{#towns}}
+    <p class="cover__towns">Serving {{towns}} <a href="additional.html">and nearby towns</a>.</p>
+{{/towns}}
 {{#action}}
     <p class="cover__act"><a class="btn btn--on-dark btn--sm" href="{{actionHref}}"><img class="btn__ico" src="../../assets/brand-icons/{{actionIcon}}.webp" width="26" height="26" alt="">{{action}}</a></p>
 {{/action}}

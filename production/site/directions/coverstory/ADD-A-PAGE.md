@@ -80,7 +80,7 @@ Every recipe takes `alt`, `kw` (the keyword line), `title` (one or two lines; li
 | Recipe | For | Its own fields | Picture |
 |---|---|---|---|
 | `home` | `index` only | none: both scenes are fixed | `recipe-home` |
-| `service` | dog waste removal, sanitizing | `scene` (`"heroes/….jpg"`); optional `sceneReach`, `sceneLift`, `lawn`, `kwLines`, `titleLines`, `seal`, `cardTitle`, `action`, `spark` | `recipe-service` |
+| `service` | dog waste removal, sanitizing | `scene` (`"heroes/….jpg"`); optional `sceneReach`, `sceneLift`, `lawn`, `kwLines`, `titleLines`, `seal`, `cardTitle`, `action`, `spark`, `towns` (one line under the lead naming served towns, then "and nearby towns" linked to the service areas page; /quote only) | `recipe-service` |
 | `city` | the 17 city pages | `city` (the community's name, put on the mount as `data-city`); `zip` only where the city has ONE accepted ZIP (the builder checks the engine); `alsoZips` only where the page prints a ZIP that the price engine lists under another town (below); `scene` defaults to `heroes/<slug>.jpg`; the same options as `service` | `recipe-city` |
 | `plain` | about, reviews, FAQ, welcome, Yard Guide, all areas, an article | ONE of `scene` (the page's 16:9 picture), `pose` (one cut-out standing on the drawn field) or `cover` (a Yard Guide post's slug: that article's cover on the drawn field, no pose); `buttons`: up to two of `"quote"`, `"text"`, `"call"` (the text-first PAIR: Text, then Call), `{ "label", "href" }`; optional `sceneY`, and with a pose `stickers` | `_example-plain-scene.html`, `_example-plain-pose.html`, `_example-plain-cover.html` |
 | `legal` | terms, privacy | `pose` (default `clipboard`: give each legal page its own), `stickers`, `date`; no buttons | `_example-legal.html` |

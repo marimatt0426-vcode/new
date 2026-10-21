@@ -258,6 +258,16 @@
     swashes.forEach(function (s) { io.observe(s); });
   }
 
+  /* ---- the footer's grass strip: its picture is asked for when the footer comes within about two screens (2026-10-18) ---- */
+  $$(".foot__grass").forEach(function (grass) {
+    if (!("IntersectionObserver" in window)) { grass.classList.add("is-near"); return; }
+    var near = new IntersectionObserver(function (entries) {
+      if (!entries.some(function (en) { return en.isIntersecting; })) return;
+      grass.classList.add("is-near"); near.disconnect();
+    }, { rootMargin: "1600px 0px" });
+    near.observe(grass);
+  });
+
   /* ---- in-page links: the page ends where the link points, whatever else moves it on the way ----
      The browser makes its own jump (address, focus, :target). Three things were found to spoil where it ends:
      1. Below 900px a split stacks with its picture first, so a jump to that section landed on the picture and left

@@ -909,6 +909,13 @@
      "average": 9.42
     },
     {
+     "w": 960,
+     "h": 540,
+     "file": "derived/heroes/quote-960.webp",
+     "bytes": 106612,
+     "average": 8.43
+    },
+    {
      "w": 1152,
      "h": 648,
      "file": "derived/heroes/quote-1152.webp",

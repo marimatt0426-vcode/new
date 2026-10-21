@@ -63,8 +63,28 @@
     }
     return node;
   }
+  /* 2026-10-18: a picture drawn small everywhere it is used gets a copy about twice its largest drawn size, offered with the
+     original (srcset); sharper screens still get the original. [copy, its width, the original's width, largest drawn width] */
+  var SMALL = { "step-icons/mascot-head.webp": ["step-icons/mascot-head-132.webp", 132, 240, 65] };
   function pic(path, size, cls, height) {
-    return h("img", { src: ASSETS + path, width: size, height: height || size, alt: "", class: cls || null, decoding: "async" });
+    var attrs = { src: ASSETS + path, width: size, height: height || size, alt: "", class: cls || null, decoding: "async" }, small = SMALL[path];
+    if (small) { attrs.srcset = ASSETS + small[0] + " " + small[1] + "w, " + ASSETS + path + " " + small[2] + "w"; attrs.sizes = small[3] + "px"; }
+    return h("img", attrs);
+  }
+  /* 2026-10-18: the two large poses of later screens (the ZIP question's and the out-of-area answer's, about 95 KB each) are not
+     fetched while the page loads. Each is made with an empty stand-in of the same size; warmPoses() gives it its file at the
+     visitor's first touch of the price card, the first answer, the panel opening, or the ZIP question appearing. */
+  var BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", latePics = [], posesWarm = false;
+  function latePic(path, size, cls, height) {
+    var node = pic(path, size, cls, height);
+    if (!posesWarm) { node.setAttribute("data-ppb-late", path); node.src = BLANK; latePics.push(node); }
+    return node;
+  }
+  function warmPoses() {
+    if (posesWarm) return;
+    posesWarm = true;
+    latePics.forEach(function (node) { node.src = ASSETS + node.getAttribute("data-ppb-late"); node.removeAttribute("data-ppb-late"); });
+    latePics = [];
   }
   function setText(node, text) { if (node.textContent !== text) node.textContent = text; }
   function lowerFirst(text) { return !text ? "" : /^[A-Z]{2}/.test(text) ? text : text.charAt(0).toLowerCase() + text.slice(1); }   // an acronym keeps its capitals ("ZIP")
@@ -126,7 +146,8 @@
     yard: { q: "How big is the yard?", need: "Pick the closest size.", ok: "Tap another to change it.",
       most: function (label) { return "Most customers pick " + lowerFirst(label); }, guide: "Not sure?", guideLabel: "Not sure? Open the yard size guide" },   // starts with the words on the link (m10)
     areas: { q: "Which areas?", need: "Tick at least one area.", ok: "Tap again to remove one.", note: "Tick every area the dogs use. Tap a ticked one again to remove it." },
-    frequency: { q: "How often?", need: "Each shows one exact price.", ok: "Tap another to change it.", popular: "Popular", picked: "Chosen for you. Tap Next, or change it." },
+    frequency: { q: "How often?", need: "Each shows one exact price.", ok: "Tap another to change it.", popular: "Popular", picked: "Chosen for you. Tap See my price, or change it.",
+      next: "See my price" },   // 2026-10-18: the button of this question says where it goes (the price-skip fix, below)
     /* the pinned price before the exact price is known: the engine's "from" line, moved along by the engine's own calculator as answers arrive */
     line: {
       known: function (fromLabel) { return fromLabel.replace(/\s+from$/i, ""); },               // "Weekly visits from" -> "Weekly visits" once dogs, yard and areas are in
@@ -444,7 +465,7 @@
   };
 
   /* every answer goes through the engine; if it changed nothing, redraw anyway so local state (an opened row) shows */
-  function answer(patch) { var result = store.set(patch); if (!result.changed.length) refresh(); return result; }
+  function answer(patch) { warmPoses(); var result = store.set(patch); if (!result.changed.length) refresh(); return result; }
   function took(result) { return Boolean(result) && result.ok !== false && !(result.rejected || []).length; }
   function refresh() {
     var state = store.getState(), def = stepDef(state.step);
@@ -458,6 +479,8 @@
     if (previous !== id) { cancelAuto(); ui.picked = ""; ui.floor = false; if (id !== "price") ui.kept = false; }
     ui.step = id; ui.blocked = false; ui.flash = "";
     if (id === "done" && previous !== id) ui.doneAt = Date.now();   // see pressNext (N4)
+    if (id === "price" && previous !== id) ui.priceAt = Date.now();  // see pressNext (2026-10-18)
+    if (id === "zip") warmPoses();                                   // its pose, if the visitor's first touch has not fetched it yet
     if (def.enter) def.enter(previous, api);
     if (!ui.panels[id]) {
       var panel = def.build(api, id);
@@ -501,9 +524,13 @@
     if (held && moved && doc.contains(held)) { held.focus({ preventScroll: true }); if (inFlow) { el.opts.scrollTop = el.opts.scrollHeight; held.scrollIntoView({ block: "nearest" }); } }
   }
 
-  /* One tap is the answer on the single-choice questions (dogs, yard size, how often): the tile shows its selected
+  /* One tap is the answer on the single-choice questions (dogs, yard size): the tile shows its selected
      state for about a quarter of a second, then the builder moves on by itself, exactly as the Next button would.
-     Next stays where it is for the keyboard and for going on from a question that is already answered. */
+     Next stays where it is for the keyboard and for going on from a question that is already answered.
+     2026-10-18 (owner-approved price-skip fix): NOT on "How often?". There the moving-on put the price screen up under the
+     visitor's finger, and the next tap, meant for Next, landed on "Request service" in the same place: the price, "Text me
+     this quote", "Save this quote for 7 days" and the no-start-up-fee note were skipped. A tap there only chooses; the
+     button, "See my price", moves on; and the price screen's own button rests for PRICE_REST_MS after it appears. */
   var AUTO_MS = 260;
   function cancelAuto() { if (ui.auto > 0) win.clearTimeout(ui.auto); ui.auto = 0; }
   function tapAnswer(stepId, patch) {
@@ -732,6 +759,7 @@
     fillPrice(el.priceLabel, el.priceAmt, parts);
   }
 
+  var PRICE_REST_MS = 600;  // 2026-10-18: how long "Request service" rests after the price screen appears: a fast second tap meant for "See my price" does nothing
   var DONE_REST_MS = 700;   // how long the done screen's own button rests after the screen appears (N4): longer than any double tap, shorter than anyone can read the screen and mean Done
   function pressBack() { var def = stepDef(ui.step); if (def.back && def.back(api)) return; store.back(); }
   function pressNext() {
@@ -744,6 +772,7 @@
       def.next(api);
       return;
     }
+    if (ui.step === "price" && Date.now() - (ui.priceAt || 0) < PRICE_REST_MS) return;   // 2026-10-18: see PRICE_REST_MS
     if (flow.primaryAction === "none") return;
     if (flow.disablePrimary) {                      // resting: say why, in words, where the eye already is
       ui.blocked = true; ui.flash = "";
@@ -910,10 +939,10 @@
         reachButtons("btn--secondary", "ppb-ooa__reach"),
         h("div", { class: "ppb-ooa__copy ppb-ooa__help" }, h("p", { class: "ppb-ooa__text", text: String(copy.help).replace("correct it below.", "correct it above.") })),
         GLOVED_PAGE ? h("span", { class: "puck puck--sq puck--lg ppb-ooa__pin" }, pic(ICON.pin, 256, null, 239))
-          : h("span", { class: "stand stand--mound ppb-ooa__pose" }, pic(ICON.sorry, 597, null, 900)),
+          : h("span", { class: "stand stand--mound ppb-ooa__pose" }, latePic(ICON.sorry, 597, null, 900)),
         h("div", { class: "ppb-ooa__copy ppb-ooa__edge" }, edgeText));
       // in the panel he stands on the ground line and presents the question (not on the gloved pages, and not where the ZIP choices need the room; the out-of-area answer has its own pose)
-      self.scene = GLOVED_PAGE || offered ? null : h("div", { class: "ppb-zip__scene", "aria-hidden": "true" }, h("span", { class: "stand stand--mound ppb-zip__pose" }, pic(ICON.present, 598, null, 900)));
+      self.scene = GLOVED_PAGE || offered ? null : h("div", { class: "ppb-zip__scene", "aria-hidden": "true" }, h("span", { class: "stand stand--mound ppb-zip__pose" }, latePic(ICON.present, 598, null, 900)));
       self.root = h("div", { class: "ppb-zip" + (offered ? " ppb-zip--picks" : "") }, self.picks, self.again,
         h("div", { class: "ppb-zip__field" }, pic(ICON.pin, 256, "ppb-zip__ico", 239), self.input), self.msg, self.ooa, self.scene);
       return self.root;
@@ -1009,6 +1038,7 @@
     q: function () { return COPY.frequency.q; },
     hint: function (state) { return state.frequency ? (ui.picked === state.frequency ? COPY.frequency.picked : COPY.frequency.ok) : COPY.frequency.need; },
     say: SAY.frequency,
+    nextLabel: function () { return COPY.frequency.next; },
     build: function () {
       var self = this;
       self.rows = {};
@@ -1019,7 +1049,8 @@
           onclick: function () {
             if (row.node.getAttribute("aria-disabled") === "true") { flashHint(row.why.textContent); return; }   // say why, do nothing else
             ui.prefer = ""; ui.picked = "";
-            tapAnswer("frequency", { frequency: option.id });
+            cancelAuto();
+            answer({ frequency: option.id });   // 2026-10-18: chooses only; "See my price" moves on (see tapAnswer)
           } },
           pic(ICON.freq[option.id] || ICON.freq.custom, 192, "ppb-tile__pic"), row.label, row.flag, row.sub, row.why, row.price);
         self.rows[option.id] = row;
@@ -2372,6 +2403,8 @@
     el.sheetRoot.append(el.stage);                // the ONE stage: out of the hero card (if it was there), into the panel
     setMode("dialog");
     ui.sheetOpen = true;
+    if (store.getState().step === "price") ui.priceAt = Date.now();   // opened on the price: its button rests too (PRICE_REST_MS)
+    warmPoses();
     syncHero();                                   // the card behind shows the summary (or the placeholder): same outer size, the page does not move
     lockPage(true);
     el.sheet.showModal();
@@ -2466,10 +2499,47 @@
     if (mount && !hasProgress(state) && ui.inView) {
       syncHero(); refresh();
       mount.scrollIntoView({ block: "center", behavior: QUIET ? "auto" : "smooth" });
-      if (!QUIET) { el.stage.classList.remove("is-ping"); void el.stage.offsetWidth; el.stage.classList.add("is-ping"); }
+      pointAtCard();
       focusOpened(false);
     } else { openSheet(trigger, ui.way); focusOpened(true); }
     applyPrefer();
+  }
+  /* 2026-10-16 (Matthew): a "Get my price" button pressed while the card is already on screen moved nothing, and the one
+     faint ring (is-ping) was easy to miss. Now the card rises a little and glows twice, and the mascot nods. With reduced
+     motion: a still glow that fades, nothing moves. The rules come with this script, so no page's own block has to change. */
+  var cueTimer = 0;
+  function cueRules() {
+    var base = "0 0 0 1px rgba(6, 38, 68, .06), var(--sh-3)";
+    return [
+      "@keyframes ppb-cue-glow {",
+      "  0% { box-shadow: BASE, 0 0 0 0 rgba(24, 174, 245, .9), 0 0 0 0 rgba(24, 174, 245, .5); }",
+      "  12% { box-shadow: BASE, 0 0 0 4px rgba(24, 174, 245, .9), 0 0 0 4px rgba(24, 174, 245, .5); }",
+      "  44% { box-shadow: BASE, 0 0 0 4px rgba(24, 174, 245, .9), 0 0 0 26px rgba(24, 174, 245, 0); }",
+      "  50% { box-shadow: BASE, 0 0 0 4px rgba(24, 174, 245, .9), 0 0 0 4px rgba(24, 174, 245, .5); }",
+      "  84% { box-shadow: BASE, 0 0 0 4px rgba(24, 174, 245, .9), 0 0 0 26px rgba(24, 174, 245, 0); }",
+      "  100% { box-shadow: BASE, 0 0 0 0 rgba(24, 174, 245, 0), 0 0 0 0 rgba(24, 174, 245, 0); }",
+      "}",
+      "@keyframes ppb-cue-lift { 0% { transform: none; } 35% { transform: translateY(-6px); } 70% { transform: translateY(1px); } 100% { transform: none; } }",
+      "@keyframes ppb-cue-still {",
+      "  0%, 60% { box-shadow: BASE, 0 0 0 4px rgba(24, 174, 245, .9); }",
+      "  100% { box-shadow: BASE, 0 0 0 4px rgba(24, 174, 245, 0); }",
+      "}",
+      ".ppb-stage.is-cue { animation: ppb-cue-glow 1.8s var(--ease), ppb-cue-lift .6s var(--ease); }",
+      "@media (prefers-reduced-motion: reduce) { .ppb-stage.is-cue { animation: ppb-cue-still 1.8s linear; } }"
+    ].join(" ").split("BASE").join(base);
+  }
+  function pointAtCard() {
+    var stage = el.stage;
+    if (!doc.querySelector("style[data-ppb-cue]")) {
+      var style = doc.createElement("style");
+      style.setAttribute("data-ppb-cue", "");
+      style.textContent = cueRules();
+      (doc.head || doc.body).append(style);
+    }
+    win.clearTimeout(cueTimer);
+    stage.classList.remove("is-ping", "is-cue"); void stage.offsetWidth; stage.classList.add("is-cue");
+    cueTimer = win.setTimeout(function () { stage.classList.remove("is-cue"); }, 2000);   // gone after the glow, so nothing lingers
+    if (!QUIET) { el.avatar.classList.remove("is-bop"); void el.avatar.offsetWidth; el.avatar.classList.add("is-bop"); }
   }
   function onClose() { if (ui.sheetOpen) stowSheet(); }
   function onBusy() { focusOpened(false); }
@@ -2550,6 +2620,7 @@
       if (moved && now.step === "frequency" && ui.prefer) win.Promise.resolve().then(applyPrefer);
     });
 
+    if (mount) { mount.addEventListener("pointerdown", warmPoses, { passive: true }); mount.addEventListener("keydown", warmPoses); }   // the first touch of the card (2026-10-18)
     win.addEventListener("scroll", watchView, { passive: true });
     win.addEventListener("resize", function () { watchView(); ui.floor = false; syncPin(store.getState()); scheduleMore(); });   // syncPin: a window that became short, or tall again (M4)
     if (doc.fonts && doc.fonts.addEventListener) doc.fonts.addEventListener("loadingdone", scheduleMore);   // 2026-10-12: words change width when the site's typeface arrives (placeOver)
@@ -2572,7 +2643,7 @@
         ui.panels[id] = panel; el.opts.append(panel);
         if (steps[id].update) steps[id].update(now, null, api);
       });
-      [ICON.zero, ICON.chat, ICON.calendar, ICON.ok, ICON.returning, GLOVED_PAGE ? ICON.pin : ICON.sorry, GLOVED_PAGE ? ICON.pin : ICON.present, ICON.close, ICON.alert, ICON.name, ICON.house, ICON.email, ICON.call, ICON.fresh].forEach(function (path) { new win.Image().src = ASSETS + path; });
+      [ICON.zero, ICON.chat, ICON.calendar, ICON.ok, ICON.returning, GLOVED_PAGE ? ICON.pin : null, ICON.close, ICON.alert, ICON.name, ICON.house, ICON.email, ICON.call, ICON.fresh].forEach(function (path) { if (path) new win.Image().src = ASSETS + path; });   // the two poses: warmPoses()
     }, 60);
   }
 
@@ -2621,7 +2692,7 @@
   }
 
   win.PPBuilder = {
-    version: "2026-10-13c", store: store, hooks: null, ui: ui, el: el, api: api, COPY: COPY, SAY: SAY, steps: steps, city: CITY, town: TOWN,
+    version: "2026-10-18a", store: store, hooks: null, ui: ui, el: el, api: api, COPY: COPY, SAY: SAY, steps: steps, city: CITY, town: TOWN,
     registerStep: registerStep, refresh: refresh, openPop: openPop, closePop: closePop,
     open: function (openOptions) { return hooks.open(openOptions || {}, null); },
     close: function () { return hooks.close(); },
